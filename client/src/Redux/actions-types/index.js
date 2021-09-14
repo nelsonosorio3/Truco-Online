@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { SING_UP } from '../actions/index';
+import { SIGN_UP } from '../actions/index';
 
 export default function signUpUser(data) {
   return function(dispatch) {
