@@ -1,0 +1,1 @@
+export const SING_UP = 'SING_UP';
