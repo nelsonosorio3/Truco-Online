@@ -1,6 +1,9 @@
-import React, { useEffect, useState, useCallback } from 'react';
+import React, { useState } from 'react';
+import { useDispatch } from "react-redux";
 
 import NavBar from './NavBar';
+
+import { signUpUser } from '../Redux/actions-types/index';
 
 import styles from './styles/SignUp.module.css';
 
@@ -37,6 +40,8 @@ const initialState = {
 
 export default function SignUp() {
 
+    const dispatch = useDispatch();
+
     const [state, setState] = useState(initialState);
     
     const [errors, setErrors] = useState(initialState);
@@ -54,6 +59,7 @@ export default function SignUp() {
     };
 
     function handleSubmit(event) {
+        dispatch(signUpUser(state));
         event.preventDefault();
         setState(initialState);
         setErrors(initialState);
