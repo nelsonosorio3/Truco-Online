@@ -1,7 +1,10 @@
+import React from 'react';
+import { Route, Switch } from "react-router-dom";
+
 import Welcome from "./components/Welcome";
-import {Route, Switch} from "react-router-dom";
-import Profile from "./components/Profile";
 import NavBar from "./components/NavBar";
+import Profile from "./components/Profile";
+import SignUp from "./components/SignUp";
 
 function App() {
   return (
@@ -14,9 +17,12 @@ function App() {
           <NavBar />
           <Profile />
         </Route>
+        <Route exact path='/singUp'>
+          <SignUp />
+        </Route>
       </Switch>
     </div>
   );
-}
+};
 
 export default App;
