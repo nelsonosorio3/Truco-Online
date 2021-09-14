@@ -1,0 +1,11 @@
+.mainDiv{
+    display: flex;
+    justify-content: space-around;
+    background: #292b2c;
+    padding: 15px 0px 15px 0px;
+}
+
+.a{
+    text-decoration: none;
+    color: #878787;
+}

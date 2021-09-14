@@ -1,0 +1,22 @@
+.mainDiv{
+    display: flex;
+    flex-direction: column;
+}
+
+.player{
+    display: flex;
+    flex-direction: column;
+    align-self: flex-start;
+    align-items: center;
+}
+
+.profileIcon{
+    width: 150px;
+}
+
+.playerInfo{
+    display: flex;
+    flex-direction: column;
+    align-self: flex-start;
+    align-items: center;
+}
