@@ -10,7 +10,7 @@ export default function Welcome() {
             <form action="" className={styles.form}>
                 <div className={styles.divButtons}>
                     <button className={styles.btnLogIn}>Log In</button>
-                    <Link to='/sing-up'>
+                    <Link to='/sign-up'>
                         <button className={styles.btnSignUp}>
                             Sign Up
                         </button>
