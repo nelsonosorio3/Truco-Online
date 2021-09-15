@@ -6,14 +6,16 @@ const Op = Sequelize.Op;
 
 const router = Router();
 
-const u1 = { username: "pedro", email: "pedro@mail.com", gamesPlayed: 0, gamesWon: 0, gamesLost: 0 }
-const u2 = { username: "nelson", email: "nelson@mail.com", gamesPlayed: 0, gamesWon: 0, gamesLost: 0 }
-const u3 = { username: "guille", email: "guille@mail.com", gamesPlayed: 0, gamesWon: 0, gamesLost: 0 }
-const u4 = { username: "tomas", email: "tomas@mail.com", gamesPlayed: 0, gamesWon: 0, gamesLost: 0 }
-const u5 = { username: "leo", email: "leo@mail.com", gamesPlayed: 0, gamesWon: 0, gamesLost: 0 }
-const u6 = { username: "santiago", email: "santiago@mail.com", gamesPlayed: 0, gamesWon: 0, gamesLost: 0 }
-const u7 = { username: "fede", email: "fede@mail.com", gamesPlayed: 0, gamesWon: 0, gamesLost: 0 }
-const u8 = { username: "santiago", email: "santiago@mail.com", gamesPlayed: 0, gamesWon: 0, gamesLost: 0 }
+const u1 = { username: "pedro", email: "pedro@mail.com", password: "1234", gamesPlayed: 0, gamesWon: 0, gamesLost: 0 }
+const u2 = { username: "nelson", email: "nelson@mail.com", password: "1234", gamesPlayed: 0, gamesWon: 0, gamesLost: 0 }
+const u3 = { username: "guille", email: "guille@mail.com", password: "1234", gamesPlayed: 0, gamesWon: 0, gamesLost: 0 }
+const u4 = { username: "tomas", email: "tomas@mail.com", password: "1234", gamesPlayed: 0, gamesWon: 0, gamesLost: 0 }
+const u5 = { username: "leo", email: "leo@mail.com", password: "1234", gamesPlayed: 0, gamesWon: 0, gamesLost: 0 }
+const u6 = { username: "santiago", email: "santiago@mail.com", password: "1234", gamesPlayed: 0, gamesWon: 0, gamesLost: 0 }
+const u7 = { username: "fede", email: "fede@mail.com", password: "1234", gamesPlayed: 0, gamesWon: 0, gamesLost: 0 }
+const u8 = { username: "santiago", email: "santiago@mail.com", password: "1234", gamesPlayed: 0, gamesWon: 0, gamesLost: 0 }
+
+const g1 = {}
 
 router.post("/", async (req, res) => {
 

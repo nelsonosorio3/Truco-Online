@@ -8,7 +8,6 @@ module.exports = (sequelize) => {
             type: DataTypes.ENUM('finished', 'initialized', 'pending'),
             allowNull: false,
         },
-
         winner: {
             type: DataTypes.STRING,
             allowNull: false,
@@ -20,7 +19,6 @@ module.exports = (sequelize) => {
                 }
             }
         },
-
         loser: {
             type: DataTypes.STRING,
             allowNull: false,
@@ -31,7 +29,6 @@ module.exports = (sequelize) => {
                 }
             }
         },
-
         results: {
             type: DataTypes.INTEGER,
             allowNull: false,
