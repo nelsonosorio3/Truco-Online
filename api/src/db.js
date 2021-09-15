@@ -10,6 +10,15 @@ const sequelize = new Sequelize(`postgres://${DB_USER}:${DB_PASSWORD}@${DB_HOST}
   logging: false, // set to console.log to see the raw SQL queries
   native: false, // lets Sequelize know we can use pg-native for ~30% more speed
 });
+
+//.authenticate() function is used to test if the connection is OK:
+try {
+  await sequelize.authenticate();
+  console.log('Connection has been established successfully.');
+} catch (error) {
+  console.error('Unable to connect to the database:', error);
+}
+
 const basename = path.basename(__filename);
 
 const modelDefiners = [];
@@ -30,10 +39,41 @@ sequelize.models = Object.fromEntries(capsEntries);
 
 // En sequelize.models están todos los modelos importados como propiedades
 // Para relacionarlos hacemos un destructuring
-const { User, Message } = sequelize.models;
+const { User, Partidas, Message } = sequelize.models;
 
 // Aca vendrian las relaciones
-// Product.hasMany(Reviews);
+//relacion users <-----> games
+User.belongsToMany(Games, { through: 'UserGames' });
+Games.belongsToMany(User, { through: 'UserGames' });
+
+// Associative entity for friends
+const Friends = sequelize.define('Friends', {
+  User1_Id: {
+    type: DataTypes.INTEGER,
+    references: {
+      model: User,
+      as: 'User1',
+      key: 'id'
+    }
+  },
+  User2_Id: {
+    type: DataTypes.INTEGER,
+    references: {
+      model: User,
+      as: 'User2',
+      key: 'id'
+    }
+  },
+
+  status: {
+    type: DataTypes.ENUM('pending', 'rejected', 'accepted'),
+    allowNull: false,
+  },
+});
+
+User.belongsToMany(User, { through: 'Friends' });
+User.belongsToMany(User, { through: 'Friends' });
+
 
 // Prueba de conflicto
 //
