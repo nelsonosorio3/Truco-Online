@@ -17,7 +17,7 @@ function App() {
           <NavBar />
           <Profile />
         </Route>
-        <Route exact path='/singUp'>
+        <Route exact path='/sign-up'>
           <SignUp />
         </Route>
       </Switch>
