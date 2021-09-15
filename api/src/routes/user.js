@@ -43,10 +43,18 @@ router.get("/:id/history", async(req, res)=>{
 });
 
 router.get("/:id/friend_requests_reveived", async(req, res) =>{
-  const {id} = req.params;
-  const friend_requests_reveived = await User.findByPk(parseInt(id), {include: Friends, attributes:["name"], where:{status: "pending"}});
-  if(!friend_requests_reveived) res.sendStatus(404);
-  return friend_requests_reveived;
+  // const {id} = req.params;
+  // const friend_requests_reveived = await User.findByPk(parseInt(id), {include: Friends, attributes:["name"], where:{status: "pending"}});
+  // if(!friend_requests_reveived) res.sendStatus(404);
+  // res.json(friend_requests_reveived);
+  res.sendStatus(404);
+});
+
+router.get("/:id/friend_requests_sent", async(req, res)=>{
+  // const {id} = req.params;
+  // const friend_requests_reveived = await User.findByPk(parseInt(id), {include: Friends, attributes:["name"], where:{[Op.or]: [{status: "pending"},{status: "reject"}]}});
+  // if(!friend_requests_reveived) res.sendStatus(404);
+  // res.json(friend_requests_reveived);
   res.sendStatus(404);
 })
 
