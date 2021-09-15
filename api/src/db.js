@@ -42,9 +42,39 @@ sequelize.models = Object.fromEntries(capsEntries);
 const { User, Partidas, Message } = sequelize.models;
 
 // Aca vendrian las relaciones
-
+//relacion users <-----> games
 User.belongsToMany(Games, { through: 'UserGames' });
 Games.belongsToMany(User, { through: 'UserGames' });
+
+// Associative entity for friends
+const Friends = sequelize.define('Friends', {
+  User1_Id: {
+    type: DataTypes.INTEGER,
+    references: {
+      model: User,
+      as: 'User1',
+      key: 'id'
+    }
+  },
+  User2_Id: {
+    type: DataTypes.INTEGER,
+    references: {
+      model: User,
+      as: 'User2',
+      key: 'id'
+    }
+  },
+
+  status: {
+    type: DataTypes.ENUM('pending', 'rejected', 'accepted'),
+    allowNull: false,
+  },
+
+});
+
+User.belongsToMany(User,  { through:'Friends'});
+User.belongsToMany(User,  { through:'Friends'});
+
 
 module.exports = {
   ...sequelize.models, // para poder importar los modelos así: const { Product, User } = require('./db.js');

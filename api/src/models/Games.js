@@ -7,13 +7,13 @@ module.exports = (sequelize) => {
         state: {
             type: DataTypes.ENUM('finished', 'initialized', 'pending'),
             allowNull: false,
-            //notEmpty doesn't allow empty strings
         },
 
         winner: {
             type: DataTypes.STRING,
             allowNull: false,
             validate: {
+                //notEmpty doesn't allow empty strings  
                 notEmpty: true,
                 notNull: {
                     msg: 'Please enter a winner'
