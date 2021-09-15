@@ -1,4 +1,4 @@
-import { SING_UP } from '../actions/index';
+import { SIGN_UP } from '../actions/index';
 
 const INITIAL_STATE = {
   isAuth: false,
@@ -7,7 +7,7 @@ const INITIAL_STATE = {
 
 export default function reducer(state = INITIAL_STATE, {type, payload}) {
   switch (type) {
-    case SING_UP:
+    case SIGN_UP:
       return {
         ...state,
         isAuth: payload.isAuth,
