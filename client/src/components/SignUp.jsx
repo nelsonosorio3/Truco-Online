@@ -1,6 +1,9 @@
-import React, { useEffect, useState, useCallback } from 'react';
+import React, { useState } from 'react';
+import { useDispatch } from "react-redux";
 
 import NavBar from './NavBar';
+
+import signUpUserActions from '../Redux/actions-types/signUpUserActions';
 
 import styles from './styles/SignUp.module.css';
 
@@ -37,6 +40,8 @@ const initialState = {
 
 export default function SignUp() {
 
+    const dispatch = useDispatch();
+
     const [state, setState] = useState(initialState);
     
     const [errors, setErrors] = useState(initialState);
@@ -54,6 +59,7 @@ export default function SignUp() {
     };
 
     function handleSubmit(event) {
+        dispatch(signUpUserActions(state));
         event.preventDefault();
         setState(initialState);
         setErrors(initialState);
@@ -62,48 +68,50 @@ export default function SignUp() {
     return (
         <>
             <NavBar />
-            <form className={styles.form} onSubmit={handleSubmit}>
-            <label className={styles.label} htmlFor="user" > User: </label>
-            <input
-                type="text"
-                id="user"
-                name = "user"
-                value={state.user}
-                autoComplete="off"
-                className={styles.input}
-                onChange={handleChange}
-            />
-            {errors.user && (<p className={styles.danger}> {errors.user} </p>)}
-            <label className={styles.label} htmlFor="email"> Email: </label>
-            <input 
-                type="email"
-                id='email'
-                name="email"
-                value={state.email}
-                autoComplete="off"
-                className={styles.input}
-                onChange={handleChange}
-            />
-            {errors.email && (<p className={styles.danger}> {errors.email} </p>)}
-            <label className={styles.label} htmlFor="health"> Password: </label>
-            <input 
-                type='text'
-                id='password'
-                name="password"
-                value={state.password}
-                autoComplete="off"
-                className={styles.input}
-                onChange={handleChange}
-            />
-            {errors.password && (<p className={styles.danger}> {errors.password} </p>)}
-            {((!errors.user && !errors.email && !errors.password) 
-                && 
-                (errors.user !== '' && errors.email !== '' && errors.password !== '')) 
-                ? 
-                (<button type="submit" className={styles.button}> Create User </button>) 
-                : 
-                <button type="submit" className={styles.disabled} disabled> Create User </button>}
-            </form> 
+            <div className={styles.container}>
+                <form className={styles.form} onSubmit={handleSubmit}>
+                <label className={styles.label} htmlFor="user" > User: </label>
+                <input
+                    type="text"
+                    id="user"
+                    name = "user"
+                    value={state.user}
+                    autoComplete="off"
+                    className={styles.input}
+                    onChange={handleChange}
+                />
+                {errors.user && (<p className={styles.danger}> {errors.user} </p>)}
+                <label className={styles.label} htmlFor="email"> Email: </label>
+                <input 
+                    type="email"
+                    id='email'
+                    name="email"
+                    value={state.email}
+                    autoComplete="off"
+                    className={styles.input}
+                    onChange={handleChange}
+                />
+                {errors.email && (<p className={styles.danger}> {errors.email} </p>)}
+                <label className={styles.label} htmlFor="health"> Password: </label>
+                <input 
+                    type='text'
+                    id='password'
+                    name="password"
+                    value={state.password}
+                    autoComplete="off"
+                    className={styles.input}
+                    onChange={handleChange}
+                    />
+                {errors.password && (<p className={styles.danger}> {errors.password} </p>)}
+                {((!errors.user && !errors.email && !errors.password) 
+                    && 
+                    (errors.user !== '' && errors.email !== '' && errors.password !== '')) 
+                    ? 
+                    (<button type="submit" className={styles.button}> Create User </button>) 
+                    : 
+                    <button type="submit" className={styles.disabled} disabled> Create User </button>}
+                </form> 
+            </div>
         </>
     );
 };

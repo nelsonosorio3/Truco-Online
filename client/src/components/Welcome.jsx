@@ -10,10 +10,10 @@ export default function Welcome() {
             <form action="" className={styles.form}>
                 <div className={styles.divButtons}>
                     <button className={styles.btnLogIn}>Log In</button>
-                    <Link 
-                        to='/singUp'
-                        className={styles.btnSignUp}>
-                        Sign Up
+                    <Link to='/sign-up'>
+                        <button className={styles.btnSignUp}>
+                            Sign Up
+                        </button>
                     </Link>
                     <button className={styles.btnGuest}>Login as Guest</button>
                 </div>
