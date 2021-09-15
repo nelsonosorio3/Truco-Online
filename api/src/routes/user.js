@@ -13,9 +13,22 @@ router.get('/' , async(req , res) => {
 
 router.get("/:id", async(req, res)=>{
   // const {id} = req.params;
-  // const user = await User.findByP(parseInt(id));
+  // const user = await User.findByPk(parseInt(id));
   // if(!user) return res.sendStatus(404);
-  // res.jsaon(user);
+  // res.json(user);
+});
+
+router.get(":id/friends", async(req, res)=>{
+  // const {id} = req.params;
+  // const user = await User.findByPk(parseInt(id), {include: friends});
+  // const friends = [];
+  // if(user){
+  //   for await(let friend of user.friends){
+  //     friends.push(friend);
+  //   };
+  //   return res.json(friends);
+  // };
+  // res.sendStatus(404);
 })
 
 module.exports = router;
