@@ -3,7 +3,7 @@ import { useDispatch } from "react-redux";
 
 import NavBar from './NavBar';
 
-import { signUpUser } from '../Redux/actions-types/index';
+import signUpUserActions from '../Redux/actions-types/signUpUserActions';
 
 import styles from './styles/SignUp.module.css';
 
@@ -59,7 +59,7 @@ export default function SignUp() {
     };
 
     function handleSubmit(event) {
-        dispatch(signUpUser(state));
+        dispatch(signUpUserActions(state));
         event.preventDefault();
         setState(initialState);
         setErrors(initialState);
