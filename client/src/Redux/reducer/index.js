@@ -1,19 +1,11 @@
-import { SIGN_UP } from '../actions/index';
+// En este archivo se hace el combine
+import { combineReducers } from "redux";
 
-const INITIAL_STATE = {
-  isAuth: false,
-  user: '',
-};
+// importar cada reducer(exportarlos en su archivo por default) y añadirlos a rootReducer
+import signUpReducer from "./signUpReducer";
 
-export default function reducer(state = INITIAL_STATE, {type, payload}) {
-  switch (type) {
-    case SIGN_UP:
-      return {
-        ...state,
-        isAuth: payload.isAuth,
-        user: payload.name,
-      };
-    default:
-      return state;    
-  };
-};
+const rootReducer = combineReducers({
+  signUpReducer,
+});
+
+export default rootReducer;
