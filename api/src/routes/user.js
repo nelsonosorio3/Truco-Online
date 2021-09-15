@@ -9,6 +9,7 @@ const router = Router();
 router.get('/' , async(req , res) => {
   // const users = await User.findAll();
   // res.json(users)
+  res.sendStatus(404);
 });
 
 router.get("/:id", async(req, res)=>{
@@ -16,9 +17,10 @@ router.get("/:id", async(req, res)=>{
   // const user = await User.findByPk(parseInt(id));
   // if(!user) return res.sendStatus(404);
   // res.json(user);
+  res.sendStatus(404);
 });
 
-router.get(":id/friends", async(req, res)=>{
+router.get("/:id/friends", async(req, res)=>{
   // const {id} = req.params;
   // const user = await User.findByPk(parseInt(id), {include: friends});
   // const friends = [];
@@ -29,6 +31,14 @@ router.get(":id/friends", async(req, res)=>{
   //   return res.json(friends);
   // };
   // res.sendStatus(404);
-})
+  res.sendStatus(404);
+});
+
+router.get("/:id/history", async(req, res)=>{
+  // const {id} = req.params;
+  // const history = await User.findByPk(parseInt(id), {attributes: [history]});
+  // if(!history) return res.sendStatus(404);
+  // res.json(history);
+});
 
 module.exports = router;
