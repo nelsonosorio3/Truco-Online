@@ -69,7 +69,6 @@ const Friends = sequelize.define('Friends', {
     type: DataTypes.ENUM('pending', 'rejected', 'accepted'),
     allowNull: false,
   },
-
 });
 
 User.belongsToMany(User,  { through:'Friends'});
