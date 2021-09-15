@@ -1,5 +1,5 @@
 require('dotenv').config();
-const { Sequelize } = require('sequelize');
+const { Sequelize, DataTypes } = require('sequelize');
 const fs = require('fs');
 const path = require('path');
 const {
@@ -39,43 +39,9 @@ const { User, Partidas, Message, Games } = sequelize.models;
 User.belongsToMany(Games, { through: 'UserGames' });
 Games.belongsToMany(User, { through: 'UserGames' });
 
-// Associative entity for friends
-/*
-const Friends = sequelize.define('Friends', {
-  User1_Id: {
-    type: DataTypes.INTEGER,
-    references: {
-      model: User,
-      as: 'User1',
-      key: 'id'
-    }
-  },
-  User2_Id: {
-    type: DataTypes.INTEGER,
-    references: {
-      model: User,
-      as: 'User2',
-      key: 'id'
-    }
-  },
-
-  status: {
-    type: DataTypes.ENUM('pending', 'rejected', 'accepted'),
-    allowNull: false,
-  },
-});
-
-
-User.belongsToMany(User, { through: 'Friends' });
-User.belongsToMany(User, { through: 'Friends' });
-*/
-
-// Prueba de conflicto
-//
-// https://stackoverflow.com/questions/24747652/sequelize-self-references-has-many-relation
-//
-//
-// Probando conflicto
+// Associative entity for friends (the table friends is already created in models)
+User.belongsToMany(User,  {as:"userSender", foreignKey: 'userSenderId',  through:'Friends'});
+User.belongsToMany(User,  {as:"userRequested", foreignKey: 'userRequestedId',  through:'Friends'});
 
 
 module.exports = {
