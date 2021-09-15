@@ -3,7 +3,7 @@ const { DataTypes } = require('sequelize');
 // Luego le injectamos la conexion a sequelize.
 module.exports = (sequelize) => {
     // defino el modelo
-    sequelize.define('partida', {
+    sequelize.define('games', {
         state: {
             type: DataTypes.ENUM('finished', 'initialized', 'pending'),
             allowNull: false,
@@ -33,7 +33,7 @@ module.exports = (sequelize) => {
         },
 
         results: {
-            type:DataTypes.INTEGER,
+            type: DataTypes.INTEGER,
             allowNull: false,
             validate: {
                 notEmpty: true,
@@ -42,6 +42,5 @@ module.exports = (sequelize) => {
                 }
             }
         },
-s
     });
 };

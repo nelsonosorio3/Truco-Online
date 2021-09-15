@@ -15,7 +15,7 @@ const u6 = { username: "santiago", email: "santiago@mail.com", gamesPlayed: 0, g
 const u7 = { username: "fede", email: "fede@mail.com", gamesPlayed: 0, gamesWon: 0, gamesLost: 0 }
 const u8 = { username: "santiago", email: "santiago@mail.com", gamesPlayed: 0, gamesWon: 0, gamesLost: 0 }
 
-router.post("/filltable", async (req, res) => {
+router.post("/", async (req, res) => {
 
   var d1 = await User.create(u1)
   var d2 = await User.create(u2)
