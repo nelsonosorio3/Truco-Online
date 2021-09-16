@@ -47,6 +47,7 @@ router.post('/:id/:email' , (req , res) => {
 router.put('/:id/:email' , (req , res) => {
   const {id, email} = req.params
   const {response} = req.query
+  
   if(!id || !email) return res.status(404).json({Error: "Missing parameters!"})
 
   User.findByPk(id)
