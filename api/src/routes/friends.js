@@ -1,10 +1,8 @@
-
 const { Router }  = require("express");
 const { json } = require("sequelize");
 const Sequelize = require('sequelize');
 const Op = Sequelize.Op;
-const { User } = require("../db.js");
-const Friends = require("../models/Friends.js");
+const { User, Friends } = require("../db.js");
 
 const router = Router();
 
@@ -14,41 +12,50 @@ router.get('/' , (req , res) => {
 })
 
 router.post('/:id/:email' , (req , res) => {
+
   const {id, email} = req.params
   if(!id || !email) return res.status(404).json({message: "Missing parameters!"})
-  const userSender = User.findByPk(id)
+
+  User.findByPk(id)
   .then(sender => {
-    if(!sender) throw new TypeError
+    if(!sender) throw new Error("No se encontro el id del usuario")
     User.findOne({where: {email: email}})
     .then(requested => {
-      if(!requested) throw new TypeError
-      //Revisar teoria
-      requested.Friends = {
-        status: "pending"
+      if(!requested) throw new Error("No se encontro el Email")
+      return sender.hasUserRequested(requested)
+    })
+    .then((r) => {
+     if(r) throw new Error("Ya se ha enviado una solicitud a este usuario")
+     return User.findOne({where: {email: email}})
+    })
+    .then(requested2 => {
+      requested2.Friends = {
+      status: "pending"
       }
-      sender.addUserSender(requested) 
-      res.status(201).json({message: "Se envio una solicitud de amistad a " + requested.email})
+      sender.addUserSender(requested2) 
+      res.status(201).json({message: "Se envio una solicitud de amistad a " + requested2.email})
     })
     .catch(err => {
-      return res.status(404).json({message: "Email wans't found"})
+      return res.status(404).json({message:err.message})
     })
   })
   .catch(err => {
-    return res.status(404).json({message: "User wans't found"})
+    return res.status(404).json({m:err.message})
   })
 })
 
 router.put('/:id/:email' , (req , res) => {
   const {id, email} = req.params
   const {response} = req.query
-  if(!id || !email) return res.status(404).json({message: "Missing parameters!"})
+
+  if(!id || !email) return res.status(404).json({Error: "Missing parameters!"})
 
   User.findByPk(id)
   .then(requested => {
-    if(!requested) throw new TypeError
+    if(!requested) throw new Error("No se encontro el Email")
     User.findOne({where: {email: email}})
     .then(sender => {
-      if(!sender) throw new Error()
+      if(!sender) throw new Error("No se encontro el id del usuario")
       //Revisar teoria
       requested.Friends = {
         status: response
@@ -61,11 +68,11 @@ router.put('/:id/:email' , (req , res) => {
       }
     })
     .catch(err => {
-      return res.status(404).json({message: "Error: email wasn't found"})
+      return res.status(404).json({message: err.message})
     })
   })
   .catch(err => {
-    return res.status(404).json({message: "User wans't found"})
+    return res.status(404).json({message: err.message})
   })
 })
 
