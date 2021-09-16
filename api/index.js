@@ -11,5 +11,3 @@ conn.sync({ force: true }).then(() => {
     console.log("The table for the User model was just (re)created!");
   });
 })
-  .catch(e => console.log(e))
-  ;

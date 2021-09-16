@@ -5,6 +5,8 @@ import Welcome from "./components/Welcome";
 import NavBar from "./components/NavBar";
 import Profile from "./components/Profile";
 import SignUp from "./components/SignUp";
+import JoinRoom from './components/JoinRoom';
+
 
 function App() {
   return (
@@ -19,6 +21,9 @@ function App() {
         </Route>
         <Route exact path='/sign-up'>
           <SignUp />
+        </Route>
+        <Route exact path='/rooms'>
+          <JoinRoom />
         </Route>
       </Switch>
     </div>
