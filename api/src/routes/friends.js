@@ -76,4 +76,36 @@ router.put('/:id/:email' , (req , res) => {
   })
 })
 
+router.delete('/:id/:email' , (req , res) => {
+  const {id, email} = req.params
+  const {response} = req.query
+
+  if(!id || !email) return res.status(404).json({Error: "Missing parameters!"})
+
+  let userDeletedData = null
+
+  User.findByPk(id)
+  .then(userResult => {
+    if(!userResult) throw new Error("No se encontro el usuario")
+    return User.findOne({where: {email: email}})
+  })
+  .then(userResult => {
+    if(!userResult) throw new Error("No se encontro el mail del email")
+    userDeletedData = userResult.toJSON()
+    return Friends.destroy({
+      where: {
+        status: "accepted",
+        userSenderId: {[Op.or]: [id, Number(userDeletedData.id)]},
+        userRequestedId: {[Op.or]: [id, Number(userDeletedData.id)]},
+      }
+    })
+  })
+  .then(result => {
+    return result ? res.send("Se elimino amigo") : res.send("No se pudo eliminar el amigo.")
+  })
+  .catch(err => {
+    return res.status(404).json({message: err.message})
+  })
+})
+
 module.exports = router;
