@@ -26,6 +26,8 @@ router.post('/:userid/:gameid' , (req , res) => {
     })
     .then((gameFound) => {
         if(!gameFound) throw new Error("No existe la partida")
+        if(gameFound.state === 'pendiente') throw new Error("La partida aun se encuentra pendiente")
+        
         gamesData = gameFound
         return User.findOne({ 
             where: { id: userid},

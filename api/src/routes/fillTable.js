@@ -19,34 +19,35 @@ const g1 = {}
 
 router.post("/", async (req, res) => {
 
-
+try{
   await Games.create({
-    state: "finished",
-    winner: "pedro",
-    loser: "nelson",
+    state: "pendiente",
+    winner: "",
+    loser: "",
     results: "12|23"
   })
 
   await Games.create({
-    state: "pending",
-    winner: "tomas",
-    loser: "santiago",
+    state: "pendiente",
+    winner: "",
+    loser: "",
     results: "11|13"
   })
 
   await Games.create({
-    state: "finished",
+    state: "terminada",
     winner: "pedro",
     loser: "leo",
     results: "11|13"
   })
 
   await Games.create({
-    state: "finished",
+    state: "terminada",
     winner: "pedro",
     loser: "santiago",
     results: "11|13"
   })
+
 
   var d1 = await User.create(u1)
   var d2 = await User.create(u2)
@@ -56,7 +57,16 @@ router.post("/", async (req, res) => {
   var d6 = await User.create(u6)
   var d7 = await User.create(u7)
   var d8 = await User.create(u8)
-  res.status(404).json({ message: "Tabla de prueba llenada con éxito." });
+  res.status(200).json({ message: "Tabla de prueba llenada con éxito." });
+}
+
+catch (err){
+  res.json({message: err.message})
+}
+
+
+
+  
 
 })
 
