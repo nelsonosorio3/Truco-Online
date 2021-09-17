@@ -1,7 +1,7 @@
 const { Router } = require("express");
 const Sequelize = require('sequelize');
 //const User = require("../models/User");
-const { User, Friends } = require("../db.js");
+const { User, Friends, Games } = require("../db.js");
 const Op = Sequelize.Op;
 
 const router = Router();
@@ -50,12 +50,31 @@ router.get("/:id/friends", async (req, res) => {
 });
 
 router.get("/:id/history", async (req, res) => {
-  // const {id} = req.params;
-  // const history = await User.findByPk(parseInt(id), {attributes: ["history"]});
-  // if(!history) return res.sendStatus(404);
-  // res.json(history);
-  res.sendStatus(404);
-});
+
+  /*
+  const { id } = req.params
+
+  const username = await User.findOne({
+    where: { id: id }
+  })
+
+  Games.findAll({
+    where: { winner: id },
+    attributes: ['id', 'username'],
+  })
+    .then(user => {
+      return user.getGames({
+        attributes: ['state', "winner", "loser"]
+      })
+    })
+    .then(result => {
+      res.json(result)
+    })
+    .catch((err) => {
+      return res.json({ message: err.message })
+    })*/
+  return res.sendStatus(404);
+})
 
 router.get("/:id/friend_requests_received", async (req, res) => {
   // const {id} = req.params;
