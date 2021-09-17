@@ -1,7 +1,9 @@
 const { Router } = require("express");
 const Sequelize = require('sequelize');
 //const User = require("../models/User");
-const { User, Friends } = require("../db.js");
+
+const { User, Friends, Games } = require("../db.js");
+
 const Op = Sequelize.Op;
 
 const router = Router();
@@ -41,6 +43,35 @@ var friendships = [f1, f2, f3, f4, f5, f6, f7, f8, f9, f10, f11, f12, f13, f14]
 
 
 router.post("/", async (req, res) => {
+
+
+  await Games.create({
+    state: "finished",
+    winner: 1,
+    loser: 2,
+    results: "12|23"
+  })
+
+  await Games.create({
+    state: "pending",
+    winner: 4,
+    loser: 6,
+    results: "11|13"
+  })
+
+  await Games.create({
+    state: "finished",
+    winner: 1,
+    loser: 5,
+    results: "11|13"
+  })
+
+  await Games.create({
+    state: "finished",
+    winner: 1,
+    loser: 6,
+    results: "11|13"
+  })
 
   var d1 = await User.create(u1)
   var d2 = await User.create(u2)

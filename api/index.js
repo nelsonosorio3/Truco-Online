@@ -11,6 +11,7 @@ conn.sync({ force: true }).then(() => {
     console.log('%s listening at 3001'); // eslint-disable-line no-console
     console.log("The table for the User model was just (re)created!");
   });
+
 })
 
   // Uncomment the following lines to fill seeder
@@ -29,4 +30,5 @@ conn.sync({ force: true }).then(() => {
 
   .catch(e => console.log(e))
   ;
+
 
