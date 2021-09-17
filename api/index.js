@@ -24,7 +24,6 @@ conn.sync({ force: true }).then(() => {
         'Content-Type': 'application/json;charset=UTF-8'
       }
     })
-
   ).then(r => console.log(r))
 
 
