@@ -1,6 +1,8 @@
+const { get } = require('http');
 const { DataTypes } = require('sequelize');
 // Exportamos una funcion que define el modelo
 // Luego le injectamos la conexion a sequelize.
+
 module.exports = (sequelize) => {
     // defino el modelo
     sequelize.define('games', {
@@ -30,14 +32,17 @@ module.exports = (sequelize) => {
             }
         },
         results: {
-            type: DataTypes.INTEGER,
+            type: DataTypes.STRING,
             allowNull: false,
-            validate: {
+            validate:{
                 notEmpty: true,
-                notNull: {
-                    msg: 'Please enter a loser'
+                validatingFormat(value){
+                    let regex = /^\d{0,2}\|\d{0,2}$/gm
+                    //only this format is valid "12|23" un string con uno o dos numeros separados por "|"
+                    if(!regex.test(value)) throw new Error("Invalid Format");
                 }
             }
+
         },
     });
 };
