@@ -30,12 +30,12 @@ module.exports = (sequelize) => {
             }
         },
         results: {
-            type: DataTypes.INTEGER,
+            type: DataTypes.STRING,
             allowNull: false,
             validate: {
                 notEmpty: true,
                 notNull: {
-                    msg: 'Please enter a loser'
+                    msg: 'Please enter score.'
                 }
             }
         },

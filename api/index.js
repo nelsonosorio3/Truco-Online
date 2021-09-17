@@ -1,5 +1,6 @@
 const server = require('./src/app.js');
 const { conn } = require('./src/db.js');
+const axios = require("axios");
 
 // Syncing all the models at once.
 // [force flag]
@@ -11,5 +12,22 @@ conn.sync({ force: true }).then(() => {
     console.log("The table for the User model was just (re)created!");
   });
 })
+
+  // Uncomment the following lines to fill seeder
+
+  .then(() =>
+    axios({
+      url: "http://localhost:3001/api/filltable",
+      method: "POST",
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json;charset=UTF-8'
+      }
+    })
+
+  ).then(r => console.log(r))
+
+
   .catch(e => console.log(e))
   ;
+
