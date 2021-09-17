@@ -17,21 +17,29 @@ router.get('/' , (req , res) => {
 router.post('/:userid/:gameid' , (req , res) => {
     const {userid, gameid} = req.params
 
+    let gamesData = null
+    let userData = null
+
     Games.findOne({
         where: {id: gameid},
         raw: true
-
     })
     .then((gameFound) => {
         if(!gameFound) throw new Error("No existe la partida")
-        if(gameFound.winner !== userid && gameFound.loser !== userid) throw new Error("El usuario no participo de la partida")
+        // if(gameFound.winner !== userid && gameFound.loser !== userid) throw new Error("El usuario no participo de la partida")
+        gamesData = gameFound
 
         return User.findOne({ 
             where: { id: userid},
+
         })
     })
     .then(user => {
         if(!user) throw new Error("No existe el usuario")
+        userData = user.toJSON()
+        
+        if(gamesData.winner !== userData.username && gamesData.loser !== userData.username) throw new Error("El usuario no participo de la partida")
+
         return user.getGames({
             where: {id: gameid},
         })

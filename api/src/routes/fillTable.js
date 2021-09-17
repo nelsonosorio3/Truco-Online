@@ -22,29 +22,29 @@ router.post("/", async (req, res) => {
 
   await Games.create({
     state: "finished",
-    winner: 1,
-    loser: 2,
+    winner: "pedro",
+    loser: "nelson",
     results: "12|23"
   })
 
   await Games.create({
     state: "pending",
-    winner: 4,
-    loser: 6,
+    winner: "tomas",
+    loser: "santiago",
     results: "11|13"
   })
 
   await Games.create({
     state: "finished",
-    winner: 1,
-    loser: 5,
+    winner: "pedro",
+    loser: "leo",
     results: "11|13"
   })
 
   await Games.create({
     state: "finished",
-    winner: 1,
-    loser: 6,
+    winner: "pedro",
+    loser: "santiago",
     results: "11|13"
   })
 
