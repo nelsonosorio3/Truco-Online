@@ -7,27 +7,34 @@ module.exports = (sequelize) => {
     // defino el modelo
     sequelize.define('games', {
         state: {
-            type: DataTypes.ENUM('finished', 'initialized', 'pending'),
+            type: DataTypes.ENUM('pendiente','terminada'),
             allowNull: false,
         },
         winner: {
             type: DataTypes.STRING,
-            allowNull: false,
+            defaultValue: "",
             validate: {
-                //notEmpty doesn't allow empty strings  
-                notEmpty: true,
-                notNull: {
-                    msg: 'Please enter a winner'
+                validatingStatus(value){
+                    if(this.state === "terminada"){
+                        if(!value.length) throw new Error('Se debe ingresar un ganador');
+                    }
+                    if(this.state === "pendiente"){
+                        if(value.length) throw new Error('Partida en curso, no se puede asignar un ganador');
+                    }
                 }
             }
         },
         loser: {
             type: DataTypes.STRING,
-            allowNull: false,
+            defaultValue: "",
             validate: {
-                notEmpty: true,
-                notNull: {
-                    msg: 'Please enter a loser'
+                validatingStatus(value){
+                    if(this.state === "terminada"){
+                        if(!value.length) throw new Error('Se debe ingresar un perdedor');
+                    }
+                    if(this.state === "pendiente"){
+                        if(value.length) throw new Error('Partida en curso, no se puede asignar un perdedor');
+                    }
                 }
             }
         },
