@@ -3,8 +3,15 @@ const http = require('http');
 const appSocket = express();
 const server = http.createServer(appSocket);
 
-const socketio = require('socket.io')
-const io = socketio(server)
+// const socketio = require('socket.io')
+const io = require("socket.io")(server, {
+   cors: {
+     origin: "*",
+     methods: ["GET", "POST"],
+     allowedHeaders: ["my-custom-header"],
+     credentials: true
+   }
+ });
 
 import "reflect-metadata";
 import * as cors from "cors";
