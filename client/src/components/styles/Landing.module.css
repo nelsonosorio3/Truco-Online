@@ -6,31 +6,11 @@
     align-items: center;
     justify-content: center;
     
-    background-image: url('../../img/Welcome_bg2_edited.jpg');
+    background-image: url('../../img/landing.jpg');
     background-size: 100% 100%;
     background-repeat: no-repeat;
 }
 
-.table {
-    width: 750px;
-    height: 350px;
-
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    
-    position: absolute;
-    top: 50%;
-    left: 50%;
-
-    background-color: var(--tableColor);
-    padding: 2em;
-    border-radius: 150px;
-    border:15px solid var(--tableBorder);
-
-    transform: translate(-50%, -60%);
-}
 
 .btn {
     width: 250px !important;
@@ -42,17 +22,18 @@
     font-size: 20px;
     color: white;
     outline: none;
-    margin-top: 1em;
+    margin-top: 20em;
     cursor: pointer;
-    -webkit-transition: background-position .7s,box-shadow .4s;
-    transition: background-position .7s,box-shadow .4s;
+    /* -webkit-transition: background-position .7s,box-shadow .4s;
+    transition: background-position .7s,box-shadow .4s; */
     font-family: 'Oswald', sans-serif;
-    background: linear-gradient(to bottom, #d78746, #ffcda3);
-    box-shadow: 0px 0px 0px 2px rgb(255 255 255 / 16%) inset, 0px 0px 10px 0px #e48a3c;
+    background: linear-gradient(to bottom, #573908, #a98766);
+    /* box-shadow: 0px 0px 0px 2px rgb(255 255 255 / 16%) inset, 0px 0px 10px 0px #e48a3c; */
 }
 
 .btn:hover {
-    background: linear-gradient(to bottom, #d18e58, #eeb484);
+    background: linear-gradient(to top, #0c0c0b,#848784 );
+    color: white;
 }
 
 .table h1 {
