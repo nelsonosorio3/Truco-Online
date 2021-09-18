@@ -92,32 +92,6 @@ router.put('/:id/:email', (req, res) => {
     return res.status(404).json({ message: err.message })
   })
 
-
-  // User.findByPk(id)
-  //   .then(requested => {
-  //     if (!requested) throw new Error("No se encontro el usuario")
-
-  //     User.findOne({ where: { email: email } })
-  //       .then(sender => {
-  //         if (!sender) throw new Error("No se encontro el id del usuario")
-  //         //Revisar teoria
-  //         requested.Friends = {
-  //           status: response
-  //         }
-  //         sender.addUserSender(requested)
-  //         if (response == "accepted") {
-  //           res.status(201).json({ message: "La solicitud fue aceptada por " + requested.email })
-  //         } else {
-  //           res.status(201).json({ message: "La solicitud fue rechaza por " + requested.email })
-  //         }
-  //       })
-  //       .catch(err => {
-  //         return res.status(404).json({ message: err.message })
-  //       })
-  //   })
-  //   .catch(err => {
-  //     return res.status(404).json({ message: err.message })
-  //   })
 })
 
 router.delete('/:id/:email' , (req , res) => {
@@ -134,7 +108,7 @@ router.delete('/:id/:email' , (req , res) => {
     return User.findOne({where: {email: email}})
   })
   .then(userResult => {
-    if(!userResult) throw new Error("No se encontro el mail del email")
+    if(!userResult) throw new Error("No se encontro el email")
     userDeletedData = userResult.toJSON()
     return Friends.destroy({
       where: {
@@ -145,6 +119,8 @@ router.delete('/:id/:email' , (req , res) => {
     })
   })
   .then(result => {
+    //responde con 1 si se elimino
+    //responde con 0 si se elimino
     return result ? res.send("Se elimino amigo") : res.send("No se pudo eliminar el amigo.")
   })
   .catch(err => {
