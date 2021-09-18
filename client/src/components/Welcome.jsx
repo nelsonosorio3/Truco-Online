@@ -9,11 +9,11 @@ export default function Welcome() {
         <div className={styles.mainDiv}>
             <form action="" className={styles.form}>
                 <div className={styles.divButtons}>
-                    <button className={styles.btnLogIn}>Log In</button>
+                    <Link to='/log-in'>
+                        <button className={styles.btnLogIn}>Log In</button>
+                    </Link>
                     <Link to='/sign-up'>
-                        <button className={styles.btnSignUp}>
-                            Sign Up
-                        </button>
+                        <button className={styles.btnSignUp}>Sign Up</button>
                     </Link>
                     <button className={styles.btnGuest}>Login as Guest</button>
                 </div>

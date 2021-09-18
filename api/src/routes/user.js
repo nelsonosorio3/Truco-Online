@@ -1,7 +1,7 @@
 const { Router } = require("express");
 const Sequelize = require('sequelize');
 //const User = require("../models/User");
-const { User } = require("../db.js");
+const { User, Friends } = require("../db.js");
 const Op = Sequelize.Op;
 
 const router = Router();
@@ -22,7 +22,6 @@ router.get('/', async (req, res) => {
 
 router.get("/:id", async (req, res) => {
 
-  console.log("entro1");
   var { id } = req.params;
   id = parseInt(id);
   var user = await User.findAll({
@@ -37,16 +36,16 @@ router.get("/:id", async (req, res) => {
 });
 
 router.get("/:id/friends", async (req, res) => {
-  // const {id} = req.params;
-  // const user = await User.findByPk(parseInt(id), {include: Friends});
-  // const friends = [];
-  // if(user){
-  //   for await(let friend of user.friends){
-  //     friends.push(friend);
-  //   };
-  //   return res.json(friends);
-  // };
-  // res.sendStatus(404);
+  const { id } = req.params;
+  var user = await User.findByPk(parseInt(id), {
+    include: { model: User, as: "userSender", }
+  });
+  var user2 = await User.findByPk(parseInt(id), {
+    include: { model: User, as: "userRequested", }
+  });
+  var result = [...user.userSender, ...user2.userRequested]
+
+  res.status(200).json(result);
   res.sendStatus(404);
 });
 
@@ -58,12 +57,29 @@ router.get("/:id/history", async (req, res) => {
   res.sendStatus(404);
 });
 
-router.get("/:id/friend_requests_reveived", async (req, res) => {
+router.get("/:id/friend_requests_received", async (req, res) => {
   // const {id} = req.params;
   // const friend_requests_reveived = await User.findByPk(parseInt(id), {include: Friends, attributes:["name"], where:{status: "pending"}});
   // if(!friend_requests_reveived) res.sendStatus(404);
   // res.json(friend_requests_reveived);
-  res.sendStatus(404);
+  const { id } = req.params;
+  var user = await User.findByPk(parseInt(id), {
+    include: {
+      model: User,
+      as: "userRequested",
+      through: {
+        where: {
+          status: "pending"
+        }
+      }
+    }
+  });
+  var result = [...user.userRequested]
+
+  var result2 = result.filter(f => f.Friends.status === "pending");
+
+  res.status(200).json(result2);
+
 });
 
 router.get("/:id/friend_requests_sent", async (req, res) => {
@@ -71,7 +87,23 @@ router.get("/:id/friend_requests_sent", async (req, res) => {
   // const friend_requests_reveived = await User.findByPk(parseInt(id), {include: Friends, attributes:["name"], where:{[Op.or]: [{status: "pending"},{status: "reject"}]}});
   // if(!friend_requests_reveived) res.sendStatus(404);
   // res.json(friend_requests_reveived);
-  res.sendStatus(404);
+  const { id } = req.params;
+  var user = await User.findByPk(parseInt(id), {
+    where: {
+      '$Friends.status$': { [Op.ne]: "pending" }
+    },
+    include: {
+      model: User,
+      as: "userSender",
+    }
+  }
+  );
+  var result = [...user.userSender]
+
+  //implemento filter, porque no puedo generar la consulta con sequelize.
+  var result2 = result.filter(f => f.Friends.status === "pending" || f.Friends.status === "rejected");
+
+  res.status(200).json(result2);
 })
 
 router.post("/", async (req, res) => {

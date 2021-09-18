@@ -1,10 +1,10 @@
 // En este archivo se hacen las importaciones de todos los actions types
 // Definir el nomnre de los archivos como: nombre/funcion + Actions
 
-import signUpUserActions from "./signUpUserActions";
+import signUpActions from "./signUpActions";
 
 const allActions = {
-  signUpUserActions,
+  signUpActions,
 };
 
 export default allActions;
