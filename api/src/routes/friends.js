@@ -20,8 +20,9 @@ router.post('/:id/:email', (req, res) => {
     .then(sender => {
       if (!sender) throw new Error("No se encontro el id del usuario")
       User.findOne({ where: { email: email } })
-        .then(requested => {
+      .then(requested => {
           if (!requested) throw new Error("No se encontro el Email")
+          if(requested.toJSON().id === sender.toJSON().id) throw new Error("No se puede enviar una solicitud a uno mismo")
           return sender.hasUserRequested(requested)
         })
         .then((r) => {
@@ -48,35 +49,49 @@ router.put('/:id/:email', (req, res) => {
   const { id, email } = req.params
   const { response } = req.query
 
-  console.log("La respuesta fue:");
-  console.log(response);
+  // console.log("La respuesta fue:");
+  // console.log(response);
 
   if (!id || !email) return res.status(404).json({ Error: "Missing parameters!" })
 
+  let userRequestedData = null
+  let userSenderData = null
+
   User.findByPk(id)
-    .then(requested => {
-      if (!requested) throw new Error("No se encontro el Email")
-      User.findOne({ where: { email: email } })
-        .then(sender => {
-          if (!sender) throw new Error("No se encontro el id del usuario")
-          //Revisar teoria
-          requested.Friends = {
-            status: response
-          }
-          sender.addUserSender(requested)
-          if (response == "accepted") {
-            res.status(201).json({ message: "La solicitud fue aceptada por " + requested.email })
-          } else {
-            res.status(201).json({ message: "La solicitud fue rechaza por " + requested.email })
-          }
-        })
-        .catch(err => {
-          return res.status(404).json({ message: err.message })
-        })
+  .then((requested => {
+    if (!requested) throw new Error("No se encontro el usuario")
+    userRequestedData = requested
+    return User.findOne({ where: { email: email } })
+  }))
+  .then((sender) => {
+    if (!sender) throw new Error("No se encontro el id del usuario")
+    userSenderData = sender
+    return Friends.findAll({
+      where: {
+        status: "pending",
+        userSenderId:sender.toJSON().id,
+        userRequestedId: id
+      }
     })
-    .catch(err => {
-      return res.status(404).json({ message: err.message })
-    })
+  })
+  .then((result) => {
+    if(!result.length) throw new Error("El usuario requerido no tiene solicitud pendiente")
+    userRequestedData.Friends = {
+      status: response
+    }
+    return userSenderData.addUserSender(userRequestedData)
+  })
+  .then(response2 => {
+    if (response == "accepted") {
+      res.status(201).json({ message: "La solicitud fue aceptada "})
+    } else {
+      res.status(201).json({ message: "La solicitud fue rechaza por"})
+    }
+  })
+  .catch(err => {
+    return res.status(404).json({ message: err.message })
+  })
+
 })
 
 router.delete('/:id/:email' , (req , res) => {
@@ -93,7 +108,7 @@ router.delete('/:id/:email' , (req , res) => {
     return User.findOne({where: {email: email}})
   })
   .then(userResult => {
-    if(!userResult) throw new Error("No se encontro el mail del email")
+    if(!userResult) throw new Error("No se encontro el email")
     userDeletedData = userResult.toJSON()
     return Friends.destroy({
       where: {
@@ -104,6 +119,8 @@ router.delete('/:id/:email' , (req , res) => {
     })
   })
   .then(result => {
+    //responde con 1 si se elimino
+    //responde con 0 si se elimino
     return result ? res.send("Se elimino amigo") : res.send("No se pudo eliminar el amigo.")
   })
   .catch(err => {
