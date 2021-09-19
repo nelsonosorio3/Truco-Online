@@ -1,5 +1,6 @@
 const { Router } = require("express");
 const Sequelize = require('sequelize');
+const { isConstructorDeclaration } = require("typescript");
 //const User = require("../models/User");
 const { User, Friends, Games } = require("../db.js");
 const Op = Sequelize.Op;
@@ -51,29 +52,31 @@ router.get("/:id/friends", async (req, res) => {
 
 router.get("/:id/history", async (req, res) => {
 
-  /*
-  const { id } = req.params
+  const userId = req.params.id
 
-  const username = await User.findOne({
-    where: { id: id }
-  })
+  const userData = await User.findAll({
+    where: {
+      id: userId
+    }
+  });
+
+  console.log("userData is:")
+  console.log(userData)
+
+  var username = userData[0].dataValues.username;
 
   Games.findAll({
-    where: { winner: id },
-    attributes: ['id', 'username'],
+    where: {
+      [Op.or]: [
+        { winner: username },
+        { loser: username }
+      ]
+    }
   })
-    .then(user => {
-      return user.getGames({
-        attributes: ['state', "winner", "loser"]
-      })
-    })
     .then(result => {
-      res.json(result)
+      return res.json(result)
     })
-    .catch((err) => {
-      return res.json({ message: err.message })
-    })*/
-  return res.sendStatus(404);
+    .catch(e => res.status(404).send(e))
 })
 
 router.get("/:id/friend_requests_received", async (req, res) => {
