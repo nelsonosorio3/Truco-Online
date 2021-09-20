@@ -14,20 +14,20 @@ conn.sync({ force: true }).then(() => {
 
 })
 
-  // Uncomment the following lines to fill seeder
+  //Uncomment the following lines to fill seeder
 
-  // .then(() =>
-  //   axios({
-  //     url: "http://localhost:3001/api/filltable",
-  //     method: "POST",
-  //     headers: {
-  //       'Accept': 'application/json',
-  //       'Content-Type': 'application/json;charset=UTF-8'
-  //     }
-  //   })
-  // ).then(r => console.log(r))
+  .then(() =>
+    axios({
+      url: "http://localhost:3001/api/filltable",
+      method: "POST",
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json;charset=UTF-8'
+      }
+    })
+  ).then(r => console.log(r))
 
-  // .catch(e => console.log(e))
-  // ;
+  .catch(e => console.log(e))
+  ;
 
 

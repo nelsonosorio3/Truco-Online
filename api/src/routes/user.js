@@ -21,6 +21,38 @@ router.get('/', async (req, res) => {
 
 });
 
+router.get('/login', async (req, res) => {
+  var { emailInput, passwordInput } = req.body;
+  var users = await User.findAll({
+    where: {
+      email: emailInput
+    }
+  });
+  if (users.length === 0) return res.status(200).json(
+    { message: "El correo ingresado no existe." }
+  )
+  console.log(users)
+  try {
+    if (users.length > 0) {
+      console.log("Entro acá1");
+      var user = users.filter(u => u.password === passwordInput);
+      if (user.length === 0) return res.status(200).json({ message: "Los datos ingresados son incorrectos" })
+      if (user.length > 1) return res.status(200).json({ message: "Error! Hay más de un usuario con ese mail y contraseña" })
+      var resp = {
+        username: user[0].username,
+        id: user[0].id,
+        login: true
+      }
+      return res.status(200).json(resp)
+    }
+    console.log(error);
+    res.sendStatus(404).send(error);
+  } catch {
+    e => console.log(e)
+  }
+
+})
+
 router.get("/:id", async (req, res) => {
 
   var { id } = req.params;
