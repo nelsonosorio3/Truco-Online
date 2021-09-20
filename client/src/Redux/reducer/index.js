@@ -3,9 +3,13 @@ import { combineReducers } from "redux";
 
 // importar cada reducer(exportarlos en su archivo por default) y añadirlos a rootReducer
 import signUpReducer from "./signUpReducer";
+import logReducer from "./logReducer";
+import profileReducer from "./profileReducer";
 
 const rootReducer = combineReducers({
   signUpReducer,
+  logReducer,
+  profileReducer,
 });
 
 export default rootReducer;
