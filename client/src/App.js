@@ -9,6 +9,7 @@ import SignUp from "./components/SignUp";
 import JoinRoom from './components/JoinRoom';
 import LogIn from './components/LogIn';
 import ErrorPage from './components/ErrorPage';
+import Game from './components/game';
 
 function App() {
   return (
@@ -32,6 +33,9 @@ function App() {
         </Route>
         <Route exact path='/rooms'>
           <JoinRoom />
+        </Route>
+        <Route exact path='/game'>
+          <Game/>
         </Route>
         <Route path="*" component={ErrorPage} />
       </Switch>
