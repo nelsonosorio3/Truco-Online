@@ -77,7 +77,7 @@ export default function LogIn() {
                 {errors.user && (<p className={styles.danger}> {errors.user} </p>)}
                 <label className={styles.label} htmlFor="health"> Password: </label>
                 <input 
-                    type='text'
+                    type='password'
                     id='password'
                     name="password"
                     value={state.password}
