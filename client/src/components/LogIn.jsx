@@ -63,47 +63,40 @@ export default function LogIn({onLogin}) {
     return (
         <>
             <NavBar />
-            <section className={styles.container}>
-                {isLoginLoading && <strong> Checking credentials... </strong>}   
-                {!isLoginLoading &&             
-                    <form className={styles.form} onSubmit={handleSubmit}>
-                        <label className={styles.label} htmlFor="user" > User: </label>
-                        <input
-                            type="text"
-                            id="user"
-                            name = "user"
-                            value={state.user}
-                            placeholder="Put here the username"
-                            autoComplete="off"
-                            className={styles.input}
-                            onChange={handleChange}
-                        />
-                        {errors.user && (<p className={styles.danger}> {errors.user} </p>)}
-                        <label className={styles.label} htmlFor="health"> Password: </label>
-                        <input 
-                            type='text'
-                            id='password'
-                            name="password"
-                            value={state.password}
-                            placeholder="Put here the password"
-                            autoComplete="off"
-                            className={styles.input}
-                            onChange={handleChange}
-                            />
-                        {errors.password && (<p className={styles.danger}> {errors.password} </p>)}
-                        {((!errors.user && !errors.password) 
-                            && 
-                            (errors.user !== '' && errors.password !== '')) 
-                            ? 
-                            (<button type="submit" className={styles.button}>Login</button>) 
-                            : 
-                            <button type="submit" className={styles.disabled} disabled>Login</button>}
-                    </form> 
-                }
-                {
-                    hasLoginError && <strong> Credentials are invalid. </strong>
-                }
-            </section>
+
+            <div className={styles.container}>
+                <form className={styles.form} onSubmit={handleSubmit}>
+                <label className={styles.label} htmlFor="user" > User: </label>
+                <input
+                    type="text"
+                    id="user"
+                    name = "user"
+                    value={state.user}
+                    autoComplete="off"
+                    className={styles.input}
+                    onChange={handleChange}
+                />
+                {errors.user && (<p className={styles.danger}> {errors.user} </p>)}
+                <label className={styles.label} htmlFor="health"> Password: </label>
+                <input 
+                    type='password'
+                    id='password'
+                    name="password"
+                    value={state.password}
+                    autoComplete="off"
+                    className={styles.input}
+                    onChange={handleChange}
+                    />
+                {errors.password && (<p className={styles.danger}> {errors.password} </p>)}
+                {((!errors.user && !errors.password) 
+                    && 
+                    (errors.user !== '' && errors.password !== '')) 
+                    ? 
+                    (<button type="submit" className={styles.button}>Login</button>) 
+                    : 
+                    <button type="submit" className={styles.disabled} disabled>Login</button>}
+                </form> 
+            </div>
         </>
     );
 };
