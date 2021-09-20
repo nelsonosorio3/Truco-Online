@@ -6,9 +6,10 @@ export default function ErrorPage() {
     return (
         <>
             <NavBar />
-            <div className={style.contError}>
-                <h3> Esta página no existe... </h3>
-            </div>
+            <section className={style.contError}>
+                <h2> Error 404: Not Found </h2>
+                <p> This page doesn't exist... </p>
+            </section>
         </>
     );
 };
