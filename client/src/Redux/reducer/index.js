@@ -5,11 +5,13 @@ import { combineReducers } from "redux";
 import signUpReducer from "./signUpReducer";
 import logReducer from "./logReducer";
 import profileReducer from "./profileReducer";
+import roomsReducer from "./roomsReducer";
 
 const rootReducer = combineReducers({
   signUpReducer,
   logReducer,
   profileReducer,
+  roomsReducer
 });
 
 export default rootReducer;
