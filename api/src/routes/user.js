@@ -1,7 +1,8 @@
 const { Router } = require("express");
 const Sequelize = require('sequelize');
+const { isConstructorDeclaration } = require("typescript");
 //const User = require("../models/User");
-const { User, Friends } = require("../db.js");
+const { User, Friends, Games } = require("../db.js");
 const Op = Sequelize.Op;
 
 const router = Router();
@@ -19,6 +20,38 @@ router.get('/', async (req, res) => {
   }
 
 });
+
+router.get('/login', async (req, res) => {
+  var { emailInput, passwordInput } = req.body;
+  var users = await User.findAll({
+    where: {
+      email: emailInput
+    }
+  });
+  if (users.length === 0) return res.status(200).json(
+    { message: "El correo ingresado no existe." }
+  )
+  console.log(users)
+  try {
+    if (users.length > 0) {
+      console.log("Entro acá1");
+      var user = users.filter(u => u.password === passwordInput);
+      if (user.length === 0) return res.status(200).json({ message: "Los datos ingresados son incorrectos" })
+      if (user.length > 1) return res.status(200).json({ message: "Error! Hay más de un usuario con ese mail y contraseña" })
+      var resp = {
+        username: user[0].username,
+        id: user[0].id,
+        login: true
+      }
+      return res.status(200).json(resp)
+    }
+    console.log(error);
+    res.sendStatus(404).send(error);
+  } catch {
+    e => console.log(e)
+  }
+
+})
 
 router.get("/:id", async (req, res) => {
 
@@ -50,12 +83,33 @@ router.get("/:id/friends", async (req, res) => {
 });
 
 router.get("/:id/history", async (req, res) => {
-  // const {id} = req.params;
-  // const history = await User.findByPk(parseInt(id), {attributes: ["history"]});
-  // if(!history) return res.sendStatus(404);
-  // res.json(history);
-  res.sendStatus(404);
-});
+
+  const userId = req.params.id
+
+  const userData = await User.findAll({
+    where: {
+      id: userId
+    }
+  });
+
+  console.log("userData is:")
+  console.log(userData)
+
+  var username = userData[0].dataValues.username;
+
+  Games.findAll({
+    where: {
+      [Op.or]: [
+        { winner: username },
+        { loser: username }
+      ]
+    }
+  })
+    .then(result => {
+      return res.json(result)
+    })
+    .catch(e => res.status(404).send(e))
+})
 
 router.get("/:id/friend_requests_received", async (req, res) => {
   // const {id} = req.params;

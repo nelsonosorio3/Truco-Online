@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from "react-redux";
 
 import NavBar from './NavBar';
@@ -33,14 +33,14 @@ function validate(state) {
 };
 
 const initialState = {
-    user: '',
+    username: '',
     email: '',
     password: '',
 };
 
 export default function SignUp() {
 
-    const isAuth = useSelector(state => state.isAuth);
+    const { isRegister } = useSelector(state => state.signUpReducer);
     
     const dispatch = useDispatch();
 
@@ -62,38 +62,38 @@ export default function SignUp() {
 
     function handleSubmit(event) {
         event.preventDefault();
-        dispatch(signUpActions(state));
+        dispatch(signUpActions.signUpActions(state));
         setState(initialState);
         setErrors(initialState);
     };
 
     useEffect(() => {
         // para saber si el usuario se registro con exito
-        if(isAuth) {
-            // si asi fue mostrar mensaje de exito, guardar en local y redirigir
+        if(isRegister) {
+            // si asi fue mostrar mensaje de exito(quiero que sea un modal despues)
             return <h4>
               Congratulations ✅! You've been successfully registered!
             </h4>
         };
-    }, [isAuth]);
+    }, [isRegister]);
 
     return (
         <>
             <NavBar />
-            <div className={styles.container}>
+            <section className={styles.container}>
                 <form className={styles.form} onSubmit={handleSubmit}>
-                <label className={styles.label} htmlFor="user" > User: </label>
+                <label className={styles.label} htmlFor="username" > User: </label>
                 <input
                     type="text"
-                    id="user"
-                    name = "user"
-                    value={state.user}
+                    id="username"
+                    name = "username"
+                    value={state.username}
                     placeholder="Put here the username"
                     autoComplete="off"
                     className={styles.input}
                     onChange={handleChange}
                 />
-                {errors.user && (<p className={styles.danger}> {errors.user} </p>)}
+                {errors.username && (<p className={styles.danger}> {errors.user} </p>)}
                 <label className={styles.label} htmlFor="email"> Email: </label>
                 <input 
                     type="email"
@@ -118,15 +118,15 @@ export default function SignUp() {
                     onChange={handleChange}
                     />
                 {errors.password && (<p className={styles.danger}> {errors.password} </p>)}
-                {((!errors.user && !errors.email && !errors.password) 
+                {((!errors.username && !errors.email && !errors.password) 
                     && 
-                    (errors.user !== '' && errors.email !== '' && errors.password !== '')) 
+                    (errors.username !== '' && errors.email !== '' && errors.password !== '')) 
                     ? 
                     (<button type="submit" className={styles.button}> Create User </button>) 
                     : 
                     <button type="submit" className={styles.disabled} disabled> Create User </button>}
                 </form> 
-            </div>
+            </section>
         </>
     );
 };

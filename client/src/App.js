@@ -6,7 +6,7 @@ import Welcome from "./components/Welcome";
 import NavBar from "./components/NavBar";
 import Profile from "./components/Profile";
 import SignUp from "./components/SignUp";
-import JoinRoom from './components/JoinRoom';
+import Rooms from './components/rooms/Rooms';
 import LogIn from './components/LogIn';
 import ErrorPage from './components/ErrorPage';
 import Game from './components/game';
@@ -24,7 +24,7 @@ function App() {
         <Route exact path='/log-in'>
           <LogIn />
         </Route>
-        <Route exact path='/profile'>
+        <Route exact path='/profile/:user'>
           <NavBar />
           <Profile />
         </Route>
@@ -32,7 +32,7 @@ function App() {
           <SignUp />
         </Route>
         <Route exact path='/rooms'>
-          <JoinRoom />
+          <Rooms />
         </Route>
         <Route exact path='/game'>
           <Game/>

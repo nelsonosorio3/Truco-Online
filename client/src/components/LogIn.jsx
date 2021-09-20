@@ -1,9 +1,10 @@
-import React, { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from "react-redux";
+import { useEffect, useState } from 'react';
+import { useDispatch } from "react-redux";
+import { Redirect } from 'react-router-dom'; 
+
+import useUser from '../hooks/useUser';
 
 import NavBar from './NavBar';
-
-import signUpActions from '../Redux/actions-types/signUpActions';
 
 import styles from './styles/LogIn.module.css';
 
@@ -23,15 +24,15 @@ const initialState = {
     password: '',
 };
 
-export default function LogIn() {
+export default function LogIn({onLogin}) {
 
-    const isAuth = useSelector(state => state.isAuth);
-    
     const dispatch = useDispatch();
 
     const [state, setState] = useState(initialState);
     
     const [errors, setErrors] = useState(initialState);
+
+    const { isLoginLoading, hasLoginError, login, isLogged } = useUser();
     
     function handleChange(event) {
         const { name, value } = event.target;
@@ -47,21 +48,22 @@ export default function LogIn() {
 
     function handleSubmit(event) {
         event.preventDefault();
-        dispatch(signUpActions(state));
+        dispatch(login(state));
         setState(initialState);
         setErrors(initialState);
     };
 
     useEffect(() => {
-        if(isAuth) {
-            // para saber si el usuario se registro con exito
-            // si asi fue mostrar mensaje de exito, guardar en local y redirigir
+        if(isLogged) {
+            <Redirect to='/rooms'/>
+            onLogin && onLogin()
         };
-    }, [isAuth]);
+    }, [isLogged, onLogin]);
 
     return (
         <>
             <NavBar />
+
             <div className={styles.container}>
                 <form className={styles.form} onSubmit={handleSubmit}>
                 <label className={styles.label} htmlFor="user" > User: </label>

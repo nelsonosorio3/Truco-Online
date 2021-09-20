@@ -14,7 +14,7 @@ conn.sync({ force: true }).then(() => {
 
 })
 
-  // Uncomment the following lines to fill seeder
+  //Uncomment the following lines to fill seeder
 
   .then(() =>
     axios({
@@ -26,7 +26,6 @@ conn.sync({ force: true }).then(() => {
       }
     })
   ).then(r => console.log(r))
-
 
   .catch(e => console.log(e))
   ;
