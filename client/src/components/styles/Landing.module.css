@@ -1,0 +1,48 @@
+.container {
+    width: 100vw;
+    height: 100vh;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    
+    background-image: url('../../img/landing.jpg');
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+}
+
+
+.btn {
+    width: 250px !important;
+    height: auto;
+    border: none;
+    border-radius: 4px;
+    text-shadow: 0px 0px 10px rgb(0 0 0 / 50%);
+    padding: 20px 50px 20px 50px;
+    font-size: 20px;
+    color: white;
+    outline: none;
+    margin-top: 20em;
+    cursor: pointer;
+    /* -webkit-transition: background-position .7s,box-shadow .4s;
+    transition: background-position .7s,box-shadow .4s; */
+    font-family: 'Oswald', sans-serif;
+    background: linear-gradient(to bottom, #573908, #a98766);
+    /* box-shadow: 0px 0px 0px 2px rgb(255 255 255 / 16%) inset, 0px 0px 10px 0px #e48a3c; */
+}
+
+.btn:hover {
+    background: linear-gradient(to top, #0c0c0b,#848784 );
+    color: white;
+}
+
+.table h1 {
+    color: var(--fontColor);
+    font-size: 2.5rem;
+}
+
+.table a {
+    font-size: 1.8rem;
+    color: var(--fontColor);
+    text-decoration: none;
+}
