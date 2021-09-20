@@ -4,7 +4,10 @@
   padding: 0;
   box-sizing: border-box;
 }
-
+@font-face {
+  font-family: 'Crayon';
+  src: local('Crayon'), url(./fonts/CrayonHandRegular2016Demo.ttf) format('truetype');
+}
 /* Variables */
 :root {
   --fontFamily:-apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif; 

@@ -1,10 +1,9 @@
 .mainDiv{
-    background-image: url('../../img/Welcome_bg2_edited.jpg');
+    background-image: url('../../img/landing.jpg');
     background-size: 100% 100%;
     background-repeat: no-repeat;
-    width: 100%;
-    height: 0;
     padding-top: 57%;
+   
 }
 
 .form{
@@ -23,20 +22,31 @@
     text-shadow: 0px 0px 10px rgb(0 0 0 / 50%);
     overflow: hidden;
     padding: 20px 50px 20px 50px;
-    margin-bottom: 20px;
+    margin-top: 200px;
     font-size: 20px;
     position: relative;
     color: white;
     outline: none;
     cursor: pointer;
     width: 100%;
-    -webkit-transition: background-position .7s,box-shadow .4s;
+    background: transparent;
+    background-image: url('../../img/button1.png');
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+    text-decoration: none;
+    font-family: 'Crayon' ;
+    font-size: 20px;
+    /* -webkit-transition: background-position .7s,box-shadow .4s;
     transition: background-position .7s,box-shadow .4s;
     font-family: 'Oswald', sans-serif;
     background: linear-gradient(to bottom, #d78746, rgb(255 205 163));
-    box-shadow: 0px 0px 0px 2px rgb(255 255 255 / 16%) inset, 0px 0px 10px 0px #e48a3c;
+    box-shadow: 0px 0px 0px 2px rgb(255 255 255 / 16%) inset, 0px 0px 10px 0px #e48a3c; */
 }
 
+.btnLogIn:hover {
+    transition: all 1s cubic-bezier(0.19, 1, 0.22, 1);
+    transform : scale(1.1);
+}
 .btnSignUp{
     border: none;
     border-radius: 4px;
@@ -51,11 +61,23 @@
     outline: none;
     cursor: pointer;
     width: 100%;
-    -webkit-transition: background-position .7s,box-shadow .4s;
+    background: transparent;
+    background-image: url('../../img/button1.png');
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+    text-decoration: none;
+    font-family: 'Crayon' ;
+    font-size: 20px;
+    /* -webkit-transition: background-position .7s,box-shadow .4s;
     transition: background-position .7s,box-shadow .4s;
     font-family: 'Oswald', sans-serif;
     background: linear-gradient(to bottom, #36C176, rgb(147 225 183));
-    box-shadow: 0px 0px 0px 2px rgb(255 255 255 / 16%) inset, 0px 0px 10px 0px #e48a3c;
+    box-shadow: 0px 0px 0px 2px rgb(255 255 255 / 16%) inset, 0px 0px 10px 0px #e48a3c; */
+}
+
+.btnSignUp:hover {
+    transition: all 1s cubic-bezier(0.19, 1, 0.22, 1);
+    transform : scale(1.1);
 }
 
 .btnGuest{
@@ -71,9 +93,20 @@
     outline: none;
     cursor: pointer;
     width: 100%;
-    -webkit-transition: background-position .7s,box-shadow .4s;
+    background: transparent;
+    background-image: url('../../img/button1.png');
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+    text-decoration: none;
+    font-family: 'Crayon' ;
+    font-size: 20px;
+    /* -webkit-transition: background-position .7s,box-shadow .4s;
     transition: background-position .7s,box-shadow .4s;
     font-family: 'Oswald', sans-serif;
     background: linear-gradient(to bottom, #baea45, rgb(222 238 160));
-    box-shadow: 0px 0px 0px 2px rgb(255 255 255 / 16%) inset, 0px 0px 10px 0px #e48a3c;
+    box-shadow: 0px 0px 0px 2px rgb(255 255 255 / 16%) inset, 0px 0px 10px 0px #e48a3c; */
+}
+.btnGuest:hover {
+    transition: all 1s cubic-bezier(0.19, 1, 0.22, 1);
+    transform : scale(1.1);
 }
