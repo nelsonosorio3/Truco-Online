@@ -4,6 +4,8 @@ import { useHistory } from 'react-router';
 
 import HomeButton from './HomeButton';
 
+import { Redirect } from 'react-router'
+
 import signUpActions from '../Redux/actions-types/signUpActions';
 
 import styles from './styles/SignUp.module.css';
@@ -50,6 +52,8 @@ export default function SignUp() {
     const [state, setState] = useState(initialState);
     
     const [errors, setErrors] = useState(initialState);
+
+    const [endRegister, setEndRegister] = useState(false)
     
     function handleChange(event) {
         const { name, value } = event.target;
@@ -68,6 +72,7 @@ export default function SignUp() {
         dispatch(signUpActions.signUpActions(state));
         setState(initialState);
         setErrors(initialState);
+        setEndRegister(true);
     };
 
     useEffect(() => {
@@ -82,6 +87,7 @@ export default function SignUp() {
     return (
         <>
             <HomeButton />
+            {endRegister ? <Redirect to="/welcome" /> : <></>}
             <section className={styles.container}>
                 <form className={styles.form} onSubmit={handleSubmit}>
                 <label className={styles.label} htmlFor="username" > User: </label>

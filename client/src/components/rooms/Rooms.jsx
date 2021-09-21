@@ -1,15 +1,28 @@
 import React, {useEffect, useState} from 'react';
+import {useDispatch, useSelector} from 'react-redux'
+
 import Chat from '../Chat';
-import Socket from '../socket';
 
 import JoinRoomForm from './JoinRoomForm';
 import RoomsList from './RoomsList';
 
 export default function Rooms() {
+
+  const isinRoom = useSelector(store => store.roomsReducer.isInRoom);
+  const roomId = useSelector(store => store.roomsReducer.roomId)
+
   return (
-    <div>
-      <JoinRoomForm />
-      <RoomsList />
+    <div>{console.log(isinRoom, roomId)}
+      {
+        isinRoom
+        ?
+        <Chat roomId={roomId} />
+        :
+        <div>
+          <JoinRoomForm />
+          <RoomsList />
+        </div>
+      }
     </div>
   );
 }
