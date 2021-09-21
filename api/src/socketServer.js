@@ -53,6 +53,7 @@ const table = {
                 }, //la lista de apuestas posibles la idea es que es un objeto con propiedades de apuestas posibles y un array con cada posible respuesta
     bet: false, //estado para renocer si hubo o no una apuesta y parar el flujo normal del juego
     skip: false, // auxiliar para saltar
+    tableCards: [], //array para tener las cartas en la mesa
   };
 
   function buildDeck(){
@@ -169,6 +170,7 @@ io.on('connection', function (socket) {
         socket.broadcast.emit("bet", table.betsList[betPick])
         console.log(table.betsList[betPick])
     })
+    socket.on("playCard")
 
 
 
