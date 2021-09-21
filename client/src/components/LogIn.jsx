@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { useHistory } from 'react-router';
 import { useDispatch, useSelector } from "react-redux";
 
-import ModalController from "./Modal"
+import ModalController from "./Modal";
 import HomeButton from './HomeButton';
 
 import log from '../Redux/actions-types/logActions';
@@ -30,16 +30,16 @@ const initialState = {
 };
 
 export default function LogIn() {
+
   const dispatch = useDispatch();
-  
+    
   const history = useHistory();
-  
+    
   const { isAuth, message, token  } = useSelector(state => state.logReducer);
 
   const { logIn } = log;
 
   const [state, setState] = useState(initialState);
-  
   const [errors, setErrors] = useState(initialState);
 
   // Esto es para el modal
@@ -74,9 +74,9 @@ export default function LogIn() {
       localStorage.setItem("token", token)
       history.push('/rooms');
     }
-  }, [isAuth, message, history]);
+  }, [isAuth]);
 
-    return (
+  return (
         <>
             <HomeButton />
             {/* Este es el modal. El state que lo determina es "show" */}
