@@ -9,8 +9,8 @@ export default function Friend({ name, date }) {
       <img src={profileIcon} alt="" className={styles.profileIconSmall} />
       <h3 className={styles.name}>{name}</h3>
       <div className={styles.div2}>
-        <p className={styles.name}>Amigos desde:</p>
-        <div className={styles.name}>{date.split("T")[0]}</div>
+        <p className={styles.text}>Amigos desde:</p>
+        <div className={styles.text}>{date.split("T")[0]}</div>
       </div>
     </div>
   )

@@ -1,15 +1,16 @@
-import { ADD_ROOM } from '../actions/index';
+import { IS_IN_ROOM } from '../actions/index';
 
 const INITIAL_STATE = {
-  rooms: []
+  isInRoom: false,
+  roomId: null,
 };
 
 const roomsReducer = (state = INITIAL_STATE, {type, payload}) => {
   switch (type) {
-    case ADD_ROOM:
+    case IS_IN_ROOM:
       return {
-        ...state,
-        rooms: [...state.rooms, payload]
+        isInRoom: payload.isInRoom,
+        roomId: payload.roomId,
       };
     default:
       return state;    

@@ -1,13 +1,13 @@
 import React, {useState, useEffect } from 'react';
+import {useDispatch, useSelector} from 'react-redux'
 
+import { setIsInRoom } from '../../Redux/actions-types/roomsActions';
 import socket from '../socket';
-import Chat from '../Chat';
 
 export default function RoomsList(){
-    // const allRooms = useSelector(store => store.roomsReducer.rooms);
     const [allRooms, setAllRooms] = useState([])
-    const [isInRoom, setIsInRoom] = useState(false)
     const [roomId, setRoomId] = useState('')
+    const dispatch = useDispatch()
 
     useEffect(() => {
         socket.on('showActiveRooms', (rooms) => {
@@ -24,36 +24,26 @@ export default function RoomsList(){
 
     const joinRoom = async (event) => {
         event.preventDefault();
-        setRoomId(parseInt(event.target[0].innerText))
-        console.log(roomId)
         socket.emit('joinRoom', (parseInt(event.target[0].innerText)))
-        setIsInRoom(true);
-    }
+        dispatch(setIsInRoom({isInRoom: true, roomId: parseInt(event.target[0].innerText)}))
+      }
 
     return(
         <div>
+            <form onSubmit={updateRooms}>
+                <button type='submit'>Update Rooms</button>
+            </form>
             {
-            isInRoom
-            ? 
-              <Chat roomId={roomId}/>
-            :
-                <div>
-                    <form onSubmit={updateRooms}>
-                        <button type='submit'>Update Rooms</button>
+            allRooms.length > 0
+            ?
+                allRooms[0].activeRooms.map(room => 
+                <div key={room}>
+                    <form onSubmit={joinRoom}>
+                        <button type='submit' value={room}>{room}</button>
                     </form>
-                    {
-                        allRooms.length > 0
-                        ?
-                            allRooms[0].activeRooms.map(room => 
-                                <div key={room}>
-                                    <form onSubmit={joinRoom}>
-                                        <button type='submit' disabled={isInRoom} value={room}>{room}</button>
-                                    </form>
-                                </div>)
-                        :
-                        <></>
-            }
-                </div>
+                </div>)
+            :
+                <></>
             }
         </div>
     )

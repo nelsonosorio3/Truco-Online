@@ -1,8 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from 'react-router';
-
-import NavBar from './NavBar';
+import { Redirect } from 'react-router'
 
 import signUpActions from '../Redux/actions-types/signUpActions';
 
@@ -50,6 +49,8 @@ export default function SignUp() {
     const [state, setState] = useState(initialState);
     
     const [errors, setErrors] = useState(initialState);
+
+    const [endRegister, setEndRegister] = useState(false)
     
     function handleChange(event) {
         const { name, value } = event.target;
@@ -68,6 +69,7 @@ export default function SignUp() {
         dispatch(signUpActions.signUpActions(state));
         setState(initialState);
         setErrors(initialState);
+        setEndRegister(true);
     };
 
     useEffect(() => {
@@ -81,7 +83,7 @@ export default function SignUp() {
 
     return (
         <>
-            <NavBar />
+            {endRegister ? <Redirect to="/welcome" /> : <></>}
             <section className={styles.container}>
                 <form className={styles.form} onSubmit={handleSubmit}>
                 <label className={styles.label} htmlFor="username" > User: </label>
