@@ -1,9 +1,8 @@
 import { SIGN_UP } from '../actions/index';
 
 const INITIAL_STATE = {
-  isRegister: false,
-  isValidName: null,
-  isValidEmail: null,
+  registered: false,
+  validEmail: null,
 };
 
 const signUpReducer = (state = INITIAL_STATE, {type, payload}) => {
@@ -11,9 +10,8 @@ const signUpReducer = (state = INITIAL_STATE, {type, payload}) => {
     case SIGN_UP:
       return {
         ...state,
-        isRegister: payload.isRegister,
-        isValidName: payload.isValidName,
-        isValidEmail: payload.isValidEmail,
+        registered: payload.registered,
+        validEmail: payload.validEmail,
       };
     default:
       return state;    

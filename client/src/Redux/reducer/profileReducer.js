@@ -1,7 +1,9 @@
-import { GET_PROFILE } from '../actions/index';
+import { GET_PROFILE, GET_FRIENDS, GET_HISTORY } from '../actions/index';
 
 const INITIAL_STATE = {
   userProfile: {},
+  userFriends: {},
+  userHistory: {},
 };
 
 const profileReducer = (state = INITIAL_STATE, {type, payload}) => {
@@ -13,6 +15,18 @@ const profileReducer = (state = INITIAL_STATE, {type, payload}) => {
             gamesPlayed: payload.gamesPlayed,
             gamesWon: payload.gamesWon,
             gamesLost: payload.gamesLost,
+        },
+      };
+    case GET_FRIENDS:
+      return {
+        userFriends: {
+            
+        },
+      };  
+      case GET_HISTORY:
+      return {
+        userHistory: {
+            
         },
       };
     default:
