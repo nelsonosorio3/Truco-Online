@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from "react-redux";
+import { useHistory } from 'react-router';
 
 import NavBar from './NavBar';
 
@@ -40,7 +41,9 @@ const initialState = {
 
 export default function SignUp() {
 
-    const { isRegister } = useSelector(state => state.signUpReducer);
+    const history = useHistory();
+
+    const { registered } = useSelector(state => state.signUpReducer);
     
     const dispatch = useDispatch();
 
@@ -69,13 +72,12 @@ export default function SignUp() {
 
     useEffect(() => {
         // para saber si el usuario se registro con exito
-        if(isRegister) {
+        if(registered) {
             // si asi fue mostrar mensaje de exito(quiero que sea un modal despues)
-            return <h4>
-              Congratulations ✅! You've been successfully registered!
-            </h4>
+            alert("Congratulations ✅! You've been successfully registered!");
+            history.push('log-in');
         };
-    }, [isRegister]);
+    }, [registered]);
 
     return (
         <>
