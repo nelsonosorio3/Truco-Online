@@ -10,6 +10,7 @@ import JoinRoom from './components/JoinRoom';
 import LogIn from './components/LogIn';
 import ErrorPage from './components/ErrorPage';
 import Game from './components/game';
+import Ranking from './components/Ranking';
 
 function App() {
   return (
@@ -36,6 +37,10 @@ function App() {
         </Route>
         <Route exact path='/game'>
           <Game/>
+        </Route>
+        <Route exact path='/ranking'>
+          <NavBar />
+          <Ranking/>
         </Route>
         <Route path="*" component={ErrorPage} />
       </Switch>
