@@ -3,7 +3,7 @@ const Sequelize = require('sequelize');
 const { isConstructorDeclaration } = require("typescript");
 //const User = require("../models/User");
 const { User, Friends, Games } = require("../db.js");
-const jwt = require('jsonwebtoken')
+const jwt = require('jsonwebtoken');
 const Op = Sequelize.Op;
 const router = Router();
 
@@ -82,6 +82,12 @@ router.get('/login', async (req, res) => {
 router.get("/:id", validarUsuario,  async (req, res) => {
   var { id } = req.params;
   id = parseInt(id);
+  
+  console.log("Comparacion userId (validado) y id (profile)", req.body.userId, id)
+  //Compara el id que se almacena luego del la validacion con el id ingresado para ver el perfil.
+  //Solo se da acceso al usuario con el id que se hizo la validacion
+  //Ejemplo: /1 hizo validacion, entonces /1 no puede acceder luego al profile de /2
+  if(req.body.userId !== id) return res.json("No tienes acceso!")
   try{
     let user = await User.findAll({
       attributes: { exclude: 'password' },
