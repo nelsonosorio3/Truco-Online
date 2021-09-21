@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useHistory } from 'react-router';
 import { useDispatch, useSelector } from "react-redux";
+import ModalController from "./Modal"
 
 import log from '../Redux/actions-types/logActions';
 
@@ -33,7 +34,7 @@ export default function LogIn() {
     
     const history = useHistory();
     
-    const { isAuth } = useSelector(state => state.logReducer);
+    const { isAuth, message  } = useSelector(state => state.logReducer);
 
     const { logIn } = log;
 
@@ -41,6 +42,11 @@ export default function LogIn() {
     
     const [errors, setErrors] = useState(initialState);
 
+    // Esto es para el modal
+    const [show, setShow] = useState(false);
+    const handleClose = () => setShow(false);
+    const handleShow = () => setShow(true);
+  
     
     function handleChange(event) {
         const { name, value } = event.target;
@@ -59,17 +65,22 @@ export default function LogIn() {
         dispatch(logIn(state)); 
         setState(initialState);
         setErrors(initialState);
+        
+        // Para el modal
+        handleShow()
     };
 
     useEffect(() => {
         if(isAuth) {
             history.push('/rooms');
-        };
-    }, [isAuth]);
+        }
+    }, [isAuth, message, history]);
 
     return (
         <>
             <NavBar />
+            {/* Este es el modal. El state que lo determina es "show" */}
+            <ModalController show={show} handleClose={handleClose} message={message}/>
             <section className={styles.container}>
                     <form className={styles.form} onSubmit={handleSubmit}>
                         <label className={styles.label} htmlFor="emailInput" > Email: </label>
@@ -106,6 +117,7 @@ export default function LogIn() {
                     </form> 
               
             </section>
+
         </>
     );
 };

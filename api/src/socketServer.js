@@ -26,6 +26,21 @@ server.listen(9000, function () {
 
 var activeRooms = []
 
+
+
+  
+//Hacer passport
+// io.use((socket, next) => {
+//     console.log("socket.handshake.auth (middleware)", socket.handshake.auth)
+//     if (true) {
+//       next();
+
+//     } else {
+//       next(new Error("invalid"));
+//     }
+// });
+
+
 io.on('connection', function (socket) {
 
     socket.on('connected', function (name) {
@@ -38,10 +53,11 @@ io.on('connection', function (socket) {
         io.emit('messages', { server: 'Server', message: 'Has left the room.' });
     });
     socket.on('joinRoom', function (roomId) {
+
         socket.join(parseInt(roomId));
         if(activeRooms.indexOf(roomId) === -1) activeRooms = [...activeRooms, roomId]
         else console.log(roomId, 'ya existe');
-        console.log(activeRooms)
+        console.log("active rooms: ", activeRooms)
     });
     socket.on('roomTest', function (_a) {
         var room = _a.room;

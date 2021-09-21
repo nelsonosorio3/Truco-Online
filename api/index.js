@@ -25,7 +25,7 @@ conn.sync({ force: true }).then(() => {
         'Content-Type': 'application/json;charset=UTF-8'
       }
     })
-  ).then(r => console.log(r))
+  ).then(r => console.log("Tabla llenada"))
 
   .catch(e => console.log(e))
   ;
