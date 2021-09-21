@@ -79,20 +79,14 @@ router.get('/login', async (req, res) => {
   }
 })
 
-router.get("/:id", validarUsuario,  async (req, res) => {
-  var { id } = req.params;
-  id = parseInt(id);
-  
-  console.log("Comparacion userId (validado) y id (profile)", req.body.userId, id)
-  //Compara el id que se almacena luego del la validacion con el id ingresado para ver el perfil.
-  //Solo se da acceso al usuario con el id que se hizo la validacion
-  //Ejemplo: /1 hizo validacion, entonces /1 no puede acceder luego al profile de /2
-  if(req.body.userId !== id) return res.json("No tienes acceso!")
+router.get("/profile", validarUsuario,  async (req, res) => {
+  // userId ---> viene del middleware para autenticacion(req.body.userId) - Se utiliza para el query
+  console.log("Authenticated userId: ", req.body.userId)
   try{
     let user = await User.findAll({
       attributes: { exclude: 'password' },
       where: {
-        id: id
+        id: req.body.userId
       }
     })
     if (!user) throw new Error("El usuario no se encontro")

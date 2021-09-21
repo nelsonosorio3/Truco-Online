@@ -1,12 +1,10 @@
 import axios from 'axios';
 import { GET_PROFILE, GET_FRIENDS, GET_HISTORY } from '../actions/index';
 
-const getProfile = ({id, token}) => {
-
-  console.log(id, token)
+const getProfile = ({token}) => {
 
   return function(dispatch) {
-    return axios.get(`http://localhost:3001/api/user/${id}`,{
+    return axios.get(`http://localhost:3001/api/user/profile`,{
       headers: {
         "x-access-token": token,
       }

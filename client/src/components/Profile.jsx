@@ -16,10 +16,11 @@ export default function Profile(props) {
     const { userProfile, userFriends, userHistory  } = useSelector(state => state.profileReducer);
     const {getProfile} = profileActions
     const dispatch = useDispatch();
-
+    
+    console.log(userProfile)
 
     useEffect(() => {
-        dispatch(getProfile({id: 1, token: localStorage.token}))
+        dispatch(getProfile({token: localStorage.token}))
     },[])
     /* 
     Las solicitudes enviadas no debe traer aquellas que ya están aceptadas, estos ya son amigos!
