@@ -3,9 +3,17 @@
     justify-content: space-around;
     background: #292b2c;
     padding: 15px 0px 15px 0px;
+    text-decoration: none;
 }
 
 .a{
     text-decoration: none;
-    color: #878787;
+    font-family: 'Crayon';
+    color: lightgray;
+    font-size: 20px;
+}
+
+.logo {
+    width: 20px;
+    height: 20px;
 }
