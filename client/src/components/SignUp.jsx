@@ -110,7 +110,7 @@ export default function SignUp() {
                 {errors.email && (<p className={styles.danger}> {errors.email} </p>)}
                 <label className={styles.label} htmlFor="health"> Password: </label>
                 <input 
-                    type='text'
+                    type='password'
                     id='password'
                     name="password"
                     value={state.password}

@@ -9,3 +9,5 @@ export const LOG_IN = 'LOG_IN';
 export const GET_PROFILE = 'GET_PROFILE';
 export const GET_FRIENDS = 'GET_FRIENDS';
 export const GET_HISTORY = 'GET_HISTORY';
+
+export const ADD_ROOM = 'ADD_ROOM'

@@ -6,9 +6,10 @@ import Welcome from "./components/Welcome";
 import NavBar from "./components/NavBar";
 import Profile from "./components/Profile";
 import SignUp from "./components/SignUp";
-import JoinRoom from './components/JoinRoom';
+import Rooms from './components/rooms/Rooms';
 import LogIn from './components/LogIn';
 import ErrorPage from './components/ErrorPage';
+import Game from './components/game';
 
 function App() {
   return (
@@ -31,7 +32,10 @@ function App() {
           <SignUp />
         </Route>
         <Route exact path='/rooms'>
-          <JoinRoom />
+          <Rooms />
+        </Route>
+        <Route exact path='/game'>
+          <Game/>
         </Route>
         <Route path="*" component={ErrorPage} />
       </Switch>
