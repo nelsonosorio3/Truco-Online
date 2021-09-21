@@ -60,6 +60,7 @@ router.get('/login', async (req, res) => {
       var user = users.filter(u => u.password === passwordInput);
       if (user.length === 0) return res.status(200).json({ message: "Los datos ingresados son incorrectos", login: false })
       if (user.length > 1) return res.status(200).json({ message: "Error! Hay más de un usuario con ese mail y contraseña", login: false })
+      
       //token autentication - Se crea el token y se envia al cliente
       const token = jwt.sign({id: user[0].id}, req.app.get('secretKey'), { expiresIn: '7d' });
       var resp = {
