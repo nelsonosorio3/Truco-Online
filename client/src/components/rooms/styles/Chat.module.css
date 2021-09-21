@@ -1,0 +1,17 @@
+.chatLobby{
+    width: 100%;
+    min-height: 60vh;
+    max-height: 60vh;
+    overflow: scroll;
+    border: 2px solid black;
+    background-color: rgba(255, 255, 255, 0.3);
+}
+
+.chatGame{
+    width: 100%;
+    min-height: 50vh;
+    max-height: 50vh;
+    overflow: scroll;
+    border: 2px solid black;
+    background-color: rgba(255, 255, 255, 0.3);
+}
