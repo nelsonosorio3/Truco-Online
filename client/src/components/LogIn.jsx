@@ -72,7 +72,9 @@ export default function LogIn() {
   useEffect(() => {
     if(isAuth) {
       localStorage.setItem("token", token)
-      history.push('/rooms');
+      setTimeout(() => {
+        history.push('/rooms');
+      }, 3000);
     }
   }, [isAuth]);
 
@@ -97,7 +99,7 @@ export default function LogIn() {
                         {errors.emailInput && (<p className={styles.danger}> {errors.emailInput} </p>)}
                         <label className={styles.label} htmlFor="passwordInput"> Password: </label>
                         <input 
-                            type='text'
+                            type='password'
                             id='passwordInput'
                             name="passwordInput"
                             value={state.passwordInput}
