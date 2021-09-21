@@ -1,11 +1,13 @@
 import React from 'react';
 
-import styles from './styles/Profile.module.css'
-import profileIcon from '../img/profileIcon.png'
+import styles from './styles/Profile.module.css';
+import profileIcon from '../img/profileIcon.png';
+
+import { userSelector } from 'react-redux';
 
 /* Los dos siguientes imports agregados por guille */
-import Friend from './Friend'
-import Match from './Match'
+import Friend from './Friend';
+import Match from './Match';
 
 export default function Profile() {
 
@@ -15,6 +17,9 @@ export default function Profile() {
     Las búsquedas de amigos no deven devolver las amistades con estado "pending" ni "rejected", sólo "accepted".
 
     */
+    /*
+     var user2 = useSelector(state => state.profileReducer)*/
+
 
     var user = [
         {
