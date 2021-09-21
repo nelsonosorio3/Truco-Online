@@ -30,53 +30,53 @@ const initialState = {
 };
 
 export default function LogIn() {
-    const dispatch = useDispatch();
+
+  const dispatch = useDispatch();
     
-    const history = useHistory();
+  const history = useHistory();
     
-    const { isAuth, message } = useSelector(state => state.logReducer);
+  const { isAuth, message, token  } = useSelector(state => state.logReducer);
 
-    const { logIn } = log;
+  const { logIn } = log;
 
-    const [state, setState] = useState(initialState);
-    
-    const [errors, setErrors] = useState(initialState);
+  const [state, setState] = useState(initialState);
+  const [errors, setErrors] = useState(initialState);
 
-    // Esto es para el modal
-    const [show, setShow] = useState(false);
-    const handleClose = () => setShow(false);
-    const handleShow = () => setShow(true);
-  
-    
-    function handleChange(event) {
-        const { name, value } = event.target;
-        setErrors(validate({
-          ...state,
-          [name]: value
-        }));
-        setState({
-          ...state,
-          [name]: value,
-        });
-    };
+  // Esto es para el modal
+  const [show, setShow] = useState(false);
+  const handleClose = () => setShow(false);
+  const handleShow = () => setShow(true);
 
-    function handleSubmit(event) {
-        event.preventDefault();
-        dispatch(logIn(state)); 
-        setState(initialState);
-        setErrors(initialState);
-        
-        // Para el modal
-        handleShow()
-    };
+  function handleChange(event) {
+      const { name, value } = event.target;
+      setErrors(validate({
+        ...state,
+        [name]: value
+      }));
+      setState({
+        ...state,
+        [name]: value,
+      });
+  };
 
-    useEffect(() => {
-        if(isAuth) {
-            history.push('/rooms');
-        }
-    }, [isAuth]);
+  function handleSubmit(event) {
+      event.preventDefault();
+      dispatch(logIn(state)); 
+      setState(initialState);
+      setErrors(initialState);
+      
+      // Para el modal
+      handleShow()
+  };
 
-    return (
+  useEffect(() => {
+    if(isAuth) {
+      localStorage.setItem("token", token)
+      history.push('/rooms');
+    }
+  }, [isAuth]);
+
+  return (
         <>
             <HomeButton />
             {/* Este es el modal. El state que lo determina es "show" */}

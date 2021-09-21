@@ -19,11 +19,13 @@ const logReducer = (state = INITIAL_STATE, {type, payload}) => {
         // id: 1
         // login: true
         // username: "pedro"
+        // token: "String"
         return {
           ...state,
           isAuth: payload.login,
           user: payload.username,
           id: payload.id,
+          token: payload.token
         };
       } else {
         console.log(payload)
