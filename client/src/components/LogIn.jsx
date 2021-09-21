@@ -1,11 +1,11 @@
 import { useEffect, useState } from 'react';
 import { useHistory } from 'react-router';
 import { useDispatch, useSelector } from "react-redux";
+
 import ModalController from "./Modal"
+import HomeButton from './HomeButton';
 
 import log from '../Redux/actions-types/logActions';
-
-import NavBar from './NavBar';
 
 import styles from './styles/LogIn.module.css';
 
@@ -78,7 +78,7 @@ export default function LogIn() {
 
     return (
         <>
-            <NavBar />
+            <HomeButton />
             {/* Este es el modal. El state que lo determina es "show" */}
             <ModalController show={show} handleClose={handleClose} message={message}/>
             <section className={styles.container}>
@@ -115,7 +115,6 @@ export default function LogIn() {
                             : 
                             <button type="submit" className={styles.disabled} disabled>Login</button>}
                     </form> 
-              
             </section>
 
         </>

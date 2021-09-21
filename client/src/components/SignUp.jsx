@@ -1,6 +1,9 @@
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from 'react-router';
+
+import HomeButton from './HomeButton';
+
 import { Redirect } from 'react-router'
 
 import signUpActions from '../Redux/actions-types/signUpActions';
@@ -12,12 +15,12 @@ const EMAIL = /^[^@]+@[^@]+\.[^@]+$/;
 
 function validate(state) {
   let errors = {};
-  if(!state.user) {
-    errors.user = 'You have to enter a user name...';
-  } else if (state.user.length < 4) {
-      errors.user = 'The user is invalid. Must be more than 4 characters...';
-  } else if(!ALPHA.test(state.user)) {
-      errors.user = 'Only letters are allowed...'
+  if(!state.username) {
+    errors.username = 'You have to enter a user name...';
+  } else if (state.username.length < 4) {
+      errors.username = 'The user is invalid. Must be more than 4 characters...';
+  } else if(!ALPHA.test(state.username)) {
+      errors.username = 'Only letters are allowed...'
   };
   if(!state.email) {
     errors.email = 'You have to enter an email...';
@@ -83,6 +86,7 @@ export default function SignUp() {
 
     return (
         <>
+            <HomeButton />
             {endRegister ? <Redirect to="/welcome" /> : <></>}
             <section className={styles.container}>
                 <form className={styles.form} onSubmit={handleSubmit}>
@@ -97,7 +101,7 @@ export default function SignUp() {
                     className={styles.input}
                     onChange={handleChange}
                 />
-                {errors.username && (<p className={styles.danger}> {errors.user} </p>)}
+                {errors.username && (<p className={styles.danger}> {errors.username} </p>)}
                 <label className={styles.label} htmlFor="email"> Email: </label>
                 <input 
                     type="email"
