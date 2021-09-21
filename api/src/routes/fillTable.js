@@ -44,60 +44,60 @@ var friendships = [f1, f2, f3, f4, f5, f6, f7, f8, f9, f10, f11, f12, f13, f14]
 
 router.post("/", async (req, res) => {
 
-try{
-  await Games.create({
-    state: "pendiente",
-    winner: "",
-    loser: "",
-    results: "12|23"
-  })
+  try {
+    await Games.create({
+      state: "pendiente",
+      winner: "",
+      loser: "",
+      results: "12|23"
+    })
 
-  await Games.create({
-    state: "pendiente",
-    winner: "",
-    loser: "",
-    results: "11|13"
-  })
+    await Games.create({
+      state: "pendiente",
+      winner: "",
+      loser: "",
+      results: "11|13"
+    })
 
-  await Games.create({
-    state: "terminada",
-    winner: "pedro",
-    loser: "leo",
-    results: "11|13"
-  })
+    await Games.create({
+      state: "terminada",
+      winner: "pedro",
+      loser: "leo",
+      results: "11|13"
+    })
 
-  await Games.create({
-    state: "terminada",
-    winner: "pedro",
-    loser: "santiago",
-    results: "11|13"
-  })
+    await Games.create({
+      state: "terminada",
+      winner: "pedro",
+      loser: "santiago",
+      results: "11|13"
+    })
 
 
-  var d1 = await User.create(u1)
-  var d2 = await User.create(u2)
-  var d3 = await User.create(u3)
-  var d4 = await User.create(u4)
-  var d5 = await User.create(u5)
-  var d6 = await User.create(u6)
-  var d7 = await User.create(u7)
-  var d8 = await User.create(u8)
-  await Friends.create(f15)
+    var d1 = await User.create(u1)
+    var d2 = await User.create(u2)
+    var d3 = await User.create(u3)
+    var d4 = await User.create(u4)
+    var d5 = await User.create(u5)
+    var d6 = await User.create(u6)
+    var d7 = await User.create(u7)
+    var d8 = await User.create(u8)
+    await Friends.create(f15)
 
-  for await (f of friendships) {
-    Friends.create(f)
+    for await (f of friendships) {
+      Friends.create(f)
+    }
+    res.status(200).json({ message: "Tabla de prueba llenada con éxito." });
   }
-  res.status(200).json({ message: "Tabla de prueba llenada con éxito." });
-}
-  
 
-catch (err){
-  res.json({message: err.message})
-}
+
+  catch (err) {
+    res.json({ message: err.message })
+  }
 
 
 
-  
+
 
 
 })

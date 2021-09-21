@@ -7,6 +7,10 @@ const INITIAL_STATE = {
   message: ''
 };
 
+const saveInLocalStorage = () => {
+  
+};
+
 const logReducer = (state = INITIAL_STATE, {type, payload}) => {
   switch (type) {
     case LOG_IN:

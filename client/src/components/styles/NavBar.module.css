@@ -1,19 +1,25 @@
-.mainDiv{
+/* .mainDiv{
     display: flex;
     justify-content: space-around;
     background: #292b2c;
     padding: 15px 0px 15px 0px;
+} */
+
+.nav{
+    display: flex;
+    justify-content: space-around;
+    background: #292b2c;
     text-decoration: none;
 }
 
 .a{
     text-decoration: none;
-    font-family: 'Crayon';
-    color: lightgray;
-    font-size: 20px;
+    color: #878787;
+    margin: auto;
+    font-weight: 300;
+    font-size: 21px;
 }
 
-.logo {
-    width: 20px;
-    height: 20px;
+.logo2{
+    width: 5%;
 }
