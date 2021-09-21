@@ -2,9 +2,9 @@ import { useEffect, useState } from 'react';
 import { useHistory } from 'react-router';
 import { useDispatch, useSelector } from "react-redux";
 
-import log from '../Redux/actions-types/logActions';
+import HomeButton from './HomeButton';
 
-import NavBar from './NavBar';
+import log from '../Redux/actions-types/logActions';
 
 import styles from './styles/LogIn.module.css';
 
@@ -69,7 +69,7 @@ export default function LogIn() {
 
     return (
         <>
-            <NavBar />
+            <HomeButton />
             <section className={styles.container}>
                     <form className={styles.form} onSubmit={handleSubmit}>
                         <label className={styles.label} htmlFor="emailInput" > Email: </label>
@@ -104,7 +104,6 @@ export default function LogIn() {
                             : 
                             <button type="submit" className={styles.disabled} disabled>Login</button>}
                     </form> 
-              
             </section>
         </>
     );
