@@ -7,7 +7,7 @@ const Op = Sequelize.Op;
 
 const router = Router();
 
-//todas las rutas /api/user
+//todas las rutas /api/user 
 router.get('/', async (req, res) => {
   try {
     const users = await User.findAll();
@@ -22,7 +22,9 @@ router.get('/', async (req, res) => {
 });
 
 router.get('/login', async (req, res) => {
-  var { emailInput, passwordInput } = req.body;
+  //Recibe las argumentos por query ---> req.quey
+  var { emailInput, passwordInput } = req.query;
+
   var users = await User.findAll({
     where: {
       email: emailInput
