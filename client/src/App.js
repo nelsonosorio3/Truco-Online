@@ -25,7 +25,7 @@ function App() {
         <Route exact path='/log-in'>
           <LogIn />
         </Route>
-        <Route exact path='/profile/:user'>
+        <Route exact path='/profile'>
           <NavBar />
           <Profile />
         </Route>

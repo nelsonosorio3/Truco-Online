@@ -3,7 +3,7 @@ const Sequelize = require('sequelize');
 const { isConstructorDeclaration } = require("typescript");
 //const User = require("../models/User");
 const { User, Friends, Games } = require("../db.js");
-const jwt = require('jsonwebtoken')
+const jwt = require('jsonwebtoken');
 const Op = Sequelize.Op;
 const router = Router();
 
@@ -77,14 +77,15 @@ router.get('/login', async (req, res) => {
   }
 })
 
-router.get("/:id", validarUsuario, async (req, res) => {
-  var { id } = req.params;
-  id = parseInt(id);
-  try {
+
+router.get("/profile", validarUsuario,  async (req, res) => {
+  // userId ---> viene del middleware para autenticacion(req.body.userId) - Se utiliza para el query
+  console.log("Authenticated userId: ", req.body.userId)
+  try{
     let user = await User.findAll({
       attributes: { exclude: 'password' },
       where: {
-        id: id
+        id: req.body.userId
       }
     })
     if (!user) throw new Error("El usuario no se encontro")

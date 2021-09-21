@@ -11,6 +11,8 @@ const profileReducer = (state = INITIAL_STATE, {type, payload}) => {
     case GET_PROFILE:
       return {
         userProfile: {
+            id: payload.id,
+            username: payload.username,
             email: payload.email,
             gamesPlayed: payload.gamesPlayed,
             gamesWon: payload.gamesWon,
