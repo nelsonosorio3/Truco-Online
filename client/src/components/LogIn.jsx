@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { useHistory } from 'react-router';
 import { useDispatch, useSelector } from "react-redux";
 
-import ModalController from "./Modal"
+import ModalController from "./Modal";
 import HomeButton from './HomeButton';
 
 import log from '../Redux/actions-types/logActions';
@@ -34,7 +34,7 @@ export default function LogIn() {
     
     const history = useHistory();
     
-    const { isAuth, message  } = useSelector(state => state.logReducer);
+    const { isAuth, message } = useSelector(state => state.logReducer);
 
     const { logIn } = log;
 
@@ -74,7 +74,7 @@ export default function LogIn() {
         if(isAuth) {
             history.push('/rooms');
         }
-    }, [isAuth, message, history]);
+    }, [isAuth]);
 
     return (
         <>
