@@ -21,9 +21,13 @@ export default function Rooms() {
       {
         isinRoom
         ?
-        <Chat roomId={roomId} />
+        <div className={styles.subMainDiv_inGame}>
+          <div className={styles.game}>
+            <Chat roomId={roomId} typeofChat={'chatGame'}/>
+          </div>
+        </div>
         :
-        <div className={styles.subMainDiv}>
+        <div className={styles.subMainDiv_noGame}>
           <div className={styles.lobby}>
             <div className={styles.div_Chat_Rooms}>
               <Chat typeofChat={'chatLobby'}/>

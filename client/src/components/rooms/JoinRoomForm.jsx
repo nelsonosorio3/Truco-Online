@@ -3,6 +3,7 @@ import {useDispatch, useSelector} from 'react-redux'
 
 import { setIsInRoom } from '../../Redux/actions-types/roomsActions';
 import socket from '../socket';
+import styles from './styles/JoinRoomForm.module.css'
 
 export default function JoinRoomForm (){
     const [isJoining, setIsJoining] = useState(false);
@@ -19,7 +20,7 @@ export default function JoinRoomForm (){
     return(
       <div>
         <form onSubmit={joinRoom}>
-          <button type='submit' >{isJoining ? 'Joining...' : 'Create new room'}</button>
+          <button type='submit' className={styles.btn}>{isJoining ? 'Joining...' : 'Create new room'}</button>
         </form>
       </div>
     )

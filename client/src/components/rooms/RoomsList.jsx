@@ -3,6 +3,7 @@ import {useDispatch, useSelector} from 'react-redux'
 
 import { setIsInRoom } from '../../Redux/actions-types/roomsActions';
 import socket from '../socket';
+import styles from './styles/RoomsList.module.css'
 
 export default function RoomsList(){
     const [allRooms, setAllRooms] = useState([])
@@ -31,20 +32,22 @@ export default function RoomsList(){
     return(
         <div>
             <form onSubmit={updateRooms}>
-                <button type='submit'>Update Rooms</button>
+                <button type='submit' className={styles.btn} >Update Rooms</button>
             </form>
-            {
-            allRooms.length > 0
-            ?
-                allRooms[0].activeRooms.map(room => 
-                <div key={room}>
-                    <form onSubmit={joinRoom}>
-                        <button type='submit' value={room}>{room}</button>
-                    </form>
-                </div>)
-            :
-                <></>
-            }
+            <div className={styles.roomsList}>
+                {
+                allRooms.length > 0
+                ?
+                    allRooms[0].activeRooms.map(room => 
+                    <div key={room}>
+                        <form onSubmit={joinRoom}>
+                            <button type='submit' value={room} className={styles.roomBtn} >{room}</button>
+                        </form>
+                    </div>)
+                :
+                    <></>
+                }
+            </div>
         </div>
     )
 }

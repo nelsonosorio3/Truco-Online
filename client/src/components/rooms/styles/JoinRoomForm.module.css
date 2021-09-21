@@ -1,28 +1,6 @@
-.chatLobby{
-    width: 100%;
-    min-height: 60vh;
-    max-height: 60vh;
-    overflow: scroll;
-    border: 2px solid black;
-    background-color: rgba(255, 255, 255, 0.6);
-}
-
-.chatGame{
-    width: 20%;
-    min-height: 50vh;
-    max-height: 50vh;
-    overflow: scroll;
-    border: 2px solid black;
-    background-color: rgba(255, 255, 255, 0.6);
-}
-
-.writeMessage{
-    display: flex;
-}
-
 .btn{
     color: #fff;
-    background-color: #7f7056;
+    background-color: #343a40;
     border-color: #343a40;
     display: inline-block;
     font-weight: 400;
@@ -30,6 +8,8 @@
     white-space: nowrap;
     vertical-align: middle;
     -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
     user-select: none;
     border: 1px solid transparent;
     padding: .375rem .75rem;

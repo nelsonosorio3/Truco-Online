@@ -37,10 +37,13 @@ export default function Chat ({name, roomId, typeofChat}) {
                 {msgs.map((element, i) => ( <div key={i}><div>{element.name}</div><div>{element.msg}</div></div> ))}
                 <div ref={divRef}></div>
             </div>
-            <form onSubmit={submit}>
-                <label htmlFor="">Write your message</label>
-                <textarea name="" id="" cols="95" rows="2" value={msg} onChange={event => setMsg(event.target.value)}></textarea>
-                <button>Send</button>
+            <form onSubmit={submit} className={styles.writeMessage}>
+                {
+                    typeofChat==='chatLobby'
+                    ? <textarea placeholder={'Message...'} name="" id="" cols="95" rows="1" value={msg} onChange={event => setMsg(event.target.value)}></textarea>
+                    : <textarea placeholder={'Message...'} name="" id="" cols="31" rows="1" value={msg} onChange={event => setMsg(event.target.value)}></textarea>
+                }
+                <button className={styles.btn}>Send</button>
             </form>
         </div>
     )
