@@ -17,7 +17,7 @@ const u4 = { username: "tomas", email: "tomas@mail.com", password: "1234", games
 const u5 = { username: "leo", email: "leo@mail.com", password: "1234", gamesPlayed: 0, gamesWon: 0, gamesLost: 0 }
 const u6 = { username: "santiago", email: "santiago@mail.com", password: "1234", gamesPlayed: 0, gamesWon: 0, gamesLost: 0 }
 const u7 = { username: "fede", email: "fede@mail.com", password: "1234", gamesPlayed: 0, gamesWon: 0, gamesLost: 0 }
-const u8 = { username: "santiago", email: "santiago@mail.com", password: "1234", gamesPlayed: 0, gamesWon: 0, gamesLost: 0 }
+const u8 = { username: "marcelo", email: "marcelo@mail.com", password: "1234", gamesPlayed: 0, gamesWon: 0, gamesLost: 0 }
 
 // Friends (friendships)
 
@@ -87,7 +87,6 @@ try{
   for await (f of friendships) {
     Friends.create(f)
   }
-
   res.status(200).json({ message: "Tabla de prueba llenada con éxito." });
 }
   

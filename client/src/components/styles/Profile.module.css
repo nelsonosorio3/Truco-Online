@@ -6,8 +6,9 @@
 .player{
     display: flex;
     flex-direction: column;
-    align-self: flex-start;
+    align-self: center;
     align-items: center;
+    margin: 20px;
 }
 
 .profileIcon{
@@ -19,4 +20,24 @@
     flex-direction: column;
     align-self: flex-start;
     align-items: center;
+}
+
+.friends{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    align-self: center;
+}
+
+.title{
+    text-align: center;
+    margin-left: 20px;;
+    margin-right: auto;
+    width: 100px;
+    align-self: center;
+    align-items: center;
+}
+
+.history{
+    margin: auto;
 }

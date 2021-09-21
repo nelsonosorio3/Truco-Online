@@ -1,19 +1,21 @@
 import { SIGN_UP } from '../actions/index';
 
 const INITIAL_STATE = {
-  isAuth: false,
-  user: '',
+  registered: false,
+  validEmail: null,
 };
 
-export default function signUpReducer(state = INITIAL_STATE, {type, payload}) {
+const signUpReducer = (state = INITIAL_STATE, {type, payload}) => {
   switch (type) {
     case SIGN_UP:
       return {
         ...state,
-        isAuth: payload.isAuth,
-        user: payload.name,
+        registered: payload.registered,
+        validEmail: payload.validEmail,
       };
     default:
       return state;    
   };
 };
+
+export default signUpReducer;
