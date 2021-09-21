@@ -12,14 +12,12 @@ export default function NavBar(){
     let name =null;
 
     return(
-      <div>
-      </div>
-//         <div className={styles.mainDiv}>
-//             <nav className={styles.nav}>
-//                 <img src={Logo2} alt="TrucoHenry" className={styles.logo2} />
-//                 <Link to='/rooms' className={styles.a}>Lobbys</Link>
-//                 <Link to='profile' className={styles.a}>My Profile</Link>
-//             </nav>
+        <div className={styles.mainDiv}>
+            <nav className={styles.nav}>
+                <img src={Logo2} alt="TrucoHenry" className={styles.logo2} />
+                <Link to='/rooms' className={styles.a}>Lobbys</Link>
+                <Link to='profile' className={styles.a}>My Profile</Link>
+            </nav>
 
 
 //         <div className={styles.mainDiv}>
