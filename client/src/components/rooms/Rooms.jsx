@@ -6,6 +6,7 @@ import JoinRoomForm from './JoinRoomForm';
 import RoomsList from './RoomsList';
 
 export default function Rooms() {
+  console.log("localStorage in Rooms", localStorage)
   return (
     <div>
       <JoinRoomForm />

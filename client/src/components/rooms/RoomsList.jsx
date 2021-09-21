@@ -28,7 +28,7 @@ export default function RoomsList(){
         console.log(roomId)
         socket.emit('joinRoom', (parseInt(event.target[0].innerText)))
         setIsInRoom(true);
-      }
+    }
 
     return(
         <div>
