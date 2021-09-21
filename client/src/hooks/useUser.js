@@ -45,7 +45,9 @@ export default function useUser() {
 
   const login = useCallback((data) => {
     setState({loading: true, error: false })
+
       dispatch(logIn(data));
+      
       if(isAuth) {
         window.sessionStorage.setItem('isAuth', isAuth)
         setState({loading: false, error: false })

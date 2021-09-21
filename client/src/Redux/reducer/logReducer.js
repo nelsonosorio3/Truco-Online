@@ -4,12 +4,17 @@ const INITIAL_STATE = {
   isAuth: false,
   user: null,
   id: null,
+  message: ''
 };
 
 const logReducer = (state = INITIAL_STATE, {type, payload}) => {
   switch (type) {
     case LOG_IN:
-      if(payload.login) { 
+      if(payload.login) {
+        //Se almacena en el state las respuesta obtenida del server, en caso de afirmativa, el payload queda asi:
+        // id: 1
+        // login: true
+        // username: "pedro"
         return {
           ...state,
           isAuth: payload.login,
@@ -17,10 +22,13 @@ const logReducer = (state = INITIAL_STATE, {type, payload}) => {
           id: payload.id,
         };
       } else {
-          return {
-            ...state,
-            message: payload.message,
-          };
+        console.log(payload)
+        const newState = {
+          ...state,
+          isAuth: false,
+          message: payload.message,
+        };
+        return newState
       };
     case LOG_OUT:
       return {
