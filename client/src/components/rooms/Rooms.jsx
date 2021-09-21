@@ -10,6 +10,7 @@ import JoinRoomForm from './JoinRoomForm';
 import RoomsList from './RoomsList';
 
 export default function Rooms() {
+  console.log("localStorage in Rooms", localStorage)
 
   const isinRoom = useSelector(store => store.roomsReducer.isInRoom);
   const roomId = useSelector(store => store.roomsReducer.roomId)

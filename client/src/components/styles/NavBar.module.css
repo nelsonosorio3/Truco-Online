@@ -9,7 +9,7 @@
     display: flex;
     justify-content: space-around;
     background: #292b2c;
-    
+    text-decoration: none;
 }
 
 .a{
@@ -22,4 +22,12 @@
 
 .logo2{
     width: 5%;
+    font-family: 'Crayon';
+    color: lightgray;
+    font-size: 20px;
+}
+
+.logo {
+    width: 20px;
+    height: 20px;
 }
