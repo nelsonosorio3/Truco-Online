@@ -36,8 +36,10 @@ function validarUsuario(req,res,next){
 }
 
 router.get('/login', async (req, res) => {
+
   //Recibe las argumentos por query ---> req.quey
   var { emailInput, passwordInput } = req.query;
+
 
   var users = await User.findAll({
     where: {
@@ -45,12 +47,16 @@ router.get('/login', async (req, res) => {
     }
   });
   if (users.length === 0) return res.status(200).json(
-    { message: "El correo ingresado no existe.", login: false }
+
+    {
+      message: "El correo ingresado no existe.",
+      login: false
+    }
+
   )
   // console.log(users)
   try {
     if (users.length > 0) {
-      console.log("Entro acá1");
       var user = users.filter(u => u.password === passwordInput);
       if (user.length === 0) return res.status(200).json({ message: "Los datos ingresados son incorrectos", login: false })
       if (user.length > 1) return res.status(200).json({ message: "Error! Hay más de un usuario con ese mail y contraseña", login: false })
@@ -94,15 +100,23 @@ router.get("/:id", validarUsuario,  async (req, res) => {
 router.get("/:id/friends", async (req, res) => {
   const { id } = req.params;
   var user = await User.findByPk(parseInt(id), {
-    include: { model: User, as: "userSender", }
+    include: {
+      model: User,
+      as: "userSender",
+    },
   });
   var user2 = await User.findByPk(parseInt(id), {
-    include: { model: User, as: "userRequested", }
+    include: {
+      model: User,
+      as: "userRequested",
+    }
   });
   var result = [...user.userSender, ...user2.userRequested]
 
+  // Difícil hacer con sequelize, tuve que user filter en JS.
+  result = result.filter(f => f.Friends.status === "accepted")
+
   res.status(200).json(result);
-  res.sendStatus(404);
 });
 
 router.get("/:id/history", async (req, res) => {
@@ -185,10 +199,24 @@ router.get("/:id/friend_requests_sent", async (req, res) => {
 
 router.post("/", async (req, res) => {
 
+  console.log("ingreso aca 1")
+
   var { username, email, password } = req.body;
 
+  const userData = await User.findAll({
+    where: {
+      email: email
+    }
+  });
+
+  if (userData.length > 0) return res.status(200).send({
+    message: "Esa dirección de correo ya está registrada",
+    registered: false,
+    validEmail: false
+  });
+
   try {
-    var newUser = await User.create({
+    await User.create({
       username,
       email,
       password,
@@ -196,10 +224,18 @@ router.post("/", async (req, res) => {
       gamesWon: 0,
       gamesLost: 0
     })
-    res.status(200).json({ message: "Usuario creado con éxito" });
+    return res.status(200).json({
+      message: "Usuario creado con éxito",
+      registered: true,
+      validEmail: true
+    });
   } catch (error) {
     console.log(error)
-    res.sendStatus(404).send(error);
+    return res.status(404).send({
+      message: "No se generó usuario",
+      registered: false,
+      validEmail: true
+    });
   }
 })
 
