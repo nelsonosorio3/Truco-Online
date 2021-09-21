@@ -1,0 +1,27 @@
+.mainDiv{
+    
+}
+
+.lobby{
+    margin-top: -60%;
+}
+
+.subMainDiv{
+    background-image: url('../../../img/DarkWood_bg.jpg');
+    background-size: contain;
+    background-repeat: no-repeat;
+    width: 100%;
+    height: 0;
+    padding-top: 67%;
+}
+
+.div_Chat_Rooms{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+
+.div_CreateRoom_RoomsList{
+    display: flex;
+    flex-direction: column;
+}
