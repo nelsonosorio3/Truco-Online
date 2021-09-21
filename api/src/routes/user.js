@@ -70,7 +70,6 @@ router.get('/login', async (req, res) => {
   } catch {
     e => console.log(e)
   }
-
 })
 
 router.get("/:id", validarUsuario,  async (req, res) => {
