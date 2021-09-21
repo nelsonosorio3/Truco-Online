@@ -11,9 +11,7 @@ const router = Router();
 router.get('/', async (req, res) => {
   try {
     const users = await User.findAll();
-    res.json(users)
-    res.sendStatus(404);
-    res.status(400).json({ message: "Conexión OK." })
+    return res.json(users)
   } catch (error) {
     console.log(error)
     res.sendStatus(404).send(error);
@@ -21,14 +19,14 @@ router.get('/', async (req, res) => {
 });
 
 // Esto en la verificacion del token
-function validarUsuario(req,res,next){
-  jwt.verify(req.headers['x-access-token'], req.app.get('secretKey'), function(err, decoded){
-    if(err){  
-    res.json({
-      status: "error",
-      message: err.message, data:null
-    })
-    }else{
+function validarUsuario(req, res, next) {
+  jwt.verify(req.headers['x-access-token'], req.app.get('secretKey'), function (err, decoded) {
+    if (err) {
+      res.json({
+        status: "error",
+        message: err.message, data: null
+      })
+    } else {
       req.body.userId = decoded.id
       next()
     }
@@ -60,9 +58,9 @@ router.get('/login', async (req, res) => {
       var user = users.filter(u => u.password === passwordInput);
       if (user.length === 0) return res.status(200).json({ message: "Los datos ingresados son incorrectos", login: false })
       if (user.length > 1) return res.status(200).json({ message: "Error! Hay más de un usuario con ese mail y contraseña", login: false })
-      
+
       //token autentication - Se crea el token y se envia al cliente
-      const token = jwt.sign({id: user[0].id}, req.app.get('secretKey'), { expiresIn: '7d' });
+      const token = jwt.sign({ id: user[0].id }, req.app.get('secretKey'), { expiresIn: '7d' });
       var resp = {
         username: user[0].username,
         id: user[0].id,
@@ -79,10 +77,10 @@ router.get('/login', async (req, res) => {
   }
 })
 
-router.get("/:id", validarUsuario,  async (req, res) => {
+router.get("/:id", validarUsuario, async (req, res) => {
   var { id } = req.params;
   id = parseInt(id);
-  try{
+  try {
     let user = await User.findAll({
       attributes: { exclude: 'password' },
       where: {
@@ -92,7 +90,7 @@ router.get("/:id", validarUsuario,  async (req, res) => {
     if (!user) throw new Error("El usuario no se encontro")
     res.json(user);
   }
-  catch(err){
+  catch (err) {
     res.json(err.message)
   }
 });
