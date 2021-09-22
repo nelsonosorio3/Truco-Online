@@ -163,15 +163,15 @@ function resetTimeOut(){
 
   
 //Hacer passport
-// io.use((socket, next) => {
-//     console.log("socket.handshake.auth (middleware)", socket.handshake.auth)
-//     if (true) {
-//       next();
+io.use((socket, next) => {
+    console.log("socket.handshake.auth (middleware)", socket.handshake.auth)
+    if (true) {
+      next();
 
-//     } else {
-//       next(new Error("invalid"));
-//     }
-// });
+    } else {
+      next(new Error("invalid"));
+    }
+});
 
 
 io.on('connection', function (socket) {
@@ -231,9 +231,7 @@ io.on('connection', function (socket) {
         socket.broadcast.emit("playerOrder", false);
         socket.emit("playerOrder", true);
     });
-    socket.on("setOrder", ()=>{
-        io.emit
-    })
+
 
     if(table.players.length === table.numberPlayers && !table.gameStarted) {
         io.to(table.players[0]).emit("playerOrder",true);

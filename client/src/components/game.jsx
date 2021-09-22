@@ -93,6 +93,7 @@ export default function Game() {
         } 
         if(player.tablePlayer[0] && player.tableRival[0] && player.roundResults.length === 0) roundCheckWinner(player.tablePlayer[0], player.tableRival[0])
         if(player.tablePlayer[1] && player.tableRival[1] && player.roundResults.length === 1) roundCheckWinner(player.tablePlayer[1], player.tableRival[1])
+        if(player.tablePlayer[2] && player.tableRival[2] && player.roundResults.length === 2) roundCheckWinner(player.tablePlayer[2], player.tableRival[2])
         
 
       }, [player.tablePlayer, player.tableRival])
