@@ -17,6 +17,8 @@ export default function NavBar(){
                 <img src={Logo2} alt="TrucoHenry" className={styles.logo2} />
                 <Link to='/rooms' className={styles.a}>Lobbys</Link>
                 <Link to='/ranking'className={styles.a}>Ranking</Link>
+                <Link to='/profile' className={styles.a}>My Profile</Link>
+            </nav>
 
                 {/* No descomentar todavia, esto va a ser para el ingreso como invitado */}
                 {/* {
@@ -26,7 +28,6 @@ export default function NavBar(){
                     :
                     null
                 } */}
-            </nav>
          </div>
     );
 };
