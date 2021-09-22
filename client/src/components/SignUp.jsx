@@ -5,8 +5,6 @@ import { useHistory } from 'react-router';
 import ModalController from "./Modal";
 import HomeButton from './HomeButton';
 
-import { Redirect } from 'react-router'
-
 import signUpActions from '../Redux/actions-types/signUpActions';
 
 import styles from './styles/SignUp.module.css';
@@ -77,13 +75,15 @@ export default function SignUp() {
         setState(initialState);
         setErrors(initialState);
         // Para el modal
-        handleShow()
+        handleShow();
     };
 
     useEffect(() => {
         // para saber si el usuario se registro con exito
         if(registered) {
-            history.push('log-in');
+            setTimeout(() => {
+                history.push('log-in');
+            }, 3000);
         };
     }, [registered]);
 
