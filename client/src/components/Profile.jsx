@@ -1,14 +1,18 @@
 import React from 'react';
 import { useEffect, useState } from 'react';
-import styles from './styles/Profile.module.css';
+import { useDispatch , useSelector } from 'react-redux';
+
 import profileIcon from '../img/profileIcon.png';
 import profileActions from '../Redux/actions-types/profileActions';
-import { useDispatch , useSelector } from 'react-redux';
+import styles from './styles/Profile.module.css';
 
 /* Los dos siguientes imports agregados por guille */
 import Friend from './Friend';
 import AddFriend from './addFriend';
 // import Match from './Match';
+
+// nav
+import NavBar from './NavBar';
 
 export default function Profile(props) {
     
@@ -54,6 +58,8 @@ export default function Profile(props) {
     }
 
     return (
+
+         <NavBar />
         <div className={styles.mainDiv}>
             <div className={styles.player}>
                 <img src={profileIcon} alt="" className={styles.profileIcon} />
@@ -97,20 +103,21 @@ export default function Profile(props) {
                 }
             </div>
 
-            <h3 classname={styles.title}>Últimos resultados</h3>
-            <div className={styles.history}>
-                {/* {
-                    history.map(m => <Match
-                        key={m.id}
-                        id={m.id}
-                        result={m.winner === user.username ? "Ganaste" : "Perdiste"}
-                        j1={m.winner}
-                        j2={m.loser}
-                        date={m.createdAt}
-                    />)
-                } */}
-            </div>
 
-        </div>
-    )
-}
+                <h3 classname={styles.title}>Últimos resultados</h3>
+                <div className={styles.history}>
+                    {/* {
+                        history.map(m => <Match
+                            key={m.id}
+                            id={m.id}
+                            result={m.winner === user.username ? "Ganaste" : "Perdiste"}
+                            j1={m.winner}
+                            j2={m.loser}
+                            date={m.createdAt}
+                        />)
+                    } */}
+                </div>
+            </div>
+        </>
+    );
+};
