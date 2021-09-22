@@ -8,24 +8,26 @@ const INITIAL_STATE = {
 
 const profileReducer = (state = INITIAL_STATE, {type, payload}) => {
   switch (type) {
+    
     case GET_PROFILE:
-      return {
-        ...state,
-        userProfile: {
-            id: payload.id,
-            username: payload.username,
-            email: payload.email,
-            gamesPlayed: payload.gamesPlayed,
-            gamesWon: payload.gamesWon,
-            gamesLost: payload.gamesLost,
-        },
-      };
+    return {
+      ...state,
+      userProfile: {
+          id: payload.id,
+          username: payload.username,
+          email: payload.email,
+          gamesPlayed: payload.gamesPlayed,
+          gamesWon: payload.gamesWon,
+          gamesLost: payload.gamesLost,
+      },
+    };
+      
     case GET_FRIENDS:
       const ansFriends = {
         ...state,
         userFriends: payload
       }
-      return ansFriends 
+    return ansFriends 
 
     case DELETE_FRIEND:
       const ans = {
@@ -35,11 +37,12 @@ const profileReducer = (state = INITIAL_STATE, {type, payload}) => {
     return ans  
 
     case GET_HISTORY:
-      return {
-        userHistory: {
-            
-        },
-      };
+    return {
+      userHistory: {
+          
+      },
+    };
+
     default:
       return state;    
   };
