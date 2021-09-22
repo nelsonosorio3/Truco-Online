@@ -58,7 +58,7 @@ export default function Profile(props) {
     }
 
     return (
-
+        <>
          <NavBar />
         <div className={styles.mainDiv}>
             <div className={styles.player}>
