@@ -26,11 +26,10 @@ function App() {
         <Route exact path='/log-in'>
           <LogIn />
         </Route>
-        <PrivateRoute exact path="/profile/:id" component={Profile} />
-        {/* <Route exact path='/profile/:id'>
-          <NavBar />
+        {/* No es necesario el id, hacer de esta forma porque sino se rompe el codigo */}
+        <Route exact path='/profile'>
           <Profile />
-        </Route> */}
+        </Route>
         <Route exact path='/sign-up'>
           <SignUp />
         </Route>

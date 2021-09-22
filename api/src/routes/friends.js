@@ -49,9 +49,6 @@ router.put('/:id/:email', (req, res) => {
   const { id, email } = req.params
   const { response } = req.query
 
-  // console.log("La respuesta fue:");
-  // console.log(response);
-
   if (!id || !email) return res.status(404).json({ Error: "Missing parameters!" })
 
   let userRequestedData = null
@@ -97,7 +94,7 @@ router.put('/:id/:email', (req, res) => {
 router.delete('/:id/:email' , (req , res) => {
   const {id, email} = req.params
   const {response} = req.query
-
+  console.log(id, email)
   if(!id || !email) return res.status(404).json({Error: "Missing parameters!"})
 
   let userDeletedData = null
@@ -121,7 +118,7 @@ router.delete('/:id/:email' , (req , res) => {
   .then(result => {
     //responde con 1 si se elimino
     //responde con 0 si se elimino
-    return result ? res.send("Se elimino amigo") : res.send("No se pudo eliminar el amigo.")
+    return result ? res.json({message: "Se elimino amigo", id: userDeletedData.id}) : res.send("No se pudo eliminar el amigo.")
   })
   .catch(err => {
     return res.status(404).json({message: err.message})

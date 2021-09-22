@@ -8,7 +8,7 @@ const axios = require("axios");
 // If it doesn't exist, a table is just created. 
 conn.sync({ force: true }).then(() => {
   server.listen(3001, () => {
-    console.log('%s listening at 3001'); // eslint-disable-line no-console
+    console.log('% listening at 3001'); // eslint-disable-line no-console
     console.log("The table for the User model was just (re)created!");
   });
 
