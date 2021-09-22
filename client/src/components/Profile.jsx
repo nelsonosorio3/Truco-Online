@@ -7,21 +7,34 @@ import { useDispatch , useSelector } from 'react-redux';
 
 /* Los dos siguientes imports agregados por guille */
 import Friend from './Friend';
-import Match from './Match';
+// import Match from './Match';
 
 export default function Profile(props) {
     
     //Estados del profileReducer
-    //userProfile: es el estado del usuario logeado
-    const { userProfile, userFriends, userHistory  } = useSelector(state => state.profileReducer);
-    const {getProfile} = profileActions
-    const dispatch = useDispatch();
-    
-    console.log(userProfile)
+    const [friends, setFriends] = useState([])
 
+    //userProfile: es el estado del usuario logeado
+    const { userProfile, userFriends  } = useSelector(state => state.profileReducer);
+    const {getProfile, getFriends, deleteFriends} = profileActions
+    const dispatch = useDispatch();
+
+    //Trae primeramente los datos del usuario y sus amigos
     useEffect(() => {
         dispatch(getProfile({token: localStorage.token}))
+        dispatch(getFriends(localStorage.token))
     },[])
+
+    //Esto es para que se actualice el estado una vez que se elimina
+    useEffect(() => {
+        setFriends(userFriends)
+    }, [userFriends])
+
+    //Funcion para eliminar un amigo
+    const deleteFriendFunction = (id, email) => {
+        dispatch(deleteFriends(id, email))
+    }
+
     /* 
     Las solicitudes enviadas no debe traer aquellas que ya están aceptadas, estos ya son amigos!
     Las búsquedas de amigos no deven devolver las amistades con estado "pending" ni "rejected", sólo "accepted".
@@ -32,30 +45,31 @@ export default function Profile(props) {
             <div className={styles.player}>
                 <img src={profileIcon} alt="" className={styles.profileIcon} />
                 <div className={styles.playerInfo}>
-                    <h2>Username: {userProfile.username}</h2>
-                    <h3>Email: {userProfile.email}</h3>
-                    <h3>Games played: {userProfile.gamesPlayed}</h3>
-                    <h3>Username: {userProfile.gamesLost}</h3>
-                    <h3>Games won: {userProfile.gamesWon}</h3>
+                    <h2>Username: {userProfile?.username}</h2>
+                    <h3>Email: {userProfile?.email}</h3>
+                    <h3>Games played: {userProfile?.gamesPlayed}</h3>
+                    <h3>Username: {userProfile?.gamesLost}</h3>
+                    <h3>Games won: {userProfile?.gamesWon}</h3>
                 </div>
             </div>
-
             <br />
             <h3 classname={styles.title}>Amigos</h3>
 
             <div className={styles.friends}>
-                {/* {
-                    friends.map(f => <Friend
-                        key={f.id}
-                        id={f.id}
-                        name={f.username}
-                        date={f.createdAt}
+                {
+                    !friends.length ? <p>No tienes amigos</p> : friends.map(f => <Friend
+                        key={f?.id}
+                        email={f?.email}
+                        deleteId={deleteFriendFunction}
+                        profileId={userProfile?.id}
+                        id={f?.id}
+                        name={f?.username}
+                        date={f.Friends?.createdAt}
                     />)
-                } */}
+                }
             </div>
 
             <h3 classname={styles.title}>Últimos resultados</h3>
-
             <div className={styles.history}>
                 {/* {
                     history.map(m => <Match

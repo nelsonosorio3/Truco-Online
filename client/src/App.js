@@ -26,7 +26,8 @@ function App() {
         <Route exact path='/log-in'>
           <LogIn />
         </Route>
-        <PrivateRoute exact path="/profile/:id" component={Profile} />
+        {/* No es necesario el id */}
+        <PrivateRoute exact path="/profile" component={Profile} />
         {/* <Route exact path='/profile/:id'>
           <NavBar />
           <Profile />

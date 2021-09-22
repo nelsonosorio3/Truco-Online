@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { GET_PROFILE, GET_FRIENDS, GET_HISTORY } from '../actions/index';
+import { GET_PROFILE, GET_FRIENDS, GET_HISTORY, DELETE_FRIEND } from '../actions/index';
 
 const getProfile = ({token}) => {
 
@@ -16,11 +16,26 @@ const getProfile = ({token}) => {
   };
 };
 
-const getFriends = (id) => {
+const getFriends = (token) => {
   return function(dispatch) {
-    return axios(`http://localhost:3001/api/user/${id}/friends`)
+    return axios(`http://localhost:3001/api/user/friends`, {
+      headers: {
+        "x-access-token": token,
+      }
+    })
       .then(data => {
-        dispatch({ type: GET_FRIENDS, payload: data });
+        dispatch({ type: GET_FRIENDS, payload: data.data.userSender });
+      })
+      .catch((error) => console.error(error));
+  };
+};
+
+const deleteFriends = (id, email) => {
+  return function(dispatch) {
+    return axios.delete(`http://localhost:3001/api/friends/${id}/${email}`)
+      .then(data => {
+        console.log(data)
+        dispatch({ type: DELETE_FRIEND, payload: data.data.id});
       })
       .catch((error) => console.error(error));
   };
@@ -39,5 +54,6 @@ const getHistory = (id) => {
 export default {
     getProfile,
     getFriends,
+    deleteFriends,
     getHistory,
 };

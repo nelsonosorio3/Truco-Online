@@ -72,9 +72,11 @@ export default function LogIn() {
   useEffect(() => {
     if(isAuth) {
       localStorage.setItem("token", token)
-      setTimeout(() => {
-        history.push('/rooms');
-      }, 3000);
+      history.push('/rooms');
+
+      // setTimeout(() => {
+      //   history.push('/rooms');
+      // }, 3000);
     }
   }, [isAuth]);
 
