@@ -1,5 +1,12 @@
 import { io } from "socket.io-client";
 
-let socket = io('//localhost:9000');
+
+// console.log("Desde socket.js", localStorage.token)
+
+let socket = io('//localhost:9000',{
+    auth: {
+      token: localStorage.token
+    }
+});
 
 export default socket;

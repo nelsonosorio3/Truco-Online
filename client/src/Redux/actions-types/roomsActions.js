@@ -1,8 +1,8 @@
-import { ADD_ROOM } from '../actions/index';
+import { IS_IN_ROOM } from '../actions/index';
 
-export const addRoom = (roomData) => {
+export const setIsInRoom = (isInRoom) => {
     return {
-        type: ADD_ROOM,
-        payload: roomData
+        type: IS_IN_ROOM,
+        payload: isInRoom
     }
 }

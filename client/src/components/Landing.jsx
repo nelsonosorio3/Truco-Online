@@ -8,7 +8,7 @@ export default function Landing() {
         <section className={styles.container}>
             <div className={styles.table}> 
                 <button className={styles.btn1}>
-                    <NavLink to="/login" > Enter </NavLink>
+                    <NavLink to="/welcome" > Enter </NavLink>
                 </button>
             </div>
         </section>
