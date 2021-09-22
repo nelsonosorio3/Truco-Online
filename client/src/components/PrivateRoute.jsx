@@ -1,15 +1,13 @@
 import React from 'react';
-import { useSelector } from "react-redux";
 import { Redirect, Route } from "react-router";
 
 export default function PrivateRoute({ component: Component, ...rest }) {
 
-    const { isAuth } = useSelector(state => state.logReducer);
+    const logged = window.localStorage.getItem("isAuth");
 
     return (
         <Route {...rest}>
-            {isAuth ? <Component /> : <Redirect to="/" />}
+            {logged ? <Component /> : <Redirect to="/" />}
         </Route>
     );
 };
-

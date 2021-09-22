@@ -41,6 +41,7 @@ const initialState = {
 };
 
 export default function SignUp() {
+    const logged = window.localStorage.getItem("isAuth");
 
     const history = useHistory();
 
@@ -80,7 +81,12 @@ export default function SignUp() {
 
     useEffect(() => {
         // para saber si el usuario se registro con exito
-        if(registered) {
+        if(logged) {
+            setTimeout(() => {
+                history.push('rooms');
+            }, 0);
+        };
+        if(registered || logged) {
             setTimeout(() => {
                 history.push('log-in');
             }, 3000);
