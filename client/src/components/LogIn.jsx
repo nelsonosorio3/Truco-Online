@@ -35,10 +35,13 @@ export default function LogIn() {
     
   const history = useHistory();
     
-  const { isAuth, message, token  } = useSelector(state => state.logReducer);
+  const { message } = useSelector(state => state.logReducer);
 
   const { logIn } = log;
 
+  const logged = window.localStorage.getItem("isAuth");
+  
+  const [isAuth, setIsAuth] = useState(false); 
   const [state, setState] = useState(initialState);
   const [errors, setErrors] = useState(initialState);
 
@@ -68,15 +71,18 @@ export default function LogIn() {
       // Para el modal
       handleShow()
   };
+  
+  useEffect(() => {
+    if(logged) {
+      setIsAuth(logged);
+    };
+  }, [logged]);
 
   useEffect(() => {
     if(isAuth) {
-      localStorage.setItem("token", token)
-      history.push('/rooms');
-
-      // setTimeout(() => {
-      //   history.push('/rooms');
-      // }, 3000);
+      setTimeout(() => {
+        history.push('/rooms');
+      }, 3000);
     }
   }, [isAuth]);
 

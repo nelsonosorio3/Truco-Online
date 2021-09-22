@@ -45,49 +45,50 @@ export default function Profile(props) {
     */
 
     return (
-        <div className={styles.mainDiv}>
-            <div className={styles.player}>
-                <img src={profileIcon} alt="" className={styles.profileIcon} />
-                <div className={styles.playerInfo}>
-                    <h2>Username: {userProfile?.username}</h2>
-                    <h3>Email: {userProfile?.email}</h3>
-                    <h3>Games played: {userProfile?.gamesPlayed}</h3>
-                    <h3>Username: {userProfile?.gamesLost}</h3>
-                    <h3>Games won: {userProfile?.gamesWon}</h3>
+        <>
+            <NavBar />
+            <div className={styles.mainDiv}>
+                <div className={styles.player}>
+                    <img src={profileIcon} alt="" className={styles.profileIcon} />
+                    <div className={styles.playerInfo}>
+                        <h2>Username: {userProfile?.username}</h2>
+                        <h3>Email: {userProfile?.email}</h3>
+                        <h3>Games played: {userProfile?.gamesPlayed}</h3>
+                        <h3>Username: {userProfile?.gamesLost}</h3>
+                        <h3>Games won: {userProfile?.gamesWon}</h3>
+                    </div>
+                </div>
+                <br />
+                <h3 classname={styles.title}>Amigos</h3>
+
+                <div className={styles.friends}>
+                    {
+                        !friends.length ? <p>No tienes amigos</p> : friends.map(f => <Friend
+                            key={f?.id}
+                            email={f?.email}
+                            deleteId={deleteFriendFunction}
+                            profileId={userProfile?.id}
+                            id={f?.id}
+                            name={f?.username}
+                            date={f.Friends?.createdAt}
+                        />)
+                    }
+                </div>
+
+                <h3 classname={styles.title}>Últimos resultados</h3>
+                <div className={styles.history}>
+                    {/* {
+                        history.map(m => <Match
+                            key={m.id}
+                            id={m.id}
+                            result={m.winner === user.username ? "Ganaste" : "Perdiste"}
+                            j1={m.winner}
+                            j2={m.loser}
+                            date={m.createdAt}
+                        />)
+                    } */}
                 </div>
             </div>
-            <br />
-            <h3 classname={styles.title}>Amigos</h3>
-
-            <div className={styles.friends}>
-                {
-                    !friends.length ? <p>No tienes amigos</p> : friends.map(f => <Friend
-                        key={f?.id}
-                        email={f?.email}
-                        deleteId={deleteFriendFunction}
-                        profileId={userProfile?.id}
-                        id={f?.id}
-                        name={f?.username}
-                        date={f.Friends?.createdAt}
-                    />)
-                }
-            </div>
-
-            <h3 classname={styles.title}>Últimos resultados</h3>
-            <div className={styles.history}>
-                {/* {
-                    history.map(m => <Match
-                        key={m.id}
-                        id={m.id}
-                        result={m.winner === user.username ? "Ganaste" : "Perdiste"}
-                        j1={m.winner}
-                        j2={m.loser}
-                        date={m.createdAt}
-                    />)
-                } */}
-            </div>
-
-            </div>
         </>
-    )
-}
+    );
+};
