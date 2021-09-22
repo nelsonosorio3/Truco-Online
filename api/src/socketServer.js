@@ -197,11 +197,17 @@ io.on('connection', function (socket) {
         io.emit('messages', { server: 'Server', message: 'Has left the room.' });
     });
     socket.on('joinRoom', function (roomId) {
-
+        const clients = io.sockets?.adapter.rooms.get(roomId) //set de clientes room
+        if(clients?.size < 2 || clients === undefined){ //revisar si la sala esta llena
         socket.join(parseInt(roomId));
         if(activeRooms.indexOf(roomId) === -1) activeRooms = [...activeRooms, roomId]
         else console.log(roomId, 'ya existe');
         console.log("active rooms: ", activeRooms)
+        }
+        if(clients?.size === 2) {
+            activeRooms =  activeRooms.filter(room=> room!== roomId)
+            socket.emit("roomFull", false);
+         } //remover la sala de la lista si esta llena
     });
     socket.on('roomTest', function (_a) {
         var room = _a.room;
@@ -211,21 +217,21 @@ io.on('connection', function (socket) {
         io.emit('showActiveRooms', { activeRooms });
     });
     // esucha el evento para iniciar una nueva ronda
-    socket.on("newRoundStarts", ()=>{
+    socket.on("newRoundStarts", (roomId)=>{
         let deck = buildDeck(); //contruye deck
         deck = shuffleDeck(deck); //baraja deck
         const [playerAhand, playerBhand] = getHands(deck); //obtiene manos de 3 cartas de dos jugadores
         socket.emit("newRoundStarts", playerAhand); // emite al cliente que emitio el nuevo turno la mano A
-        socket.broadcast.emit("newRoundStarts", playerBhand); // emite al otro cliente de la partida la mano B
-        io.emit("bet", table.betsList.firstTurn); // emite a todos el evento apuesta con la lista de posibles apuesta iniciales
+        socket.to(roomId).emit("newRoundStarts", playerBhand); // emite al otro cliente de la partida la mano B
+        io.in(roomId).emit("bet", table.betsList.firstTurn); // emite a todos el evento apuesta con la lista de posibles apuesta iniciales
     });
     // escucha el evento bet para devolver la lista adecuado de opciones de apuesta
-    socket.on("bet", betPick => {
-        socket.broadcast.emit("bet", table.betsList[betPick]); //emite al otro cliente la lista de respuesta a la apuesta enviada
+    socket.on("bet", (betPick, roomId) => {
+        socket.to(roomId).emit("bet", table.betsList[betPick]); //emite al otro cliente la lista de respuesta a la apuesta enviada
         console.log(table.betsList[betPick]); 
     });
-    socket.on("playCard", card => {
-        socket.broadcast.emit("playCard", card) //emite al otro cliente la carta que jugo el cliente emisor
+    socket.on("playCard", (card, roomId) => {
+        socket.to(roomId).emit("playCard", card) //emite al otro cliente la carta que jugo el cliente emisor
     });
     socket.on("changeTurn", ()=>{
         socket.broadcast.emit("playerOrder", false);

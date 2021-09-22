@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import styles from './styles/game.module.css';
 import socket from './socket';
+import {useDispatch, useSelector} from 'react-redux'
 
 
 
@@ -9,15 +10,16 @@ export default function Game() {
         name: "player",
         score: 0,
         hand: [],
-        isTurn: false,
-        turnNumber: 1,
+        isTurn: true,
+        roundChange: 1,
         betOptions: [],
         tableRival: [],
         tablePlayer: [],
         bet: false,
         roundResults: [],
       });
-
+    const roomId = useSelector(store => store.roomsReducer.roomId);
+    console.log(roomId)
     function roundCheckWinner(playerCard, rivalCard){
       console.log(playerCard)
       if(playerCard.truco < rivalCard.truco){
@@ -36,22 +38,22 @@ export default function Game() {
       if((rounds.filter(round => round === "win").length >1) || 
         (rounds.filter(round => round === "tie").length === 2 && rounds.some(round => round === "win")) ||
         rounds.every(round => round === "tie")){
-          setPlayer({...player, score: ++player.score})
+          setPlayer({...player, score: ++player.score, roundChange: ++player.roundChange})
           return
         } 
       if(rounds.length >= 3){
         for (let i = 0; i < 3; i++) {
-          if(rounds[i] === "winner") setPlayer({...player, score: ++player.score});
+          if(rounds[i] === "win") setPlayer({...player, score: ++player.score, roundChange: ++player.roundChange});
         }
       }
     }
 
     const newRoundStarts = async () => {
-      player.isTurn && socket.emit('newRoundStarts');
+      player.isTurn && socket.emit('newRoundStarts', roomId);
     }
 
     const bet = async (e) =>{
-      player.isTurn && socket.emit("bet", e.target.name);
+      player.isTurn && socket.emit("bet", e.target.name, roomId);
     }
 
     const playCard = async (card) =>{
@@ -59,7 +61,7 @@ export default function Game() {
       // else if (!player.mesa2) setPlayer({...player, hand: player.hand.filter(cardH=> card.id !== cardH.id), mesa2: card});
       if(player.isTurn){
       setPlayer({...player, hand: player.hand.filter(cardH=> card.id !== cardH.id), tablePlayer: [...player.tablePlayer, card]});
-      socket.emit("playCard", card)
+      socket.emit("playCard", card, roomId)
       console.log(card)}
     }
 
@@ -83,7 +85,7 @@ export default function Game() {
           setPlayer({...player, hand, tableRival: [], tablePlayer: [], roundResults: []});
         });
         socket.on("bet", betOptions=>{
-          // console.log(betOptions);
+          console.log(betOptions);
           setPlayer({...player, betOptions});
           changeTurn();
         });
@@ -117,7 +119,9 @@ export default function Game() {
       useEffect(()=>{
         if(player.roundResults.length > 1) checkWinnerMatch(player.roundResults)
       },[player.roundResults])
+
       console.log(player)
+      if(player.roundChange > 2) {newRoundStarts(); setPlayer({...player, roundChange:1})}
     return(<div>
             {/* <div className={styles.image}>  */}
             {/* </div> */}

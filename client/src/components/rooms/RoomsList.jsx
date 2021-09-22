@@ -14,13 +14,14 @@ export default function RoomsList(){
         socket.on('showActiveRooms', (rooms) => {
             setAllRooms([rooms]);
         })
+        // socket.emit('bringActiveRooms') //automaticamente hacer update de rooms cuando hay cambios en allRooms?
 
         return () => {socket.off()}
     }, [allRooms])
 
     const updateRooms = (event) => {
         event.preventDefault();
-        socket.emit('bringActiveRooms');
+        socket.emit('bringActiveRooms'); 
     }
 
     const joinRoom = async (event) => {
