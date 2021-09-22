@@ -10,10 +10,10 @@ const server = express();
 
 server.name = 'API';
 
-//tomas
+//tomas - esto es una clave de seguridad para el token
 server.set('secretKey', 'jwt_pwd_!!223344');
 
-
+//
 server.use(bodyParser.urlencoded({ extended: true, limit: '50mb' }));
 server.use(bodyParser.json({ limit: '50mb' }));
 server.use(cookieParser());

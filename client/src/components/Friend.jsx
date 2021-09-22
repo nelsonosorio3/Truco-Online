@@ -3,7 +3,14 @@ import React from "react";
 import styles from './styles/Friend.module.css'
 import profileIcon from '../img/profileIcon.png'
 
-export default function Friend({ name, date }) {
+export default function Friend({ name, date, id, profileId, deleteId, email }) {
+
+  const deleteFriend = () => {
+    console.log("user profile: ", profileId, "user delete: ",email)
+    deleteId(profileId, email)
+  }
+
+
   return (
     <div className={styles.mainDiv}>
       <img src={profileIcon} alt="" className={styles.profileIconSmall} />
@@ -12,6 +19,7 @@ export default function Friend({ name, date }) {
         <p className={styles.text}>Amigos desde:</p>
         <div className={styles.text}>{date.split("T")[0]}</div>
       </div>
+      <button onClick={() => deleteFriend()}>X</button>
     </div>
   )
 }

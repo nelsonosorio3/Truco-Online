@@ -1,4 +1,4 @@
-const { Router } = require("express");
+const { Router, response } = require("express");
 const Sequelize = require('sequelize');
 const { isConstructorDeclaration } = require("typescript");
 //const User = require("../models/User");
@@ -52,7 +52,6 @@ router.get('/login', async (req, res) => {
     }
 
   )
-  // console.log(users)
   try {
     if (users.length > 0) {
       var user = users.filter(u => u.password === passwordInput);
@@ -77,10 +76,10 @@ router.get('/login', async (req, res) => {
   }
 })
 
-
+//Ruta para obtener datos del perfil del usuario
 router.get("/profile", validarUsuario,  async (req, res) => {
   // userId ---> viene del middleware para autenticacion(req.body.userId) - Se utiliza para el query
-  console.log("Authenticated userId: ", req.body.userId)
+  console.log("Authenticated for /profile userId: ", req.body.userId)
   try{
     let user = await User.findAll({
       attributes: { exclude: 'password' },
@@ -96,26 +95,44 @@ router.get("/profile", validarUsuario,  async (req, res) => {
   }
 });
 
-router.get("/:id/friends", async (req, res) => {
-  const { id } = req.params;
-  var user = await User.findByPk(parseInt(id), {
+//Ruta para traer todos los amigos de un usuario
+router.get("/friends",validarUsuario, async (req, res) => {
+  console.log("Authenticated for /friends userId: ", req.body.userId)
+  User.findOne({
+    where: {id: req.body.userId},
+    // include: "userSender",
+    attributes: ["id", "username"],
     include: {
       model: User,
       as: "userSender",
-    },
-  });
-  var user2 = await User.findByPk(parseInt(id), {
-    include: {
-      model: User,
-      as: "userRequested",
+      attributes: ["username", "id", "email"],
+      through: {
+        where: {status: "accepted"},
+        attributes: ["status", "createdAt"]
+      }
     }
-  });
-  var result = [...user.userSender, ...user2.userRequested]
+  })
+  .then(user => {
+    return res.json(user)
+  })
 
-  // Difícil hacer con sequelize, tuve que user filter en JS.
-  result = result.filter(f => f.Friends.status === "accepted")
 
-  res.status(200).json(result);
+  // var user = await User.findByPk(parseInt(id), {
+  //   include: {
+  //     model: User,
+  //     as: "userSender",
+  //   },
+  // });
+  // var user2 = await User.findByPk(parseInt(id), {
+  //   include: {
+  //     model: User,
+  //     as: "userRequested",
+  //   }
+  // });
+  // var result = [...user.userSender, ...user2.userRequested]
+  // // Difícil hacer con sequelize, tuve que user filter en JS.
+  // result = result.filter(f => f.Friends.status === "accepted")
+  // res.status(200).json(result);
 });
 
 router.get("/:id/history", async (req, res) => {
