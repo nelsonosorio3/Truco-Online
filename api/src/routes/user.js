@@ -98,41 +98,42 @@ router.get("/profile", validarUsuario,  async (req, res) => {
 //Ruta para traer todos los amigos de un usuario
 router.get("/friends",validarUsuario, async (req, res) => {
   console.log("Authenticated for /friends userId: ", req.body.userId)
+
+  let userInfo = {
+    //usuarios que aceptaron la solicitud del usuario logeado, tambien los usuarios a los que se envio una solicitud
+    userSender: null, 
+    //usuarios que enviaron una solicitud al usuario logeado
+    userRequested: null
+  }
+
   User.findOne({
     where: {id: req.body.userId},
-    // include: "userSender",
     attributes: ["id", "username"],
     include: {
       model: User,
       as: "userSender",
       attributes: ["username", "id", "email"],
       through: {
-        where: {status: "accepted"},
-        attributes: ["status", "createdAt"]
+        attributes: ["status", "createdAt", "userRequestedId"]
       }
-    }
+    },
   })
-  .then(user => {
-    return res.json(user)
+  .then(userSenderResults => {
+    userInfo.userSender = userSenderResults
+    return userSenderResults.getUserRequested({
+      attributes: ["username", "id", "email"],
+    })
   })
+  .then(userRequestedResults => {
+    //Solucion momentanea, se va a tratar de implementar algo ams optimo
+    let userRequestedAccepted = userRequestedResults.filter( el => el.Friends.status === "accepted")
+    let userRequestedPending = userRequestedResults.filter( el => el.Friends.status === "pending")
+    
+    userInfo.userSender = userInfo.userSender.userSender.concat(userRequestedAccepted)
+    userInfo.userRequested = userRequestedPending
 
-
-  // var user = await User.findByPk(parseInt(id), {
-  //   include: {
-  //     model: User,
-  //     as: "userSender",
-  //   },
-  // });
-  // var user2 = await User.findByPk(parseInt(id), {
-  //   include: {
-  //     model: User,
-  //     as: "userRequested",
-  //   }
-  // });
-  // var result = [...user.userSender, ...user2.userRequested]
-  // // Difícil hacer con sequelize, tuve que user filter en JS.
-  // result = result.filter(f => f.Friends.status === "accepted")
-  // res.status(200).json(result);
+    return res.json(userInfo)
+  })
 });
 
 router.get("/:id/history", async (req, res) => {

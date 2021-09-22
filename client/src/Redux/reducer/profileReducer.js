@@ -1,8 +1,11 @@
-import { GET_PROFILE, GET_FRIENDS, GET_HISTORY, DELETE_FRIEND } from '../actions/index';
+import { GET_PROFILE, GET_FRIENDS, GET_HISTORY, DELETE_FRIEND, PUT_FRIEND_REQUEST } from '../actions/index';
 
 const INITIAL_STATE = {
   userProfile: {},
-  userFriends: [],
+  userFriends: {
+    requested: [],
+    sender: []
+  },
   userHistory: {},
 };
 
@@ -23,25 +26,43 @@ const profileReducer = (state = INITIAL_STATE, {type, payload}) => {
     };
       
     case GET_FRIENDS:
+      console.log("REDUCER", payload)
+
       const ansFriends = {
         ...state,
-        userFriends: payload
+        userFriends: {
+          requested: payload.userRequested,
+          sender: payload.userSender
+        }
       }
     return ansFriends 
 
     case DELETE_FRIEND:
       const ans = {
         ...state,
-        userFriends: state.userFriends.filter(f => f.id !== payload)
+        userFriends: {
+          ...state.userFriends,
+          sender: state.userFriends.sender.filter(f => f.id !== payload)
+        }
       }
     return ans  
 
-    case GET_HISTORY:
-    return {
-      userHistory: {
+    case PUT_FRIEND_REQUEST:
+      const ansPutRequest = {
+        ...state,
+        userFriends: {
+          ...state.userFriends,
+          requested: state.userFriends.requested.filter(f => f.id !== payload)
+        }
+      }
+    return ansPutRequest  
+
+    // case GET_HISTORY:
+    // return {
+    //   userHistory: {
           
-      },
-    };
+    //   },
+    // };
 
     default:
       return state;    
