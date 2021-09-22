@@ -83,6 +83,7 @@ export default function LogIn() {
             <HomeButton />
             {/* Este es el modal. El state que lo determina es "show" */}
             <ModalController show={show} handleClose={handleClose} message={message}/>
+
             <section className={styles.container}>
                     <form className={styles.form} onSubmit={handleSubmit}>
                         <label className={styles.label} htmlFor="emailInput" > Email: </label>
