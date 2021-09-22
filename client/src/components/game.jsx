@@ -18,18 +18,34 @@ export default function Game() {
         roundResults: [],
       });
 
-      function roundCheckWinner(playerCard, rivalCard){
-        console.log(playerCard)
-        if(playerCard.truco < rivalCard.truco){
-          setPlayer({...player, roundResults: [...player.roundResults, "win"]});
-        }
-        else if(playerCard.truco > rivalCard.truco){
-          setPlayer({...player, roundResults: [...player.roundResults, "loss"]});
-        }
-        else{
-          setPlayer({...player, roundResults: [...player.roundResults, "tie"]});
+    function roundCheckWinner(playerCard, rivalCard){
+      console.log(playerCard)
+      if(playerCard.truco < rivalCard.truco){
+        setPlayer({...player, roundResults: [...player.roundResults, "win"]});
+      }
+      else if(playerCard.truco > rivalCard.truco){
+        setPlayer({...player, roundResults: [...player.roundResults, "loss"]});
+      }
+      else{
+        setPlayer({...player, roundResults: [...player.roundResults, "tie"]});
+      }
+    }
+
+    function checkWinnerMatch(rounds){
+      console.log(rounds)
+      if((rounds.filter(round => round === "win").length >1) || 
+        (rounds.filter(round => round === "tie").length === 2 && rounds.some(round => round === "win")) ||
+        rounds.every(round => round === "tie")){
+          setPlayer({...player, score: ++player.score})
+          return
+        } 
+      if(rounds.length >= 3){
+        for (let i = 0; i < 3; i++) {
+          if(rounds[i] === "winner") setPlayer({...player, score: ++player.score});
         }
       }
+    }
+
     const newRoundStarts = async () => {
       player.isTurn && socket.emit('newRoundStarts');
     }
@@ -99,7 +115,7 @@ export default function Game() {
       }, [player.tablePlayer, player.tableRival])
 
       useEffect(()=>{
-        
+        if(player.roundResults.length > 1) checkWinnerMatch(player.roundResults)
       },[player.roundResults])
       console.log(player)
     return(<div>
