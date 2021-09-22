@@ -1,7 +1,9 @@
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from 'react-router';
-import { Redirect } from 'react-router'
+
+import ModalController from "./Modal";
+import HomeButton from './HomeButton';
 
 import signUpActions from '../Redux/actions-types/signUpActions';
 
@@ -12,12 +14,12 @@ const EMAIL = /^[^@]+@[^@]+\.[^@]+$/;
 
 function validate(state) {
   let errors = {};
-  if(!state.user) {
-    errors.user = 'You have to enter a user name...';
-  } else if (state.user.length < 4) {
-      errors.user = 'The user is invalid. Must be more than 4 characters...';
-  } else if(!ALPHA.test(state.user)) {
-      errors.user = 'Only letters are allowed...'
+  if(!state.username) {
+    errors.username = 'You have to enter a user name...';
+  } else if (state.username.length < 4) {
+      errors.username = 'The user is invalid. Must be more than 4 characters...';
+  } else if(!ALPHA.test(state.username)) {
+      errors.username = 'Only letters are allowed...'
   };
   if(!state.email) {
     errors.email = 'You have to enter an email...';
@@ -42,7 +44,7 @@ export default function SignUp() {
 
     const history = useHistory();
 
-    const { registered } = useSelector(state => state.signUpReducer);
+    const { registered, message } = useSelector(state => state.signUpReducer);
     
     const dispatch = useDispatch();
 
@@ -50,8 +52,11 @@ export default function SignUp() {
     
     const [errors, setErrors] = useState(initialState);
 
-    const [endRegister, setEndRegister] = useState(false)
-    
+    // Esto es para el modal
+    const [show, setShow] = useState(false);
+    const handleClose = () => setShow(false);
+    const handleShow = () => setShow(true);
+
     function handleChange(event) {
         const { name, value } = event.target;
         setErrors(validate({
@@ -69,21 +74,24 @@ export default function SignUp() {
         dispatch(signUpActions.signUpActions(state));
         setState(initialState);
         setErrors(initialState);
-        setEndRegister(true);
+        // Para el modal
+        handleShow();
     };
 
     useEffect(() => {
         // para saber si el usuario se registro con exito
         if(registered) {
-            // si asi fue mostrar mensaje de exito(quiero que sea un modal despues)
-            alert("Congratulations ✅! You've been successfully registered!");
-            history.push('log-in');
+            setTimeout(() => {
+                history.push('log-in');
+            }, 3000);
         };
     }, [registered]);
 
     return (
         <>
-            {endRegister ? <Redirect to="/welcome" /> : <></>}
+            <HomeButton />
+            {/* Este es el modal. El state que lo determina es "show" */}
+            <ModalController show={show} handleClose={handleClose} message={message}/>
             <section className={styles.container}>
                 <form className={styles.form} onSubmit={handleSubmit}>
                 <label className={styles.label} htmlFor="username" > User: </label>
@@ -97,7 +105,7 @@ export default function SignUp() {
                     className={styles.input}
                     onChange={handleChange}
                 />
-                {errors.username && (<p className={styles.danger}> {errors.user} </p>)}
+                {errors.username && (<p className={styles.danger}> {errors.username} </p>)}
                 <label className={styles.label} htmlFor="email"> Email: </label>
                 <input 
                     type="email"

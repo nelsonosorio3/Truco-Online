@@ -10,6 +10,8 @@ import Rooms from './components/rooms/Rooms';
 import LogIn from './components/LogIn';
 import ErrorPage from './components/ErrorPage';
 import Game from './components/game';
+import Ranking from './components/Ranking';
+import PrivateRoute from './components/PrivateRoute';
 
 function App() {
   return (
@@ -24,10 +26,11 @@ function App() {
         <Route exact path='/log-in'>
           <LogIn />
         </Route>
-        <Route exact path='/profile/:user'>
+        <PrivateRoute exact path="/profile/:id" component={Profile} />
+        {/* <Route exact path='/profile/:id'>
           <NavBar />
           <Profile />
-        </Route>
+        </Route> */}
         <Route exact path='/sign-up'>
           <SignUp />
         </Route>
@@ -36,6 +39,10 @@ function App() {
         </Route>
         <Route exact path='/game'>
           <Game/>
+        </Route>
+        <Route exact path='/ranking'>
+          <NavBar />
+          <Ranking/>
         </Route>
         <Route path="*" component={ErrorPage} />
       </Switch>

@@ -1,11 +1,11 @@
 import { useEffect, useState } from 'react';
 import { useHistory } from 'react-router';
 import { useDispatch, useSelector } from "react-redux";
-import ModalController from "./Modal"
+
+import ModalController from "./Modal";
+import HomeButton from './HomeButton';
 
 import log from '../Redux/actions-types/logActions';
-
-import NavBar from './NavBar';
 
 import styles from './styles/LogIn.module.css';
 
@@ -30,16 +30,16 @@ const initialState = {
 };
 
 export default function LogIn() {
+
   const dispatch = useDispatch();
-  
+    
   const history = useHistory();
-  
+    
   const { isAuth, message, token  } = useSelector(state => state.logReducer);
 
   const { logIn } = log;
 
   const [state, setState] = useState(initialState);
-  
   const [errors, setErrors] = useState(initialState);
 
   // Esto es para el modal
@@ -72,15 +72,18 @@ export default function LogIn() {
   useEffect(() => {
     if(isAuth) {
       localStorage.setItem("token", token)
-      history.push('/rooms');
+      setTimeout(() => {
+        history.push('/rooms');
+      }, 3000);
     }
-  }, [isAuth, message, history]);
+  }, [isAuth]);
 
-    return (
+  return (
         <>
-            <NavBar />
+            <HomeButton />
             {/* Este es el modal. El state que lo determina es "show" */}
             <ModalController show={show} handleClose={handleClose} message={message}/>
+
             <section className={styles.container}>
                     <form className={styles.form} onSubmit={handleSubmit}>
                         <label className={styles.label} htmlFor="emailInput" > Email: </label>
@@ -97,7 +100,7 @@ export default function LogIn() {
                         {errors.emailInput && (<p className={styles.danger}> {errors.emailInput} </p>)}
                         <label className={styles.label} htmlFor="passwordInput"> Password: </label>
                         <input 
-                            type='text'
+                            type='password'
                             id='passwordInput'
                             name="passwordInput"
                             value={state.passwordInput}
@@ -115,7 +118,6 @@ export default function LogIn() {
                             : 
                             <button type="submit" className={styles.disabled} disabled>Login</button>}
                     </form> 
-              
             </section>
 
         </>
