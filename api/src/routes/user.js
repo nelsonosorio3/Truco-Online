@@ -101,7 +101,7 @@ router.get("/friends",validarUsuario, async (req, res) => {
 
   let userInfo = {
     //usuarios que aceptaron la solicitud del usuario logeado, tambien los usuarios a los que se envio una solicitud
-    userSender: null,
+    userSender: null, 
     //usuarios que enviaron una solicitud al usuario logeado
     userRequested: null
   }
@@ -125,7 +125,13 @@ router.get("/friends",validarUsuario, async (req, res) => {
     })
   })
   .then(userRequestedResults => {
-    userInfo.userRequested = userRequestedResults
+    //Solucion momentanea, se va a tratar de implementar algo ams optimo
+    let userRequestedAccepted = userRequestedResults.filter( el => el.Friends.status === "accepted")
+    let userRequestedPending = userRequestedResults.filter( el => el.Friends.status === "pending")
+    
+    userInfo.userSender = userInfo.userSender.userSender.concat(userRequestedAccepted)
+    userInfo.userRequested = userRequestedPending
+
     return res.json(userInfo)
   })
 });

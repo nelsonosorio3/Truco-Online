@@ -80,9 +80,9 @@ router.put('/:id/:email', (req, res) => {
   })
   .then(response2 => {
     if (response == "accepted") {
-      res.status(201).json({ message: "La solicitud fue aceptada "})
+      res.status(201).json({ message: "La solicitud fue aceptada", id: userSenderData.toJSON().id})
     } else {
-      res.status(201).json({ message: "La solicitud fue rechaza por"})
+      res.status(201).json({ message: "La solicitud fue rechaza por", id: userSenderData.toJSON().id})
     }
   })
   .catch(err => {

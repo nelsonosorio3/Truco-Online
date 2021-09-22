@@ -7,6 +7,7 @@ import { useDispatch , useSelector } from 'react-redux';
 
 /* Los dos siguientes imports agregados por guille */
 import Friend from './Friend';
+import AddFriend from './addFriend';
 // import Match from './Match';
 
 export default function Profile(props) {
@@ -20,7 +21,7 @@ export default function Profile(props) {
 
     //userProfile: es el estado del usuario logeado
     const { userProfile, userFriends  } = useSelector(state => state.profileReducer);
-    const {getProfile, getFriends, deleteFriends} = profileActions
+    const {getProfile, getFriends, deleteFriends, putFriendRequest} = profileActions
     const dispatch = useDispatch();
 
     //Trae primeramente los datos del usuario y sus amigos
@@ -37,7 +38,7 @@ export default function Profile(props) {
         })
     }, [userFriends])
 
-    // console.log(friends)
+    console.log(userFriends)
 
     //Funcion para eliminar un amigo
     const deleteFriendFunction = (id, email) => {
@@ -45,10 +46,12 @@ export default function Profile(props) {
         dispatch(deleteFriends(id, email))
     }
 
-    /* 
-    Las solicitudes enviadas no debe traer aquellas que ya están aceptadas, estos ya son amigos!
-    Las búsquedas de amigos no deven devolver las amistades con estado "pending" ni "rejected", sólo "accepted".
-    */
+    //Funcion para responder a una solicitud
+      const respondFriendFunction = (email, response) => {
+        console.log(userProfile.id, email, response)
+        dispatch(putFriendRequest(userProfile.id, email, response))
+        window.location.reload()
+    }
 
     return (
         <div className={styles.mainDiv}>
@@ -63,6 +66,20 @@ export default function Profile(props) {
                 </div>
             </div>
             <br />
+
+            
+
+            <h1>Solicitudes pendientes</h1>
+            <div className={styles.friends}>
+                {
+                    !friends.requested.length ? <p>No solicitudes pendientes</p> : friends.requested.map(f => <AddFriend
+                        username={f.username}
+                        respond={respondFriendFunction}
+                        email={f.email}
+                    />)
+                }
+            </div>
+
             <h3 classname={styles.title}>Amigos</h3>
 
             <div className={styles.friends}>

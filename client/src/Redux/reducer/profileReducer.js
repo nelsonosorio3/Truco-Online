@@ -1,4 +1,4 @@
-import { GET_PROFILE, GET_FRIENDS, GET_HISTORY, DELETE_FRIEND } from '../actions/index';
+import { GET_PROFILE, GET_FRIENDS, GET_HISTORY, DELETE_FRIEND, PUT_FRIEND_REQUEST } from '../actions/index';
 
 const INITIAL_STATE = {
   userProfile: {},
@@ -32,7 +32,7 @@ const profileReducer = (state = INITIAL_STATE, {type, payload}) => {
         ...state,
         userFriends: {
           requested: payload.userRequested,
-          sender: payload.userSender.userSender
+          sender: payload.userSender
         }
       }
     return ansFriends 
@@ -46,6 +46,16 @@ const profileReducer = (state = INITIAL_STATE, {type, payload}) => {
         }
       }
     return ans  
+
+    case PUT_FRIEND_REQUEST:
+      const ansPutRequest = {
+        ...state,
+        userFriends: {
+          ...state.userFriends,
+          requested: state.userFriends.requested.filter(f => f.id !== payload)
+        }
+      }
+    return ansPutRequest  
 
     // case GET_HISTORY:
     // return {
