@@ -1,4 +1,4 @@
-import React, {useState, useEffect } from 'react';
+import React, {useState, useEffect, useRef } from 'react';
 import {useDispatch, useSelector} from 'react-redux'
 
 import { setIsInRoom } from '../../Redux/actions-types/roomsActions';
@@ -9,7 +9,7 @@ export default function RoomsList(){
     const [allRooms, setAllRooms] = useState([])
     const [roomId, setRoomId] = useState('')
     const dispatch = useDispatch()
-
+    const listRooms = useRef(null);
     useEffect(() => {
         socket.on('showActiveRooms', (rooms) => {
             setAllRooms([rooms]);
@@ -18,6 +18,18 @@ export default function RoomsList(){
 
         return () => {socket.off()}
     }, [allRooms])
+
+    useEffect(()=>{
+        socket.emit('bringActiveRooms')  // traer todas las rooms disponibles al entrar
+        console.log("test")
+    }, [])
+
+    useEffect(()=>{
+        socket.on("newRoomCreated",()=> {console.log("test");socket.emit('bringActiveRooms')}) //actualizar en tiempo real rooms disponibles
+        return ()=>{
+            socket.off("newRoomCreated")
+        }
+    })
 
     const updateRooms = (event) => {
         event.preventDefault();
@@ -32,7 +44,7 @@ export default function RoomsList(){
 
     return(
         <div>
-            <form onSubmit={updateRooms}>
+            <form onSubmit={updateRooms} ref={listRooms}>
                 <button type='submit' className={styles.btn} >Update Rooms</button>
             </form>
             <div className={styles.roomsList}>

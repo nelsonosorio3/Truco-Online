@@ -175,8 +175,6 @@ io.use((socket, next) => {
 
 
 io.on('connection', function (socket) {
-    table.players.push(socket.id);
-    console.log(table.players)
 
     socket.on('passTurn',function(){
         if(table.players[table.turn] === socket.id){
@@ -200,6 +198,8 @@ io.on('connection', function (socket) {
         const clients = io.sockets?.adapter.rooms.get(roomId) //set de clientes room
         if(clients?.size < 2 || clients === undefined){ //revisar si la sala esta llena
         socket.join(parseInt(roomId));
+        table.players.push(socket.id);
+        console.log(table.players)
         if(activeRooms.indexOf(roomId) === -1) activeRooms = [...activeRooms, roomId]
         else console.log(roomId, 'ya existe');
         console.log("active rooms: ", activeRooms)
@@ -207,7 +207,10 @@ io.on('connection', function (socket) {
         if(clients?.size === 2) {
             activeRooms =  activeRooms.filter(room=> room!== roomId)
             socket.emit("roomFull", false);
+            io.to(table.players[0]).emit("playerOrder",true);
+            io.to(table.players[1]).emit("playerOrder",false)
          } //remover la sala de la lista si esta llena
+         io.emit("newRoomCreated"); // informar a todos los clientes lista neuvas creadas o cerradas
     });
     socket.on('roomTest', function (_a) {
         var room = _a.room;
@@ -239,11 +242,12 @@ io.on('connection', function (socket) {
     });
 
 
-    if(table.players.length === table.numberPlayers && !table.gameStarted) {
-        io.to(table.players[0]).emit("playerOrder",true);
-        io.to(table.players[1]).emit("playerOder",false);
-        table.gameStarted= true;
-    };
+    // if(io.sockets?.adapter.rooms.get(roomId).size === 2 && !table.gameStarted) {
+    //     console.log("hola")
+    //     io.to(table.players[0]).emit("playerOrder",true);
+    //     io.to(table.players[1]).emit("playerOrder",false);
+    //     table.gameStarted= true;
+    // };
 
    
 

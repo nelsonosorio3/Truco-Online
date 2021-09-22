@@ -10,7 +10,7 @@ export default function Game() {
         name: "player",
         score: 0,
         hand: [],
-        isTurn: true,
+        isTurn: false,
         roundChange: 1,
         betOptions: [],
         tableRival: [],
