@@ -23,10 +23,10 @@ const getFriends = (token) => {
         "x-access-token": token,
       }
     })
-      .then(data => {
-        dispatch({ type: GET_FRIENDS, payload: data.data.userSender });
-      })
-      .catch((error) => console.error(error));
+    .then(data => {
+      dispatch({ type: GET_FRIENDS, payload: data.data});
+    })
+    .catch((error) => console.error(error));
   };
 };
 

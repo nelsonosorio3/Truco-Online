@@ -12,7 +12,11 @@ import Friend from './Friend';
 export default function Profile(props) {
     
     //Estados del profileReducer
-    const [friends, setFriends] = useState([])
+    const [friends, setFriends] = useState({
+        sender: [],
+        requested: []
+    })
+    const [myPendingRequests, setMyPendingRequests] = useState([])
 
     //userProfile: es el estado del usuario logeado
     const { userProfile, userFriends  } = useSelector(state => state.profileReducer);
@@ -25,13 +29,19 @@ export default function Profile(props) {
         dispatch(getFriends(localStorage.token))
     },[])
 
-    //Esto es para que se actualice el estado una vez que se elimina
+    // Esto es para que se actualice el estado una vez que se elimina
     useEffect(() => {
-        setFriends(userFriends)
+        setFriends({
+            sender: userFriends.sender,
+            requested: userFriends.requested
+        })
     }, [userFriends])
+
+    // console.log(friends)
 
     //Funcion para eliminar un amigo
     const deleteFriendFunction = (id, email) => {
+        console.log(id, email)
         dispatch(deleteFriends(id, email))
     }
 
@@ -48,7 +58,7 @@ export default function Profile(props) {
                     <h2>Username: {userProfile?.username}</h2>
                     <h3>Email: {userProfile?.email}</h3>
                     <h3>Games played: {userProfile?.gamesPlayed}</h3>
-                    <h3>Username: {userProfile?.gamesLost}</h3>
+                    <h3>Games Lost: {userProfile?.gamesLost}</h3>
                     <h3>Games won: {userProfile?.gamesWon}</h3>
                 </div>
             </div>
@@ -57,7 +67,7 @@ export default function Profile(props) {
 
             <div className={styles.friends}>
                 {
-                    !friends.length ? <p>No tienes amigos</p> : friends.map(f => <Friend
+                    !friends.sender.length ? <p>No tienes amigos</p> : friends.sender.map(f => <Friend
                         key={f?.id}
                         email={f?.email}
                         deleteId={deleteFriendFunction}
@@ -65,6 +75,7 @@ export default function Profile(props) {
                         id={f?.id}
                         name={f?.username}
                         date={f.Friends?.createdAt}
+                        status = {f.Friends.status}
                     />)
                 }
             </div>
