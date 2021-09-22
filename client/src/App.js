@@ -1,6 +1,7 @@
 import React from 'react';
 import { Route, Switch } from "react-router-dom";
 
+import NavBar from './components/NavBar';
 import Landing from './components/Landing';
 import Welcome from "./components/Welcome";
 import Profile from "./components/Profile";
@@ -39,7 +40,6 @@ function App() {
           <Game/>
         </Route>
         <Route exact path='/ranking'>
-          <NavBar />
           <Ranking/>
         </Route>
         <Route path="*" component={ErrorPage} />

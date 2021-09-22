@@ -20,6 +20,15 @@
     font-size: 21px;
 }
 
+.a_disable{
+    text-decoration: none;
+    color: #878787;
+    margin: auto;
+    font-weight: 300;
+    font-size: 21px;
+    pointer-events: none;
+}
+
 .logo2{
     width: 5%;
 }
