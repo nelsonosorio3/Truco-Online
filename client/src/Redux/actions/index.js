@@ -9,5 +9,8 @@ export const LOG_IN = 'LOG_IN';
 export const GET_PROFILE = 'GET_PROFILE';
 export const GET_FRIENDS = 'GET_FRIENDS';
 export const GET_HISTORY = 'GET_HISTORY';
+export const DELETE_FRIEND = 'DELETE_FRIEND';
+export const PUT_FRIEND_REQUEST = 'PUT_FRIEND_REQUEST';
+
 
 export const IS_IN_ROOM = 'ADD_ROOM'

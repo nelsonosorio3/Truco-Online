@@ -1,4 +1,4 @@
-const { Router } = require("express");
+const { Router, response } = require("express");
 const Sequelize = require('sequelize');
 const { isConstructorDeclaration } = require("typescript");
 //const User = require("../models/User");
@@ -52,7 +52,6 @@ router.get('/login', async (req, res) => {
     }
 
   )
-  // console.log(users)
   try {
     if (users.length > 0) {
       var user = users.filter(u => u.password === passwordInput);
@@ -77,10 +76,10 @@ router.get('/login', async (req, res) => {
   }
 })
 
-
+//Ruta para obtener datos del perfil del usuario
 router.get("/profile", validarUsuario,  async (req, res) => {
   // userId ---> viene del middleware para autenticacion(req.body.userId) - Se utiliza para el query
-  console.log("Authenticated userId: ", req.body.userId)
+  console.log("Authenticated for /profile userId: ", req.body.userId)
   try{
     let user = await User.findAll({
       attributes: { exclude: 'password' },
@@ -96,26 +95,45 @@ router.get("/profile", validarUsuario,  async (req, res) => {
   }
 });
 
-router.get("/:id/friends", async (req, res) => {
-  const { id } = req.params;
-  var user = await User.findByPk(parseInt(id), {
+//Ruta para traer todos los amigos de un usuario
+router.get("/friends",validarUsuario, async (req, res) => {
+  console.log("Authenticated for /friends userId: ", req.body.userId)
+
+  let userInfo = {
+    //usuarios que aceptaron la solicitud del usuario logeado, tambien los usuarios a los que se envio una solicitud
+    userSender: null, 
+    //usuarios que enviaron una solicitud al usuario logeado
+    userRequested: null
+  }
+
+  User.findOne({
+    where: {id: req.body.userId},
+    attributes: ["id", "username"],
     include: {
       model: User,
       as: "userSender",
+      attributes: ["username", "id", "email"],
+      through: {
+        attributes: ["status", "createdAt", "userRequestedId"]
+      }
     },
-  });
-  var user2 = await User.findByPk(parseInt(id), {
-    include: {
-      model: User,
-      as: "userRequested",
-    }
-  });
-  var result = [...user.userSender, ...user2.userRequested]
+  })
+  .then(userSenderResults => {
+    userInfo.userSender = userSenderResults
+    return userSenderResults.getUserRequested({
+      attributes: ["username", "id", "email"],
+    })
+  })
+  .then(userRequestedResults => {
+    //Solucion momentanea, se va a tratar de implementar algo ams optimo
+    let userRequestedAccepted = userRequestedResults.filter( el => el.Friends.status === "accepted")
+    let userRequestedPending = userRequestedResults.filter( el => el.Friends.status === "pending")
+    
+    userInfo.userSender = userInfo.userSender.userSender.concat(userRequestedAccepted)
+    userInfo.userRequested = userRequestedPending
 
-  // Difícil hacer con sequelize, tuve que user filter en JS.
-  result = result.filter(f => f.Friends.status === "accepted")
-
-  res.status(200).json(result);
+    return res.json(userInfo)
+  })
 });
 
 router.get("/:id/history", async (req, res) => {
