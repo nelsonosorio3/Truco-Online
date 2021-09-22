@@ -57,9 +57,10 @@ const table = {
     bet: false, //estado para renocer si hubo o no una apuesta y parar el flujo normal del juego
     skip: false, // auxiliar para saltar
     tableCards: [], //array para tener las cartas en la mesa
-    waitingTime: 3 * 1000, //tiempo de espera en milisegundo de cada turno
+    waitingTime: 30 * 1000, //tiempo de espera en milisegundo de cada turno
     numberPlayers: 2,
     players: [],
+    gameStarted: false,
   };
 
   // devuelve el objeto deck para la partida
@@ -227,8 +228,18 @@ io.on('connection', function (socket) {
         socket.broadcast.emit("playCard", card) //emite al otro cliente la carta que jugo el cliente emisor
     });
     socket.on("changeTurn", ()=>{
-        
+        socket.broadcast.emit("playerOrder", false);
+        socket.emit("playerOrder", true);
+    });
+    socket.on("setOrder", ()=>{
+        io.emit
     })
+
+    if(table.players.length === table.numberPlayers && !table.gameStarted) {
+        io.to(table.players[0]).emit("playerOrder",true);
+        io.to(table.players[1]).emit("playerOder",false);
+        table.gameStarted= true;
+    };
 
    
 

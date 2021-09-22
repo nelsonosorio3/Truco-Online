@@ -39,6 +39,10 @@ export default function Game() {
       socket.emit('passTurn')
     }
 
+    const changeTurn = () =>{
+      socket.emit("changeTurn")
+    };
+
     useEffect(()=>{
         socket.on("newRoundStarts", hand=>{
           console.log(hand)
@@ -46,17 +50,22 @@ export default function Game() {
           setPlayer({...player, hand, tableRival: [], tablePlayer: []});
         });
         socket.on("bet", betOptions=>{
-          console.log(betOptions)
-          setPlayer({...player, betOptions})
+          console.log(betOptions);
+          setPlayer({...player, betOptions});
+          changeTurn();
         });
         socket.on("playCard", card=>{
           console.log(card)
           setPlayer({...player, tableRival:  [...player.tableRival, card]});
+          changeTurn();
         });
+        socket.on("playerOrder", (isTurn)=>setPlayer({...player, isTurn}));
+
         return () =>{
           socket.off('newRoundStarts');
           socket.off("bet");
           socket.off("playCard");
+          socket.off("playerOrder");
         };
       });
       console.log(player)
