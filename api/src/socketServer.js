@@ -170,7 +170,7 @@ io.on('connection', function (socket) {
         socket.broadcast.emit("bet", table.betsList[betPick])
         console.log(table.betsList[betPick])
     })
-    socket.on("playCard")
+   
 
 
 
