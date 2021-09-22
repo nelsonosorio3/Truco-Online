@@ -1,13 +1,17 @@
 import React from 'react';
 import { useEffect, useState } from 'react';
-import styles from './styles/Profile.module.css';
+import { useDispatch , useSelector } from 'react-redux';
+
 import profileIcon from '../img/profileIcon.png';
 import profileActions from '../Redux/actions-types/profileActions';
-import { useDispatch , useSelector } from 'react-redux';
+import styles from './styles/Profile.module.css';
 
 /* Los dos siguientes imports agregados por guille */
 import Friend from './Friend';
 // import Match from './Match';
+
+// nav
+import NavBar from './NavBar';
 
 export default function Profile(props) {
     
@@ -83,6 +87,7 @@ export default function Profile(props) {
                 } */}
             </div>
 
-        </div>
+            </div>
+        </>
     )
 }
