@@ -1,7 +1,7 @@
 import React , { useSelector }from 'react';
 import { Link } from 'react-router-dom';
 
-import Logo2 from '../img/Logo2.png'
+import Logo2 from '../img/logo2.png'
 import styles from './styles/NavBar.module.css'
 
 export default function NavBar(){

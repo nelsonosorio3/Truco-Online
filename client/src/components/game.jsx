@@ -15,44 +15,61 @@ export default function Game() {
         isTurn: false,
         turnNumber: 1,
         betOptions: [],
+        tableRival: [],
+        tablePlayer: [],
       });
 
     const newRoundStarts = async () => {
-        socket.emit('newRoundStarts')
+      socket.emit('newRoundStarts')
     }
 
     const bet = async (e) =>{
-        socket.emit("bet", e.target.name)
+      socket.emit("bet", e.target.name)
     }
 
     const playCard = async (card) =>{
-      if(!player.mesa1) setPlayer({...player, hand: player.hand.filter(cardH=> card.id !== cardH.id), mesa1: card});
-      else if (!player.mesa2) setPlayer({...player, hand: player.hand.filter(cardH=> card.id !== cardH.id), mesa2: card});
-      else setPlayer({...player, hand: player.hand.filter(cardH=> card.id !== cardH.id), mesa3: card});
+      // if(!player.mesa1) setPlayer({...player, hand: player.hand.filter(cardH=> card.id !== cardH.id), mesa1: card});
+      // else if (!player.mesa2) setPlayer({...player, hand: player.hand.filter(cardH=> card.id !== cardH.id), mesa2: card});
+      setPlayer({...player, hand: player.hand.filter(cardH=> card.id !== cardH.id), tablePlayer: [...player.tablePlayer, card]});
       socket.emit("playCard", card)
       console.log(card)
     }
+
+    const passTurn = () =>{
+      socket.emit('passTurn')
+    }
+
     useEffect(()=>{
-        socket.on("newRoundStarts", (hand)=>{
-            console.log(hand)
-            setPlayer({...player, hand});
+        socket.on("newRoundStarts", hand=>{
+          console.log(hand)
+          socket.emit('passTurn')
+          setPlayer({...player, hand, tableRival: [], tablePlayer: []});
         });
-        socket.on("bet", (betOptions)=>{
-            console.log(betOptions)
-            setPlayer({...player, betOptions})
-        })
+        socket.on("bet", betOptions=>{
+          console.log(betOptions)
+          setPlayer({...player, betOptions})
+        });
+        socket.on("playCard", card=>{
+          console.log(card)
+          setPlayer({...player, tableRival:  [...player.tableRival, card]});
+        });
         return () =>{
           socket.off('newRoundStarts');
           socket.off("bet");
+          socket.off("playCard");
         };
       });
       console.log(player)
     return(<div>
-            <div className={styles.image}> 
-            </div>
+            {/* <div className={styles.image}>  */}
+            {/* </div> */}
             <button onClick={newRoundStarts}>New round Start</button>
             {player.betOptions?.map(betPick=><button onClick={bet} name={betPick} key={betPick} style = {{ padding: "30px" }}>{betPick}</button>)}<br/>
-            {player.hand?.map(card => <div onClick={()=>playCard(card)}><h2>{card.suit}</h2><h2>{card.number}</h2></div>)}
+            {player.hand?.map(card => <div onClick={()=>playCard(card)}><h2>{card.suit}</h2><h2>{card.number}</h2></div>)}<br/>
+            <div style ={{ display: "flex", flexDirection: "column" }}>
+            {player.tableRival?.map(card => <div style = {{ display: "flex", flexDirection: "row" }}><h2>{card.suit}</h2><h2>{card.number}</h2></div>)}
+            {player.tablePlayer?.map(card => <div style = {{ display: "flex", flexDirection: "row" }}><h2>{card.suit}</h2><h2>{card.number}</h2></div>)}
+            </div>
             </div>
             
     );
