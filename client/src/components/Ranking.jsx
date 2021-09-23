@@ -25,19 +25,20 @@ export default function Ranking() {
 
     console.log(state)
     return(
-<<<<<<< HEAD
-            <div className={styles.fondo}> 
+
+            
+
+        <>
+        <NavBar />
+            <div > 
+              <div className={styles.fondo}> 
                 <section>
                   <ul>
                     
                   </ul>
                 </section>
-=======
-        <>
-        <NavBar />
-            <div > 
                 Probando ranking
->>>>>>> 56fb7ac3a7513066afb10c30d403ff6b04751b03
+             </div>
             </div>
         </>
     );
