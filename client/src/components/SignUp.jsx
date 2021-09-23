@@ -1,9 +1,10 @@
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from 'react-router';
+import { useModal } from '../hooks/useModal';
 
-import ModalController from "./Modal";
 import HomeButton from './HomeButton';
+import Modal from "./Modal";
 
 import signUpActions from '../Redux/actions-types/signUpActions';
 
@@ -53,10 +54,7 @@ export default function SignUp() {
     
     const [errors, setErrors] = useState(initialState);
 
-    // Esto es para el modal
-    const [show, setShow] = useState(false);
-    const handleClose = () => setShow(false);
-    const handleShow = () => setShow(true);
+    const [isOpenModal, openModal, closeModal] = useModal();
 
     function handleChange(event) {
         const { name, value } = event.target;
@@ -73,10 +71,10 @@ export default function SignUp() {
     function handleSubmit(event) {
         event.preventDefault();
         dispatch(signUpActions.signUpActions(state));
+        openModal();
         setState(initialState);
         setErrors(initialState);
-        // Para el modal
-        handleShow();
+
     };
 
     useEffect(() => {
@@ -86,7 +84,7 @@ export default function SignUp() {
                 history.push('rooms');
             }, 0);
         };
-        if(registered || logged) {
+        if(registered) {
             setTimeout(() => {
                 history.push('log-in');
             }, 3000);
@@ -96,8 +94,6 @@ export default function SignUp() {
     return (
         <>
             <HomeButton />
-            {/* Este es el modal. El state que lo determina es "show" */}
-            <ModalController show={show} handleClose={handleClose} message={message}/>
             <section className={styles.container}>
                 <form className={styles.form} onSubmit={handleSubmit}>
                 <label className={styles.label} htmlFor="username" > User: </label>
@@ -145,6 +141,16 @@ export default function SignUp() {
                     <button type="submit" className={styles.disabled} disabled> Create User </button>}
                 </form> 
             </section>
+            <Modal isOpen={isOpenModal} closeModal={closeModal}>
+              <h3>Status:</h3>
+              <p>{message}</p>
+              {
+                registered ? 
+                <p>Redirecting...</p>
+                :
+                null
+              }
+            </Modal> 
         </>
     );
 };

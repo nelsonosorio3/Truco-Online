@@ -27,6 +27,7 @@ const logReducer = (state = INITIAL_STATE, {type, payload}) => {
           isAuth: payload.login,
           user: payload.username,
           id: payload.id,
+          message: payload.message,
           token: payload.token
         };
       } else {
