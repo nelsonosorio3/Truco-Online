@@ -265,7 +265,7 @@ io.on('connection', function (socket) {
             };
             table.games[roomId].common ={
                 envidoList: [],
-                trucoBet: "",
+                trucoBet: 1,
                 scoreToWin: 15,
                 matchesToWin: 1, 
                 flor: true,
@@ -331,6 +331,9 @@ io.on('connection', function (socket) {
     });
     // escucha el evento bet para devolver la lista adecuado de opciones de apuesta
     socket.on("bet", (betPick, roomId, playerId) => {
+        table.games[roomId].playerOne.bet = true;
+        table.games[roomId].playerTwo.bet = true;
+        table.games[roomId].playerOne.id === playerId? io.to(table.games[roomId].playerTwo.id).emit("betting", true) : io.to(table.games[roomId].playerOne.id).emit("betting", true);
         if(betPick === "ir al mazo") {
             table.games[roomId].playerOne.id === playerId? table.games[roomId].playerTwo.score++ : table.games[roomId].playerOne.score++;
 
@@ -373,9 +376,19 @@ io.on('connection', function (socket) {
             io.to(table.games[roomId].playerTwo.id).emit("newRoundStarts", table.games[roomId].playerTwo);
            
         }
+        else if(betPick === "quiero truco") {
+            table.games[roomId].common.trucoBet = 2;
+            io.to(roomId).emit("bet", [], false);
+            io.to(roomId).emit("betting", false);
+        }
+        else if(betPick === "no quiero truco") {
+            table.games[roomId].playerOne.id ===playerId? table.games[roomId].playerTwo.score++ : table.games[roomId].playerOne.score++;
+            io.to(roomId).emit("bet", []);
+            io.to(roomId).emit("betting", false);
+        }
         else{
-        socket.to(roomId).emit("bet", table.betsList[betPick]); //emite al otro cliente la lista de respuesta a la apuesta enviada
-        console.log(table.betsList[betPick])};
+        table.games[roomId].playerOne.id === playerId? io.to(table.games[roomId].playerTwo.id).emit("bet", table.betsList[betPick]) : io.to(table.games[roomId].playerOne.id).emit("bet", table.betsList[betPick]);
+        }
     });
     socket.on("playCard", (card, roomId) => {
         socket.to(roomId).emit("playCard", card) //emite al otro cliente la carta que jugo el cliente emisor

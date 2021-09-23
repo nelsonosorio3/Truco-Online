@@ -28,7 +28,10 @@ export default function Game() {
     // };
 
     const bet = e => {
-      player.isTurn && socket.emit("bet", e.target.name, roomId, player.id);
+      if(player.isTurn){
+        socket.emit("bet", e.target.name, roomId, player.id);
+        setPlayer({...player, bet:true})
+      };
     };
 
     function roundCheckWinner(playerCard, rivalCard){
@@ -70,7 +73,7 @@ export default function Game() {
     const playCard = async (card) =>{
       // if(!player.mesa1) setPlayer({...player, hand: player.hand.filter(cardH=> card.id !== cardH.id), mesa1: card});
       // else if (!player.mesa2) setPlayer({...player, hand: player.hand.filter(cardH=> card.id !== cardH.id), mesa2: card});
-      if(player.isTurn){
+      if(player.isTurn && !player.bet){
       setPlayer({...player, hand: player.hand.filter(cardH=> card.id !== cardH.id), tablePlayer: [...player.tablePlayer, card]});
       socket.emit("playCard", card, roomId)
       console.log(card)}
@@ -104,9 +107,9 @@ export default function Game() {
         setPlayer({...player, betOptions});
         changeTurn();
       });
-      socket.on("mazo", algo =>{
-
-      });
+      socket.on("betting", bool=>{
+        setPlayer({...player, bet: bool});
+      })
       socket.on("playCard", card=>{
         // console.log(card)
         setPlayer({...player, tableRival:  [...player.tableRival, card]});
@@ -120,6 +123,7 @@ export default function Game() {
         socket.off("bet");
         socket.off("playCard");
         socket.off("playerOrder");
+        socket.off("betting");
       };
     });
 
