@@ -6,7 +6,8 @@ import {useDispatch, useSelector} from 'react-redux'
 
 
 export default function Game() {
-    const [player, setPlayer] = useState({
+    const roomId = useSelector(store => store.roomsReducer.roomId); //traer el id de la sala en la que esta el jugador
+    const [player, setPlayer] = useState({ //objeto del jugador en el cliente deberia tener solo propiedades que se usan para renderizar o limitar interacciones en el cliente
         name: "player",
         score: 0,
         hand: [],
@@ -18,7 +19,7 @@ export default function Game() {
         bet: false,
         roundResults: [],
       });
-    const roomId = useSelector(store => store.roomsReducer.roomId);
+    
     console.log(roomId)
     function roundCheckWinner(playerCard, rivalCard){
       console.log(playerCard)
@@ -39,11 +40,12 @@ export default function Game() {
         (rounds.filter(round => round === "tie").length === 2 && rounds.some(round => round === "win")) ||
         rounds.every(round => round === "tie")){
           setPlayer({...player, score: ++player.score, roundChange: ++player.roundChange})
+          roundWin();
           return
         } 
       if(rounds.length >= 3){
         for (let i = 0; i < 3; i++) {
-          if(rounds[i] === "win") setPlayer({...player, score: ++player.score, roundChange: ++player.roundChange});
+          if(rounds[i] === "win") {setPlayer({...player, score: ++player.score, roundChange: ++player.roundChange}); roundWin()};
         }
       }
     }
@@ -56,6 +58,9 @@ export default function Game() {
       player.isTurn && socket.emit("bet", e.target.name, roomId);
     }
 
+    const roundWin = () =>{
+      socket.emit("roundWin", roomId, socket.id)
+    }
     const playCard = async (card) =>{
       // if(!player.mesa1) setPlayer({...player, hand: player.hand.filter(cardH=> card.id !== cardH.id), mesa1: card});
       // else if (!player.mesa2) setPlayer({...player, hand: player.hand.filter(cardH=> card.id !== cardH.id), mesa2: card});
@@ -70,7 +75,7 @@ export default function Game() {
     }
 
     const changeTurn = () =>{
-      socket.emit("changeTurn");
+      socket.emit("changeTurn", roomId);
     };
     
     const turnTwo = () =>{
@@ -80,7 +85,7 @@ export default function Game() {
     
     useEffect(()=>{
         socket.on("newRoundStarts", hand=>{
-          // console.log(hand)
+          console.log(hand)
           socket.emit('passTurn')
           setPlayer({...player, hand, tableRival: [], tablePlayer: [], roundResults: []});
         });

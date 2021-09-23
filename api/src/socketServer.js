@@ -30,15 +30,11 @@ let timeOut;
 
 // objeto con todas las propiedasdes comunes de la partida, cosas como
 const table = {
-    envidoList: [], // lista con la acumulacion de envidos
+    //estas son las propiedades que son comunes a todos los juegos
     trucoValue: {truco: 2, retruco: 3, valeCuatro: 4}, //lista valor de trucos
     envidoValue: {envido: 2, realEnvido: 3},  //lista valor envido individual
-    scoreToWin: 15, // puntaje para ganar partida/chico 
-    matchesToWin: 1, // partidas para ganar el juego
-    flor: true, //opcion para activar o desactivar flor
-    cumulativeScore: 1, //puntaje acumulado partida
-    currentTurn: 1, // turno actual
-    turn: 0,
+    players: [],
+    turn: 1,
     betsList: {firstTurn: ["truco", "envido1", "realEnvido", "faltaEnvido", "ir al mazo"],
                 secondTurn: ["truco", "ir al mazo"],
                 thirdTurn: ["truco", "ir al mazo"],
@@ -54,15 +50,38 @@ const table = {
                 realEnvido: ["noQuiero", "faltaEnvido"],
                 faltaEnvido: ["noQuiero", "quiero"]
                 }, //la lista de apuestas posibles la idea es que es un objeto con propiedades de apuestas posibles y un array con cada posible respuesta
-    bet: false, //estado para renocer si hubo o no una apuesta y parar el flujo normal del juego
-    skip: false, // auxiliar para saltar
-    tableCards: [], //array para tener las cartas en la mesa
-    waitingTime: 30 * 1000, //tiempo de espera en milisegundo de cada turno
-    numberPlayers: 2,
-    players: [],
-    gameStarted: false,
+    games: {}, //objeto que contiene todas las partidas jugandose, la propiedad es el id de cada Rooom
   };
-
+  /*como se veria table.games {
+        1234: {
+            playerOne: {
+                id: 2144124,
+                name: "player",
+                score: 0,
+                hand: [],
+                turnNumber: 1
+                isTurn: false,
+                betOptions: [],
+                tableRival: [],
+                tablePlayer: [],
+                bet: false,
+                roundResults: [],
+            },
+            playerTwo:{
+                //igual que playerOne
+            },
+            common:{
+                envidoList: [],
+                trucoBet: "",
+                scoreToWin: 15,
+                matchesToWin: 1, 
+                flor: true,
+                cumulativeScore: 1,
+                time: 15 * 1000 
+            }
+        }
+  }
+*/
   // devuelve el objeto deck para la partida
 function buildDeck(){
 let deck = [{ id: 1, suit: 'copas', number: 1, truco: 7},
@@ -142,36 +161,36 @@ playerBhand.push(getCard(deck));
 return [playerAhand, playerBhand]
 }
 
-function nextTurn(){
-    table.turn = table.currentTurn++ % table.numberPlayers;
+// function nextTurn(){
+//     table.turn = table.currentTurn++ % table.numberPlayers;
 
-    setTimeOut();
-}
-function setTimeOut(){
-    timeOut = setTimeout(()=>{
-        nextTurn();
-        console.log("cambio turno");
-    }, table.waitingTime);
-}
+//     setTimeOut();
+// }
+// function setTimeOut(){
+//     timeOut = setTimeout(()=>{
+//         nextTurn();
+//         console.log("cambio turno");
+//     }, table.waitingTime);
+// }
 
-function resetTimeOut(){
-    if(typeof timeOut === "object"){
-        console.log("timeout reset");
-        clearTimeout(timeOut);
-    }
-}
+// function resetTimeOut(){
+//     if(typeof timeOut === "object"){
+//         console.log("timeout reset");
+//         clearTimeout(timeOut);
+//     }
+// }
 
   
 //Hacer passport
-io.use((socket, next) => {
-    console.log("socket.handshake.auth (middleware)", socket.handshake.auth)
-    if (true) {
-      next();
+// io.use((socket, next) => {
+//     console.log("socket.handshake.auth (middleware)", socket.handshake.auth)
+//     if (true) {
+//       next();
 
-    } else {
-      next(new Error("invalid"));
-    }
-});
+//     } else {
+//       next(new Error("invalid"));
+//     }
+// });
 
 
 io.on('connection', function (socket) {
@@ -198,7 +217,6 @@ io.on('connection', function (socket) {
         const clients = io.sockets?.adapter.rooms.get(roomId) //set de clientes room
         if(clients?.size < 2 || clients === undefined){ //revisar si la sala esta llena
         socket.join(parseInt(roomId));
-        table.players.push(socket.id);
         console.log(table.players)
         if(activeRooms.indexOf(roomId) === -1) activeRooms = [...activeRooms, roomId]
         else console.log(roomId, 'ya existe');
@@ -207,8 +225,51 @@ io.on('connection', function (socket) {
         if(clients?.size === 2) {
             activeRooms =  activeRooms.filter(room=> room!== roomId)
             socket.emit("roomFull", false);
-            io.to(table.players[0]).emit("playerOrder",true);
-            io.to(table.players[1]).emit("playerOrder",false)
+            let iterator = clients.values();
+            const player1 = iterator.next().value;
+            const player2 = iterator.next().value;
+            console.log(clients.values())
+            // let player2 = player1.next()
+            io.to(player1).emit("playerOrder",true);
+            io.to(player2).emit("playerOrder",false);
+            table.games[roomId]={};
+            table.games[roomId].playerOne = {
+                id: player1,
+                name: "player1",
+                score: 0,
+                hand: [],
+                turnNumber: 1,
+                isTurn: true,
+                betOptions: [],
+                tableRival: [],
+                tablePlayer: [],
+                bet: false,
+                roundResults: [],
+            };
+            table.games[roomId].playerTwo = {
+                id: player2,
+                name: "player2",
+                score: 0,
+                hand: [],
+                turnNumber: 1,
+                isTurn: false,
+                betOptions: [],
+                tableRival: [],
+                tablePlayer: [],
+                bet: false,
+                roundResults: [],
+            };
+            table.games[roomId].common ={
+                envidoList: [],
+                trucoBet: "",
+                scoreToWin: 15,
+                matchesToWin: 1, 
+                flor: true,
+                cumulativeScore: 1,
+                time: 15 * 1000
+            }
+            console.log(table.games)
+
          } //remover la sala de la lista si esta llena
          io.emit("newRoomCreated"); // informar a todos los clientes lista neuvas creadas o cerradas
     });
@@ -236,10 +297,13 @@ io.on('connection', function (socket) {
     socket.on("playCard", (card, roomId) => {
         socket.to(roomId).emit("playCard", card) //emite al otro cliente la carta que jugo el cliente emisor
     });
-    socket.on("changeTurn", ()=>{
-        socket.broadcast.emit("playerOrder", false);
+    socket.on("changeTurn", (roomId)=>{
+        socket.to(roomId).emit("playerOrder", false);
         socket.emit("playerOrder", true);
     });
+    socket.on("roundWin", (roomId, socketId)=>{
+        socket.to()
+    })
 
 
     // if(io.sockets?.adapter.rooms.get(roomId).size === 2 && !table.gameStarted) {
