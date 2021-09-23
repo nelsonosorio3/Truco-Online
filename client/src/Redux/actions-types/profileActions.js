@@ -50,20 +50,26 @@ const putFriendRequest = (id, email, response) => {
   };
 };
 
-const getHistory = (id) => {
+const getGames = (token) => {
   return function(dispatch) {
-    return axios(`http://localhost:3001/api/user/${id}/history`)
-      .then(data => {
-        dispatch({ type: GET_HISTORY, payload: data });
-      })
-      .catch((error) => console.error(error));
+    return axios(`http://localhost:3001/api/games/mygames`, {
+      headers: {
+        "x-access-token": token,
+      }
+    })
+    .then(data => {
+      dispatch({ type: GET_HISTORY, payload: data.data.games});
+    })
+    .catch((error) => console.error(error));
   };
 };
+
+
 
 export default {
     getProfile,
     getFriends,
     putFriendRequest,
     deleteFriends,
-    getHistory,
+    getGames,
 };
