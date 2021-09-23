@@ -19,14 +19,9 @@ export default function Game() {
         tablePlayer: [], // cartas del jugador en la mesa
         bet: false, // llevar registro de si aposto
         roundResults: [], //deberia contener el resultado de la mano por ejemplo ["tie", "win", "loss"]
-        starts: false, //para cambiar turnos al finalizar ronda
+        starts: false, // referencia para cambiar turnos al finalizar ronda
       });
     
-    // funcion que deberia ejecutarse solo al iniciar el juego
-    // const gameStarts = (player) => {
-    //   socket.emit("gameStarts", player);
-    // };
-
     const bet = e => {
       if(player.isTurn){
         socket.emit("bet", e.target.name, roomId, player.id);
@@ -34,95 +29,51 @@ export default function Game() {
       };
     };
 
-    function roundCheckWinner(playerCard, rivalCard){
-      console.log(playerCard)
-      if(playerCard.truco < rivalCard.truco){
-        setPlayer({...player, roundResults: [...player.roundResults, "win"]});
-      }
-      else if(playerCard.truco > rivalCard.truco){
-        setPlayer({...player, roundResults: [...player.roundResults, "loss"]});
-      }
-      else{
-        setPlayer({...player, roundResults: [...player.roundResults, "tie"]});
-      }
-    }
-
-    function checkWinnerMatch(rounds){
-      console.log(rounds)
-      if((rounds.filter(round => round === "win").length >1) || 
-        (rounds.filter(round => round === "tie").length === 2 && rounds.some(round => round === "win")) ||
-        rounds.every(round => round === "tie")){
-          setPlayer({...player, score: ++player.score, roundChange: ++player.roundChange})
-          roundWin();
-          return
-        } 
-      if(rounds.length >= 3){
-        for (let i = 0; i < 3; i++) {
-          if(rounds[i] === "win") {setPlayer({...player, score: ++player.score, roundChange: ++player.roundChange}); roundWin()};
-        }
-      }
-    }
-
     const newRoundStarts = () => {
       player.isTurn && socket.emit('newRoundStarts', roomId);
-    }
+    };
 
-    const roundWin = () =>{
-      socket.emit("roundWin", roomId, socket.id)
-    }
-    const playCard = async (card) =>{
+    const playCard = (card) =>{
       // if(!player.mesa1) setPlayer({...player, hand: player.hand.filter(cardH=> card.id !== cardH.id), mesa1: card});
       // else if (!player.mesa2) setPlayer({...player, hand: player.hand.filter(cardH=> card.id !== cardH.id), mesa2: card});
       if(player.isTurn && !player.bet){
       setPlayer({...player, hand: player.hand.filter(cardH=> card.id !== cardH.id), tablePlayer: [...player.tablePlayer, card]});
       socket.emit("playCard", card, roomId, player.id);
-      }
-    }
-
-    const passTurn = () =>{
-      socket.emit('passTurn');
-    }
+      };
+    };
 
     const changeTurn = () =>{
-      socket.emit("changeTurn", roomId);
+      socket.emit("changeTurn", roomId, player.id);
     };
-    
-    const turnTwo = () =>{
-      socket.emit("turnTwo");
-    }
-
     
     useEffect(()=>{
       socket.on("gameStarts", player=>{ //escucha gameStarts para iniciar cuando la sala se llena y dejar el estado jugador listo
-        console.log(player)
         setPlayer(player);
-      })
+      });
       socket.on("newRoundStarts", player=>{
-        // console.log(hand)
-        // socket.emit('passTurn')
         setPlayer(player);
       });
       socket.on("bet", betOptions=>{
-        console.log(betOptions);
+        // changeTurn();
         setPlayer({...player, betOptions});
-        changeTurn();
       });
       socket.on("betting", bool=>{
         setPlayer({...player, bet: bool});
-      })
+      });
       socket.on("playCard", card=>{
-        // console.log(card)
-        setPlayer({...player, tableRival:  [...player.tableRival, card]});
-        if(player.tableRival[0] && player.tablePlayer[0]) turnTwo();
-        changeTurn();
+        // changeTurn();
+        setPlayer({...player, tableRival:  [...player.tableRival, card]}); 
       });
       socket.on("updateScore", score=>{
         setPlayer({...player, score: player.score + score})
       });
-      socket.on("noFirstTurn", betOptions=>{
-        setPlayer({...player, betOptions});
-      })
-      socket.on("playerOrder", (isTurn)=>setPlayer({...player, isTurn}));
+      socket.on("changeTurn", bool=>{
+        setPlayer({...player, isTurn: bool});
+      });
+      // socket.on("noFirstTurn", betOptions=>{
+      //   setPlayer({...player, betOptions});
+      // })
+      socket.on("changeTurn", (bool)=>setPlayer({...player, isTurn: bool}));
       return () =>{
         socket.off("gameStarts");
         socket.off('newRoundStarts');
@@ -130,27 +81,11 @@ export default function Game() {
         socket.off("playCard");
         socket.off("playerOrder");
         socket.off("betting");
+        socket.off("changeTurn");
       };
     });
 
-      // useEffect(()=>{
-      //   if(player.tablePlayer[0] && player.tableRival[0]){
-      //     socket.on("checkWinnerHand", player.tablePlayer[0], player.tablePlayer[0])
-      //     turnTwo();
-      //   } 
-      //   if(player.tablePlayer[0] && player.tableRival[0] && player.roundResults.length === 0) roundCheckWinner(player.tablePlayer[0], player.tableRival[0])
-      //   if(player.tablePlayer[1] && player.tableRival[1] && player.roundResults.length === 1) roundCheckWinner(player.tablePlayer[1], player.tableRival[1])
-      //   if(player.tablePlayer[2] && player.tableRival[2] && player.roundResults.length === 2) roundCheckWinner(player.tablePlayer[2], player.tableRival[2])
-        
-
-      // }, [player.tablePlayer, player.tableRival])
-
-      // useEffect(()=>{
-      //   if(player.roundResults.length > 1) checkWinnerMatch(player.roundResults)
-      // },[player.roundResults])
-
-      console.log(player)
-      // if(player.roundChange > 2) {newRoundStarts(); setPlayer({...player, roundChange:1})}
+    console.log(player)
     return(<div>
             {/* <div className={styles.image}>  */}
             {/* </div> */}
@@ -161,7 +96,6 @@ export default function Game() {
             <ol>{player.tableRival?.map(card => <li key={card.id}style = {{ display: "flex", flexDirection: "row" }}><h2>{card.suit}</h2><h2>{card.number}</h2></li>)}</ol>
             <ol>{player.tablePlayer?.map(card => <div key={card.id}style = {{ display: "flex", flexDirection: "row" }}><h2>{card.suit}</h2><h2>{card.number}</h2></div>)}</ol>
             </div>
-            </div>
-            
+            </div>    
     );
 };
