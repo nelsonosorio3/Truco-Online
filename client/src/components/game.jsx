@@ -118,6 +118,9 @@ export default function Game() {
       });
       socket.on("updateScore", score=>{
         setPlayer({...player, score: player.score + score})
+      });
+      socket.on("noFirstTurn", betOptions=>{
+        setPlayer({...player, betOptions});
       })
       socket.on("playerOrder", (isTurn)=>setPlayer({...player, isTurn}));
       return () =>{
