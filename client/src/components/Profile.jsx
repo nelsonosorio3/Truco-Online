@@ -1,6 +1,8 @@
 import React from 'react';
 import { useEffect, useState } from 'react';
 import { useDispatch , useSelector } from 'react-redux';
+import { useHistory } from 'react-router';
+
 
 import profileIcon from '../img/profileIcon.png';
 import profileActions from '../Redux/actions-types/profileActions';
@@ -16,6 +18,8 @@ import NavBar from './NavBar';
 
 export default function Profile(props) {
     
+    const history = useHistory();
+
     //Estados del profileReducer
     const [friends, setFriends] = useState({
         sender: [],
@@ -58,9 +62,17 @@ export default function Profile(props) {
         window.location.reload()
     }
 
+    //Funcion para hacer log out
+    const logout = () => {
+        localStorage.removeItem('token')
+        localStorage.removeItem("isAuth")
+        history.push("/")
+    }
+
     return (
         <>
          <NavBar />
+         <button onClick={logout}>Log out</button>
          <div className={styles.mainDiv}>
          </div>
         <div className={styles.subMainDiv}>

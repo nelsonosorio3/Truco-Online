@@ -1,4 +1,3 @@
-
 const jwt = require('jsonwebtoken');
 
 exports.validarUsuario = function (req, res, next) {
@@ -15,6 +14,4 @@ exports.validarUsuario = function (req, res, next) {
   })
 }
 
-// exports.usuario_reservar = function(req, res){
-// let usuarioController = require('../controllers/usuario')
 
