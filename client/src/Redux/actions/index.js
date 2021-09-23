@@ -14,3 +14,4 @@ export const PUT_FRIEND_REQUEST = 'PUT_FRIEND_REQUEST';
 
 
 export const IS_IN_ROOM = 'ADD_ROOM'
+export const IS_IN_TOURNAMENT = 'IS_IN_TOURNAMENT'
