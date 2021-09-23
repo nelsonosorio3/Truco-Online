@@ -25,7 +25,7 @@ export default function Game() {
     const bet = e => {
       if(player.isTurn){
         socket.emit("bet", e.target.name, roomId, player.id);
-        setPlayer({...player, bet:true})
+        setPlayer({...player, bet:true, isTurn:false})
       };
     };
 
@@ -37,7 +37,7 @@ export default function Game() {
       // if(!player.mesa1) setPlayer({...player, hand: player.hand.filter(cardH=> card.id !== cardH.id), mesa1: card});
       // else if (!player.mesa2) setPlayer({...player, hand: player.hand.filter(cardH=> card.id !== cardH.id), mesa2: card});
       if(player.isTurn && !player.bet){
-      setPlayer({...player, hand: player.hand.filter(cardH=> card.id !== cardH.id), tablePlayer: [...player.tablePlayer, card]});
+      setPlayer({...player, hand: player.hand.filter(cardH=> card.id !== cardH.id), tablePlayer: [...player.tablePlayer, card], isTurn: false});
       socket.emit("playCard", card, roomId, player.id);
       };
     };
@@ -53,15 +53,15 @@ export default function Game() {
       socket.on("newRoundStarts", player=>{
         setPlayer(player);
       });
-      socket.on("bet", betOptions=>{
-        // changeTurn();
+      socket.on("bet", async betOptions=>{
+        // await changeTurn();
         setPlayer({...player, betOptions});
       });
       socket.on("betting", bool=>{
         setPlayer({...player, bet: bool});
       });
-      socket.on("playCard", card=>{
-        // changeTurn();
+      socket.on("playCard", async card=>{
+        // await changeTurn();
         setPlayer({...player, tableRival:  [...player.tableRival, card]}); 
       });
       socket.on("updateScore", score=>{
@@ -73,7 +73,7 @@ export default function Game() {
       // socket.on("noFirstTurn", betOptions=>{
       //   setPlayer({...player, betOptions});
       // })
-      socket.on("changeTurn", (bool)=>setPlayer({...player, isTurn: bool}));
+      // socket.on("changeTurn", (bool)=>setPlayer({...player, isTurn: bool}));
       return () =>{
         socket.off("gameStarts");
         socket.off('newRoundStarts');

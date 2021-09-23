@@ -345,6 +345,7 @@ io.on('connection', function (socket) {
         table.games[roomId].playerOne.bet = true;
         table.games[roomId].playerTwo.bet = true;
         table.games[roomId].playerOne.id === playerId? io.to(table.games[roomId].playerTwo.id).emit("betting", true) : io.to(table.games[roomId].playerOne.id).emit("betting", true);
+        table.games[roomId].playerOne.id === playerId? io.to(table.games[roomId].playerTwo.id).emit("changeTurn", true) : io.to(table.games[roomId].playerOne.id).emit("changeTurn", true);
         if(betPick === "ir al mazo") {
             table.games[roomId].playerOne.id === playerId? table.games[roomId].playerTwo.score++ : table.games[roomId].playerOne.score+= Math.floor(table.games[roomId].common.trucoBet/2) || 1;
 
@@ -394,8 +395,8 @@ io.on('connection', function (socket) {
         }
         else if(betPick === "quiero truco") {
             table.games[roomId].common.trucoBet = 2;
-            io.to(roomId).emit("bet", []);
-            io.to(roomId).emit("betting", false);
+            io.in(roomId).emit("betting", false);
+            io.in(roomId).emit("bet", []);
         }
         else if(betPick === "no quiero truco") {
             if(table.games[roomId].playerOne.id ===playerId){
@@ -406,13 +407,15 @@ io.on('connection', function (socket) {
                 table.games[roomId].playerOne.score++;
                 io.to(table.games[roomId].playerOne.id).emit("updateScore", 1);
             }  
-            io.to(roomId).emit("bet", []);
-            io.to(roomId).emit("betting", false);
+            io.in(roomId).emit("betting", false);
+            io.in(roomId).emit("bet", []);
+        
         }
         else if(betPick === "quiero retruco") {
             table.games[roomId].common.trucoBet = 3;
-            io.to(roomId).emit("bet", []);
-            io.to(roomId).emit("betting", false);
+            io.in(roomId).emit("betting", false);
+            io.in(roomId).emit("bet", []);
+            
         }
         else if(betPick === "no quiero retruco") {
             if(table.games[roomId].playerOne.id ===playerId){
@@ -423,13 +426,16 @@ io.on('connection', function (socket) {
                 table.games[roomId].playerOne.score+= 2;
                 io.to(table.games[roomId].playerOne.id).emit("updateScore", 2);
             } 
-            io.to(roomId).emit("bet", []);
-            io.to(roomId).emit("betting", false);
+            io.in(roomId).emit("bet", []);
+            io.in(roomId).emit("betting", false);
+        
+            
         }
         else if(betPick === "quiero valeCuatro") {
             table.games[roomId].common.trucoBet = 4;
-            io.to(roomId).emit("bet", []);
-            io.to(roomId).emit("betting", false);
+            io.in(roomId).emit("betting", false);
+            io.in(roomId).emit("bet", []);
+         
         }
         else if(betPick === "no quiero valeCuatro") {
             if(table.games[roomId].playerOne.id ===playerId){
@@ -440,14 +446,18 @@ io.on('connection', function (socket) {
                 table.games[roomId].playerOne.score+= 3;
                 io.to(table.games[roomId].playerOne.id).emit("updateScore", 3);
             } 
-            io.to(roomId).emit("bet", []);
-            io.to(roomId).emit("betting", false);
+            io.in(roomId).emit("betting", false);
+            io.in(roomId).emit("bet", []);
+           
         }
         else{
+        table.games[roomId].playerOne.id === playerId? io.to(table.games[roomId].playerTwo.id).emit("changeTurn", true) : io.to(table.games[roomId].playerOne.id).emit("changeTurn", true);
         table.games[roomId].playerOne.id === playerId? io.to(table.games[roomId].playerTwo.id).emit("bet", table.betsList[betPick]) : io.to(table.games[roomId].playerOne.id).emit("bet", table.betsList[betPick]);
+        
         }
     });
     socket.on("playCard", (card, roomId, playerId) => {
+        table.games[roomId].playerOne.id === playerId? io.to(table.games[roomId].playerTwo.id).emit("changeTurn", true) : io.to(table.games[roomId].playerOne.id).emit("changeTurn", true);
         if(table.games[roomId].playerOne.id === playerId){
             io.to(table.games[roomId].playerTwo.id).emit("playCard", card);
             table.games[roomId].playerTwo.tableRival.push(card);
@@ -470,7 +480,7 @@ io.on('connection', function (socket) {
                 table.games[roomId].common.roundResults.push("tie");
             }
             table.games[roomId].common.turn = 2;
-            table.games[roomId].common.trucoBet > 1? io.to(roomId).emit("bet", table.betsList.noTruco) : io.to(roomId).emit("bet", table.betsList.otherTurn);
+            table.games[roomId].common.trucoBet > 1? io.in(roomId).emit("bet", table.betsList.noTruco) : io.in(roomId).emit("bet", table.betsList.otherTurn);
         }
 
         if(table.games[roomId].playerOne.tableRival[1] && table.games[roomId].playerTwo.tableRival[1] && table.games[roomId].common.turn === 2){
@@ -484,7 +494,7 @@ io.on('connection', function (socket) {
                 table.games[roomId].common.roundResults.push("tie");
             }
             table.games[roomId].common.turn = 3;
-            table.games[roomId].common.trucoBet > 1? io.to(roomId).emit("bet", table.betsList.noTruco) : io.to(roomId).emit("bet", table.betsList.otherTurn);
+            table.games[roomId].common.trucoBet > 1? io.in(roomId).emit("bet", table.betsList.noTruco) : io.in(roomId).emit("bet", table.betsList.otherTurn);
         }
 
         if(table.games[roomId].playerOne.tableRival[2] && table.games[roomId].playerTwo.tableRival[2] && table.games[roomId].common.turn === 3){
@@ -498,7 +508,7 @@ io.on('connection', function (socket) {
                 table.games[roomId].common.roundResults.push("tie");
             }
             table.games[roomId].common.turn = 4;
-            table.games[roomId].common.trucoBet > 1? io.to(roomId).emit("bet", table.betsList.noTruco) : io.to(roomId).emit("bet", table.betsList.otherTurn);
+            table.games[roomId].common.trucoBet > 1? io.in(roomId).emit("bet", table.betsList.noTruco) : io.in(roomId).emit("bet", table.betsList.otherTurn);
         }
 
         console.log(table.games[roomId].common.roundResults)
@@ -581,12 +591,12 @@ io.on('connection', function (socket) {
         // socket.to(roomId).emit("playerOrder", false);
         // socket.emit("playerOrder", true);
         if(table.games[roomId].playerOne.id === playerId){
-            io.to(table.games[roomId].playerOne.id).emit("changeTurn", false);
-            io.to(table.games[roomId].playerTwo.id).emit("changeTurn", true);
+            io.to(table.games[roomId].playerTwo.id).emit("changeTurn", false);
+            io.to(table.games[roomId].playerOne.id).emit("changeTurn", true);
         }
         else{
-            io.to(table.games[roomId].playerOne.id).emit("changeTurn", true);
-            io.to(table.games[roomId].playerTwo.id).emit("changeTurn", false);
+            io.to(table.games[roomId].playerTwo.id).emit("changeTurn", true);
+            io.to(table.games[roomId].playerOne.id).emit("changeTurn", false);
         }
         
     });
