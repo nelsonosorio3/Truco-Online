@@ -62,7 +62,7 @@ export default function Game() {
       });
       socket.on("playCard", async card=>{
         // await changeTurn();
-        setPlayer({...player, tableRival:  [...player.tableRival, card]}); 
+        setPlayer({...player, tableRival:  [...player.tableRival, card], isTurn: true}); 
       });
       socket.on("updateScore", score=>{
         setPlayer({...player, score: player.score + score})
@@ -92,6 +92,7 @@ export default function Game() {
             <button onClick={newRoundStarts}>New round Start</button>
             {player.betOptions?.map(betPick=><button onClick={bet} name={betPick} key={betPick} style = {{ padding: "30px" }}>{betPick}</button>)}<br/>
             {player.hand?.map(card => <div onClick={()=>playCard(card)}><h2>{card.suit}</h2><h2>{card.number}</h2></div>)}<br/>
+            {/* <ol>{[...Array(3-player.tableRival.length).keys()].map(card=><li key={card}>Dorso carta oponente</li>)}</ol> */}
             <div style ={{ display: "flex", flexDirection: "row" }}>
             <ol>{player.tableRival?.map(card => <li key={card.id}style = {{ display: "flex", flexDirection: "row" }}><h2>{card.suit}</h2><h2>{card.number}</h2></li>)}</ol>
             <ol>{player.tablePlayer?.map(card => <div key={card.id}style = {{ display: "flex", flexDirection: "row" }}><h2>{card.suit}</h2><h2>{card.number}</h2></div>)}</ol>

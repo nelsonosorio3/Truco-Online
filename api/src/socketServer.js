@@ -456,15 +456,14 @@ io.on('connection', function (socket) {
         
         }
     });
-    socket.on("playCard", (card, roomId, playerId) => {
-        table.games[roomId].playerOne.id === playerId? io.to(table.games[roomId].playerTwo.id).emit("changeTurn", true) : io.to(table.games[roomId].playerOne.id).emit("changeTurn", true);
+    socket.on("playCard", async(card, roomId, playerId) => {
         if(table.games[roomId].playerOne.id === playerId){
-            io.to(table.games[roomId].playerTwo.id).emit("playCard", card);
+            await io.to(table.games[roomId].playerTwo.id).emit("playCard", card, true);
             table.games[roomId].playerTwo.tableRival.push(card);
             table.games[roomId].playerOne.tablePlayer.push(card);
         }
         else{
-            io.to(table.games[roomId].playerOne.id).emit("playCard", card);
+            await io.to(table.games[roomId].playerOne.id).emit("playCard", card, true);
             table.games[roomId].playerOne.tableRival.push(card);
             table.games[roomId].playerTwo.tablePlayer.push(card);
         }
