@@ -116,6 +116,9 @@ export default function Game() {
         if(player.tableRival[0] && player.tablePlayer[0]) turnTwo();
         changeTurn();
       });
+      socket.on("updateScore", score=>{
+        setPlayer({...player, score: player.score + score})
+      })
       socket.on("playerOrder", (isTurn)=>setPlayer({...player, isTurn}));
       return () =>{
         socket.off("gameStarts");

@@ -378,11 +378,52 @@ io.on('connection', function (socket) {
         }
         else if(betPick === "quiero truco") {
             table.games[roomId].common.trucoBet = 2;
-            io.to(roomId).emit("bet", [], false);
+            io.to(roomId).emit("bet", []);
             io.to(roomId).emit("betting", false);
         }
         else if(betPick === "no quiero truco") {
-            table.games[roomId].playerOne.id ===playerId? table.games[roomId].playerTwo.score++ : table.games[roomId].playerOne.score++;
+            if(table.games[roomId].playerOne.id ===playerId){
+                table.games[roomId].playerTwo.score++;
+                io.to(table.games[roomId].playerTwo.id).emit("updateScore", 1);
+            }
+            else{
+                table.games[roomId].playerOne.score++;
+                io.to(table.games[roomId].playerOne.id).emit("updateScore", 1);
+            }  
+            io.to(roomId).emit("bet", []);
+            io.to(roomId).emit("betting", false);
+        }
+        else if(betPick === "quiero retruco") {
+            table.games[roomId].common.trucoBet = 3;
+            io.to(roomId).emit("bet", []);
+            io.to(roomId).emit("betting", false);
+        }
+        else if(betPick === "no quiero retruco") {
+            if(table.games[roomId].playerOne.id ===playerId){
+                table.games[roomId].playerTwo.score+= 2;
+                io.to(table.games[roomId].playerTwo.id).emit("updateScore", 2);
+            }
+            else{
+                table.games[roomId].playerOne.score+= 2;
+                io.to(table.games[roomId].playerOne.id).emit("updateScore", 2);
+            } 
+            io.to(roomId).emit("bet", []);
+            io.to(roomId).emit("betting", false);
+        }
+        else if(betPick === "quiero valeCuatro") {
+            table.games[roomId].common.trucoBet = 4;
+            io.to(roomId).emit("bet", []);
+            io.to(roomId).emit("betting", false);
+        }
+        else if(betPick === "no quiero valeCuatro") {
+            if(table.games[roomId].playerOne.id ===playerId){
+                table.games[roomId].playerTwo.score+= 3;
+                io.to(table.games[roomId].playerTwo.id).emit("updateScore", 3);
+            }
+            else{
+                table.games[roomId].playerOne.score+= 3;
+                io.to(table.games[roomId].playerOne.id).emit("updateScore", 3);
+            } 
             io.to(roomId).emit("bet", []);
             io.to(roomId).emit("betting", false);
         }
