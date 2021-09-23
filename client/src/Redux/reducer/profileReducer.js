@@ -1,34 +1,69 @@
-import { GET_PROFILE, GET_FRIENDS, GET_HISTORY } from '../actions/index';
+import { GET_PROFILE, GET_FRIENDS, GET_HISTORY, DELETE_FRIEND, PUT_FRIEND_REQUEST } from '../actions/index';
 
 const INITIAL_STATE = {
   userProfile: {},
-  userFriends: {},
-  userHistory: {},
+  userFriends: {
+    requested: [],
+    sender: []
+  },
+  userHistory: [],
 };
 
 const profileReducer = (state = INITIAL_STATE, {type, payload}) => {
   switch (type) {
+    
     case GET_PROFILE:
-      return {
-        userProfile: {
-            email: payload.email,
-            gamesPlayed: payload.gamesPlayed,
-            gamesWon: payload.gamesWon,
-            gamesLost: payload.gamesLost,
-        },
-      };
+    return {
+      ...state,
+      userProfile: {
+          id: payload.id,
+          username: payload.username,
+          email: payload.email,
+          gamesPlayed: payload.gamesPlayed,
+          gamesWon: payload.gamesWon,
+          gamesLost: payload.gamesLost,
+      },
+    };
+      
     case GET_FRIENDS:
-      return {
+
+      const ansFriends = {
+        ...state,
         userFriends: {
-            
-        },
-      };  
-      case GET_HISTORY:
-      return {
-        userHistory: {
-            
-        },
-      };
+          requested: payload.userRequested,
+          sender: payload.userSender
+        }
+      }
+    return ansFriends 
+
+    case DELETE_FRIEND:
+      const ans = {
+        ...state,
+        userFriends: {
+          ...state.userFriends,
+          sender: state.userFriends.sender.filter(f => f.id !== payload)
+        }
+      }
+    return ans  
+
+    case PUT_FRIEND_REQUEST:
+      const ansPutRequest = {
+        ...state,
+        userFriends: {
+          ...state.userFriends,
+          requested: state.userFriends.requested.filter(f => f.id !== payload)
+        }
+      }
+    return ansPutRequest  
+
+    case GET_HISTORY:
+      console.log("REDUCER", payload)
+
+    return {
+      ...state,
+      userHistory: payload
+    };
+
     default:
       return state;    
   };

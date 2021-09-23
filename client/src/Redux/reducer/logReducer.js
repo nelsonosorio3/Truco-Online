@@ -1,7 +1,7 @@
 import { LOG_OUT, LOG_IN } from '../actions/index';
 
 const INITIAL_STATE = {
-  isAuth: false,
+  isAuth: false, // sacar
   user: null,
   id: null,
   message: ''
@@ -20,15 +20,17 @@ const logReducer = (state = INITIAL_STATE, {type, payload}) => {
         // login: true
         // username: "pedro"
         // token: "String"
+        window.localStorage.setItem("token", payload.token);
+        window.localStorage.setItem("isAuth", payload.login);
         return {
           ...state,
           isAuth: payload.login,
           user: payload.username,
           id: payload.id,
+          message: payload.message,
           token: payload.token
         };
       } else {
-        console.log(payload)
         const newState = {
           ...state,
           isAuth: false,
@@ -37,6 +39,9 @@ const logReducer = (state = INITIAL_STATE, {type, payload}) => {
         return newState
       };
     case LOG_OUT:
+      // esto no va aca, es para no olvidarme
+      // window.localStorage.removeItem("token", token);
+      // window.localStorage.removeItem("isAuth", isAuth);
       return {
         ...state,
         isAuth: false,

@@ -1,21 +1,18 @@
-import React from 'react'
-import { Modal, Button } from 'react-bootstrap';
+import styles from './styles/Modal.module.css';
 
-export default function ModalController(props) {
-    return (
-        <Modal show={props.show} onHide={props.handleClose}>
-        <Modal.Header closeButton>
-          <Modal.Title>Log In Information</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>{props.message}</Modal.Body>
-        <Modal.Footer>
-          <Button variant="secondary" onClick={props.handleClose}>
-            Close
-          </Button>
-          <Button variant="primary" onClick={props.handleClose}>
-            Save Changes
-          </Button>
-        </Modal.Footer>
-      </Modal>
-    )
-}
+export default function Modal({ children, isOpen, closeModal }) {
+
+  const handleModalContainerClick = (e) => e.stopPropagation();
+  const conditionalOpen = isOpen ? styles.isOpen : null;
+
+  return (
+    <article className={styles.modal + ' ' + conditionalOpen} onClick={closeModal}>
+      <div className={styles.container} onClick={handleModalContainerClick}>
+        <button className={styles.close} onClick={closeModal}>
+          X
+        </button>
+        {children}
+      </div>
+    </article>
+  );
+};

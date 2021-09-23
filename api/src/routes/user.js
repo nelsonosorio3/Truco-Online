@@ -1,11 +1,14 @@
-const { Router } = require("express");
+const { Router, response } = require("express");
 const Sequelize = require('sequelize');
 const { isConstructorDeclaration } = require("typescript");
 //const User = require("../models/User");
 const { User, Friends, Games } = require("../db.js");
-const jwt = require('jsonwebtoken')
 const Op = Sequelize.Op;
 const router = Router();
+//jwt es necesario para crear el token luego del login
+const jwt = require('jsonwebtoken');
+// Funcion para validar usuario
+const {validarUsuario} = require('../controller/index')
 
 //todas las rutas /api/user 
 router.get('/', async (req, res) => {
@@ -18,26 +21,10 @@ router.get('/', async (req, res) => {
   }
 });
 
-// Esto en la verificacion del token
-function validarUsuario(req, res, next) {
-  jwt.verify(req.headers['x-access-token'], req.app.get('secretKey'), function (err, decoded) {
-    if (err) {
-      res.json({
-        status: "error",
-        message: err.message, data: null
-      })
-    } else {
-      req.body.userId = decoded.id
-      next()
-    }
-  })
-}
-
 router.get('/login', async (req, res) => {
 
   //Recibe las argumentos por query ---> req.quey
   var { emailInput, passwordInput } = req.query;
-
 
   var users = await User.findAll({
     where: {
@@ -52,7 +39,6 @@ router.get('/login', async (req, res) => {
     }
 
   )
-  // console.log(users)
   try {
     if (users.length > 0) {
       var user = users.filter(u => u.password === passwordInput);
@@ -77,14 +63,15 @@ router.get('/login', async (req, res) => {
   }
 })
 
-router.get("/:id", validarUsuario, async (req, res) => {
-  var { id } = req.params;
-  id = parseInt(id);
-  try {
+//Ruta para obtener datos del perfil del usuario
+router.get("/profile", validarUsuario,  async (req, res) => {
+  // userId ---> viene del middleware para autenticacion(req.body.userId) - Se utiliza para el query
+  console.log("Authenticated for /profile userId: ", req.body.userId)
+  try{
     let user = await User.findAll({
       attributes: { exclude: 'password' },
       where: {
-        id: id
+        id: req.body.userId
       }
     })
     if (!user) throw new Error("El usuario no se encontro")
@@ -95,32 +82,52 @@ router.get("/:id", validarUsuario, async (req, res) => {
   }
 });
 
-router.get("/:id/friends", async (req, res) => {
-  const { id } = req.params;
-  var user = await User.findByPk(parseInt(id), {
+//Ruta para traer todos los amigos de un usuario
+router.get("/friends",validarUsuario, async (req, res) => {
+  console.log("Authenticated for /friends userId: ", req.body.userId)
+
+  let userInfo = {
+    //usuarios que aceptaron la solicitud del usuario logeado, tambien los usuarios a los que se envio una solicitud
+    userSender: null, 
+    //usuarios que enviaron una solicitud al usuario logeado
+    userRequested: null
+  }
+
+  User.findOne({
+    where: {id: req.body.userId},
+    attributes: ["id", "username"],
     include: {
       model: User,
       as: "userSender",
+      attributes: ["username", "id", "email"],
+      through: {
+        attributes: ["status", "createdAt", "userRequestedId"]
+      }
     },
-  });
-  var user2 = await User.findByPk(parseInt(id), {
-    include: {
-      model: User,
-      as: "userRequested",
-    }
-  });
-  var result = [...user.userSender, ...user2.userRequested]
+  })
+  .then(userSenderResults => {
+    userInfo.userSender = userSenderResults
+    return userSenderResults.getUserRequested({
+      attributes: ["username", "id", "email"],
+    })
+  })
+  .then(userRequestedResults => {
+    //Solucion momentanea, se va a tratar de implementar algo ams optimo
+    let userRequestedAccepted = userRequestedResults.filter( el => el.Friends.status === "accepted")
+    let userRequestedPending = userRequestedResults.filter( el => el.Friends.status === "pending")
+    
+    userInfo.userSender = userInfo.userSender.userSender.concat(userRequestedAccepted)
+    userInfo.userRequested = userRequestedPending
 
-  // Difícil hacer con sequelize, tuve que user filter en JS.
-  result = result.filter(f => f.Friends.status === "accepted")
-
-  res.status(200).json(result);
+    return res.json(userInfo)
+  })
 });
 
 router.get("/:id/history", async (req, res) => {
 
-  const userId = req.params.id
+  //No se esta usando -----> se usa la ruta de /games/mygames
 
+  const userId = req.params.id
   const userData = await User.findAll({
     where: {
       id: userId

@@ -1,220 +1,141 @@
 import React from 'react';
+import { useEffect, useState } from 'react';
+import { useDispatch , useSelector } from 'react-redux';
+import { useHistory } from 'react-router';
 
-import styles from './styles/Profile.module.css';
+
 import profileIcon from '../img/profileIcon.png';
-
-import { userSelector } from 'react-redux';
+import profileActions from '../Redux/actions-types/profileActions';
+import styles from './styles/Profile.module.css';
 
 /* Los dos siguientes imports agregados por guille */
 import Friend from './Friend';
+import AddFriend from './addFriend';
 import Match from './Match';
 
-export default function Profile() {
+// nav
+import NavBar from './NavBar';
 
-    // Corregir desde el backend: El llamado de amigos no debe traer su password!!!
-    /* 
-    Las solicitudes enviadas no debe traer aquellas que ya están aceptadas, estos ya son amigos!
-    Las búsquedas de amigos no deven devolver las amistades con estado "pending" ni "rejected", sólo "accepted".
+export default function Profile(props) {
+    
+    const history = useHistory();
 
-    */
-    /*
-     var user2 = useSelector(state => state.profileReducer)*/
+    //Estados del profileReducer
+    const [friends, setFriends] = useState({
+        sender: [],
+        requested: []
+    })
 
+    //userProfile: es el estado del usuario logeado
+    const { userProfile, userFriends, userHistory  } = useSelector(state => state.profileReducer);
+    const {getProfile, getFriends, deleteFriends, putFriendRequest, getGames} = profileActions
+    const dispatch = useDispatch();
 
-    var user = [
-        {
-            "id": 1,
-            "username": "pedro",
-            "email": "pedro@mail.com",
-            "gamesPlayed": 3,
-            "gamesWon": 2,
-            "gamesLost": 1,
-            "createdAt": "2021-09-20T14:44:32.390Z",
-            "updatedAt": "2021-09-20T14:44:32.390Z"
-        }
-    ]
+    //Trae primeramente los datos del usuario y sus amigos
+    useEffect(() => {
+        //informacion del usuario logeado
+        dispatch(getProfile({token: localStorage.token}))
+        //todos los amigos (pendientes y aceptados) del usuario
+        dispatch(getFriends(localStorage.token))
+        //todas las partidas del usuario
+        dispatch(getGames(localStorage.token))
+    },[])
 
-    var user = user[0];
+    // Esto es para que se actualice el estado una vez que se elimina
+    useEffect(() => {
+        setFriends({
+            sender: userFriends.sender,
+            requested: userFriends.requested
+        })
+    }, [userFriends])
 
-    var friends = [
-        {
-            "id": 3,
-            "username": "guille",
-            "email": "guille@mail.com",
-            "password": "1234", // Quitar el password de los amigos!!!
-            "gamesPlayed": 0,
-            "gamesWon": 0,
-            "gamesLost": 0,
-            "createdAt": "2021-09-20T14:44:32.394Z",
-            "updatedAt": "2021-09-20T14:44:32.394Z",
-            "Friends": {
-                "status": "pending",
-                "createdAt": "2021-09-20T14:44:32.405Z",
-                "updatedAt": "2021-09-20T14:44:32.405Z",
-                "userSenderId": 1,
-                "userRequestedId": 3
-            }
-        },
-        {
-            "id": 5,
-            "username": "leo",
-            "email": "leo@mail.com",
-            "password": "1234",
-            "gamesPlayed": 0,
-            "gamesWon": 0,
-            "gamesLost": 0,
-            "createdAt": "2021-09-20T14:44:32.397Z",
-            "updatedAt": "2021-09-20T14:44:32.397Z",
-            "Friends": {
-                "status": "accepted",
-                "createdAt": "2021-09-20T14:44:32.407Z",
-                "updatedAt": "2021-09-20T14:44:32.407Z",
-                "userSenderId": 1,
-                "userRequestedId": 5
-            }
-        },
-        {
-            "id": 7,
-            "username": "fede",
-            "email": "fede@mail.com",
-            "password": "1234",
-            "gamesPlayed": 0,
-            "gamesWon": 0,
-            "gamesLost": 0,
-            "createdAt": "2021-09-20T14:44:32.399Z",
-            "updatedAt": "2021-09-20T14:44:32.399Z",
-            "Friends": {
-                "status": "pending",
-                "createdAt": "2021-09-20T14:44:32.404Z",
-                "updatedAt": "2021-09-20T14:44:32.404Z",
-                "userSenderId": 1,
-                "userRequestedId": 7
-            }
-        },
-        {
-            "id": 8,
-            "username": "marcelo",
-            "email": "marcelo@mail.com",
-            "password": "1234",
-            "gamesPlayed": 0,
-            "gamesWon": 0,
-            "gamesLost": 0,
-            "createdAt": "2021-09-20T14:44:32.400Z",
-            "updatedAt": "2021-09-20T14:44:32.400Z",
-            "Friends": {
-                "status": "accepted",
-                "createdAt": "2021-09-20T14:44:32.409Z",
-                "updatedAt": "2021-09-20T14:44:32.409Z",
-                "userSenderId": 1,
-                "userRequestedId": 8
-            }
-        }
-    ]
+    //Funcion para eliminar un amigo
+    const deleteFriendFunction = (id, email) => {
+        console.log(id, email)
+        dispatch(deleteFriends(id, email))
+    }
 
-    var friend_rr = []
+    //Funcion para responder a una solicitud
+      const respondFriendFunction = (email, response) => {
+        console.log(userProfile.id, email, response)
+        dispatch(putFriendRequest(userProfile.id, email, response))
+        window.location.reload()
+    }
 
-    var friend_rs = [
-        {
-            "id": 3,
-            "username": "guille",
-            "email": "guille@mail.com",
-            "password": "1234",
-            "gamesPlayed": 0,
-            "gamesWon": 0,
-            "gamesLost": 0,
-            "createdAt": "2021-09-20T14:44:32.394Z",
-            "updatedAt": "2021-09-20T14:44:32.394Z",
-            "Friends": {
-                "status": "pending",
-                "createdAt": "2021-09-20T14:44:32.405Z",
-                "updatedAt": "2021-09-20T14:44:32.405Z",
-                "userSenderId": 1,
-                "userRequestedId": 3
-            }
-        },
-        {
-            "id": 7,
-            "username": "fede",
-            "email": "fede@mail.com",
-            "password": "1234",
-            "gamesPlayed": 0,
-            "gamesWon": 0,
-            "gamesLost": 0,
-            "createdAt": "2021-09-20T14:44:32.399Z",
-            "updatedAt": "2021-09-20T14:44:32.399Z",
-            "Friends": {
-                "status": "pending",
-                "createdAt": "2021-09-20T14:44:32.404Z",
-                "updatedAt": "2021-09-20T14:44:32.404Z",
-                "userSenderId": 1,
-                "userRequestedId": 7
-            }
-        }
-    ]
-
-    var history = [
-        {
-            "id": 3,
-            "state": "terminada",
-            "winner": "pedro",
-            "loser": "leo",
-            "results": "30|24",
-            "createdAt": "2021-09-20T14:44:32.387Z",
-            "updatedAt": "2021-09-20T14:44:32.387Z"
-        },
-        {
-            "id": 4,
-            "state": "terminada",
-            "winner": "santiago",
-            "loser": "pedro",
-            "results": "30|11",
-            "createdAt": "2021-09-20T14:44:32.389Z",
-            "updatedAt": "2021-09-20T14:44:32.389Z"
-        }
-    ]
-
-
+    //Funcion para hacer log out
+    const logout = () => {
+        localStorage.removeItem('token')
+        localStorage.removeItem("isAuth")
+        history.push("/")
+    }
 
     return (
-        <div className={styles.mainDiv}>
+        <>
+         <NavBar />
+         <button onClick={logout}>Log out</button>
+         <div className={styles.mainDiv}>
+         </div>
+        <div className={styles.subMainDiv}>
             <div className={styles.player}>
                 <img src={profileIcon} alt="" className={styles.profileIcon} />
                 <div className={styles.playerInfo}>
-                    <h2>Username: {user.username}</h2>
-                    <h3>Games played: {user.gamesPlayed}</h3>
-                    <h3>Games won: {user.gamesWon}</h3>
+                    <h2>{userProfile?.username}</h2>
+                    <h3>{userProfile?.email}</h3>
+                    <h3>Games played: {userProfile?.gamesPlayed}</h3>
+                    <div className={styles.playerInfo_Games}>
+                        <h3>Wins: {userProfile?.gamesLost}</h3>
+                        <h3>Loses: {userProfile?.gamesWon}</h3>
+                    </div>
                 </div>
             </div>
-
             <br />
-            <h3 classname={styles.title}>Amigos</h3>
-
             <div className={styles.friends}>
-                {
-                    friends.map(f => <Friend
-                        key={f.id}
-                        id={f.id}
-                        name={f.username}
-                        date={f.createdAt}
-                    />)
-                }
+                <div className={styles.friendsDiv}>
+                    <h3 classname={styles.title}>Amigos</h3>
+                    <div className={styles.friendsList}>
+                        {
+                            !friends.sender.length ? <p>No tienes amigos</p> : friends.sender.map(f => <Friend
+                                key={f?.id}
+                                email={f?.email}
+                                deleteId={deleteFriendFunction}
+                                profileId={userProfile?.id}
+                                id={f?.id}
+                                name={f?.username}
+                                date={f.Friends?.createdAt}
+                                status = {f.Friends.status}
+                            />)
+                        }
+                    </div>
+                </div>
+                <div className={styles.friendsDiv}>
+                    <h3>Solicitudes pendientes</h3>
+                    <div className={styles.friendsList}>
+                        {
+                            !friends.requested.length ? <p>No solicitudes pendientes</p> : friends.requested.map(f => <AddFriend
+                                username={f.username}
+                                respond={respondFriendFunction}
+                                email={f.email}
+                            />)
+                        }
+                    </div>
+                </div>
             </div>
-
-            <h3 classname={styles.title}>Últimos resultados</h3>
-
-            <div className={styles.history}>
-                {
-                    history.map(m => <Match
-                        key={m.id}
-                        id={m.id}
-                        result={m.winner === user.username ? "Ganaste" : "Perdiste"}
-                        j1={m.winner}
-                        j2={m.loser}
-                        date={m.createdAt}
-                    />)
-                }
+            <div className={styles.lastResults}>
+                <h3 classname={styles.title}>Últimos resultados</h3>
+                <div className={styles.history}>
+                    {
+                        !userHistory.length ? null : userHistory.map(m => <Match
+                            key={m?.id}
+                            id={m?.id}
+                            result={m?.winner === userProfile.username ? "Ganaste" : "Perdiste"}
+                            j1={m?.winner}
+                            j2={m?.loser}
+                            date={m?.createdAt}
+                        />)
+                    }
+                </div>
             </div>
-
-        </div>
-    )
-}
+            </div>
+        </>
+    );
+};
