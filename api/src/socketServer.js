@@ -316,30 +316,30 @@ io.on('connection', function (socket) {
 
     //GAME EVENTS
 
-    // esucha el evento para iniciar una nueva ronda
-    socket.on("newRoundStarts", (roomId)=>{
-        // let deck = buildDeck(); //contruye deck
-        // deck = shuffleDeck(deck); //baraja deck
-        // const [playerAhand, playerBhand] = getHands(deck); //obtiene manos de 3 cartas de dos jugadores
-        // socket.emit("newRoundStarts", playerAhand); // emite al cliente que emitio el nuevo turno la mano A
-        // socket.to(roomId).emit("newRoundStarts", playerBhand); // emite al otro cliente de la partida la mano B
-        // io.in(roomId).emit("bet", table.betsList.firstTurn); // emite a todos el evento apuesta con la lista de posibles apuesta iniciales
-        let deck = buildDeck(); //contruye deck
-        deck = shuffleDeck(deck); //baraja deck
-        const [playerAhand, playerBhand] = getHands(deck); //obtiene manos de 3 cartas de dos jugadores
+    // // esucha el evento para iniciar una nueva ronda
+    // socket.on("newRoundStarts", (roomId)=>{
+    //     // let deck = buildDeck(); //contruye deck
+    //     // deck = shuffleDeck(deck); //baraja deck
+    //     // const [playerAhand, playerBhand] = getHands(deck); //obtiene manos de 3 cartas de dos jugadores
+    //     // socket.emit("newRoundStarts", playerAhand); // emite al cliente que emitio el nuevo turno la mano A
+    //     // socket.to(roomId).emit("newRoundStarts", playerBhand); // emite al otro cliente de la partida la mano B
+    //     // io.in(roomId).emit("bet", table.betsList.firstTurn); // emite a todos el evento apuesta con la lista de posibles apuesta iniciales
+    //     let deck = buildDeck(); //contruye deck
+    //     deck = shuffleDeck(deck); //baraja deck
+    //     const [playerAhand, playerBhand] = getHands(deck); //obtiene manos de 3 cartas de dos jugadores
 
-        //manos al iniciar partida
-        table.games[roomId].playerOne.hand = playerAhand;
-        table.games[roomId].playerTwo.hand = playerBhand;
+    //     //manos al iniciar partida
+    //     table.games[roomId].playerOne.hand = playerAhand;
+    //     table.games[roomId].playerTwo.hand = playerBhand;
 
-        //dejar las apuestas al comienzo
-        table.games[roomId].playerOne.betOptions = table.betsList.firstTurn;
-        table.games[roomId].playerTwo.betOptions = table.betsList.firstTurn;
+    //     //dejar las apuestas al comienzo
+    //     table.games[roomId].playerOne.betOptions = table.betsList.firstTurn;
+    //     table.games[roomId].playerTwo.betOptions = table.betsList.firstTurn;
 
-        //emitir como deberia ser el jugador de cada cliente
-        io.to(player1).emit("gameStarts", table.games[roomId].playerOne);
-        io.to(player2).emit("gameStarts", table.games[roomId].playerTwo);
-    });
+    //     //emitir como deberia ser el jugador de cada cliente
+    //     io.to(player1).emit("gameStarts", table.games[roomId].playerOne);
+    //     io.to(player2).emit("gameStarts", table.games[roomId].playerTwo);
+    // });
     // escucha el evento bet para devolver la lista adecuado de opciones de apuesta
     socket.on("bet", (betPick, roomId, playerId) => {
         table.games[roomId].playerOne.bet = true;

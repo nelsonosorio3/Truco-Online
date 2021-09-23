@@ -29,10 +29,6 @@ export default function Game() {
       };
     };
 
-    const newRoundStarts = () => {
-      player.isTurn && socket.emit('newRoundStarts', roomId);
-    };
-
     const playCard = (card) =>{
       // if(!player.mesa1) setPlayer({...player, hand: player.hand.filter(cardH=> card.id !== cardH.id), mesa1: card});
       // else if (!player.mesa2) setPlayer({...player, hand: player.hand.filter(cardH=> card.id !== cardH.id), mesa2: card});
@@ -70,10 +66,6 @@ export default function Game() {
       socket.on("changeTurn", bool=>{
         setPlayer({...player, isTurn: bool});
       });
-      // socket.on("noFirstTurn", betOptions=>{
-      //   setPlayer({...player, betOptions});
-      // })
-      // socket.on("changeTurn", (bool)=>setPlayer({...player, isTurn: bool}));
       return () =>{
         socket.off("gameStarts");
         socket.off('newRoundStarts');
@@ -89,14 +81,13 @@ export default function Game() {
     return(<div>
             {/* <div className={styles.image}>  */}
             {/* </div> */}
-            <button onClick={newRoundStarts}>New round Start</button>
             {player.betOptions?.map(betPick=><button onClick={bet} name={betPick} key={betPick} style = {{ padding: "30px" }}>{betPick}</button>)}<br/>
             {player.hand?.map(card => <div onClick={()=>playCard(card)}><h2>{card.suit}</h2><h2>{card.number}</h2></div>)}<br/>
-            {/* <ol>{[...Array(3-player.tableRival.length).keys()].map(card=><li key={card}>Dorso carta oponente</li>)}</ol> */}
+            <ol>{[...Array(3-player.tableRival.length).keys()].map(card=><li key={card}>Dorso carta oponente</li>)}</ol>
             <div style ={{ display: "flex", flexDirection: "row" }}>
             <ol>{player.tableRival?.map(card => <li key={card.id}style = {{ display: "flex", flexDirection: "row" }}><h2>{card.suit}</h2><h2>{card.number}</h2></li>)}</ol>
             <ol>{player.tablePlayer?.map(card => <div key={card.id}style = {{ display: "flex", flexDirection: "row" }}><h2>{card.suit}</h2><h2>{card.number}</h2></div>)}</ol>
             </div>
-            </div>    
+          </div>    
     );
 };
