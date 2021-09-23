@@ -2,25 +2,12 @@ const { User, Friends, Games } = require("../db.js");
 const { Router }  = require("express");
 const Sequelize = require('sequelize');
 // const Op = Sequelize.Op;
-const jwt = require('jsonwebtoken');
 const router = Router();
 
+//Funcion para validar usuarios
+const {validarUsuario} = require('../controller/index')
 
 
-// Esto en la verificacion del token
-function validarUsuario(req, res, next) {
-    jwt.verify(req.headers['x-access-token'], req.app.get('secretKey'), function (err, decoded) {
-      if (err) {
-        res.json({
-          status: "error",
-          message: err.message, data: null
-        })
-      } else {
-        req.body.userId = decoded.id
-        next()
-      }
-    })
-}
 
 //Ruta para traer todos los juegos disputados
 router.get('/' , (req , res) => {

@@ -3,9 +3,12 @@ const Sequelize = require('sequelize');
 const { isConstructorDeclaration } = require("typescript");
 //const User = require("../models/User");
 const { User, Friends, Games } = require("../db.js");
-const jwt = require('jsonwebtoken');
 const Op = Sequelize.Op;
 const router = Router();
+//jwt es necesario para crear el token luego del login
+const jwt = require('jsonwebtoken');
+// Funcion para validar usuario
+const {validarUsuario} = require('../controller/index')
 
 //todas las rutas /api/user 
 router.get('/', async (req, res) => {
@@ -18,26 +21,10 @@ router.get('/', async (req, res) => {
   }
 });
 
-// Esto en la verificacion del token
-function validarUsuario(req, res, next) {
-  jwt.verify(req.headers['x-access-token'], req.app.get('secretKey'), function (err, decoded) {
-    if (err) {
-      res.json({
-        status: "error",
-        message: err.message, data: null
-      })
-    } else {
-      req.body.userId = decoded.id
-      next()
-    }
-  })
-}
-
 router.get('/login', async (req, res) => {
 
   //Recibe las argumentos por query ---> req.quey
   var { emailInput, passwordInput } = req.query;
-
 
   var users = await User.findAll({
     where: {
