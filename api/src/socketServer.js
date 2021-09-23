@@ -266,9 +266,22 @@ io.on('connection', function (socket) {
                 matchesToWin: 1, 
                 flor: true,
                 cumulativeScore: 1,
-                time: 15 * 1000
+                time: 15 * 1000,
+                numberPlayers: 2,
             }
-            console.log(table.games)
+            let deck = buildDeck(); //contruye deck
+            deck = shuffleDeck(deck); //baraja deck
+            const [playerAhand, playerBhand] = getHands(deck); //obtiene manos de 3 cartas de dos jugadores
+
+            //manos iniciales al iniciar partida
+            table.games[roomId].playerOne.hand = playerAhand;
+            table.games[roomId].playerTwo.hand = playerBhand;
+
+            //dejar las apuestas al comienzo
+            table.games[roomId].playerOne.betOptions = table.betsList.firstTurn;
+            table.games[roomId].playerTwo.betOptions = table.betsList.firstTurn;
+            io.to(player1).emit("gameStarts", table.games[roomId].playerOne);
+            io.to(player2).emit("gameStarts", table.games[roomId].playerTwo);
 
          } //remover la sala de la lista si esta llena
          io.emit("newRoomCreated"); // informar a todos los clientes lista neuvas creadas o cerradas
@@ -280,6 +293,11 @@ io.on('connection', function (socket) {
     socket.on('bringActiveRooms', function () {
         io.emit('showActiveRooms', { activeRooms });
     });
+
+    //GAME EVENTS
+    socket.on("gameStarts", (player)=>{
+
+    })
     // esucha el evento para iniciar una nueva ronda
     socket.on("newRoundStarts", (roomId)=>{
         let deck = buildDeck(); //contruye deck
