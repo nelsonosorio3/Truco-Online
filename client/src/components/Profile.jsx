@@ -60,50 +60,54 @@ export default function Profile(props) {
     return (
         <>
          <NavBar />
-        <div className={styles.mainDiv}>
+         <div className={styles.mainDiv}>
+         </div>
+        <div className={styles.subMainDiv}>
             <div className={styles.player}>
                 <img src={profileIcon} alt="" className={styles.profileIcon} />
                 <div className={styles.playerInfo}>
-                    <h2>Username: {userProfile?.username}</h2>
-                    <h3>Email: {userProfile?.email}</h3>
+                    <h2>{userProfile?.username}</h2>
+                    <h3>{userProfile?.email}</h3>
                     <h3>Games played: {userProfile?.gamesPlayed}</h3>
-                    <h3>Games Lost: {userProfile?.gamesLost}</h3>
-                    <h3>Games won: {userProfile?.gamesWon}</h3>
+                    <div className={styles.playerInfo_Games}>
+                        <h3>Wins: {userProfile?.gamesLost}</h3>
+                        <h3>Loses: {userProfile?.gamesWon}</h3>
+                    </div>
                 </div>
             </div>
             <br />
-
-            
-
-            <h1>Solicitudes pendientes</h1>
             <div className={styles.friends}>
-                {
-                    !friends.requested.length ? <p>No solicitudes pendientes</p> : friends.requested.map(f => <AddFriend
-                        username={f.username}
-                        respond={respondFriendFunction}
-                        email={f.email}
-                    />)
-                }
+                <div className={styles.friendsDiv}>
+                    <h3 classname={styles.title}>Amigos</h3>
+                    <div className={styles.friendsList}>
+                        {
+                            !friends.sender.length ? <p>No tienes amigos</p> : friends.sender.map(f => <Friend
+                                key={f?.id}
+                                email={f?.email}
+                                deleteId={deleteFriendFunction}
+                                profileId={userProfile?.id}
+                                id={f?.id}
+                                name={f?.username}
+                                date={f.Friends?.createdAt}
+                                status = {f.Friends.status}
+                            />)
+                        }
+                    </div>
+                </div>
+                <div className={styles.friendsDiv}>
+                    <h3>Solicitudes pendientes</h3>
+                    <div className={styles.friendsList}>
+                        {
+                            !friends.requested.length ? <p>No solicitudes pendientes</p> : friends.requested.map(f => <AddFriend
+                                username={f.username}
+                                respond={respondFriendFunction}
+                                email={f.email}
+                            />)
+                        }
+                    </div>
+                </div>
             </div>
-
-            <h3 classname={styles.title}>Amigos</h3>
-
-            <div className={styles.friends}>
-                {
-                    !friends.sender.length ? <p>No tienes amigos</p> : friends.sender.map(f => <Friend
-                        key={f?.id}
-                        email={f?.email}
-                        deleteId={deleteFriendFunction}
-                        profileId={userProfile?.id}
-                        id={f?.id}
-                        name={f?.username}
-                        date={f.Friends?.createdAt}
-                        status = {f.Friends.status}
-                    />)
-                }
-            </div>
-
-
+            <div className={styles.lastResults}>
                 <h3 classname={styles.title}>Últimos resultados</h3>
                 <div className={styles.history}>
                     {/* {
@@ -117,6 +121,7 @@ export default function Profile(props) {
                         />)
                     } */}
                 </div>
+            </div>
             </div>
         </>
     );
