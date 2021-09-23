@@ -45,10 +45,10 @@ const table = {
                 truco: ["no quiero truco", "quiero truco", "retruco", "valeCuatro"],
                 retruco: ["no quiero retruco", "quiero retruco"],
                 valeCuatro: ["no quiero valeCuatro", "quiero valeCuatro"],
-                envido1: ["no quiero", "quiero", "envido2", "realEnvido", "faltaEnvido"],
-                envido2: ["no quiero", "quiero", "realEnvido", "faltaEnvido"],
-                realEnvido: ["noQuiero", "faltaEnvido"],
-                faltaEnvido: ["noQuiero", "quiero"],
+                envido1: ["no quiero envido1", "quiero envido1", "envido2", "realEnvido", "faltaEnvido"],
+                envido2: ["no quiero envido2", "quiero envido2", "realEnvido", "faltaEnvido"],
+                realEnvido: ["noQuiero realEnvido", "quiero, realEnvido", "faltaEnvido"],
+                faltaEnvido: ["noQuiero faltaEnvido", "quiero faltaEnvido"],
 
                 }, //la lista de apuestas posibles la idea es que es un objeto con propiedades de apuestas posibles y un array con cada posible respuesta
     games: {}, //objeto que contiene todas las partidas jugandose, la propiedad es el id de cada Rooom
