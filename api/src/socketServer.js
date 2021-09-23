@@ -47,8 +47,8 @@ const table = {
                 valeCuatro: ["no quiero valeCuatro", "quiero valeCuatro"],
                 envido1: ["no quiero envido1", "quiero envido1", "envido2", "realEnvido", "faltaEnvido"],
                 envido2: ["no quiero envido2", "quiero envido2", "realEnvido", "faltaEnvido"],
-                realEnvido: ["noQuiero realEnvido", "quiero, realEnvido", "faltaEnvido"],
-                faltaEnvido: ["noQuiero faltaEnvido", "quiero faltaEnvido"],
+                realEnvido: ["no quiero realEnvido", "quiero realEnvido", "faltaEnvido"],
+                faltaEnvido: ["no quiero faltaEnvido", "quiero faltaEnvido"],
 
                 }, //la lista de apuestas posibles la idea es que es un objeto con propiedades de apuestas posibles y un array con cada posible respuesta
     games: {}, //objeto que contiene todas las partidas jugandose, la propiedad es el id de cada Rooom
@@ -362,7 +362,7 @@ io.on('connection', function (socket) {
                 roundResults: [],}
             table.games[roomId].common = {...table.games[roomId].common, envidoList: [],
                 trucoBet: 1,
-                cumulativeScore: 1,
+                cumulativeScore: 0,
                 roundResults: [],
                 turn: 1,}
 
@@ -449,6 +449,98 @@ io.on('connection', function (socket) {
             io.in(roomId).emit("betting", false);
             io.in(roomId).emit("bet", []);
            
+        }
+        else if(betPick === "quiero envido1"){
+                table.games[roomId].common.cumulativeScore+= 2;
+                io.in(roomId).emit("betting", false);
+                io.in(roomId).emit("bet", []);
+
+                // console.log(table.games[roomId].playerOne.hand)
+                let envido1 = new Set();
+                table.games[roomId].playerOne.hand.forEach(card => {if(card.number < 10)return card;else card.number = 0; return card});
+                table.games[roomId].playerOne.hand.forEach(card => envido1.add(card.suit));
+                console.log(envido1)
+                if(envido1.size === 3){
+                    table.games[roomId].playerOne.handnd1 = table.games[roomId].playerOne.hand.sort((a, b)=> (a.number > b.number) ? 1 : -1);
+                    console.log(table.games[roomId].playerOne.hand)
+                    const cardEnvido = hand1.pop()
+                    console.log(cardEnvido);
+                }
+                else if(envido1.size === 2){
+                    table.games[roomId].playerOne.hand.sort((a, b)=> (a.suit > b.suit)? 1: -1);
+                    console.log(table.games[roomId].playerOne.hand);
+                    if(table.games[roomId].playerOne.hand[0].suit === table.games[roomId].playerOne.hand[1].suit) console.log(table.games[roomId].playerOne.hand[0].number + table.games[roomId].playerOne.hand[1].number + 20)
+                    else console.log(table.games[roomId].playerOne.hand[1].number + table.games[roomId].playerOne.hand[2].number + 20)
+                }
+                else if(envido1.size === 1){
+                    table.games[roomId].playerOne.hand = table.games[roomId].playerOne.hand.sort((a, b)=> (a.number < b.number) ? 1 : -1)
+                    console.log(table.games[roomId].playerOne.hand[0].number + table.games[roomId].playerOne.hand[1].number + 20)
+                }
+                  
+        }
+        else if(betPick === "no quiero envido1"){
+            if(table.games[roomId].playerOne.id ===playerId){
+                table.games[roomId].playerTwo.score+= 1;
+                io.to(table.games[roomId].playerTwo.id).emit("updateScore", 1);
+            }
+            else{
+                table.games[roomId].playerOne.score+= 1;
+                io.to(table.games[roomId].playerOne.id).emit("updateScore", 1);
+            } 
+            io.in(roomId).emit("betting", false);
+            io.in(roomId).emit("bet", []);
+        }
+        else if(betPick === "quiero envido2"){
+            table.games[roomId].common.cumulativeScore+= 4;
+            io.in(roomId).emit("betting", false);
+            io.in(roomId).emit("bet", []);
+        }
+        else if(betPick === "no quiero envido2"){
+            if(table.games[roomId].playerOne.id ===playerId){
+                table.games[roomId].playerTwo.score+= 2;
+                io.to(table.games[roomId].playerTwo.id).emit("updateScore", 2);
+            }
+            else{
+                table.games[roomId].playerOne.score+= 2;
+                io.to(table.games[roomId].playerOne.id).emit("updateScore", 2);
+            } 
+            io.in(roomId).emit("betting", false);
+            io.in(roomId).emit("bet", []);
+        }
+        else if(betPick === "quiero realEnvido"){
+            table.games[roomId].common.cumulativeScore+=3;
+            io.in(roomId).emit("betting", false);
+            io.in(roomId).emit("bet", []);
+        }
+        else if(betPick === "no quiero realEnvido"){
+            if(table.games[roomId].playerOne.id ===playerId){
+                table.games[roomId].playerTwo.score+= 1;
+                io.to(table.games[roomId].playerTwo.id).emit("updateScore", 1);
+            }
+            else{
+                table.games[roomId].playerOne.score+= 1;
+                io.to(table.games[roomId].playerOne.id).emit("updateScore", 1);
+            } 
+            io.in(roomId).emit("betting", false);
+            io.in(roomId).emit("bet", []);
+        }
+        else if(betPick === "quiero faltaEnvido"){
+            const points = table.games[roomId].playerOne.score > table.games[roomId].playerTwo.score? table.games[roomId].playerOne.score : table.gmaes[roomId].playerTwo.score;
+            table.games[roomId].common.cumulativeScore = (table.games[roomId].common.scoreToWin - points);
+            io.in(roomId).emit("betting", false);
+            io.in(roomId).emit("bet", []);
+        }
+        else if(betPick === "no quiero faltaEnvido"){
+            if(table.games[roomId].playerOne.id ===playerId){
+                table.games[roomId].playerTwo.score+= 1;
+                io.to(table.games[roomId].playerTwo.id).emit("updateScore", 1);
+            }
+            else{
+                table.games[roomId].playerOne.score+= 1;
+                io.to(table.games[roomId].playerOne.id).emit("updateScore", 1);
+            } 
+            io.in(roomId).emit("betting", false);
+            io.in(roomId).emit("bet", []);
         }
         else{
         table.games[roomId].playerOne.id === playerId? io.to(table.games[roomId].playerTwo.id).emit("changeTurn", true) : io.to(table.games[roomId].playerOne.id).emit("changeTurn", true);
