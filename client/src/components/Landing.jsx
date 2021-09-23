@@ -19,13 +19,13 @@ export default function Landing() {
             <div className={styles.table}> 
                 {
                     isAuth ?
-                    <button className={styles.btn1}>
-                        <NavLink to="/rooms" > Enter </NavLink>
-                    </button>
+                        <NavLink to="/rooms" >
+                            <button className={styles.btn1}>Enter</button>
+                        </NavLink>
                     :
-                    <button className={styles.btn1}>
-                        <NavLink to="/welcome" > Enter </NavLink>
-                    </button>
+                        <NavLink to="/welcome" >
+                            <button className={styles.btn1}>Enter</button>
+                        </NavLink>
                 }
             </div>
         </section>

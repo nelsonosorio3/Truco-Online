@@ -1,6 +1,16 @@
 .mainDiv{
+    background-image: url('../../img/Profile_bg.jpg');
+    background-size: contain;
+    background-repeat: no-repeat;
+    width: 100%;
+    height: 0;
+    padding-top: 67%;
+}
+
+.subMainDiv{
     display: flex;
     flex-direction: column;
+    margin-top: -65%;
 }
 
 .player{
@@ -20,13 +30,42 @@
     flex-direction: column;
     align-self: flex-start;
     align-items: center;
+    background-color: rgba(0, 0, 0, 0.6);
+    padding: 2pc 15pc 2pc 15pc;
+    color: #dedede;
+}
+
+.playerInfo_Games{
+    display: flex;
+    gap: 50px;
 }
 
 .friends{
+    background-color: rgba(0, 0, 0, 0.6);
+    display: flex;
+    justify-content: space-evenly;
+    color: #dedede;
+}
+
+.friendsDiv{
+    display: flex;
+    flex-direction: column;
+}
+
+.friendsList{
     display: flex;
     flex-direction: row;
     align-items: center;
     align-self: center;
+}
+
+.lastResults{
+    background-color: rgba(0, 0, 0, 0.6);
+    color: #dedede;
+    margin-top: 25px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 .title{
