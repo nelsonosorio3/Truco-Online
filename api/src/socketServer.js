@@ -73,7 +73,7 @@ const table = {
             },
             common:{
                 envidoList: [],
-                trucoBet: "",
+                trucoBet: 1,
                 scoreToWin: 15,
                 matchesToWin: 1, 
                 flor: true,
@@ -431,8 +431,15 @@ io.on('connection', function (socket) {
         table.games[roomId].playerOne.id === playerId? io.to(table.games[roomId].playerTwo.id).emit("bet", table.betsList[betPick]) : io.to(table.games[roomId].playerOne.id).emit("bet", table.betsList[betPick]);
         }
     });
-    socket.on("playCard", (card, roomId) => {
-        socket.to(roomId).emit("playCard", card) //emite al otro cliente la carta que jugo el cliente emisor
+    socket.on("playCard", (card, roomId, playerId) => {
+        if(table.games[roomId].playerOne.id === playerId){
+            io.to(table.games[roomId].playerTwo.id).emit("playCard", card);
+            table.games[roomId].playerTwo.tableRival.push(card);
+        }
+        else{
+            io.to(table.games[roomId].playerOne.id).emit("playCard", card);
+            table.games[roomId].playerOne.tableRival.push(card);
+        }
     });
     socket.on("changeTurn", (roomId)=>{
         socket.to(roomId).emit("playerOrder", false);

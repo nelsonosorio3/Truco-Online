@@ -75,8 +75,8 @@ export default function Game() {
       // else if (!player.mesa2) setPlayer({...player, hand: player.hand.filter(cardH=> card.id !== cardH.id), mesa2: card});
       if(player.isTurn && !player.bet){
       setPlayer({...player, hand: player.hand.filter(cardH=> card.id !== cardH.id), tablePlayer: [...player.tablePlayer, card]});
-      socket.emit("playCard", card, roomId)
-      console.log(card)}
+      socket.emit("playCard", card, roomId, player.id);
+      }
     }
 
     const passTurn = () =>{
