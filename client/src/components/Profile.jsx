@@ -9,7 +9,7 @@ import styles from './styles/Profile.module.css';
 /* Los dos siguientes imports agregados por guille */
 import Friend from './Friend';
 import AddFriend from './addFriend';
-// import Match from './Match';
+import Match from './Match';
 
 // nav
 import NavBar from './NavBar';
@@ -21,17 +21,20 @@ export default function Profile(props) {
         sender: [],
         requested: []
     })
-    const [myPendingRequests, setMyPendingRequests] = useState([])
 
     //userProfile: es el estado del usuario logeado
-    const { userProfile, userFriends  } = useSelector(state => state.profileReducer);
-    const {getProfile, getFriends, deleteFriends, putFriendRequest} = profileActions
+    const { userProfile, userFriends, userHistory  } = useSelector(state => state.profileReducer);
+    const {getProfile, getFriends, deleteFriends, putFriendRequest, getGames} = profileActions
     const dispatch = useDispatch();
 
     //Trae primeramente los datos del usuario y sus amigos
     useEffect(() => {
+        //informacion del usuario logeado
         dispatch(getProfile({token: localStorage.token}))
+        //todos los amigos (pendientes y aceptados) del usuario
         dispatch(getFriends(localStorage.token))
+        //todas las partidas del usuario
+        dispatch(getGames(localStorage.token))
     },[])
 
     // Esto es para que se actualice el estado una vez que se elimina
@@ -41,8 +44,6 @@ export default function Profile(props) {
             requested: userFriends.requested
         })
     }, [userFriends])
-
-    console.log(userFriends)
 
     //Funcion para eliminar un amigo
     const deleteFriendFunction = (id, email) => {
@@ -110,16 +111,16 @@ export default function Profile(props) {
             <div className={styles.lastResults}>
                 <h3 classname={styles.title}>Últimos resultados</h3>
                 <div className={styles.history}>
-                    {/* {
-                        history.map(m => <Match
-                            key={m.id}
-                            id={m.id}
-                            result={m.winner === user.username ? "Ganaste" : "Perdiste"}
-                            j1={m.winner}
-                            j2={m.loser}
-                            date={m.createdAt}
+                    {
+                        !userHistory.length ? null : userHistory.map(m => <Match
+                            key={m?.id}
+                            id={m?.id}
+                            result={m?.winner === userProfile.username ? "Ganaste" : "Perdiste"}
+                            j1={m?.winner}
+                            j2={m?.loser}
+                            date={m?.createdAt}
                         />)
-                    } */}
+                    }
                 </div>
             </div>
             </div>

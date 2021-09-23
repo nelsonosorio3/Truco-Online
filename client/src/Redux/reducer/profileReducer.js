@@ -6,7 +6,7 @@ const INITIAL_STATE = {
     requested: [],
     sender: []
   },
-  userHistory: {},
+  userHistory: [],
 };
 
 const profileReducer = (state = INITIAL_STATE, {type, payload}) => {
@@ -26,7 +26,6 @@ const profileReducer = (state = INITIAL_STATE, {type, payload}) => {
     };
       
     case GET_FRIENDS:
-      console.log("REDUCER", payload)
 
       const ansFriends = {
         ...state,
@@ -57,12 +56,13 @@ const profileReducer = (state = INITIAL_STATE, {type, payload}) => {
       }
     return ansPutRequest  
 
-    // case GET_HISTORY:
-    // return {
-    //   userHistory: {
-          
-    //   },
-    // };
+    case GET_HISTORY:
+      console.log("REDUCER", payload)
+
+    return {
+      ...state,
+      userHistory: payload
+    };
 
     default:
       return state;    

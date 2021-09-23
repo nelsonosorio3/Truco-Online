@@ -138,8 +138,9 @@ router.get("/friends",validarUsuario, async (req, res) => {
 
 router.get("/:id/history", async (req, res) => {
 
-  const userId = req.params.id
+  //No se esta usando -----> se usa la ruta de /games/mygames
 
+  const userId = req.params.id
   const userData = await User.findAll({
     where: {
       id: userId
