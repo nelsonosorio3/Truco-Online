@@ -8,7 +8,7 @@ import {useDispatch, useSelector} from 'react-redux'
 export default function Game() {
     const roomId = useSelector(store => store.roomsReducer.roomId); //traer el id de la sala en la que esta el jugador
     const [player, setPlayer] = useState({ //objeto del jugador en el cliente deberia tener solo propiedades que se usan para renderizar o limitar interacciones en el cliente
-        id: roomId, // id de la sala en la que entro
+        id: 1, // socket id del jugador
         name: "player", // la idea seria que sea el nombre del profile
         score: 0,  // puntaje que lleva
         hand: [], // las 3 cartas de la ronda
@@ -19,12 +19,17 @@ export default function Game() {
         tablePlayer: [], // cartas del jugador en la mesa
         bet: false, // llevar registro de si aposto
         roundResults: [], //deberia contener el resultado de la mano por ejemplo ["tie", "win", "loss"]
+        starts: false, //para cambiar turnos al finalizar ronda
       });
     
     // funcion que deberia ejecutarse solo al iniciar el juego
     // const gameStarts = (player) => {
     //   socket.emit("gameStarts", player);
     // };
+
+    const bet = e => {
+      player.isTurn && socket.emit("bet", e.target.name, roomId, player.id);
+    };
 
     function roundCheckWinner(playerCard, rivalCard){
       console.log(playerCard)
@@ -55,12 +60,8 @@ export default function Game() {
       }
     }
 
-    const newRoundStarts = async () => {
+    const newRoundStarts = () => {
       player.isTurn && socket.emit('newRoundStarts', roomId);
-    }
-
-    const bet = async (e) =>{
-      player.isTurn && socket.emit("bet", e.target.name, roomId);
     }
 
     const roundWin = () =>{
@@ -93,15 +94,18 @@ export default function Game() {
         console.log(player)
         setPlayer(player);
       })
-      socket.on("newRoundStarts", hand=>{
-        console.log(hand)
-        socket.emit('passTurn')
-        setPlayer({...player, hand, tableRival: [], tablePlayer: [], roundResults: []});
+      socket.on("newRoundStarts", player=>{
+        // console.log(hand)
+        // socket.emit('passTurn')
+        setPlayer(player);
       });
       socket.on("bet", betOptions=>{
         console.log(betOptions);
         setPlayer({...player, betOptions});
         changeTurn();
+      });
+      socket.on("mazo", algo =>{
+
       });
       socket.on("playCard", card=>{
         // console.log(card)

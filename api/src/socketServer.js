@@ -48,7 +48,8 @@ const table = {
                 envido1: ["no quiero", "quiero", "envido2", "realEnvido", "faltaEnvido"],
                 envido2: ["no quiero", "quiero", "realEnvido", "faltaEnvido"],
                 realEnvido: ["noQuiero", "faltaEnvido"],
-                faltaEnvido: ["noQuiero", "quiero"]
+                faltaEnvido: ["noQuiero", "quiero"],
+
                 }, //la lista de apuestas posibles la idea es que es un objeto con propiedades de apuestas posibles y un array con cada posible respuesta
     games: {}, //objeto que contiene todas las partidas jugandose, la propiedad es el id de cada Rooom
   };
@@ -213,25 +214,26 @@ io.on('connection', function (socket) {
     socket.on('disconnect', function () {
         io.emit('messages', { server: 'Server', message: 'Has left the room.' });
     });
+
+    //evento por si alguien crea una sala o entra a una
     socket.on('joinRoom', function (roomId) {
-        const clients = io.sockets?.adapter.rooms.get(roomId) //set de clientes room
-        if(clients?.size < 2 || clients === undefined){ //revisar si la sala esta llena
+        const clients = io.sockets?.adapter.rooms.get(roomId) //set de clientes en room
+        if(clients?.size < 2 || clients === undefined){ //revisar si la sala esta llena, para evitar que se unan mas, modificar el 2 con variable par ampliar luego a mas jugadores
         socket.join(parseInt(roomId));
-        console.log(table.players)
-        if(activeRooms.indexOf(roomId) === -1) activeRooms = [...activeRooms, roomId]
+       
+        if(activeRooms.indexOf(roomId) === -1) activeRooms = [...activeRooms, roomId] 
         else console.log(roomId, 'ya existe');
         console.log("active rooms: ", activeRooms)
         }
-        if(clients?.size === 2) {
+        if(clients?.size === 2) { //si la sala esta llena, empieza toda la preparacion de la partida
             activeRooms =  activeRooms.filter(room=> room!== roomId)
             socket.emit("roomFull", false);
             let iterator = clients.values();
             const player1 = iterator.next().value;
             const player2 = iterator.next().value;
             console.log(clients.values())
-            // let player2 = player1.next()
-            io.to(player1).emit("playerOrder",true);
-            io.to(player2).emit("playerOrder",false);
+
+            //dejar listo la propiedad con el id de la sala que contendra todo lo que ocurra en esta mientras dure la partida
             table.games[roomId]={};
             table.games[roomId].playerOne = {
                 id: player1,
@@ -245,6 +247,7 @@ io.on('connection', function (socket) {
                 tablePlayer: [],
                 bet: false,
                 roundResults: [],
+                starts: true,
             };
             table.games[roomId].playerTwo = {
                 id: player2,
@@ -258,6 +261,7 @@ io.on('connection', function (socket) {
                 tablePlayer: [],
                 bet: false,
                 roundResults: [],
+                starts: false,
             };
             table.games[roomId].common ={
                 envidoList: [],
@@ -269,6 +273,7 @@ io.on('connection', function (socket) {
                 time: 15 * 1000,
                 numberPlayers: 2,
             }
+
             let deck = buildDeck(); //contruye deck
             deck = shuffleDeck(deck); //baraja deck
             const [playerAhand, playerBhand] = getHands(deck); //obtiene manos de 3 cartas de dos jugadores
@@ -280,6 +285,8 @@ io.on('connection', function (socket) {
             //dejar las apuestas al comienzo
             table.games[roomId].playerOne.betOptions = table.betsList.firstTurn;
             table.games[roomId].playerTwo.betOptions = table.betsList.firstTurn;
+
+            //emitir como deberia ser el jugador de cada cliente
             io.to(player1).emit("gameStarts", table.games[roomId].playerOne);
             io.to(player2).emit("gameStarts", table.games[roomId].playerTwo);
 
@@ -300,17 +307,75 @@ io.on('connection', function (socket) {
     })
     // esucha el evento para iniciar una nueva ronda
     socket.on("newRoundStarts", (roomId)=>{
+        // let deck = buildDeck(); //contruye deck
+        // deck = shuffleDeck(deck); //baraja deck
+        // const [playerAhand, playerBhand] = getHands(deck); //obtiene manos de 3 cartas de dos jugadores
+        // socket.emit("newRoundStarts", playerAhand); // emite al cliente que emitio el nuevo turno la mano A
+        // socket.to(roomId).emit("newRoundStarts", playerBhand); // emite al otro cliente de la partida la mano B
+        // io.in(roomId).emit("bet", table.betsList.firstTurn); // emite a todos el evento apuesta con la lista de posibles apuesta iniciales
         let deck = buildDeck(); //contruye deck
         deck = shuffleDeck(deck); //baraja deck
         const [playerAhand, playerBhand] = getHands(deck); //obtiene manos de 3 cartas de dos jugadores
-        socket.emit("newRoundStarts", playerAhand); // emite al cliente que emitio el nuevo turno la mano A
-        socket.to(roomId).emit("newRoundStarts", playerBhand); // emite al otro cliente de la partida la mano B
-        io.in(roomId).emit("bet", table.betsList.firstTurn); // emite a todos el evento apuesta con la lista de posibles apuesta iniciales
+
+        //manos iniciales al iniciar partida
+        table.games[roomId].playerOne.hand = playerAhand;
+        table.games[roomId].playerTwo.hand = playerBhand;
+
+        //dejar las apuestas al comienzo
+        table.games[roomId].playerOne.betOptions = table.betsList.firstTurn;
+        table.games[roomId].playerTwo.betOptions = table.betsList.firstTurn;
+
+        //emitir como deberia ser el jugador de cada cliente
+        io.to(player1).emit("gameStarts", table.games[roomId].playerOne);
+        io.to(player2).emit("gameStarts", table.games[roomId].playerTwo);
     });
     // escucha el evento bet para devolver la lista adecuado de opciones de apuesta
-    socket.on("bet", (betPick, roomId) => {
+    socket.on("bet", (betPick, roomId, playerId) => {
+        if(betPick === "ir al mazo") {
+            table.games[roomId].playerOne.id === playerId? table.games[roomId].playerTwo.score++ : table.games[roomId].playerOne.score++;
+
+            //reiniciar estados de playerOne y Two para empezar siguiente ronda
+            table.games[roomId].playerOne = {...table.games[roomId].playerOne, turnNumber: 1,
+                tableRival: [],
+                tablePlayer: [],
+                bet: false,
+                roundResults: [],}
+            table.games[roomId].playerTwo = {...table.games[roomId].playerTwo, turnNumber: 1,
+                tableRival: [],
+                tablePlayer: [],
+                bet: false,
+                roundResults: [],}
+
+            let deck = buildDeck(); //contruye deck
+            deck = shuffleDeck(deck); //baraja deck
+            const [playerAhand, playerBhand] = getHands(deck); //obtiene manos de 3 cartas de dos jugadores
+    
+            //manos iniciales al iniciar partida
+            table.games[roomId].playerOne.hand = playerAhand;
+            table.games[roomId].playerTwo.hand = playerBhand;
+    
+            //dejar las apuestas al comienzo
+            table.games[roomId].playerOne.betOptions = table.betsList.firstTurn;
+            table.games[roomId].playerTwo.betOptions = table.betsList.firstTurn;
+    
+            //cambiar de jugador que inicia
+            if(table.games[roomId].playerOne.starts){
+                table.games[roomId].playerTwo.isTurn = true;
+                table.games[roomId].playerOne.isTurn = false;
+                table.games[roomId].playerOne.starts = false;
+            }else{
+                table.games[roomId].playerOne.isTurn = true;
+                table.games[roomId].playerTwo.isTurn = false;
+                table.games[roomId].playerOne.starts = true;
+            };
+            //emitir como deberia ser el jugador de cada cliente
+            io.to(table.games[roomId].playerOne.id).emit("newRoundStarts", table.games[roomId].playerOne);
+            io.to(table.games[roomId].playerTwo.id).emit("newRoundStarts", table.games[roomId].playerTwo);
+           
+        }
+        else{
         socket.to(roomId).emit("bet", table.betsList[betPick]); //emite al otro cliente la lista de respuesta a la apuesta enviada
-        console.log(table.betsList[betPick]); 
+        console.log(table.betsList[betPick])};
     });
     socket.on("playCard", (card, roomId) => {
         socket.to(roomId).emit("playCard", card) //emite al otro cliente la carta que jugo el cliente emisor
