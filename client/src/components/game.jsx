@@ -62,7 +62,7 @@ export default function Game() {
       });
       socket.on("gameEnds", data=>{
         console.log("termino");
-        history.push("/");
+        history.push("/profile");
         alert("el juego termino, por testing esta a menos puntos");
         //aqui deberia estar el dispatch con data que contiene playerOne, playerTwo, common para luego hacer el post desde actions 
       });
@@ -77,8 +77,8 @@ export default function Game() {
         socket.off("gameEnds");
       };
     },[player]);
-
-    console.log(player)
+    
+    console.log(player) //para testing
     return(<div style ={{display: "flex", flexDirection: "row", justifyContent: "space-between", paddingTop: "150px"}}>
             {/* <div className={styles.image}>  */}
             {/* </div> */}
@@ -92,6 +92,6 @@ export default function Game() {
             </div>
             </div>
             <Chat name={"test"} roomId={roomId} typeofChat={"chatLobby"}/>
-          </div>    
+          </div>    //puese estilos inline solo por que son temporales
     );
 };

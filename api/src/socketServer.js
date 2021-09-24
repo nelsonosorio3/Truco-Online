@@ -55,7 +55,7 @@ const table = {
     games: {}, //objeto que contiene todas las partidas jugandose, la propiedad es el id de cada Rooom
   };
   /*como se veria table.games {
-        1234: {
+        '1234': {
             playerOne: {
                 id: 2144124,
                 name: "player",
@@ -190,23 +190,7 @@ function envidoCount(hand){
     }
 }
 
-// function roundCheckWinner(cardA, cardB){
-//     if(cardA.truco < cardB.truco){
-//       table.games. .push("winner");
-//       // playerA.score++;
-//       playerB.rounds.push("losser");
-//     }
-//     else if(playerA[mesa].truco > playerB[mesa].truco){
-//       playerA.rounds.push("losser");
-//       playerB.rounds.push("winner");
-//       // playerB.score++;
-//     }
-//     else{
-//       playerA.rounds.push("tie");
-//       playerB.rounds.push("tie");
-//     }
-//     console.log(playerA.name, playerA.rounds)
-//   }
+// posible implementacion de turnos con tiempo.
 // function nextTurn(){
 //     table.turn = table.currentTurn++ % table.numberPlayers;
 
@@ -677,7 +661,5 @@ io.on('connection', function (socket) {
             io.to(table.games[roomId].playerTwo.id).emit("changeTurn", true);
             io.to(table.games[roomId].playerOne.id).emit("changeTurn", false);
         }
-    });
-  
-    
+    });   
 });
