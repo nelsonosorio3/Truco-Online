@@ -24,7 +24,7 @@ export default function Modal({ children, isOpen, closeModal, removeFriend, dele
             <p>¿estas seguro de que deseas eliminar esta amistad?</p> 
             <div className={styles.btnDiv}>
               <button className={styles.leftBtn} onClick={() => confirmation(true)}>
-                Yes
+                Si
               </button>
               <button className={styles.rightBtn} onClick={() => confirmation(false)}>
                 No
