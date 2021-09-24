@@ -79,7 +79,7 @@ export default function Game() {
     },[player]);
 
     console.log(player)
-    return(<div style ={{display: "flex", flexDirection: "row", justifyContent: "space-between"}}>
+    return(<div style ={{display: "flex", flexDirection: "row", justifyContent: "space-between", paddingTop: "150px"}}>
             {/* <div className={styles.image}>  */}
             {/* </div> */}
             <div>
