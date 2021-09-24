@@ -10,3 +10,18 @@
     background-repeat: no-repeat;
 }
 
+#gameBackground{
+    background-image: url('../../img/gameBackground.webp');
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-size: 100% 100%;
+    background-repeat: no-repeat;   
+}
+
+#playerCard{
+    width:"180px";
+    height: "200px";
+}

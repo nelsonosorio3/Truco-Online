@@ -595,8 +595,8 @@ io.on('connection', function (socket) {
                     };      
                 };
             };
-            //revisar si algun jugador ya gano, para testing es valor sale como 1 aunque deberia ser table.games[roomId].playerTwo.score
-            if(table.games[roomId].playerOne.score >= 1 || table.games[roomId].playerTwo.score >= table.games[roomId].common.scoreToWin){
+            //revisar si algun jugador ya gano, para testing es valor sale como 1 aunque deberia ser table.games[roomId].playerOne.score
+            if(table.games[roomId].playerOne.score >= table.games[roomId].playerOne.score || table.games[roomId].playerTwo.score >= table.games[roomId].common.scoreToWin){
                 io.to(table.games[roomId].playerOne.id).emit("gameEnds", (table.games[roomId]))
                 io.to(table.games[roomId].playerTwo.id).emit("gameEnds", (table.games[roomId]))
                 console.log(table.games)

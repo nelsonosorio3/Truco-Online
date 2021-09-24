@@ -82,19 +82,24 @@ export default function Game() {
     },[player]);
     
     console.log(player) //para testing
-    return(<div style ={{display: "flex", flexDirection: "row", justifyContent: "space-between", paddingTop: "150px"}}>
+    return(<div style ={{display: "flex", flexDirection: "row", justifyContent: "space-between"}} id={styles.gameBackground}>
             {/* <div className={styles.image}>  */}
             {/* </div> */}
             <div>
-            {player.betOptions?.map(betPick=><button onClick={bet} name={betPick} key={betPick} style = {{ padding: "30px" }}>{betPick}</button>)}<br/>
-            <ul style={{display: "flex"}}>{player.hand?.map(card => <div  style={{display: "flex", padding: "40px"}} key={card.id} onClick={()=>playCard(card)}><h2>{card.suit}</h2><h2>{card.number}</h2></div>)}</ul><br/>
-            <ol style={{display: "flex"}}>{[...Array(3-player.tableRival.length).keys()].map(card=><li key={card}><img src={`https://opengameart.org/sites/default/files/card%20back%20blue.png`} style={{width:"40%"}}/></li>)}</ol>
-            <div style ={{ display: "flex", flexDirection: "row" }}>
-            <ol>{player.tableRival?.map(card => <li key={card.id}style = {{ display: "flex", flexDirection: "row" }}><h2>{card.suit}</h2><h2>{card.number}</h2></li>)}</ol>
-            <ol>{player.tablePlayer?.map(card => <div key={card.id}style = {{ display: "flex", flexDirection: "row" }}><h2>{card.suit}</h2><h2>{card.number}</h2></div>)}</ol>
+            <ul style={{display: "flex", listStyleType: "none"}}>{[...Array(3-player.tableRival.length).keys()].map(card=><li key={card}><img src={`https://opengameart.org/sites/default/files/card%20back%20blue.png`} style={{width:"180px", height: "200px",paddingLeft: "60px", marginTop: "180px"}}/></li>)}</ul>
+            <div style ={{ display: "flex", flexDirection: "column" }}>
+            <ol>{player.tableRival?.map(card => <div key={card.id}style = {{ display: "flex", flexDirection: "row" }}><img src={`/cards/${card.id}.webp`} style={{width:"180px", height: "200px",paddingLeft: "60px"}}/></div>)}</ol>
+            <ol>{player.tablePlayer?.map(card => <div key={card.id}style = {{ display: "flex", flexDirection: "row" }} ><img src={`/cards/${card.id}.webp`} style={{width:"180px", height: "200px",paddingLeft: "60px"}}/></div>)}</ol>
             </div>
+            
+            <ul style={{display: "flex"}}>{player.hand?.map(card => <div  style={{display: "flex", padding: "40px"}} key={card.id} onClick={()=>playCard(card)}><img src={`/cards/${card.id}.webp`} style={{width:"180px", height: "200px",paddingLeft: "60px"}}/></div>)}</ul><br/>
+            
+            
             </div>
+            <div>
             <Chat name={"test"} roomId={roomId} typeofChat={"chatLobby"}/>
+            {player.betOptions?.map(betPick=><button onClick={bet} name={betPick} key={betPick} style = {{ padding: "30px" }}>{betPick}</button>)}<br/>
+            </div>
           </div>    //puese estilos inline solo por que son temporales
     );
 };
