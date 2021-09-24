@@ -4,6 +4,7 @@ import socket from './socket';
 import {useDispatch, useSelector} from 'react-redux'
 import Chat from './rooms/Chat';
 import { useHistory } from "react-router-dom";
+import { setIsInRoom } from '../Redux/actions-types/roomsActions';
 
 export default function Game() {
     const roomId = useSelector(store => store.roomsReducer.roomId); //traer el id de la sala en la que esta el jugador
@@ -22,6 +23,7 @@ export default function Game() {
         starts: false, // referencia para cambiar turnos al finalizar ronda
       });
     const history = useHistory();
+    const dispatch = useDispatch();
     const bet = e => { //emite la apuesta
       if(player.isTurn){
         socket.emit("bet", e.target.name, roomId, player.id);
@@ -64,6 +66,7 @@ export default function Game() {
         console.log("termino");
         history.push("/profile");
         alert("el juego termino, por testing esta a menos puntos");
+        dispatch(setIsInRoom({isInRoom: false, roomId: null}))
         //aqui deberia estar el dispatch con data que contiene playerOne, playerTwo, common para luego hacer el post desde actions 
       });
       return () =>{ //limpieza de eventos
