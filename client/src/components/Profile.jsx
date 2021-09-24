@@ -92,7 +92,7 @@ export default function Profile(props) {
     return (
         <>
          <NavBar />
-         <Modal isOpen={isOpenModal} closeModal={closeModal} removeFriend={removeFriend} deleteButtons={true}>Delete Confirmation</Modal>
+         <Modal isOpen={isOpenModal} closeModal={closeModal} removeFriend={removeFriend} deleteButtons={true}></Modal>
          <button className={styles.logoutBtn} onClick={logout}>Log out</button>
          <div className={styles.mainDiv}>
          </div>

@@ -60,3 +60,40 @@
 .isOpen {
   display: flex;
 }
+
+
+/* Esto es para la confirmacion de eliminacion de amigo */
+.btnDiv{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+}
+
+.btnDiv button{
+    padding: 3px;
+    border: none;
+    width: 50px;
+    background-color: #ffffffc7;
+    border-radius: 5px;
+    margin: 1px;
+    position: absolute;
+    /* cuando vuelve */
+    transition: transform .45s;
+
+}
+
+.rightBtn{
+    right: 40px;
+}
+
+.leftBtn{
+    left: 40px;
+}
+
+.btnDiv button:hover{
+ border: 1px solid;
+ background-color: white;
+ /* cuando se va */
+ transition: transform .45s;
+ transform: scale(1.1);
+}

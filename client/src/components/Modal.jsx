@@ -21,13 +21,16 @@ export default function Modal({ children, isOpen, closeModal, removeFriend, dele
         {
           deleteButtons === true ?
           <div>
-            <p>Are you Sure you want to delete this friend?</p> 
-            <button onClick={() => confirmation(true)}>
-              Yes
-            </button>
-            <button onClick={() => confirmation(false)}>
-              No
-            </button>
+            <p>¿estas seguro de que deseas eliminar esta amistad?</p> 
+            <div className={styles.btnDiv}>
+              <button className={styles.leftBtn} onClick={() => confirmation(true)}>
+                Yes
+              </button>
+              <button className={styles.rightBtn} onClick={() => confirmation(false)}>
+                No
+              </button>
+            </div>
+           
           </div> : null
           
         }
