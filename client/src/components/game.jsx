@@ -4,8 +4,6 @@ import socket from './socket';
 import {useDispatch, useSelector} from 'react-redux'
 import Chat from './rooms/Chat';
 
-
-
 export default function Game() {
     const roomId = useSelector(store => store.roomsReducer.roomId); //traer el id de la sala en la que esta el jugador
     const [player, setPlayer] = useState({ //objeto del jugador en el cliente deberia tener solo propiedades que se usan para renderizar o limitar interacciones en el cliente
@@ -23,51 +21,45 @@ export default function Game() {
         starts: false, // referencia para cambiar turnos al finalizar ronda
       });
     
-    const bet = e => {
+    const bet = e => { //emite la apuesta
       if(player.isTurn){
         socket.emit("bet", e.target.name, roomId, player.id);
         setPlayer({...player, bet:true, isTurn:false})
       };
     };
 
-    const playCard = (card) =>{
-      // if(!player.mesa1) setPlayer({...player, hand: player.hand.filter(cardH=> card.id !== cardH.id), mesa1: card});
-      // else if (!player.mesa2) setPlayer({...player, hand: player.hand.filter(cardH=> card.id !== cardH.id), mesa2: card});
+    const playCard = (card) =>{ //emite carta jugada
       if(player.isTurn && !player.bet){
       setPlayer({...player, hand: player.hand.filter(cardH=> card.id !== cardH.id), tablePlayer: [...player.tablePlayer, card], isTurn: false});
       socket.emit("playCard", card, roomId, player.id);
       };
-    };
-
-    const changeTurn = () =>{
-      socket.emit("changeTurn", roomId, player.id);
     };
     
     useEffect(()=>{
       socket.on("gameStarts", player=>{ //escucha gameStarts para iniciar cuando la sala se llena y dejar el estado jugador listo
         setPlayer(player);
       });
-      socket.on("newRoundStarts", player=>{
+      socket.on("newRoundStarts", player=>{  //escucha para empezar nueva partida
         setPlayer(player);
       });
-      socket.on("bet", async betOptions=>{
+      socket.on("bet", async betOptions=>{  //trae la apuesta segun turno
         // await changeTurn();
         setPlayer({...player, betOptions});
       });
-      socket.on("betting", bool=>{
+      socket.on("betting", bool=>{  //cambia el estado de si se esta apostando para bloquear jugar cartas hasta resolverlo
         setPlayer({...player, bet: bool, betOptions: []});
       });
-      socket.on("playCard", async card=>{
+      socket.on("playCard", async card=>{  //escucha carta jugada por rival
         // await changeTurn();
         setPlayer({...player, tableRival:  [...player.tableRival, card], isTurn: true}); 
       });
-      socket.on("updateScore", score=>{
+      socket.on("updateScore", score=>{  //trae cambios en el puntaje
         setPlayer({...player, score: player.score + score})
       });
-      socket.on("changeTurn", bool=>{
+      socket.on("changeTurn", bool=>{  //cambia turno entre jugadores
         setPlayer({...player, isTurn: bool});
       });
-      return () =>{
+      return () =>{ //limpieza de eventos
         socket.off("gameStarts");
         socket.off('newRoundStarts');
         socket.off("bet");
@@ -84,7 +76,7 @@ export default function Game() {
             {/* </div> */}
             <div>
             {player.betOptions?.map(betPick=><button onClick={bet} name={betPick} key={betPick} style = {{ padding: "30px" }}>{betPick}</button>)}<br/>
-            {player.hand?.map(card => <div onClick={()=>playCard(card)}><h2>{card.suit}</h2><h2>{card.number}</h2></div>)}<br/>
+            {player.hand?.map(card => <div key={card.id} onClick={()=>playCard(card)}><h2>{card.suit}</h2><h2>{card.number}</h2></div>)}<br/>
             <ol>{[...Array(3-player.tableRival.length).keys()].map(card=><li key={card}>Dorso carta oponente</li>)}</ol>
             <div style ={{ display: "flex", flexDirection: "row" }}>
             <ol>{player.tableRival?.map(card => <li key={card.id}style = {{ display: "flex", flexDirection: "row" }}><h2>{card.suit}</h2><h2>{card.number}</h2></li>)}</ol>

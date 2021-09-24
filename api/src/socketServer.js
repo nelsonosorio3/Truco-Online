@@ -29,7 +29,7 @@ server.listen(9000, function () {
 var activeRooms = []
 let timeOut;
 
-// objeto con todas las propiedasdes comunes de la partida, cosas como
+// objeto con todas las propiedasdes comunes de la partida
 const table = {
     //estas son las propiedades que son comunes a todos los juegos
     trucoValue: {truco: 2, retruco: 3, valeCuatro: 4}, //lista valor de trucos
@@ -341,31 +341,6 @@ io.on('connection', function (socket) {
 
     //GAME EVENTS
 
-    // // esucha el evento para iniciar una nueva ronda
-    // socket.on("newRoundStarts", (roomId)=>{
-    //     // let deck = buildDeck(); //contruye deck
-    //     // deck = shuffleDeck(deck); //baraja deck
-    //     // const [playerAhand, playerBhand] = getHands(deck); //obtiene manos de 3 cartas de dos jugadores
-    //     // socket.emit("newRoundStarts", playerAhand); // emite al cliente que emitio el nuevo turno la mano A
-    //     // socket.to(roomId).emit("newRoundStarts", playerBhand); // emite al otro cliente de la partida la mano B
-    //     // io.in(roomId).emit("bet", table.betsList.firstTurn); // emite a todos el evento apuesta con la lista de posibles apuesta iniciales
-    //     let deck = buildDeck(); //contruye deck
-    //     deck = shuffleDeck(deck); //baraja deck
-    //     const [playerAhand, playerBhand] = getHands(deck); //obtiene manos de 3 cartas de dos jugadores
-
-    //     //manos al iniciar partida
-    //     table.games[roomId].playerOne.hand = playerAhand;
-    //     table.games[roomId].playerTwo.hand = playerBhand;
-
-    //     //dejar las apuestas al comienzo
-    //     table.games[roomId].playerOne.betOptions = table.betsList.firstTurn;
-    //     table.games[roomId].playerTwo.betOptions = table.betsList.firstTurn;
-
-    //     //emitir como deberia ser el jugador de cada cliente
-    //     io.to(player1).emit("gameStarts", table.games[roomId].playerOne);
-    //     io.to(player2).emit("gameStarts", table.games[roomId].playerTwo);
-    // });
-    // escucha el evento bet para devolver la lista adecuado de opciones de apuesta
     socket.on("bet", (betPick, roomId, playerId) => {
         table.games[roomId].playerOne.bet = true;
         table.games[roomId].playerTwo.bet = true;
@@ -503,8 +478,12 @@ io.on('connection', function (socket) {
             io.in(roomId).emit("betting", false);
         }
         else if(betPick === "quiero realEnvido"){
-            table.games[roomId].common.cumulativeScore+=3;
             io.in(roomId).emit("betting", false);
+            const playerOneEnvido = envidoCount(table.games[roomId].playerOne.hand);
+            const playerTwoEnvido = envidoCount(table.games[roomId].playerTwo.hand);
+            if(playerOneEnvido > playerTwoEnvido) table.games[roomId].playerOne.score+=3;
+            else if(playerOneEnvido < playerTwoEnvido) table.games[roomId].playerTwo.score+=3;
+            else table.games[roomId].playerOne.starts? table.games[roomId].playerOne.score+=3 : table.games[roomId].playerTwo.score+=3; 
         }
         else if(betPick === "no quiero realEnvido"){
             if(table.games[roomId].playerOne.id ===playerId){
@@ -521,6 +500,11 @@ io.on('connection', function (socket) {
             const points = table.games[roomId].playerOne.score > table.games[roomId].playerTwo.score? table.games[roomId].playerOne.score : table.gmaes[roomId].playerTwo.score;
             table.games[roomId].common.cumulativeScore = (table.games[roomId].common.scoreToWin - points);
             io.in(roomId).emit("betting", false);
+            const playerOneEnvido = envidoCount(table.games[roomId].playerOne.hand);
+            const playerTwoEnvido = envidoCount(table.games[roomId].playerTwo.hand);
+            if(playerOneEnvido > playerTwoEnvido) table.games[roomId].playerOne.score+=table.games[roomId].common.cumulativeScore;
+            else if(playerOneEnvido < playerTwoEnvido) table.games[roomId].playerTwo.score+=table.games[roomId].common.cumulativeScore;
+            else table.games[roomId].playerOne.starts? table.games[roomId].playerOne.score+=table.games[roomId].common.cumulativeScore : table.games[roomId].playerTwo.score+=table.games[roomId].common.cumulativeScore; 
         }
         else if(betPick === "no quiero faltaEnvido"){
             if(table.games[roomId].playerOne.id ===playerId){
@@ -665,8 +649,6 @@ io.on('connection', function (socket) {
                 io.to(table.games[roomId].playerTwo.id).emit("newRoundStarts", table.games[roomId].playerTwo);
                 }
         }
-        
-    
     });
     socket.on("changeTurn", (roomId, playerId)=>{
         // socket.to(roomId).emit("playerOrder", false);
@@ -679,44 +661,8 @@ io.on('connection', function (socket) {
             io.to(table.games[roomId].playerTwo.id).emit("changeTurn", true);
             io.to(table.games[roomId].playerOne.id).emit("changeTurn", false);
         }
-        
     });
     socket.on("roundWin", (roomId, socketId)=>{
         socket.to()
     })
-
-
-    // if(io.sockets?.adapter.rooms.get(roomId).size === 2 && !table.gameStarted) {
-    //     console.log("hola")
-    //     io.to(table.players[0]).emit("playerOrder",true);
-    //     io.to(table.players[1]).emit("playerOrder",false);
-    //     table.gameStarted= true;
-    // };
-
-   
-
-
-
-
-    /*
-    function getActiveRooms(io) {
-    // Convert map into 2D list:
-    // ==> [['4ziBKG9XFS06NdtVAAAH', Set(1)], ['room1', Set(2)], ...]
-    const arr = Array.from(io.sockets.adapter.rooms);
-    // Filter rooms whose name exist in set:
-    // ==> [['room1', Set(2)], ['room2', Set(2)]]
-    const filtered = arr.filter(room => !room[1].has(room[0]))
-    // Return only the room name: 
-    // ==> ['room1', 'room2']
-    const res = filtered.map(i => i[0]);
-    return res;
-}
-    */
 });
-// io.on('roomAccess', socket => {
-//    const connectedSockets = io.sockets.adapter.rooms.get(message.roomId);
-//    const socketRooms = Array.from(socket.rooms.values()).filter((r) => r !== socket.id)
-//    socket.on('connected', (name) => {
-//       socket.broadcast.emit('messages', {name, msg: `${name} has joined.`})
-//    });
-// })
