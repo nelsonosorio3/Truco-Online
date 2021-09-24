@@ -89,8 +89,8 @@ export default function Game() {
             <div>
             <ul style={{display: "flex", listStyleType: "none"}}>{[...Array(3-player.tableRival.length).keys()].map(card=><li key={card}><img src={`https://opengameart.org/sites/default/files/card%20back%20blue.png`} style={{width:"180px", height: "200px", marginLeft: "60px", marginTop: "180px"}}/></li>)}</ul>
             <div style ={{ display: "flex", flexDirection: "column" }}>
-            <ol>{player.tableRival?.map(card => <div key={card.id}style = {{ display: "flex", flexDirection: "row" }}><img src={`/cards/${card.id}.webp`} style={{width:"180px", height: "200px",marginLeft: "60px"}}/></div>)}</ol>
-            <ol>{player.tablePlayer?.map(card => <div key={card.id}style = {{ display: "flex", flexDirection: "row" }} ><img src={`/cards/${card.id}.webp`} style={{width:"180px", height: "200px",marginLeft: "60px"}}/></div>)}</ol>
+            <ol style ={{ display: "flex", flexDirection: "row" }}>{player.tableRival?.map(card => <div key={card.id}style = {{ display: "flex", flexDirection: "row" }}><img src={`/cards/${card.id}.webp`} style={{width:"180px", height: "200px",marginLeft: "60px"}}/></div>)}</ol>
+            <ol style ={{ display: "flex", flexDirection: "row" }}>{player.tablePlayer?.map(card => <div key={card.id}style = {{ display: "flex", flexDirection: "row" }} ><img src={`/cards/${card.id}.webp`} style={{width:"180px", height: "200px",marginLeft: "60px"}}/></div>)}</ol>
             </div>
             
             <ul style={{display: "flex"}}>{player.hand?.map(card => <div  style={{display: "flex", padding: "40px"}} key={card.id} onClick={()=>playCard(card)}><img src={`/cards/${card.id}.webp`} style={{width:"180px", height: "200px"}}/></div>)}</ul><br/>
