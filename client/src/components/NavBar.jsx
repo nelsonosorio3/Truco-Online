@@ -9,10 +9,8 @@ import profileIcon from '../img/profileIcon.png';
 
 export default function NavBar() {
 
-    const { userProfile } = useSelector(state => state.profileReducer);
+    const { user } = useSelector(state => state.logReducer);
 
-    const user = userProfile.username;
-     
     const [isAuth, setIsAuth] = useState(false); 
 
     useEffect(() => {

@@ -1,14 +1,10 @@
 import { LOG_OUT, LOG_IN } from '../actions/index';
 
 const INITIAL_STATE = {
-  isAuth: false, // sacar
+  isAuth: false, 
   user: null,
   id: null,
   message: ''
-};
-
-const saveInLocalStorage = () => {
-  
 };
 
 const logReducer = (state = INITIAL_STATE, {type, payload}) => {
