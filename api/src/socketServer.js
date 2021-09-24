@@ -456,7 +456,6 @@ io.on('connection', function (socket) {
                 io.to(table.games[roomId].playerOne.id).emit("updateScore", 1);
             } 
             io.in(roomId).emit("betting", false);
-            io.in(roomId).emit("bet", []);
         }
         else if(betPick === "quiero envido2"){
             io.in(roomId).emit("betting", false);

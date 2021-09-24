@@ -76,8 +76,8 @@ export default function Game() {
             {/* </div> */}
             <div>
             {player.betOptions?.map(betPick=><button onClick={bet} name={betPick} key={betPick} style = {{ padding: "30px" }}>{betPick}</button>)}<br/>
-            {player.hand?.map(card => <div key={card.id} onClick={()=>playCard(card)}><h2>{card.suit}</h2><h2>{card.number}</h2></div>)}<br/>
-            <ol>{[...Array(3-player.tableRival.length).keys()].map(card=><li key={card}>Dorso carta oponente</li>)}</ol>
+            <ul style={{display: "flex"}}>{player.hand?.map(card => <div  style={{display: "flex", paddingLeft: "40px"}} key={card.id} onClick={()=>playCard(card)}><h2>{card.suit}</h2><h2>{card.number}</h2></div>)}</ul><br/>
+            <ol style={{display: "flex"}}>{[...Array(3-player.tableRival.length).keys()].map(card=><li key={card}><img src={`https://opengameart.org/sites/default/files/card%20back%20blue.png`} style={{width:"40%"}}/></li>)}</ol>
             <div style ={{ display: "flex", flexDirection: "row" }}>
             <ol>{player.tableRival?.map(card => <li key={card.id}style = {{ display: "flex", flexDirection: "row" }}><h2>{card.suit}</h2><h2>{card.number}</h2></li>)}</ol>
             <ol>{player.tablePlayer?.map(card => <div key={card.id}style = {{ display: "flex", flexDirection: "row" }}><h2>{card.suit}</h2><h2>{card.number}</h2></div>)}</ol>
