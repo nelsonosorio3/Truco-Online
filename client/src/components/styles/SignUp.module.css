@@ -16,7 +16,7 @@
     flex-direction: column;
     position: relative;
 
-    background-color: rgba(1,1,1, .5);
+    background-color: var(--transBlackColor);
     border-radius: 1em;
 
     margin-top: -50%;

@@ -13,6 +13,7 @@ var io = require("socket.io")(server, {
         credentials: true
     }
 });
+var socketTournaments = require("./socketTournaments")(io)
 require("reflect-metadata");
 var cors = require("cors");
 const { type } = require("os");

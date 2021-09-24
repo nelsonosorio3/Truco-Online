@@ -6,12 +6,14 @@ import signUpReducer from "./signUpReducer";
 import logReducer from "./logReducer";
 import profileReducer from "./profileReducer";
 import roomsReducer from "./roomsReducer";
+import tournamentsReducer from "./tournamentsReducer";
 
 const rootReducer = combineReducers({
   signUpReducer,
   logReducer,
   profileReducer,
-  roomsReducer
+  roomsReducer,
+  tournamentsReducer,
 });
 
 export default rootReducer;
