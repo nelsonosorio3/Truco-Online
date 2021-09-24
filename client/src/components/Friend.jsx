@@ -12,6 +12,7 @@ export default function Friend({ name, date, id, profileId, deleteId, email, sta
   const deleteFriend = () => {
     deleteId(email)
   }
+  const [isOpen, open, close] = useModal();
   
 
   return (
