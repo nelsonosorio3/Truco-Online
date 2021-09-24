@@ -662,5 +662,4 @@ io.on('connection', function (socket) {
             io.to(table.games[roomId].playerOne.id).emit("changeTurn", false);
         }
     });   
-    console.log(io.rooms)
 });
