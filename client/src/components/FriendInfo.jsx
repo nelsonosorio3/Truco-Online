@@ -3,6 +3,8 @@ import { useDispatch , useSelector } from 'react-redux';
 
 import profileActions from '../Redux/actions-types/profileActions';
 
+import DeleteFriendButton from './DeleteFriendButton';
+
 import styles from './styles/FriendInfo.module.css';
 import profileIcon from '../img/profileIcon.png';
 
@@ -18,7 +20,7 @@ export default function FriendInfo({ isOpen, close, name, date, email, status })
     });
 
     const { userProfile, userFriends } = useSelector(state => state.profileReducer);
-    const { getProfile, deleteFriends, putFriendRequest, getGames } = profileActions;
+    const { getProfile, deleteFriends, getGames } = profileActions;
 
     const dispatch = useDispatch();
 
@@ -30,11 +32,6 @@ export default function FriendInfo({ isOpen, close, name, date, email, status })
         dispatch(getGames(localStorage.token))
     }, []);
 
-    //Eliminar amigo
-    const deleteFriendFunction = (id, email) => {
-        dispatch(deleteFriends(id, email));
-    };
-
     //Actualiza el estado al eliminar
     useEffect(() => {
         setFriends({
@@ -43,15 +40,15 @@ export default function FriendInfo({ isOpen, close, name, date, email, status })
         });
     }, [userFriends]);
 
-    //Funcion para responder a una solicitud
-      const respondFriendFunction = (email, response) => {
-        dispatch(putFriendRequest(userProfile.id, email, response));
-        window.location.reload();
+    //Eliminar amigo
+    const deleteFriend = (id, email) => {
+        dispatch(deleteFriends(id, email));
     };
 
     return (
         <article className={styles.info + ' ' + conditionalOpen} onClick={close}>
             <div className={styles.container} onClick={handleContainerClick}>
+                <DeleteFriendButton delete={deleteFriend} name={name}/>
                 <button className={styles.close} onClick={close}> X </button>
                 <div className={styles.player}>
                     <img src={profileIcon} alt="" className={styles.profileIcon} />
