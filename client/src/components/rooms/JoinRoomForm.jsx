@@ -14,9 +14,10 @@ export default function JoinRoomForm (){
       let idGenerator = Math.floor(Math.random()*100000)
       socket.emit('joinRoom', (idGenerator))
       setIsJoining(false);
+      socket.on("fullRoom", (bool)=>setIsInRoom(bool))
       dispatch(setIsInRoom({isInRoom: true, roomId: idGenerator}))
     }
-
+ 
     return(
       <div>
         <form onSubmit={joinRoom}>

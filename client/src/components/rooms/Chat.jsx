@@ -17,7 +17,7 @@ export default function Chat ({name, roomId, typeofChat}) {
             setMsgs([...msgs, message]);
         })
 
-        return () => {socket.off()}
+        return () => {socket.off("messages")}
     }, [msgs])
 
     const divRef = useRef(null);
