@@ -27,7 +27,7 @@ export default function Friend({ name, date, id, profileId, deleteId, email, sta
       </div>
       {status === "pending" ? null : <button onClick={() => deleteFriend()}>X</button>}
       {/* Desplegar info detallada */}
-      <FriendInfo isOpen={isOpen} close={close} name={name} date={date} email={email} />
+      <FriendInfo isOpen={isOpen} close={close} name={name} date={date} email={email} status={status}/>
     </div>
   );
 };
