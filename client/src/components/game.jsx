@@ -54,7 +54,7 @@ export default function Game() {
         setPlayer({...player, betOptions});
       });
       socket.on("betting", bool=>{
-        setPlayer({...player, bet: bool});
+        setPlayer({...player, bet: bool, betOptions: []});
       });
       socket.on("playCard", async card=>{
         // await changeTurn();

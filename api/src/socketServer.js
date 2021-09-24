@@ -165,6 +165,29 @@ playerBhand.push(getCard(deck));
 return [playerAhand, playerBhand]
 }
 
+function envidoCount(hand){
+    let envido1 = new Set();
+    hand.forEach(card => {if(card.number < 10)return card;else card.number = 0; return card});
+    hand.forEach(card => envido1.add(card.suit));
+    console.log(envido1)
+    if(envido1.size === 3){
+        hand = hand.sort((a, b)=> (a.number > b.number) ? 1 : -1);
+        console.log(hand)
+        const cardEnvido = hand.pop();
+        return cardEnvido.number;
+    }
+    else if(envido1.size === 2){
+        hand.sort((a, b)=> (a.suit > b.suit)? 1: -1);
+        console.log(hand);
+        if(hand[0].suit === hand[1].suit) return(hand[0].number + hand[1].number + 20);
+        else return (hand[1].number + hand[2].number + 20);
+    }
+    else if(envido1.size === 1){
+        hand = hand.sort((a, b)=> (a.number < b.number) ? 1 : -1);
+        return (hand[0].number + hand[1].number + 20);
+    }
+}
+
 // function roundCheckWinner(cardA, cardB){
 //     if(cardA.truco < cardB.truco){
 //       table.games. .push("winner");
@@ -396,7 +419,6 @@ io.on('connection', function (socket) {
         else if(betPick === "quiero truco") {
             table.games[roomId].common.trucoBet = 2;
             io.in(roomId).emit("betting", false);
-            io.in(roomId).emit("bet", []);
         }
         else if(betPick === "no quiero truco") {
             if(table.games[roomId].playerOne.id ===playerId){
@@ -408,14 +430,10 @@ io.on('connection', function (socket) {
                 io.to(table.games[roomId].playerOne.id).emit("updateScore", 1);
             }  
             io.in(roomId).emit("betting", false);
-            io.in(roomId).emit("bet", []);
-        
         }
         else if(betPick === "quiero retruco") {
             table.games[roomId].common.trucoBet = 3;
             io.in(roomId).emit("betting", false);
-            io.in(roomId).emit("bet", []);
-            
         }
         else if(betPick === "no quiero retruco") {
             if(table.games[roomId].playerOne.id ===playerId){
@@ -426,16 +444,11 @@ io.on('connection', function (socket) {
                 table.games[roomId].playerOne.score+= 2;
                 io.to(table.games[roomId].playerOne.id).emit("updateScore", 2);
             } 
-            io.in(roomId).emit("bet", []);
-            io.in(roomId).emit("betting", false);
-        
-            
+            io.in(roomId).emit("betting", false);      
         }
         else if(betPick === "quiero valeCuatro") {
             table.games[roomId].common.trucoBet = 4;
             io.in(roomId).emit("betting", false);
-            io.in(roomId).emit("bet", []);
-         
         }
         else if(betPick === "no quiero valeCuatro") {
             if(table.games[roomId].playerOne.id ===playerId){
@@ -446,37 +459,16 @@ io.on('connection', function (socket) {
                 table.games[roomId].playerOne.score+= 3;
                 io.to(table.games[roomId].playerOne.id).emit("updateScore", 3);
             } 
-            io.in(roomId).emit("betting", false);
-            io.in(roomId).emit("bet", []);
-           
+            io.in(roomId).emit("betting", false);    
         }
         else if(betPick === "quiero envido1"){
-                table.games[roomId].common.cumulativeScore+= 2;
+                table.games[roomId].common.cumulativeScore = 2;
                 io.in(roomId).emit("betting", false);
-                io.in(roomId).emit("bet", []);
-
-                // console.log(table.games[roomId].playerOne.hand)
-                let envido1 = new Set();
-                table.games[roomId].playerOne.hand.forEach(card => {if(card.number < 10)return card;else card.number = 0; return card});
-                table.games[roomId].playerOne.hand.forEach(card => envido1.add(card.suit));
-                console.log(envido1)
-                if(envido1.size === 3){
-                    table.games[roomId].playerOne.handnd1 = table.games[roomId].playerOne.hand.sort((a, b)=> (a.number > b.number) ? 1 : -1);
-                    console.log(table.games[roomId].playerOne.hand)
-                    const cardEnvido = hand1.pop()
-                    console.log(cardEnvido);
-                }
-                else if(envido1.size === 2){
-                    table.games[roomId].playerOne.hand.sort((a, b)=> (a.suit > b.suit)? 1: -1);
-                    console.log(table.games[roomId].playerOne.hand);
-                    if(table.games[roomId].playerOne.hand[0].suit === table.games[roomId].playerOne.hand[1].suit) console.log(table.games[roomId].playerOne.hand[0].number + table.games[roomId].playerOne.hand[1].number + 20)
-                    else console.log(table.games[roomId].playerOne.hand[1].number + table.games[roomId].playerOne.hand[2].number + 20)
-                }
-                else if(envido1.size === 1){
-                    table.games[roomId].playerOne.hand = table.games[roomId].playerOne.hand.sort((a, b)=> (a.number < b.number) ? 1 : -1)
-                    console.log(table.games[roomId].playerOne.hand[0].number + table.games[roomId].playerOne.hand[1].number + 20)
-                }
-                  
+                const playerOneEnvido = envidoCount(table.games[roomId].playerOne.hand);
+                const playerTwoEnvido = envidoCount(table.games[roomId].playerTwo.hand);
+                if(playerOneEnvido > playerTwoEnvido) table.games[roomId].playerOne.score+=2;
+                else if(playerOneEnvido < playerTwoEnvido) table.games[roomId].playerTwo.score+=2;
+                else table.games[roomId].playerOne.starts? table.games[roomId].playerOne.score+=2 : table.games[roomId].playerTwo.score+=2;            
         }
         else if(betPick === "no quiero envido1"){
             if(table.games[roomId].playerOne.id ===playerId){
