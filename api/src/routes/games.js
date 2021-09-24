@@ -7,8 +7,6 @@ const router = Router();
 //Funcion para validar usuarios
 const {validarUsuario} = require('../controller/index')
 
-
-
 //Ruta para traer todos los juegos disputados
 router.get('/' , (req , res) => {
     Games.findAll()

@@ -57,8 +57,6 @@ const profileReducer = (state = INITIAL_STATE, {type, payload}) => {
     return ansPutRequest  
 
     case GET_HISTORY:
-      console.log("REDUCER", payload)
-
     return {
       ...state,
       userHistory: payload

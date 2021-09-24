@@ -36,8 +36,8 @@ const logReducer = (state = INITIAL_STATE, {type, payload}) => {
       };
     case LOG_OUT:
       // esto no va aca, es para no olvidarme
-      // window.localStorage.removeItem("token", token);
-      // window.localStorage.removeItem("isAuth", isAuth);
+      window.localStorage.removeItem("token");
+      window.localStorage.removeItem("isAuth");
       return {
         ...state,
         isAuth: false,

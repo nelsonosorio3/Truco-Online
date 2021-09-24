@@ -8,12 +8,11 @@ import profileIcon from '../img/profileIcon.png'
 
 export default function Friend({ name, date, id, profileId, deleteId, email, status }) {
 
-  const [isOpen, open, close] = useModal();
 
   const deleteFriend = () => {
-    console.log("user profile: ", profileId, "user delete: ",email);
-    deleteId(profileId, email);
-  };
+    deleteId(email)
+  }
+  
 
   return (
     <div className={styles.mainDiv}>
