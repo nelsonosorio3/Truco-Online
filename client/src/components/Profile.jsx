@@ -2,11 +2,14 @@ import React from 'react';
 import { useEffect, useState } from 'react';
 import { useDispatch , useSelector } from 'react-redux';
 import { useHistory } from 'react-router';
-
-
+import log from '../Redux/actions-types/logActions';
+import Modal from './Modal';
 import profileIcon from '../img/profileIcon.png';
 import profileActions from '../Redux/actions-types/profileActions';
 import styles from './styles/Profile.module.css';
+
+
+import { useModal } from '../hooks/useModal';
 
 /* Los dos siguientes imports agregados por guille */
 import Friend from './Friend';
@@ -19,12 +22,16 @@ import NavBar from './NavBar';
 export default function Profile(props) {
     
     const history = useHistory();
+    const { logOut } = log;
+
 
     //Estados del profileReducer
     const [friends, setFriends] = useState({
         sender: [],
         requested: []
     })
+
+    const [deleteFriend, setDeleteFriend] = useState("")
 
     //userProfile: es el estado del usuario logeado
     const { userProfile, userFriends, userHistory  } = useSelector(state => state.profileReducer);
@@ -49,10 +56,23 @@ export default function Profile(props) {
         })
     }, [userFriends])
 
-    //Funcion para eliminar un amigo
-    const deleteFriendFunction = (id, email) => {
-        console.log(id, email)
-        dispatch(deleteFriends(id, email))
+    const [isOpenModal, openModal, closeModal] = useModal();
+
+
+    const removeFriend = (flag) => {
+        if(flag){
+            dispatch(deleteFriends(userProfile.id, deleteFriend))
+        }
+        setDeleteFriend({
+            flag:false,
+            email: ""
+        })
+    }
+
+    // Funcion para eliminar un amigo
+    const deleteFriendFunction = (email) => {
+        setDeleteFriend(email)
+        openModal()
     }
 
     //Funcion para responder a una solicitud
@@ -62,17 +82,18 @@ export default function Profile(props) {
         window.location.reload()
     }
 
+
     //Funcion para hacer log out
     const logout = () => {
-        localStorage.removeItem('token')
-        localStorage.removeItem("isAuth")
+        dispatch(logOut()); 
         history.push("/")
     }
 
     return (
         <>
          <NavBar />
-         <button onClick={logout}>Log out</button>
+         <Modal isOpen={isOpenModal} closeModal={closeModal} removeFriend={removeFriend} deleteButtons={true}>Delete Confirmation</Modal>
+         <button className={styles.logoutBtn} onClick={logout}>Log out</button>
          <div className={styles.mainDiv}>
          </div>
         <div className={styles.subMainDiv}>
