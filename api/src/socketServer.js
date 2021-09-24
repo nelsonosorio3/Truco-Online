@@ -165,6 +165,7 @@ playerBhand.push(getCard(deck));
 return [playerAhand, playerBhand]
 }
 
+//regresa puntos para la apuesta envido de una mano
 function envidoCount(hand){
     let envido1 = new Set();
     hand.forEach(card => {if(card.number < 10)return card;else card.number = 0; return card});
@@ -462,7 +463,6 @@ io.on('connection', function (socket) {
             io.in(roomId).emit("betting", false);    
         }
         else if(betPick === "quiero envido1"){
-                table.games[roomId].common.cumulativeScore = 2;
                 io.in(roomId).emit("betting", false);
                 const playerOneEnvido = envidoCount(table.games[roomId].playerOne.hand);
                 const playerTwoEnvido = envidoCount(table.games[roomId].playerTwo.hand);
@@ -483,9 +483,12 @@ io.on('connection', function (socket) {
             io.in(roomId).emit("bet", []);
         }
         else if(betPick === "quiero envido2"){
-            table.games[roomId].common.cumulativeScore+= 4;
             io.in(roomId).emit("betting", false);
-            io.in(roomId).emit("bet", []);
+            const playerOneEnvido = envidoCount(table.games[roomId].playerOne.hand);
+            const playerTwoEnvido = envidoCount(table.games[roomId].playerTwo.hand);
+            if(playerOneEnvido > playerTwoEnvido) table.games[roomId].playerOne.score+=4;
+            else if(playerOneEnvido < playerTwoEnvido) table.games[roomId].playerTwo.score+=4;
+            else table.games[roomId].playerOne.starts? table.games[roomId].playerOne.score+=4 : table.games[roomId].playerTwo.score+=4; 
         }
         else if(betPick === "no quiero envido2"){
             if(table.games[roomId].playerOne.id ===playerId){
@@ -497,12 +500,10 @@ io.on('connection', function (socket) {
                 io.to(table.games[roomId].playerOne.id).emit("updateScore", 2);
             } 
             io.in(roomId).emit("betting", false);
-            io.in(roomId).emit("bet", []);
         }
         else if(betPick === "quiero realEnvido"){
             table.games[roomId].common.cumulativeScore+=3;
             io.in(roomId).emit("betting", false);
-            io.in(roomId).emit("bet", []);
         }
         else if(betPick === "no quiero realEnvido"){
             if(table.games[roomId].playerOne.id ===playerId){
@@ -514,13 +515,11 @@ io.on('connection', function (socket) {
                 io.to(table.games[roomId].playerOne.id).emit("updateScore", 1);
             } 
             io.in(roomId).emit("betting", false);
-            io.in(roomId).emit("bet", []);
         }
         else if(betPick === "quiero faltaEnvido"){
             const points = table.games[roomId].playerOne.score > table.games[roomId].playerTwo.score? table.games[roomId].playerOne.score : table.gmaes[roomId].playerTwo.score;
             table.games[roomId].common.cumulativeScore = (table.games[roomId].common.scoreToWin - points);
             io.in(roomId).emit("betting", false);
-            io.in(roomId).emit("bet", []);
         }
         else if(betPick === "no quiero faltaEnvido"){
             if(table.games[roomId].playerOne.id ===playerId){
@@ -532,12 +531,10 @@ io.on('connection', function (socket) {
                 io.to(table.games[roomId].playerOne.id).emit("updateScore", 1);
             } 
             io.in(roomId).emit("betting", false);
-            io.in(roomId).emit("bet", []);
         }
         else{
         table.games[roomId].playerOne.id === playerId? io.to(table.games[roomId].playerTwo.id).emit("changeTurn", true) : io.to(table.games[roomId].playerOne.id).emit("changeTurn", true);
         table.games[roomId].playerOne.id === playerId? io.to(table.games[roomId].playerTwo.id).emit("bet", table.betsList[betPick]) : io.to(table.games[roomId].playerOne.id).emit("bet", table.betsList[betPick]);
-        
         }
     });
     socket.on("playCard", async(card, roomId, playerId) => {
