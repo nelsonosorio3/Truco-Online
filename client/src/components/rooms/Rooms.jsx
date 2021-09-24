@@ -31,8 +31,8 @@ export default function Rooms() {
         //     <Chat roomId={roomId} typeofChat={'chatGame'}/>
         //   </div>
         // </div>
-        // history.push("/game")
-        <Game/>
+        history.push("/game")
+        // <Game/>
         :
         <div className={styles.subMainDiv_noGame}>
           <div className={styles.lobby}>

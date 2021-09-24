@@ -6,6 +6,7 @@ import Chat from './rooms/Chat';
 import { useHistory } from "react-router-dom";
 import { setIsInRoom } from '../Redux/actions-types/roomsActions';
 
+
 export default function Game() {
     const roomId = useSelector(store => store.roomsReducer.roomId); //traer el id de la sala en la que esta el jugador
     const [player, setPlayer] = useState({ //objeto del jugador en el cliente deberia tener solo propiedades que se usan para renderizar o limitar interacciones en el cliente
@@ -67,7 +68,7 @@ export default function Game() {
         history.push("/profile");
         alert("el juego termino, por testing esta a menos puntos");
         dispatch(setIsInRoom({isInRoom: false, roomId: null}))
-        //aqui deberia estar el dispatch con data que contiene playerOne, playerTwo, common para luego hacer el post desde actions 
+        //aqui deberia estar el dispatch con data que contiene playerOne, playerTwo, commonhacer el post a la api y agregar info de la partida.
       });
       return () =>{ //limpieza de eventos
         socket.off("gameStarts");
@@ -82,24 +83,26 @@ export default function Game() {
     },[player]);
     
     console.log(player) //para testing
-    return(<div style ={{display: "flex", flexDirection: "row", justifyContent: "space-between"}} id={styles.gameBackground}>
+    return(<div style ={{display: "flex", flexDirection: "row", justifyContent: "space-around"}} id={styles.gameBackground}>
             {/* <div className={styles.image}>  */}
             {/* </div> */}
             <div>
-            <ul style={{display: "flex", listStyleType: "none"}}>{[...Array(3-player.tableRival.length).keys()].map(card=><li key={card}><img src={`https://opengameart.org/sites/default/files/card%20back%20blue.png`} style={{width:"180px", height: "200px",paddingLeft: "60px", marginTop: "180px"}}/></li>)}</ul>
+            <ul style={{display: "flex", listStyleType: "none"}}>{[...Array(3-player.tableRival.length).keys()].map(card=><li key={card}><img src={`https://opengameart.org/sites/default/files/card%20back%20blue.png`} style={{width:"180px", height: "200px", marginLeft: "60px", marginTop: "180px"}}/></li>)}</ul>
             <div style ={{ display: "flex", flexDirection: "column" }}>
-            <ol>{player.tableRival?.map(card => <div key={card.id}style = {{ display: "flex", flexDirection: "row" }}><img src={`/cards/${card.id}.webp`} style={{width:"180px", height: "200px",paddingLeft: "60px"}}/></div>)}</ol>
-            <ol>{player.tablePlayer?.map(card => <div key={card.id}style = {{ display: "flex", flexDirection: "row" }} ><img src={`/cards/${card.id}.webp`} style={{width:"180px", height: "200px",paddingLeft: "60px"}}/></div>)}</ol>
+            <ol>{player.tableRival?.map(card => <div key={card.id}style = {{ display: "flex", flexDirection: "row" }}><img src={`/cards/${card.id}.webp`} style={{width:"180px", height: "200px",marginLeft: "60px"}}/></div>)}</ol>
+            <ol>{player.tablePlayer?.map(card => <div key={card.id}style = {{ display: "flex", flexDirection: "row" }} ><img src={`/cards/${card.id}.webp`} style={{width:"180px", height: "200px",marginLeft: "60px"}}/></div>)}</ol>
             </div>
             
-            <ul style={{display: "flex"}}>{player.hand?.map(card => <div  style={{display: "flex", padding: "40px"}} key={card.id} onClick={()=>playCard(card)}><img src={`/cards/${card.id}.webp`} style={{width:"180px", height: "200px",paddingLeft: "60px"}}/></div>)}</ul><br/>
+            <ul style={{display: "flex"}}>{player.hand?.map(card => <div  style={{display: "flex", padding: "40px"}} key={card.id} onClick={()=>playCard(card)}><img src={`/cards/${card.id}.webp`} style={{width:"180px", height: "200px"}}/></div>)}</ul><br/>
             
             
             </div>
             <div>
             <Chat name={"test"} roomId={roomId} typeofChat={"chatLobby"}/>
-            {player.betOptions?.map(betPick=><button onClick={bet} name={betPick} key={betPick} style = {{ padding: "30px" }}>{betPick}</button>)}<br/>
+            <div style ={{display: "flex", flexDirection: "row", flexWrap: "wrap"}}>
+            {player.betOptions?.map(betPick=><button onClick={bet} name={betPick} key={betPick} className={styles.btnBet}>{betPick}</button>)}<br/>
             </div>
-          </div>    //puese estilos inline solo por que son temporales
+            </div>
+          </div>    //puese estilos en line solo por que son temporales
     );
 };

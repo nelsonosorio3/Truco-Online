@@ -25,3 +25,30 @@
     width:"180px";
     height: "200px";
 }
+
+.btnBet {
+    width: 200px !important;
+    height: 90px;
+    border: none;
+    border-radius: 4px;
+    text-shadow: 0px 0px 10px rgb(0 0 0 / 50%);
+    /* padding: 20px 50px 20px 50px; */
+    font-family: 'Crayon' ;
+    font-size: 30px;
+    color: white;
+    outline: none;
+    cursor: pointer;
+    -webkit-transition: background-position .7s,box-shadow .4s;
+    transition: background-position .7s,box-shadow .4s;
+    background: transparent;
+    /* box-shadow: 0px 0px 0px 2px rgb(255 255 255 / 16%) inset, 0px 0px 10px 0px #e48a3c; */
+    background-image: url('../../img/button1.png');
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+    text-decoration: none;
+}
+
+.btnBet:hover {
+    transition: all 1s cubic-bezier(0.19, 1, 0.22, 1);
+    transform : scale(1.1);
+}
