@@ -396,6 +396,14 @@ io.on('connection', function (socket) {
         else if(betPick === "quiero truco") {
             table.games[roomId].common.trucoBet = 2;
             io.in(roomId).emit("betting", false);
+            if(table.games[roomId].playerOne.id ===playerId){
+                io.to(table.games[roomId].playerTwo.id).emit("changeTurn", true);
+                io.to(table.games[roomId].playerOne.id).emit("changeTurn", false);
+            }
+            else{
+                io.to(table.games[roomId].playerOne.id).emit("changeTurn", true);
+                io.to(table.games[roomId].playerTwo.id).emit("changeTurn", false);
+            }  
         }
         else if(betPick === "no quiero truco") {
             if(table.games[roomId].playerOne.id ===playerId){
@@ -603,6 +611,15 @@ io.on('connection', function (socket) {
                     };      
                 };
             };
+            //revisar si algun jugador ya gano, para testing es valor sale como 1 aunque deberia ser table.games[roomId].playerTwo.score
+            if(table.games[roomId].playerOne.score >= 1 || table.games[roomId].playerTwo.score >= table.games[roomId].common.scoreToWin){
+                io.to(table.games[roomId].playerOne.id).emit("gameEnds", (table.games[roomId]))
+                io.to(table.games[roomId].playerTwo.id).emit("gameEnds", (table.games[roomId]))
+                console.log(table.games)
+                delete table.games[roomId]
+                console.log(table.games)
+                return;
+            }
             if(winner){
                 //reiniciar estados de playerOne, Two y common para empezar siguiente ronda
                 table.games[roomId].playerOne = {...table.games[roomId].playerOne, turnNumber: 1,
@@ -661,7 +678,6 @@ io.on('connection', function (socket) {
             io.to(table.games[roomId].playerOne.id).emit("changeTurn", false);
         }
     });
-    socket.on("roundWin", (roomId, socketId)=>{
-        socket.to()
-    })
+  
+    
 });

@@ -3,6 +3,7 @@ import styles from './styles/game.module.css';
 import socket from './socket';
 import {useDispatch, useSelector} from 'react-redux'
 import Chat from './rooms/Chat';
+import { useHistory } from "react-router-dom";
 
 export default function Game() {
     const roomId = useSelector(store => store.roomsReducer.roomId); //traer el id de la sala en la que esta el jugador
@@ -20,7 +21,7 @@ export default function Game() {
         roundResults: [], //deberia contener el resultado de la mano por ejemplo ["tie", "win", "loss"]
         starts: false, // referencia para cambiar turnos al finalizar ronda
       });
-    
+    const history = useHistory();
     const bet = e => { //emite la apuesta
       if(player.isTurn){
         socket.emit("bet", e.target.name, roomId, player.id);
@@ -59,6 +60,12 @@ export default function Game() {
       socket.on("changeTurn", bool=>{  //cambia turno entre jugadores
         setPlayer({...player, isTurn: bool});
       });
+      socket.on("gameEnds", data=>{
+        console.log("termino");
+        history.push("/");
+        alert("el juego termino, por testing esta a menos puntos");
+        //aqui deberia estar el dispatch con data que contiene playerOne, playerTwo, common para luego hacer el post desde actions 
+      });
       return () =>{ //limpieza de eventos
         socket.off("gameStarts");
         socket.off('newRoundStarts');
@@ -67,6 +74,7 @@ export default function Game() {
         socket.off("playerOrder");
         socket.off("betting");
         socket.off("changeTurn");
+        socket.off("gameEnds");
       };
     },[player]);
 
@@ -76,7 +84,7 @@ export default function Game() {
             {/* </div> */}
             <div>
             {player.betOptions?.map(betPick=><button onClick={bet} name={betPick} key={betPick} style = {{ padding: "30px" }}>{betPick}</button>)}<br/>
-            <ul style={{display: "flex"}}>{player.hand?.map(card => <div  style={{display: "flex", paddingLeft: "40px"}} key={card.id} onClick={()=>playCard(card)}><h2>{card.suit}</h2><h2>{card.number}</h2></div>)}</ul><br/>
+            <ul style={{display: "flex"}}>{player.hand?.map(card => <div  style={{display: "flex", padding: "40px"}} key={card.id} onClick={()=>playCard(card)}><h2>{card.suit}</h2><h2>{card.number}</h2></div>)}</ul><br/>
             <ol style={{display: "flex"}}>{[...Array(3-player.tableRival.length).keys()].map(card=><li key={card}><img src={`https://opengameart.org/sites/default/files/card%20back%20blue.png`} style={{width:"40%"}}/></li>)}</ol>
             <div style ={{ display: "flex", flexDirection: "row" }}>
             <ol>{player.tableRival?.map(card => <li key={card.id}style = {{ display: "flex", flexDirection: "row" }}><h2>{card.suit}</h2><h2>{card.number}</h2></li>)}</ol>
