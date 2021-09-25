@@ -98,9 +98,10 @@ export default function Game() {
             
             
             </div>
-            <div>
+            <div id={stylesGame.points}></div>
+            <div id={stylesGame.containerChat}>
             <Chat name={"test"} roomId={roomId}/>
-            <div style ={{display: "flex", flexDirection: "row", flexWrap: "wrap"}} id={stylesGame.playerHand}>
+            <div className={"betContainer"} style ={{}}>
             {player.betOptions?.map(betPick=><button onClick={bet} name={betPick} key={betPick} className={player.isTurn? stylesGame.btnBet : stylesGame.btnBetNoTurn}>{betPick}</button>)}<br/>
             </div>
             </div>
