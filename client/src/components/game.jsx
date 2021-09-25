@@ -51,7 +51,7 @@ export default function Game() {
         setPlayer({...player, betOptions});
       });
       socket.on("betting", bool=>{  //cambia el estado de si se esta apostando para bloquear jugar cartas hasta resolverlo
-        setPlayer({...player, bet: bool, betOptions: []});
+        setPlayer({...player, bet: false, betOptions: [], isTurn: !player.isTurn});
       });
       socket.on("playCard", async card=>{  //escucha carta jugada por rival
         // await changeTurn();

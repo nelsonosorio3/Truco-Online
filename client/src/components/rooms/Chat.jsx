@@ -7,12 +7,6 @@ export default function Chat ({name, roomId, typeofChat}) {
     const [msg, setMsg] = useState('');
     const [msgs, setMsgs] = useState([]);
 
-    const onEnterPress = (e) =>{
-        if(e.KeyCode === 13 && e.shiftkey == false){
-            submit(e)
-        }
-    }
-
     useEffect(() => {
         socket.emit('connected', name);
     }, [name])
