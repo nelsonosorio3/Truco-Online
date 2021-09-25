@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import styles from './styles/game.module.css';
+import stylesGame from './styles/game.module.css';
 import socket from './socket';
 import {useDispatch, useSelector} from 'react-redux'
 import Chat from './rooms/Chat';
 import { useHistory } from "react-router-dom";
+import { setIsInRoom } from '../Redux/actions-types/roomsActions';
+
 
 export default function Game() {
     const roomId = useSelector(store => store.roomsReducer.roomId); //traer el id de la sala en la que esta el jugador
@@ -22,6 +24,7 @@ export default function Game() {
         starts: false, // referencia para cambiar turnos al finalizar ronda
       });
     const history = useHistory();
+    const dispatch = useDispatch();
     const bet = e => { //emite la apuesta
       if(player.isTurn){
         socket.emit("bet", e.target.name, roomId, player.id);
@@ -48,7 +51,7 @@ export default function Game() {
         setPlayer({...player, betOptions});
       });
       socket.on("betting", bool=>{  //cambia el estado de si se esta apostando para bloquear jugar cartas hasta resolverlo
-        setPlayer({...player, bet: bool, betOptions: []});
+        setPlayer({...player, bet: false, betOptions: [], isTurn: !player.isTurn});
       });
       socket.on("playCard", async card=>{  //escucha carta jugada por rival
         // await changeTurn();
@@ -64,7 +67,8 @@ export default function Game() {
         console.log("termino");
         history.push("/profile");
         alert("el juego termino, por testing esta a menos puntos");
-        //aqui deberia estar el dispatch con data que contiene playerOne, playerTwo, common para luego hacer el post desde actions 
+        dispatch(setIsInRoom({isInRoom: false, roomId: null}))
+        //aqui deberia estar el dispatch con data que contiene playerOne, playerTwo, commonhacer el post a la api y agregar info de la partida.
       });
       return () =>{ //limpieza de eventos
         socket.off("gameStarts");
@@ -79,19 +83,35 @@ export default function Game() {
     },[player]);
     
     console.log(player) //para testing
-    return(<div style ={{display: "flex", flexDirection: "row", justifyContent: "space-between", paddingTop: "150px"}}>
+    return(<div id={stylesGame.gameBackground}>
             {/* <div className={styles.image}>  */}
             {/* </div> */}
             <div>
-            {player.betOptions?.map(betPick=><button onClick={bet} name={betPick} key={betPick} style = {{ padding: "30px" }}>{betPick}</button>)}<br/>
-            <ul style={{display: "flex"}}>{player.hand?.map(card => <div  style={{display: "flex", padding: "40px"}} key={card.id} onClick={()=>playCard(card)}><h2>{card.suit}</h2><h2>{card.number}</h2></div>)}</ul><br/>
-            <ol style={{display: "flex"}}>{[...Array(3-player.tableRival.length).keys()].map(card=><li key={card}><img src={`https://opengameart.org/sites/default/files/card%20back%20blue.png`} style={{width:"40%"}}/></li>)}</ol>
-            <div style ={{ display: "flex", flexDirection: "row" }}>
-            <ol>{player.tableRival?.map(card => <li key={card.id}style = {{ display: "flex", flexDirection: "row" }}><h2>{card.suit}</h2><h2>{card.number}</h2></li>)}</ol>
-            <ol>{player.tablePlayer?.map(card => <div key={card.id}style = {{ display: "flex", flexDirection: "row" }}><h2>{card.suit}</h2><h2>{card.number}</h2></div>)}</ol>
+            <ol >{[...Array(3-player.tableRival.length).keys()].map(card=><div key={card} id={stylesGame.rivalHand}><img src={`/cards/0.webp`} className={stylesGame.cardsImg}/></div>)}</ol>
+            <div id={stylesGame.cardsContainer}>
+              
+            <ol>{player.tableRival?.map(card => <div key={card.id} className={stylesGame.tableCards}><img src={`/cards/${card.id}.webp`}  className={stylesGame.cardsImg}/></div>)}</ol>
+            <ol>{player.tablePlayer?.map(card => <div key={card.id} className={stylesGame.tableCards}><img src={`/cards/${card.id}.webp`}  className={stylesGame.cardsImg}/></div>)}</ol>
+            </div>
+            
+            <ol>{player.hand?.map(card => <div key={card.id} onClick={()=>playCard(card)} id={player.isTurn? stylesGame.playerHandActive : stylesGame.playerHand}><img src={`/cards/${card.id}.webp`}  className={stylesGame.cardsImg}/></div>)}</ol><br/>
+            </div>
+
+            <div id={stylesGame.points}>
+              <div><h2>{player.name}</h2>
+              {player.score? <img src={player.score? `/points/${player.score}.png.webp`: null}/> : <div></div>}
+              </div>
+              <div><h2>Opponent</h2>
+                {/* <img src={player.score? `/points/${player.score}.png.webp`: null}/> */}
+              </div>
+            </div>
+
+            <div id={stylesGame.containerChat}>
+            <Chat name={"test"} roomId={roomId}/>
+            <div className={"betContainer"}>
+            {player.betOptions?.map(betPick=><button onClick={bet} name={betPick} key={betPick} className={player.isTurn? stylesGame.btnBet : stylesGame.btnBetNoTurn}>{betPick}</button>)}<br/>
             </div>
             </div>
-            <Chat name={"test"} roomId={roomId} typeofChat={"chatLobby"}/>
-          </div>    //puese estilos inline solo por que son temporales
+          </div> 
     );
 };
