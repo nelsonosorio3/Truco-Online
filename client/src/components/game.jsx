@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import styles from './styles/game.module.css';
+import stylesGame from './styles/game.module.css';
 import socket from './socket';
 import {useDispatch, useSelector} from 'react-redux'
 import Chat from './rooms/Chat';
@@ -83,26 +83,32 @@ export default function Game() {
     },[player]);
     
     console.log(player) //para testing
-    return(<div style ={{display: "flex", flexDirection: "row", justifyContent: "space-around"}} id={styles.gameBackground}>
+    return(<div id={stylesGame.gameBackground}>
             {/* <div className={styles.image}>  */}
             {/* </div> */}
             <div>
-            <ul style={{display: "flex", listStyleType: "none"}}>{[...Array(3-player.tableRival.length).keys()].map(card=><li key={card}><img src={`https://opengameart.org/sites/default/files/card%20back%20blue.png`} style={{width:"180px", height: "200px", marginLeft: "60px", marginTop: "180px"}}/></li>)}</ul>
+            <ol id={stylesGame.rivalHand}>{[...Array(3-player.tableRival.length).keys()].map(card=><div key={card}><img src={`/cards/0.webp`} className={stylesGame.cardsImg}/></div>)}</ol>
             <div style ={{ display: "flex", flexDirection: "column" }}>
-            <ol style ={{ display: "flex", flexDirection: "row" }}>{player.tableRival?.map(card => <div key={card.id}style = {{ display: "flex", flexDirection: "row" }}><img src={`/cards/${card.id}.webp`} style={{width:"180px", height: "200px",marginLeft: "60px"}}/></div>)}</ol>
-            <ol style ={{ display: "flex", flexDirection: "row" }}>{player.tablePlayer?.map(card => <div key={card.id}style = {{ display: "flex", flexDirection: "row" }} ><img src={`/cards/${card.id}.webp`} style={{width:"180px", height: "200px",marginLeft: "60px"}}/></div>)}</ol>
+              {(player.tableRival.length || player.tablePlayer.length)?
+            <>
+            <ol>{player.tableRival?.map(card => <div key={card.id}style = {{ display: "flex", flexDirection: "row" }}><img src={`/cards/${card.id}.webp`}  className={stylesGame.cardsImg}/></div>)}</ol>
+            <ol>{player.tablePlayer?.map(card => <div key={card.id}style = {{ display: "flex", flexDirection: "row" }} ><img src={`/cards/${card.id}.webp`}  className={stylesGame.cardsImg}/></div>)}</ol>
+            </>
+            :
+            <div id={stylesGame.emptySpace}></div>
+              }
             </div>
             
-            <ul style={{display: "flex"}}>{player.hand?.map(card => <div  style={{display: "flex", padding: "40px"}} key={card.id} onClick={()=>playCard(card)}><img src={`/cards/${card.id}.webp`} style={{width:"180px", height: "200px"}}/></div>)}</ul><br/>
+            <ol>{player.hand?.map(card => <div  style={{display: "flex", padding: "40px"}} key={card.id} onClick={()=>playCard(card)}><img src={`/cards/${card.id}.webp`}  className={stylesGame.cardsImg}/></div>)}</ol><br/>
             
             
             </div>
             <div>
             <Chat name={"test"} roomId={roomId} typeofChat={"chatLobby"}/>
             <div style ={{display: "flex", flexDirection: "row", flexWrap: "wrap"}}>
-            {player.betOptions?.map(betPick=><button onClick={bet} name={betPick} key={betPick} className={styles.btnBet}>{betPick}</button>)}<br/>
+            {player.betOptions?.map(betPick=><button onClick={bet} name={betPick} key={betPick} className={stylesGame.btnBet}>{betPick}</button>)}<br/>
             </div>
             </div>
-          </div>    //puese estilos en line solo por que son temporales
+          </div>   
     );
 };

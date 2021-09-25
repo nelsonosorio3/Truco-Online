@@ -1,16 +1,41 @@
-.image {
-    background-image: url('../../img/game.jpg');
+#gameBackground {
+    background-image: url('../../img/gameBackground.webp');
     width: 100vw;
     height: 100vh;
-
     display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: space-evenly;
     background-size: 100% 100%;
     background-repeat: no-repeat;
+    
 }
 
-#gameBackground{
+.cardsImg {
+    width: 136px;
+    height: 190px;
+}
+
+ol{
+    display: flex;
+    padding: 0;
+    justify-content: center;
+}
+
+ol div{
+    /* padding: 30px; */
+}
+
+#rivalHand{
+    /* position: relative;
+    top: 100px; */
+}
+#emptySpace{
+    height: 420px;
+    text-align: center;
+    display: block;
+    visibility: hidden;
+}
+/* #gameBackground{
     background-image: url('../../img/gameBackground.webp');
     width: 100vw;
     height: 100vh;
@@ -19,9 +44,10 @@
     justify-content: center;
     background-size: 100% 100%;
     background-repeat: no-repeat;   
-}
+} */
 
 #playerCard{
+    
     width:"180px";
     height: "200px";
 }
