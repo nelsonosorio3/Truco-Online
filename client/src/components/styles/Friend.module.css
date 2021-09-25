@@ -25,6 +25,10 @@
 
 }
 
+.name:hover {
+  cursor: pointer;
+}
+
 .text{
   align-self: center;
 }

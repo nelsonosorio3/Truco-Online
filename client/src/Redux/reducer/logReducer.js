@@ -1,14 +1,10 @@
 import { LOG_OUT, LOG_IN } from '../actions/index';
 
 const INITIAL_STATE = {
-  isAuth: false, // sacar
+  isAuth: false, 
   user: null,
   id: null,
   message: ''
-};
-
-const saveInLocalStorage = () => {
-  
 };
 
 const logReducer = (state = INITIAL_STATE, {type, payload}) => {
@@ -40,8 +36,8 @@ const logReducer = (state = INITIAL_STATE, {type, payload}) => {
       };
     case LOG_OUT:
       // esto no va aca, es para no olvidarme
-      // window.localStorage.removeItem("token", token);
-      // window.localStorage.removeItem("isAuth", isAuth);
+      window.localStorage.removeItem("token");
+      window.localStorage.removeItem("isAuth");
       return {
         ...state,
         isAuth: false,
