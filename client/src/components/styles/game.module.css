@@ -21,38 +21,22 @@ ol{
     justify-content: center;
 }
 
-ol div{
-    /* padding: 30px; */
+#cardsContainer{
+    min-height: 400px;
 }
 
-#rivalHand{
-    /* position: relative;
-    top: 100px; */
-}
-#emptySpace{
-    height: 420px;
-    text-align: center;
-    display: block;
-    visibility: hidden;
-}
-/* #gameBackground{
-    background-image: url('../../img/gameBackground.webp');
-    width: 100vw;
-    height: 100vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background-size: 100% 100%;
-    background-repeat: no-repeat;   
-} */
 
-#playerCard{
-    
-    width:"180px";
-    height: "200px";
+#rivalHand, #playerHand, #playerHandActive, .tableCards{
+    padding: 5px 20px 5px 20px
 }
 
-.btnBet {
+
+#playerHandActive img:hover{
+    transform : scale(1.1);
+    cursor: pointer;
+}
+
+.btnBet, .btnBetNoTurn {
     width: 200px !important;
     height: 90px;
     border: none;
@@ -77,4 +61,7 @@ ol div{
 .btnBet:hover {
     transition: all 1s cubic-bezier(0.19, 1, 0.22, 1);
     transform : scale(1.1);
+}
+.btnBetNoTurn:hover{
+    cursor: default;
 }

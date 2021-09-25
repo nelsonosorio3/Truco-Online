@@ -87,28 +87,23 @@ export default function Game() {
             {/* <div className={styles.image}>  */}
             {/* </div> */}
             <div>
-            <ol id={stylesGame.rivalHand}>{[...Array(3-player.tableRival.length).keys()].map(card=><div key={card}><img src={`/cards/0.webp`} className={stylesGame.cardsImg}/></div>)}</ol>
-            <div style ={{ display: "flex", flexDirection: "column" }}>
-              {(player.tableRival.length || player.tablePlayer.length)?
-            <>
-            <ol>{player.tableRival?.map(card => <div key={card.id}style = {{ display: "flex", flexDirection: "row" }}><img src={`/cards/${card.id}.webp`}  className={stylesGame.cardsImg}/></div>)}</ol>
-            <ol>{player.tablePlayer?.map(card => <div key={card.id}style = {{ display: "flex", flexDirection: "row" }} ><img src={`/cards/${card.id}.webp`}  className={stylesGame.cardsImg}/></div>)}</ol>
-            </>
-            :
-            <div id={stylesGame.emptySpace}></div>
-              }
+            <ol >{[...Array(3-player.tableRival.length).keys()].map(card=><div key={card} id={stylesGame.rivalHand}><img src={`/cards/0.webp`} className={stylesGame.cardsImg}/></div>)}</ol>
+            <div id={stylesGame.cardsContainer}>
+              
+            <ol>{player.tableRival?.map(card => <div key={card.id}style = {{ display: "flex", flexDirection: "row" }} className={stylesGame.tableCards}><img src={`/cards/${card.id}.webp`}  className={stylesGame.cardsImg}/></div>)}</ol>
+            <ol>{player.tablePlayer?.map(card => <div key={card.id}style = {{ display: "flex", flexDirection: "row" }} className={stylesGame.tableCards}><img src={`/cards/${card.id}.webp`}  className={stylesGame.cardsImg}/></div>)}</ol>
             </div>
             
-            <ol>{player.hand?.map(card => <div  style={{display: "flex", padding: "40px"}} key={card.id} onClick={()=>playCard(card)}><img src={`/cards/${card.id}.webp`}  className={stylesGame.cardsImg}/></div>)}</ol><br/>
+            <ol>{player.hand?.map(card => <div key={card.id} onClick={()=>playCard(card)} id={player.isTurn? stylesGame.playerHandActive : stylesGame.playerHand}><img src={`/cards/${card.id}.webp`}  className={stylesGame.cardsImg}/></div>)}</ol><br/>
             
             
             </div>
             <div>
             <Chat name={"test"} roomId={roomId} typeofChat={"chatLobby"}/>
-            <div style ={{display: "flex", flexDirection: "row", flexWrap: "wrap"}}>
-            {player.betOptions?.map(betPick=><button onClick={bet} name={betPick} key={betPick} className={stylesGame.btnBet}>{betPick}</button>)}<br/>
+            <div style ={{display: "flex", flexDirection: "row", flexWrap: "wrap"}} id={stylesGame.playerHand}>
+            {player.betOptions?.map(betPick=><button onClick={bet} name={betPick} key={betPick} className={player.isTurn? stylesGame.btnBet : stylesGame.btnBetNoTurn}>{betPick}</button>)}<br/>
             </div>
             </div>
-          </div>   
+          </div> 
     );
 };
