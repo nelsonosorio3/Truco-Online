@@ -23,6 +23,7 @@ ol{
 
 #cardsContainer{
     min-height: 400px;
+    min-width: 550px;
 }
 
 
@@ -73,6 +74,26 @@ ol{
     height: 800px;
     background-size: 100% 100%;
     margin: 20px;
+    display: flex;
+    flex-direction: row;
+    font-family: 'Crayon' ;
+    color: white;
+}
+#points div{
+    width: 50%;
+}
+#points div h2{
+    text-align: center;
+    padding: 10%;
+}
+#points div img{
+    width: 100%;
+    height: 80%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: none;
+    margin-top: 30px;
 }
 
 #containerChat{

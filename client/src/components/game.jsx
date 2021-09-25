@@ -90,18 +90,25 @@ export default function Game() {
             <ol >{[...Array(3-player.tableRival.length).keys()].map(card=><div key={card} id={stylesGame.rivalHand}><img src={`/cards/0.webp`} className={stylesGame.cardsImg}/></div>)}</ol>
             <div id={stylesGame.cardsContainer}>
               
-            <ol>{player.tableRival?.map(card => <div key={card.id}style = {{ display: "flex", flexDirection: "row" }} className={stylesGame.tableCards}><img src={`/cards/${card.id}.webp`}  className={stylesGame.cardsImg}/></div>)}</ol>
-            <ol>{player.tablePlayer?.map(card => <div key={card.id}style = {{ display: "flex", flexDirection: "row" }} className={stylesGame.tableCards}><img src={`/cards/${card.id}.webp`}  className={stylesGame.cardsImg}/></div>)}</ol>
+            <ol>{player.tableRival?.map(card => <div key={card.id} className={stylesGame.tableCards}><img src={`/cards/${card.id}.webp`}  className={stylesGame.cardsImg}/></div>)}</ol>
+            <ol>{player.tablePlayer?.map(card => <div key={card.id} className={stylesGame.tableCards}><img src={`/cards/${card.id}.webp`}  className={stylesGame.cardsImg}/></div>)}</ol>
             </div>
             
             <ol>{player.hand?.map(card => <div key={card.id} onClick={()=>playCard(card)} id={player.isTurn? stylesGame.playerHandActive : stylesGame.playerHand}><img src={`/cards/${card.id}.webp`}  className={stylesGame.cardsImg}/></div>)}</ol><br/>
-            
-            
             </div>
-            <div id={stylesGame.points}></div>
+
+            <div id={stylesGame.points}>
+              <div><h2>{player.name}</h2>
+              {player.score? <img src={player.score? `/points/${player.score}.png.webp`: null}/> : <div></div>}
+              </div>
+              <div><h2>Opponent</h2>
+                {/* <img src={player.score? `/points/${player.score}.png.webp`: null}/> */}
+              </div>
+            </div>
+
             <div id={stylesGame.containerChat}>
             <Chat name={"test"} roomId={roomId}/>
-            <div className={"betContainer"} style ={{}}>
+            <div className={"betContainer"}>
             {player.betOptions?.map(betPick=><button onClick={bet} name={betPick} key={betPick} className={player.isTurn? stylesGame.btnBet : stylesGame.btnBetNoTurn}>{betPick}</button>)}<br/>
             </div>
             </div>
