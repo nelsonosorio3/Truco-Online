@@ -8,12 +8,20 @@
 }
 
 .chatGame{
-    width: 20%;
-    min-height: 50vh;
+    width: 70%;
+    min-height: 10vh;
     max-height: 50vh;
-    overflow: scroll;
-    border: 2px solid black;
+    overflow:hidden;
+    border: 5px solid rgb(90, 91, 93);
     background-color: rgba(255, 255, 255, 0.6);
+    resize: none;
+    outline: none;
+    appearance: none;
+}
+
+.writeMessageGame{
+    display: flex;
+    width: 70%;
 }
 
 .writeMessage{

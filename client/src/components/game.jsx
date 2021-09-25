@@ -99,7 +99,7 @@ export default function Game() {
             
             </div>
             <div>
-            <Chat name={"test"} roomId={roomId} typeofChat={"chatLobby"}/>
+            <Chat name={"test"} roomId={roomId}/>
             <div style ={{display: "flex", flexDirection: "row", flexWrap: "wrap"}} id={stylesGame.playerHand}>
             {player.betOptions?.map(betPick=><button onClick={bet} name={betPick} key={betPick} className={player.isTurn? stylesGame.btnBet : stylesGame.btnBetNoTurn}>{betPick}</button>)}<br/>
             </div>
