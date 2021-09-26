@@ -9,7 +9,7 @@ import profileIcon from '../img/profileIcon.png';
 
 export default function NavBar() {
 
-    const { user } = useSelector(state => state.logReducer);
+    const username = window.localStorage.getItem('user');
 
     const [isAuth, setIsAuth] = useState(false); 
 
@@ -39,7 +39,7 @@ export default function NavBar() {
                     isAuth ? 
                     <Link to='/profile' className={styles.links}>
                         <img src={profileIcon} alt="profile picture" />
-                        {`Hi, ${user}!`}
+                        {`Hi, ${username}!`}
                     </Link>
                     :
                     null
