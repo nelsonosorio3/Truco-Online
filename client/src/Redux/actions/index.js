@@ -11,7 +11,22 @@ export const GET_FRIENDS = 'GET_FRIENDS';
 export const GET_HISTORY = 'GET_HISTORY';
 export const DELETE_FRIEND = 'DELETE_FRIEND';
 export const PUT_FRIEND_REQUEST = 'PUT_FRIEND_REQUEST';
-
+//AdminPanel
+export const GET_USERS = "GET_USERS";
+export const FILTER_BY_NAME = "FILTER_BY_NAME";
+export const FILTER_BY_ID = "FILTER_BY_ID";
+export const FILTER_BY_EMAIL = "FILTER_BY_EMAIL";
+export const ORDER_BY_GAMES_ASC = "ORDER_BY_GAMES_ASC";
+export const ORDER_BY_GAMES_DESC = "ORDER_BY_GAMES_DESC";
+export const ORDER_BY_WINS_ASC = "ORDER_BY_WINS_ASC";
+export const ORDER_BY_WINS_DESC = "ORDER_BY_WINS_DESC";
+export const ORDER_BY_LOST_ASC = "ORDER_BY_LOST_ASC";
+export const ORDER_BY_LOST_DESC = "ORDER_BY_LOST_DESC";
+export const ORDER_BY_USER_SINCE_ASC = "ORDER_BY_USER_SINCE_ASC"
+export const ORDER_BY_USER_SINCE_DESC = "ORDER_BY_USER_SINCE_DESC"
+export const GO_TO_N_PAGE = "GO_TO_N_PAGE";
+export const SET_USERS_PER_PAGE = "SET_USERS_PER_PAGE";
 
 export const IS_IN_ROOM = 'ADD_ROOM'
 export const IS_IN_TOURNAMENT = 'IS_IN_TOURNAMENT'
+
