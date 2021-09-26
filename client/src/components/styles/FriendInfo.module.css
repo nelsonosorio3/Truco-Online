@@ -80,11 +80,15 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-
+    
     background-color: var(--transBlackColor);
     color: #dedede;
     padding: 2pc 15pc 2pc 15pc;
     border-radius: var(--bRadius);
+}
+
+.playerInfo p {
+    font-size: 1.5rem;
 }
 
 .playerInfo_Games {
