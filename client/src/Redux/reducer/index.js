@@ -15,7 +15,7 @@ const rootReducer = combineReducers({
   logReducer,
   profileReducer,
   roomsReducer,
-  adminPanelReducer
+  adminPanelReducer,
   tournamentsReducer,
 });
 

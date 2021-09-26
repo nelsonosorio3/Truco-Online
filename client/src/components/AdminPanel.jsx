@@ -101,8 +101,11 @@ export default function AdminPanel() {
 
 
   return (
+
+
     <div className={styles.mainContainer}>
-      <NavBar />
+      <div><NavBar /></div>
+
       <div className={styles.tableContainer}>
         <h2>Usuarios registrados</h2>
 
