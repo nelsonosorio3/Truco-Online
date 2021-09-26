@@ -12,7 +12,9 @@ export default function Game() {
     const [player, setPlayer] = useState({ //objeto del jugador en el cliente deberia tener solo propiedades que se usan para renderizar o limitar interacciones en el cliente
         id: 1, // socket id del jugador
         name: "player", // la idea seria que sea el nombre del profile
+        nameRival: "otherPlayer",
         score: 0,  // puntaje que lleva
+        scoreRival: 0,
         hand: [], // las 3 cartas de la ronda
         turnNumber: 1, // numero de turno
         isTurn: false, //para que pueda o no hacer click
@@ -46,9 +48,9 @@ export default function Game() {
       socket.on("newRoundStarts", player=>{  //escucha para empezar nueva partida
         setPlayer(player);
       });
-      socket.on("bet", async betOptions=>{  //trae la apuesta segun turno
+      socket.on("bet", async (betOptions, bool)=>{  //trae la apuesta segun turno
         // await changeTurn();
-        setPlayer({...player, betOptions});
+        setPlayer({...player, betOptions, bet: bool});
       });
       socket.on("betting", bool=>{  //cambia el estado de si se esta apostando para bloquear jugar cartas hasta resolverlo
         setPlayer({...player, bet: false, betOptions: [], isTurn: !player.isTurn});
@@ -60,9 +62,15 @@ export default function Game() {
       socket.on("updateScore", score=>{  //trae cambios en el puntaje
         setPlayer({...player, score: player.score + score})
       });
-      socket.on("changeTurn", bool=>{  //cambia turno entre jugadores
+      socket.on("changeTurn", (bool)=>{  //cambia turno entre jugadores
         setPlayer({...player, isTurn: bool});
       });
+      socket.on("quieroTruco", (bool)=>{
+        setPlayer({...player, isTurn: bool, bet: false, betOptions: []});
+      });
+      socket.on("quieroEnvido1", (bool)=>{
+        setPlayer({...player, isTurn: bool, bet:false, betOptions: []});
+      })
       socket.on("gameEnds", data=>{
         console.log("termino");
         history.push("/profile");
@@ -79,6 +87,7 @@ export default function Game() {
         socket.off("betting");
         socket.off("changeTurn");
         socket.off("gameEnds");
+        socket.off("quieroTruco");
       };
     },[player]);
     
@@ -94,15 +103,15 @@ export default function Game() {
             <ol>{player.tablePlayer?.map(card => <div key={card.id} className={stylesGame.tableCards}><img src={`/cards/${card.id}.webp`}  className={stylesGame.cardsImg}/></div>)}</ol>
             </div>
             
-            <ol>{player.hand?.map(card => <div key={card.id} onClick={()=>playCard(card)} id={player.isTurn? stylesGame.playerHandActive : stylesGame.playerHand}><img src={`/cards/${card.id}.webp`}  className={stylesGame.cardsImg}/></div>)}</ol><br/>
+            <ol>{player.hand?.map(card => <div key={card.id} onClick={()=>playCard(card)} id={player.isTurn && !player.bet? stylesGame.playerHandActive : stylesGame.playerHand}><img src={`/cards/${card.id}.webp`}  className={stylesGame.cardsImg}/></div>)}</ol><br/>
             </div>
 
             <div id={stylesGame.points}>
               <div><h2>{player.name}</h2>
-              {player.score? <img src={player.score? `/points/${player.score}.png.webp`: null}/> : <div></div>}
+                {player.score? <img src={player.score<=30? `/points/${player.score}.png.webp` : "/points/30.png.webp"}/> : <div></div>}
               </div>
-              <div><h2>Opponent</h2>
-                {/* <img src={player.score? `/points/${player.score}.png.webp`: null}/> */}
+              <div><h2>{player.nameRival}</h2>
+              {player.scoreRival? <img src={player.scoreRival<=30? `/points/${player.scoreRival}.png.webp` : "/points/30.png.webp"}/> : <div></div>}
               </div>
             </div>
 

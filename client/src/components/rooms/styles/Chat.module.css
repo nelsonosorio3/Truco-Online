@@ -18,6 +18,9 @@
     resize: none;
     outline: none;
     appearance: none;
+    font-size: larger;
+    font-weight: bolder;
+    font-family: 'Courier New', Courier, monospace;
 }
 
 .chatContainer{
