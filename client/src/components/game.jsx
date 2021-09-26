@@ -59,8 +59,8 @@ export default function Game() {
         // await changeTurn();
         setPlayer({...player, tableRival:  [...player.tableRival, card], isTurn: true}); 
       });
-      socket.on("updateScore", score=>{  //trae cambios en el puntaje
-        setPlayer({...player, score: player.score + score})
+      socket.on("updateScore", (score, bool) =>{  //trae cambios en el puntaje
+        setPlayer({...player, score: player.score + score, bet: false, isTurn: bool})
       });
       socket.on("changeTurn", (bool)=>{  //cambia turno entre jugadores
         setPlayer({...player, isTurn: bool});
@@ -68,16 +68,19 @@ export default function Game() {
       socket.on("quieroTruco", (bool)=>{
         setPlayer({...player, isTurn: bool, bet: false, betOptions: []});
       });
-      socket.on("quieroEnvido1", (bool)=>{
-        setPlayer({...player, isTurn: bool, bet: false, betOptions: []});
+      socket.on("quieroEnvido1", (bool, score)=>{
+        setPlayer({...player, isTurn: bool, bet: false, betOptions: [], score});
       });
       socket.on("envido1", (betOptions, bool)=>{
         setPlayer({...player, betOptions: betOptions, bet: true, isTurn: bool});
-      })
+      });
+      socket.on("updateRivalScore", (score, bool)=>{
+        setPlayer({...player, scoreRival: player.scoreRival + score, bet: false, isTurn: bool})
+      });
       socket.on("gameEnds", data=>{
         console.log("termino");
         history.push("/profile");
-        alert("el juego termino, por testing esta a menos puntos");
+        alert("el juego termino");
         dispatch(setIsInRoom({isInRoom: false, roomId: null}))
         //aqui deberia estar el dispatch con data que contiene playerOne, playerTwo, commonhacer el post a la api y agregar info de la partida.
       });
