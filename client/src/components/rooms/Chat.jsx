@@ -47,7 +47,7 @@ export default function Chat ({name, roomId, typeofChat}) {
                     <button className={styles.btn}>Send</button>
                     </>
                     : 
-                    <input placeholder={'Press enter to send messages...'} name="" id="" cols="31" rows="1" value={msg} onChange={event => setMsg(event.target.value)} className={styles.writeMessageGame}></input>
+                    <input type="text" id="" cols="31" rows="1" value={msg} onChange={event => setMsg(event.target.value)} className={styles.writeMessageGame}></input>
                 }
                 
             </form>

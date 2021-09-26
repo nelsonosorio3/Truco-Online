@@ -30,7 +30,7 @@ export default function Game() {
     const bet = e => { //emite la apuesta
       if(player.isTurn){
         socket.emit("bet", e.target.name, roomId, player.id);
-        setPlayer({...player, bet:true, isTurn:false})
+        if(e.target.name !== "ir al mazo") setPlayer({...player, bet:true, isTurn:false, betOptions: []})
       };
     };
 
@@ -69,7 +69,10 @@ export default function Game() {
         setPlayer({...player, isTurn: bool, bet: false, betOptions: []});
       });
       socket.on("quieroEnvido1", (bool)=>{
-        setPlayer({...player, isTurn: bool, bet:false, betOptions: []});
+        setPlayer({...player, isTurn: bool, bet: false, betOptions: []});
+      });
+      socket.on("envido1", (betOptions, bool)=>{
+        setPlayer({...player, betOptions: betOptions, bet: true, isTurn: bool});
       })
       socket.on("gameEnds", data=>{
         console.log("termino");
@@ -88,6 +91,8 @@ export default function Game() {
         socket.off("changeTurn");
         socket.off("gameEnds");
         socket.off("quieroTruco");
+        socket.off("quieroEnvido1");
+        socket.off("envido1");
       };
     },[player]);
     
