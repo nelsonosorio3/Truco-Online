@@ -6,12 +6,14 @@ import signUpReducer from "./signUpReducer";
 import logReducer from "./logReducer";
 import profileReducer from "./profileReducer";
 import roomsReducer from "./roomsReducer";
+import adminPanelReducer from "./adminPanelReducer";
 
 const rootReducer = combineReducers({
   signUpReducer,
   logReducer,
   profileReducer,
-  roomsReducer
+  roomsReducer,
+  adminPanelReducer
 });
 
 export default rootReducer;

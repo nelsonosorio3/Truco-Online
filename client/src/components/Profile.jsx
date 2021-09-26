@@ -1,6 +1,6 @@
 import React from 'react';
 import { useEffect, useState } from 'react';
-import { useDispatch , useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 import profileIcon from '../img/profileIcon.png';
 import profileActions from '../Redux/actions-types/profileActions';
@@ -15,7 +15,7 @@ import AddFriend from './addFriend';
 import NavBar from './NavBar';
 
 export default function Profile(props) {
-    
+
     //Estados del profileReducer
     const [friends, setFriends] = useState({
         sender: [],
@@ -24,15 +24,15 @@ export default function Profile(props) {
     const [myPendingRequests, setMyPendingRequests] = useState([])
 
     //userProfile: es el estado del usuario logeado
-    const { userProfile, userFriends  } = useSelector(state => state.profileReducer);
-    const {getProfile, getFriends, deleteFriends, putFriendRequest} = profileActions
+    const { userProfile, userFriends } = useSelector(state => state.profileReducer);
+    const { getProfile, getFriends, deleteFriends, putFriendRequest } = profileActions
     const dispatch = useDispatch();
 
     //Trae primeramente los datos del usuario y sus amigos
     useEffect(() => {
-        dispatch(getProfile({token: localStorage.token}))
+        dispatch(getProfile({ token: localStorage.token }))
         dispatch(getFriends(localStorage.token))
-    },[])
+    }, [])
 
     // Esto es para que se actualice el estado una vez que se elimina
     useEffect(() => {
@@ -51,57 +51,57 @@ export default function Profile(props) {
     }
 
     //Funcion para responder a una solicitud
-      const respondFriendFunction = (email, response) => {
+    const respondFriendFunction = (email, response) => {
         console.log(userProfile.id, email, response)
         dispatch(putFriendRequest(userProfile.id, email, response))
         window.location.reload()
     }
 
     return (
-
-         <NavBar />
-        <div className={styles.mainDiv}>
-            <div className={styles.player}>
-                <img src={profileIcon} alt="" className={styles.profileIcon} />
-                <div className={styles.playerInfo}>
-                    <h2>Username: {userProfile?.username}</h2>
-                    <h3>Email: {userProfile?.email}</h3>
-                    <h3>Games played: {userProfile?.gamesPlayed}</h3>
-                    <h3>Games Lost: {userProfile?.gamesLost}</h3>
-                    <h3>Games won: {userProfile?.gamesWon}</h3>
+        <div>
+            <NavBar />
+            <div className={styles.mainDiv}>
+                <div className={styles.player}>
+                    <img src={profileIcon} alt="" className={styles.profileIcon} />
+                    <div className={styles.playerInfo}>
+                        <h2>Username: {userProfile?.username}</h2>
+                        <h3>Email: {userProfile?.email}</h3>
+                        <h3>Games played: {userProfile?.gamesPlayed}</h3>
+                        <h3>Games Lost: {userProfile?.gamesLost}</h3>
+                        <h3>Games won: {userProfile?.gamesWon}</h3>
+                    </div>
                 </div>
-            </div>
-            <br />
+                <br />
 
-            
 
-            <h1>Solicitudes pendientes</h1>
-            <div className={styles.friends}>
-                {
-                    !friends.requested.length ? <p>No solicitudes pendientes</p> : friends.requested.map(f => <AddFriend
-                        username={f.username}
-                        respond={respondFriendFunction}
-                        email={f.email}
-                    />)
-                }
-            </div>
 
-            <h3 classname={styles.title}>Amigos</h3>
+                <h1>Solicitudes pendientes</h1>
+                <div className={styles.friends}>
+                    {
+                        !friends.requested.length ? <p>No solicitudes pendientes</p> : friends.requested.map(f => <AddFriend
+                            username={f.username}
+                            respond={respondFriendFunction}
+                            email={f.email}
+                        />)
+                    }
+                </div>
 
-            <div className={styles.friends}>
-                {
-                    !friends.sender.length ? <p>No tienes amigos</p> : friends.sender.map(f => <Friend
-                        key={f?.id}
-                        email={f?.email}
-                        deleteId={deleteFriendFunction}
-                        profileId={userProfile?.id}
-                        id={f?.id}
-                        name={f?.username}
-                        date={f.Friends?.createdAt}
-                        status = {f.Friends.status}
-                    />)
-                }
-            </div>
+                <h3 classname={styles.title}>Amigos</h3>
+
+                <div className={styles.friends}>
+                    {
+                        !friends.sender.length ? <p>No tienes amigos</p> : friends.sender.map(f => <Friend
+                            key={f?.id}
+                            email={f?.email}
+                            deleteId={deleteFriendFunction}
+                            profileId={userProfile?.id}
+                            id={f?.id}
+                            name={f?.username}
+                            date={f.Friends?.createdAt}
+                            status={f.Friends.status}
+                        />)
+                    }
+                </div>
 
 
                 <h3 classname={styles.title}>Últimos resultados</h3>
@@ -118,6 +118,7 @@ export default function Profile(props) {
                     } */}
                 </div>
             </div>
-        </>
+            <div />
+        </div>
     );
 };

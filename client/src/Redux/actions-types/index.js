@@ -4,11 +4,13 @@
 import signUpActions from "./signUpActions";
 import logActions from "./logActions";
 import profileActions from "./profileActions";
+import adminPanelActions from "./adminPanelActions";
 
 const allActions = {
   signUpActions,
   logActions,
   profileActions,
+  adminPanelActions
 };
 
 export default allActions;

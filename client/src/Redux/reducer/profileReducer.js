@@ -9,22 +9,22 @@ const INITIAL_STATE = {
   userHistory: {},
 };
 
-const profileReducer = (state = INITIAL_STATE, {type, payload}) => {
+const profileReducer = (state = INITIAL_STATE, { type, payload }) => {
   switch (type) {
-    
+
     case GET_PROFILE:
-    return {
-      ...state,
-      userProfile: {
+      return {
+        ...state,
+        userProfile: {
           id: payload.id,
           username: payload.username,
           email: payload.email,
           gamesPlayed: payload.gamesPlayed,
           gamesWon: payload.gamesWon,
           gamesLost: payload.gamesLost,
-      },
-    };
-      
+        },
+      };
+
     case GET_FRIENDS:
       console.log("REDUCER", payload)
 
@@ -35,7 +35,7 @@ const profileReducer = (state = INITIAL_STATE, {type, payload}) => {
           sender: payload.userSender
         }
       }
-    return ansFriends 
+      return ansFriends
 
     case DELETE_FRIEND:
       const ans = {
@@ -45,7 +45,7 @@ const profileReducer = (state = INITIAL_STATE, {type, payload}) => {
           sender: state.userFriends.sender.filter(f => f.id !== payload)
         }
       }
-    return ans  
+      return ans
 
     case PUT_FRIEND_REQUEST:
       const ansPutRequest = {
@@ -55,17 +55,17 @@ const profileReducer = (state = INITIAL_STATE, {type, payload}) => {
           requested: state.userFriends.requested.filter(f => f.id !== payload)
         }
       }
-    return ansPutRequest  
+      return ansPutRequest
 
     // case GET_HISTORY:
     // return {
     //   userHistory: {
-          
+
     //   },
     // };
 
     default:
-      return state;    
+      return state;
   };
 };
 

@@ -11,6 +11,7 @@ import ErrorPage from './components/ErrorPage';
 import Game from './components/game';
 import Ranking from './components/Ranking';
 import PrivateRoute from './components/PrivateRoute';
+import AdminPanel from './components/AdminPanel';
 
 function App() {
   return (
@@ -24,6 +25,7 @@ function App() {
         <Route exact path='/rooms' component={Rooms} />
         <Route exact path='/game' component={Game} />
         <PrivateRoute exact path="/ranking" component={Ranking} />
+        <Route path='/adminpanel' component={AdminPanel} />
         <Route path="*" component={ErrorPage} />
       </Switch>
     </div>
