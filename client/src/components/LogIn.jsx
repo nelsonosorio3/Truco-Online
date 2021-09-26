@@ -1,9 +1,10 @@
 import { useEffect, useState } from 'react';
 import { useHistory } from 'react-router';
 import { useDispatch, useSelector } from "react-redux";
+import { useModal } from '../hooks/useModal';
 
-import ModalController from "./Modal";
 import HomeButton from './HomeButton';
+import Modal from "./Modal";
 
 import log from '../Redux/actions-types/logActions';
 
@@ -45,10 +46,7 @@ export default function LogIn() {
   const [state, setState] = useState(initialState);
   const [errors, setErrors] = useState(initialState);
 
-  // Esto es para el modal
-  const [show, setShow] = useState(false);
-  const handleClose = () => setShow(false);
-  const handleShow = () => setShow(true);
+  const [isOpenModal, openModal, closeModal] = useModal();
 
   function handleChange(event) {
       const { name, value } = event.target;
@@ -64,12 +62,10 @@ export default function LogIn() {
 
   function handleSubmit(event) {
       event.preventDefault();
+      openModal();
       dispatch(logIn(state)); 
       setState(initialState);
       setErrors(initialState);
-      
-      // Para el modal
-      handleShow()
   };
   
   useEffect(() => {
@@ -89,9 +85,6 @@ export default function LogIn() {
   return (
         <>
             <HomeButton />
-            {/* Este es el modal. El state que lo determina es "show" */}
-            <ModalController show={show} handleClose={handleClose} message={message}/>
-
             <section className={styles.container}>
                     <form className={styles.form} onSubmit={handleSubmit}>
                         <label className={styles.label} htmlFor="emailInput" > Email: </label>
@@ -127,7 +120,16 @@ export default function LogIn() {
                             <button type="submit" className={styles.disabled} disabled>Login</button>}
                     </form> 
             </section>
-
+            <Modal isOpen={isOpenModal} closeModal={closeModal}>
+              <h3>Status:</h3>
+              <p>{message}</p>
+              {
+                isAuth ? 
+                <p>Redirecting...</p>
+                :
+                null
+              }
+            </Modal>              
         </>
     );
 };

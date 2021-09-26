@@ -35,17 +35,13 @@
     text-decoration: none;
     font-family: 'Crayon' ;
     font-size: 20px;
-    /* -webkit-transition: background-position .7s,box-shadow .4s;
-    transition: background-position .7s,box-shadow .4s;
-    font-family: 'Oswald', sans-serif;
-    background: linear-gradient(to bottom, #d78746, rgb(255 205 163));
-    box-shadow: 0px 0px 0px 2px rgb(255 255 255 / 16%) inset, 0px 0px 10px 0px #e48a3c; */
 }
 
 .btnLogIn:hover {
     transition: all 1s cubic-bezier(0.19, 1, 0.22, 1);
     transform : scale(1.1);
 }
+
 .btnSignUp{
     border: none;
     border-radius: 4px;

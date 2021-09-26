@@ -1,14 +1,10 @@
 import { LOG_OUT, LOG_IN } from '../actions/index';
 
 const INITIAL_STATE = {
-  isAuth: false, // sacar
+  isAuth: false, 
   user: null,
   id: null,
   message: ''
-};
-
-const saveInLocalStorage = () => {
-  
 };
 
 const logReducer = (state = INITIAL_STATE, {type, payload}) => {
@@ -22,11 +18,13 @@ const logReducer = (state = INITIAL_STATE, {type, payload}) => {
         // token: "String"
         window.localStorage.setItem("token", payload.token);
         window.localStorage.setItem("isAuth", payload.login);
+        window.localStorage.setItem("user", payload.username);
         return {
           ...state,
           isAuth: payload.login,
           user: payload.username,
           id: payload.id,
+          message: payload.message,
           token: payload.token
         };
       } else {
@@ -38,9 +36,9 @@ const logReducer = (state = INITIAL_STATE, {type, payload}) => {
         return newState
       };
     case LOG_OUT:
-      // esto no va aca, es para no olvidarme
-      // window.localStorage.removeItem("token", token);
-      // window.localStorage.removeItem("isAuth", isAuth);
+      window.localStorage.removeItem("token");
+      window.localStorage.removeItem("isAuth");
+      window.localStorage.removeItem("user");
       return {
         ...state,
         isAuth: false,

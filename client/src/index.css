@@ -15,6 +15,9 @@
   --fontColorHover: #272727;
   --tableColor: #4aad4a;
   --tableBorder: #a95555;
+  --transBlackColor: rgba(1,1,1, .5);
+  --modalContBC: rgba(221, 3, 3, 0.9);
+  --bRadius: 1em;
 }
 
 body {

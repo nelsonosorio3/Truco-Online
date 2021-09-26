@@ -1,11 +1,16 @@
 import React, { useState, useEffect }  from 'react';
+import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 
-import Logo2 from '../img/logo2.png'
 import styles from './styles/NavBar.module.css'
 
-export default function NavBar(){
-     
+import logo from '../img/logo.png';
+import profileIcon from '../img/profileIcon.png';
+
+export default function NavBar() {
+
+    const username = window.localStorage.getItem('user');
+
     const [isAuth, setIsAuth] = useState(false); 
 
     useEffect(() => {
@@ -15,26 +20,31 @@ export default function NavBar(){
         };
     }, []);
 
-    let name =null;
-
     return(
-        <div className={styles.mainDiv}>
-            <nav className={styles.nav}>
-                <img src={Logo2} alt="TrucoHenry" className={styles.logo2} />
-                <Link to='/rooms' className={styles.a}>Lobbys</Link>
+        <nav className={styles.nav}>
+            <Link to='/' className={styles.logo}>
+                <img src={logo} alt="TrucoHenry" />
+            </Link>
+            <div className={styles.groupLinks}> 
+                <Link to='/rooms' className={styles.links + ' ' + styles.rooms}>Lobbys</Link>
                 {
                     isAuth ? 
-                    <Link to='/ranking'className={styles.a}>Ranking</Link>
+                    <Link to='/ranking'className={styles.links + ' ' + styles.ranking}>Ranking</Link>
                     :
                     null
                 }
+            </div>
+            <div className={styles.contProfile}>
                 {
                     isAuth ? 
-                    <Link to='/profile' className={styles.a}>My Profile</Link>
+                    <Link to='/profile' className={styles.links}>
+                        <img src={profileIcon} alt="profile picture" />
+                        {`Hi, ${username}!`}
+                    </Link>
                     :
                     null
                 }
-            </nav>
-         </div>
+            </div>
+        </nav>
     );
 };
