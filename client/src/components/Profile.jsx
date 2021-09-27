@@ -20,9 +20,11 @@ import Match from './Match';
 import NavBar from './NavBar';
 
 export default function Profile(props) {
+
     
     const history = useHistory();
     const { logOut } = log;
+
 
 
     //Estados del profileReducer
@@ -34,8 +36,10 @@ export default function Profile(props) {
     const [deleteFriend, setDeleteFriend] = useState("")
 
     //userProfile: es el estado del usuario logeado
+
     const { userProfile, userFriends, userHistory  } = useSelector(state => state.profileReducer);
     const {getProfile, getFriends, deleteFriends, putFriendRequest, getGames} = profileActions
+
     const dispatch = useDispatch();
 
     //Trae primeramente los datos del usuario y sus amigos
@@ -47,6 +51,7 @@ export default function Profile(props) {
         //todas las partidas del usuario
         dispatch(getGames(localStorage.token))
     },[])
+
 
     // Esto es para que se actualice el estado una vez que se elimina
     useEffect(() => {
@@ -76,12 +81,11 @@ export default function Profile(props) {
     }
 
     //Funcion para responder a una solicitud
-      const respondFriendFunction = (email, response) => {
+    const respondFriendFunction = (email, response) => {
         console.log(userProfile.id, email, response)
         dispatch(putFriendRequest(userProfile.id, email, response))
         window.location.reload()
     }
-
 
     //Funcion para hacer log out
     const logout = () => {
@@ -156,7 +160,9 @@ export default function Profile(props) {
                     }
                 </div>
             </div>
+
             </div>
         </>
+
     );
 };
