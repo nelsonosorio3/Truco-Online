@@ -199,8 +199,8 @@ let timeOut;
 //     }
 // });
 
-
-io.on('connection', function (socket) {
+exports = module.exports = function(io){
+    io.sockets.on('connection', function (socket) {
 
     //GAME EVENTS
 
@@ -1080,4 +1080,6 @@ io.on('connection', function (socket) {
             io.to(table.games[roomId].playerOne.id).emit("changeTurn", false);
         }
     });   
-});
+        
+    });
+}

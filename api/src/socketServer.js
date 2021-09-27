@@ -16,8 +16,9 @@ var io = require("socket.io")(server, {
 
 var socketTournaments = require("./socketTournaments")(io)
 var socketRooms = require("./socketRooms")(io)
-var socketGameLogic = require("./socketRooms")(io)
+var socketGameLogic = require("./socketGameLogic")(io)
 require("reflect-metadata");
+
 var cors = require("cors");
 const { type } = require("os");
 
