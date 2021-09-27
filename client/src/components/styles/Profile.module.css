@@ -7,13 +7,13 @@
     padding-top: 67%;
 }
 
-.subMainDiv{
+.subMainDiv {
     display: flex;
     flex-direction: column;
-    margin-top: -65%;
+    margin-top: -60%;
 }
 
-.logoutBtn{
+.logoutBtn {
     position: absolute;
     right: 15px;
     padding: 3px;
@@ -39,13 +39,13 @@
     padding: 5px;
 }
 
-.logoutBtn:hover{
+.logoutBtn:hover {
     opacity: 1;
     transition: transform .45s;
     transform: scale(1.1);
 }
 
-.player{
+.player {
     display: flex;
     flex-direction: column;
     align-self: center;
@@ -53,62 +53,90 @@
     margin: 20px;
 }
 
-.profileIcon{
+.profileIcon {
     width: 150px;
 }
 
-.playerInfo{
+.playerInfo {
     display: flex;
     flex-direction: column;
     align-self: flex-start;
     align-items: center;
-    background-color: rgba(0, 0, 0, 0.6);
-    padding: 2pc 15pc 2pc 15pc;
+
+    background-color: var(--transBlackColor);
     color: #dedede;
+    padding: 2pc 15pc 2pc 15pc;
+    border-radius: var(--bRadius);
 }
 
-.playerInfo_Games{
+.playerInfo_Games {
     display: flex;
     gap: 50px;
 }
 
-.friends{
-    background-color: rgba(0, 0, 0, 0.6);
+.friends {
     display: flex;
     justify-content: space-evenly;
+    
+    background-color: var(--transBlackColor);
     color: #dedede;
 }
 
-.friendsDiv{
+.friendsDiv {
     display: flex;
     flex-direction: column;
 }
 
-.friendsList{
+.friendsList {
     display: flex;
     flex-direction: row;
     align-items: center;
     align-self: center;
 }
 
-.lastResults{
-    background-color: rgba(0, 0, 0, 0.6);
-    color: #dedede;
-    margin-top: 25px;
+.lastResults {
     display: flex;
     flex-direction: column;
     align-items: center;
+
+    background-color: var(--transBlackColor);
+    color: #dedede;
+    margin-top: 25px;
 }
 
-.title{
-    text-align: center;
-    margin-left: 20px;;
-    margin-right: auto;
+.title {
     width: 100px;
+    
     align-self: center;
     align-items: center;
+    
+    margin-left: 20px;;
+    margin-right: auto;
+    
+    text-align: center;
 }
 
-.history{
+.history {
     margin: auto;
+}
+
+.playerName {
+    position: relative;
+
+    margin-bottom: .8rem;
+}
+
+.editBtn {
+    position: absolute;
+    top: 6.3em;
+    left: 6.8em;
+
+    background-color: transparent;
+    border-radius: 50%;
+    border: none;
+    text-decoration: none;
+    outline: none;
+    cursor: pointer;
+
+    font-size: 1.3rem;
 }
