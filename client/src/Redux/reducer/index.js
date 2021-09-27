@@ -8,6 +8,7 @@ import profileReducer from "./profileReducer";
 import roomsReducer from "./roomsReducer";
 import adminPanelReducer from "./adminPanelReducer";
 import tournamentsReducer from "./tournamentsReducer";
+import rankingReducer from "./rankingReducer";
 
 
 const rootReducer = combineReducers({
@@ -17,6 +18,7 @@ const rootReducer = combineReducers({
   roomsReducer,
   adminPanelReducer,
   tournamentsReducer,
+  rankingReducer
 });
 
 export default rootReducer;
