@@ -1,7 +1,10 @@
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from "react-redux";
+import { useHistory } from 'react-router';
+import { useModal } from '../hooks/useModal';
 
-import NavBar from './NavBar';
+import HomeButton from './HomeButton';
+import Modal from "./Modal";
 
 import signUpActions from '../Redux/actions-types/signUpActions';
 
@@ -12,12 +15,12 @@ const EMAIL = /^[^@]+@[^@]+\.[^@]+$/;
 
 function validate(state) {
   let errors = {};
-  if(!state.user) {
-    errors.user = 'You have to enter a user name...';
-  } else if (state.user.length < 4) {
-      errors.user = 'The user is invalid. Must be more than 4 characters...';
-  } else if(!ALPHA.test(state.user)) {
-      errors.user = 'Only letters are allowed...'
+  if(!state.username) {
+    errors.username = 'You have to enter a user name...';
+  } else if (state.username.length < 4) {
+      errors.username = 'The user is invalid. Must be more than 4 characters...';
+  } else if(!ALPHA.test(state.username)) {
+      errors.username = 'Only letters are allowed...'
   };
   if(!state.email) {
     errors.email = 'You have to enter an email...';
@@ -39,15 +42,20 @@ const initialState = {
 };
 
 export default function SignUp() {
+    const logged = window.localStorage.getItem("isAuth");
 
-    const { isRegister } = useSelector(state => state.signUpReducer);
+    const history = useHistory();
+
+    const { registered, message } = useSelector(state => state.signUpReducer);
     
     const dispatch = useDispatch();
 
     const [state, setState] = useState(initialState);
     
     const [errors, setErrors] = useState(initialState);
-    
+
+    const [isOpenModal, openModal, closeModal] = useModal();
+
     function handleChange(event) {
         const { name, value } = event.target;
         setErrors(validate({
@@ -63,23 +71,29 @@ export default function SignUp() {
     function handleSubmit(event) {
         event.preventDefault();
         dispatch(signUpActions.signUpActions(state));
+        openModal();
         setState(initialState);
         setErrors(initialState);
+
     };
 
     useEffect(() => {
         // para saber si el usuario se registro con exito
-        if(isRegister) {
-            // si asi fue mostrar mensaje de exito(quiero que sea un modal despues)
-            return <h4>
-              Congratulations ✅! You've been successfully registered!
-            </h4>
+        if(logged) {
+            setTimeout(() => {
+                history.push('rooms');
+            }, 0);
         };
-    }, [isRegister]);
+        if(registered) {
+            setTimeout(() => {
+                history.push('log-in');
+            }, 3000);
+        };
+    }, [registered]);
 
     return (
         <>
-            <NavBar />
+            <HomeButton />
             <section className={styles.container}>
                 <form className={styles.form} onSubmit={handleSubmit}>
                 <label className={styles.label} htmlFor="username" > User: </label>
@@ -93,7 +107,7 @@ export default function SignUp() {
                     className={styles.input}
                     onChange={handleChange}
                 />
-                {errors.username && (<p className={styles.danger}> {errors.user} </p>)}
+                {errors.username && (<p className={styles.danger}> {errors.username} </p>)}
                 <label className={styles.label} htmlFor="email"> Email: </label>
                 <input 
                     type="email"
@@ -108,7 +122,7 @@ export default function SignUp() {
                 {errors.email && (<p className={styles.danger}> {errors.email} </p>)}
                 <label className={styles.label} htmlFor="health"> Password: </label>
                 <input 
-                    type='text'
+                    type='password'
                     id='password'
                     name="password"
                     value={state.password}
@@ -127,6 +141,16 @@ export default function SignUp() {
                     <button type="submit" className={styles.disabled} disabled> Create User </button>}
                 </form> 
             </section>
+            <Modal isOpen={isOpenModal} closeModal={closeModal}>
+              <h3>Status:</h3>
+              <p>{message}</p>
+              {
+                registered ? 
+                <p>Redirecting...</p>
+                :
+                null
+              }
+            </Modal> 
         </>
     );
 };

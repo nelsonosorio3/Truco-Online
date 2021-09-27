@@ -2,11 +2,12 @@ const { User, Friends, Games } = require("../db.js");
 const { Router }  = require("express");
 const Sequelize = require('sequelize');
 // const Op = Sequelize.Op;
-
 const router = Router();
 
+//Funcion para validar usuarios
+const {validarUsuario} = require('../controller/index')
 
-
+//Ruta para traer todos los juegos disputados
 router.get('/' , (req , res) => {
     Games.findAll()
     .then(r => {
@@ -14,6 +15,8 @@ router.get('/' , (req , res) => {
     })
 })
 
+//Agregar validacion
+//Ruta para agregar una partida [TERMINADA] a un usuario /:idUsuarioLoegado/:idDeLaPartida
 router.post('/:userid/:gameid' , (req , res) => {
     const {userid, gameid} = req.params
 
@@ -62,9 +65,10 @@ router.post('/:userid/:gameid' , (req , res) => {
     })
 })
 
-router.get('/:userid/' , (req , res) => {
-    const {userid} = req.params
-
+//Ruta para ver todas las partidas en las que participo el usuario logeado
+//Middleware validarUsuario ----> se necesita el token
+router.get('/mygames', validarUsuario, (req , res) => {
+    const userid = req.body.userId
     let userData = null
     let userGamesData = null
 
@@ -75,21 +79,20 @@ router.get('/:userid/' , (req , res) => {
     .then(user => {
         userData = user.toJSON()
         return user.getGames({
-            attributes: ['id','state', "winner", "loser"]
+            attributes: ['id','state', "winner", "loser", "createdAt"]
         })
     })
     .then(result => {
         userGamesData = result.map(r => r.toJSON())
-        
         userGamesData = userGamesData.map(d => {
             return {
                 id: d.id,
                 state: d.state,
+                createdAt: d.createdAt,
                 winner: d.winner,
                 loser: d.loser
             }
         })
-        
         const ans = {
             id: userData.id,
             username: userData.username,

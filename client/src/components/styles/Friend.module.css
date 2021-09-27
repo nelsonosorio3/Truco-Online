@@ -1,0 +1,34 @@
+.mainDiv{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  margin: 20px;
+  padding: 10px;
+  max-width: 130px;
+  background-color: #F8F8FF
+}
+
+.profileIconSmall{
+  width: 70px;
+  align-self: center;
+}
+
+.div2{
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-self: center;
+}
+
+.name{
+  align-self: center;
+
+}
+
+.name:hover {
+  cursor: pointer;
+}
+
+.text{
+  align-self: center;
+}

@@ -1,109 +1,135 @@
 import { useEffect, useState } from 'react';
-import { useDispatch } from "react-redux";
-import { Redirect } from 'react-router-dom'; 
+import { useHistory } from 'react-router';
+import { useDispatch, useSelector } from "react-redux";
+import { useModal } from '../hooks/useModal';
 
-import useUser from '../hooks/useUser';
+import HomeButton from './HomeButton';
+import Modal from "./Modal";
 
-import NavBar from './NavBar';
+import log from '../Redux/actions-types/logActions';
 
 import styles from './styles/LogIn.module.css';
 
+const EMAIL = /^[^@]+@[^@]+\.[^@]+$/;
+
 function validate(state) {
   let errors = {};
-  if(!state.user) {
-    errors.user = 'You have to enter a user name...';
+  if(!state.emailInput) {
+    errors.emailInput = 'You have to enter an email...';
+  } else if(!EMAIL.test(state.emailInput)) {
+    errors.emailInput = 'The email is invalid';
   };
-  if(!state.password) {
-    errors.password = 'You have to enter a password...';
+  if(!state.passwordInput) {
+    errors.passwordInput = 'You have to enter a password...';
   };
   return errors;
 };
 
 const initialState = {
-    user: '',
-    password: '',
+    emailInput: '',
+    passwordInput: '',
 };
 
-export default function LogIn({onLogin}) {
+export default function LogIn() {
 
-    const dispatch = useDispatch();
-
-    const [state, setState] = useState(initialState);
+  const dispatch = useDispatch();
     
-    const [errors, setErrors] = useState(initialState);
-
-    const { isLoginLoading, hasLoginError, login, isLogged } = useUser();
+  const history = useHistory();
     
-    function handleChange(event) {
-        const { name, value } = event.target;
-        setErrors(validate({
-          ...state,
-          [name]: value
-        }));
-        setState({
-          ...state,
-          [name]: value,
-        });
+  const { message } = useSelector(state => state.logReducer);
+
+  const { logIn } = log;
+
+  const logged = window.localStorage.getItem("isAuth");
+  
+  const [isAuth, setIsAuth] = useState(false); 
+  const [state, setState] = useState(initialState);
+  const [errors, setErrors] = useState(initialState);
+
+  const [isOpenModal, openModal, closeModal] = useModal();
+
+  function handleChange(event) {
+      const { name, value } = event.target;
+      setErrors(validate({
+        ...state,
+        [name]: value
+      }));
+      setState({
+        ...state,
+        [name]: value,
+      });
+  };
+
+  function handleSubmit(event) {
+      event.preventDefault();
+      openModal();
+      dispatch(logIn(state)); 
+      setState(initialState);
+      setErrors(initialState);
+  };
+  
+  useEffect(() => {
+    if(logged) {
+      setIsAuth(logged);
     };
+  }, [logged]);
 
-    function handleSubmit(event) {
-        event.preventDefault();
-        dispatch(login(state));
-        setState(initialState);
-        setErrors(initialState);
-    };
+  useEffect(() => {
+    if(isAuth) {
+      setTimeout(() => {
+        history.push('/rooms');
+      }, 3000);
+    }
+  }, [isAuth]);
 
-    useEffect(() => {
-        if(isLogged) {
-            <Redirect to='/rooms'/>
-            onLogin && onLogin()
-        };
-    }, [isLogged, onLogin]);
-
-    return (
+  return (
         <>
-            <NavBar />
+            <HomeButton />
             <section className={styles.container}>
-                {isLoginLoading && <strong> Checking credentials... </strong>}   
-                {!isLoginLoading &&             
                     <form className={styles.form} onSubmit={handleSubmit}>
-                        <label className={styles.label} htmlFor="user" > User: </label>
+                        <label className={styles.label} htmlFor="emailInput" > Email: </label>
                         <input
                             type="text"
-                            id="user"
-                            name = "user"
-                            value={state.user}
-                            placeholder="Put here the username"
+                            id="emailInput"
+                            name = "emailInput"
+                            value={state.emailInput}
+                            placeholder="Put your email"
                             autoComplete="off"
                             className={styles.input}
                             onChange={handleChange}
                         />
-                        {errors.user && (<p className={styles.danger}> {errors.user} </p>)}
-                        <label className={styles.label} htmlFor="health"> Password: </label>
+                        {errors.emailInput && (<p className={styles.danger}> {errors.emailInput} </p>)}
+                        <label className={styles.label} htmlFor="passwordInput"> Password: </label>
                         <input 
-                            type='text'
-                            id='password'
-                            name="password"
-                            value={state.password}
+                            type='password'
+                            id='passwordInput'
+                            name="passwordInput"
+                            value={state.passwordInput}
                             placeholder="Put here the password"
                             autoComplete="off"
                             className={styles.input}
                             onChange={handleChange}
                             />
-                        {errors.password && (<p className={styles.danger}> {errors.password} </p>)}
-                        {((!errors.user && !errors.password) 
+                        {errors.passwordInput && (<p className={styles.danger}> {errors.passwordInput} </p>)}
+                        {((!errors.emailInput && !errors.passwordInput) 
                             && 
-                            (errors.user !== '' && errors.password !== '')) 
+                            (errors.emailInput !== '' && errors.passwordInput !== '')) 
                             ? 
                             (<button type="submit" className={styles.button}>Login</button>) 
                             : 
                             <button type="submit" className={styles.disabled} disabled>Login</button>}
                     </form> 
-                }
-                {
-                    hasLoginError && <strong> Credentials are invalid. </strong>
-                }
             </section>
+            <Modal isOpen={isOpenModal} closeModal={closeModal}>
+              <h3>Status:</h3>
+              <p>{message}</p>
+              {
+                isAuth ? 
+                <p>Redirecting...</p>
+                :
+                null
+              }
+            </Modal>              
         </>
     );
 };

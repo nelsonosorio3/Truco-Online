@@ -18,6 +18,28 @@ const u5 = { username: "leo", email: "leo@mail.com", password: "1234", gamesPlay
 const u6 = { username: "santiago", email: "santiago@mail.com", password: "1234", gamesPlayed: 0, gamesWon: 0, gamesLost: 0 }
 const u7 = { username: "fede", email: "fede@mail.com", password: "1234", gamesPlayed: 0, gamesWon: 0, gamesLost: 0 }
 const u8 = { username: "marcelo", email: "marcelo@mail.com", password: "1234", gamesPlayed: 0, gamesWon: 0, gamesLost: 0 }
+const u9 = { username: "abel", email: "abel@mail.com", password: "1234", gamesPlayed: 0, gamesWon: 0, gamesLost: 0 }
+const u10 = { username: "artemio", email: "artemio@mail.com", password: "1234", gamesPlayed: 0, gamesWon: 0, gamesLost: 0 }
+const u11 = { username: "matias", email: "matias@mail.com", password: "1234", gamesPlayed: 0, gamesWon: 0, gamesLost: 0 }
+const u12 = { username: "agusto", email: "agusto@mail.com", password: "1234", gamesPlayed: 0, gamesWon: 0, gamesLost: 0 }
+const u13 = { username: "belmiro", email: "belmiro@mail.com", password: "1234", gamesPlayed: 0, gamesWon: 0, gamesLost: 0 }
+const u14 = { username: "angélica", email: "angelica@mail.com", password: "1234", gamesPlayed: 0, gamesWon: 0, gamesLost: 0 }
+const u15 = { username: "daria", email: "daria@mail.com", password: "1234", gamesPlayed: 0, gamesWon: 0, gamesLost: 0 }
+const u16 = { username: "ida", email: "ida@mail.com", password: "1234", gamesPlayed: 0, gamesWon: 0, gamesLost: 0 }
+const u17 = { username: "yoana", email: "yoana@mail.com", password: "1234", gamesPlayed: 6, gamesWon: 5, gamesLost: 1 }
+const u18 = { username: "colette", email: "colette@mail.com", password: "1234", gamesPlayed: 6, gamesWon: 3, gamesLost: 3 }
+const u19 = { username: "rosa", email: "rosa@mail.com", password: "1234", gamesPlayed: 12, gamesWon: 10, gamesLost: 2 }
+const u20 = { username: "ticiana", email: "ticiana@mail.com", password: "1234", gamesPlayed: 3, gamesWon: 1, gamesLost: 2 }
+const u21 = { username: "vero", email: "vero@mail.com", password: "1234", gamesPlayed: 8, gamesWon: 8, gamesLost: 1 }
+const u22 = { username: "wilma", email: "wilma@mail.com", password: "1234", gamesPlayed: 7, gamesWon: 6, gamesLost: 13 }
+const u23 = { username: "desireé", email: "desiree@mail.com", password: "1234", gamesPlayed: 2, gamesWon: 1, gamesLost: 1 }
+const u24 = { username: "diva", email: "diva@mail.com", password: "1234", gamesPlayed: 5, gamesWon: 1, gamesLost: 4 }
+const u25 = { username: "marcela", email: "marcela@mail.com", password: "1234", gamesPlayed: 5, gamesWon: 4, gamesLost: 1 }
+
+var users = [u9, u10, u11, u12, u13, u14, u15, u16, u17, u18, u19, u20,
+  u21, u22, u23, u24, u25]
+
+
 
 // Friends (friendships)
 
@@ -44,60 +66,62 @@ var friendships = [f1, f2, f3, f4, f5, f6, f7, f8, f9, f10, f11, f12, f13, f14]
 
 router.post("/", async (req, res) => {
 
-try{
-  await Games.create({
-    state: "pendiente",
-    winner: "",
-    loser: "",
-    results: "12|23"
-  })
+  try {
+    await Games.create({
+      state: "pendiente",
+      winner: "",
+      loser: "",
+      results: "12|23"
+    })
 
-  await Games.create({
-    state: "pendiente",
-    winner: "",
-    loser: "",
-    results: "11|13"
-  })
+    await Games.create({
+      state: "pendiente",
+      winner: "",
+      loser: "",
+      results: "11|13"
+    })
 
-  await Games.create({
-    state: "terminada",
-    winner: "pedro",
-    loser: "leo",
-    results: "11|13"
-  })
+    await Games.create({
+      state: "terminada",
+      winner: "pedro",
+      loser: "leo",
+      results: "11|13"
+    })
 
-  await Games.create({
-    state: "terminada",
-    winner: "pedro",
-    loser: "santiago",
-    results: "11|13"
-  })
+    await Games.create({
+      state: "terminada",
+      winner: "pedro",
+      loser: "santiago",
+      results: "11|13"
+    })
 
 
-  var d1 = await User.create(u1)
-  var d2 = await User.create(u2)
-  var d3 = await User.create(u3)
-  var d4 = await User.create(u4)
-  var d5 = await User.create(u5)
-  var d6 = await User.create(u6)
-  var d7 = await User.create(u7)
-  var d8 = await User.create(u8)
-  await Friends.create(f15)
+    var d1 = await User.create(u1)
+    var d2 = await User.create(u2)
+    var d3 = await User.create(u3)
+    var d4 = await User.create(u4)
+    var d5 = await User.create(u5)
+    var d6 = await User.create(u6)
+    var d7 = await User.create(u7)
+    var d8 = await User.create(u8)
 
-  for await (f of friendships) {
-    Friends.create(f)
+    for await (u of users) {
+      User.create(u)
+    }
+
+
+    await Friends.create(f15)
+
+    for await (f of friendships) {
+      Friends.create(f)
+    }
+    res.status(200).json({ message: "Tabla de prueba llenada con éxito." });
   }
-  res.status(200).json({ message: "Tabla de prueba llenada con éxito." });
-}
-  
-
-catch (err){
-  res.json({message: err.message})
-}
 
 
-
-  
+  catch (err) {
+    res.json({ message: err.message })
+  }
 
 
 })

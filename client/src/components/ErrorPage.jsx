@@ -7,8 +7,10 @@ export default function ErrorPage() {
         <>
             <NavBar />
             <section className={style.contError}>
-                <h2> Error 404: Not Found </h2>
-                <p> This page doesn't exist... </p>
+                <div className={style.error}>
+                    <h2> Error 404: Not Found </h2>
+                    <p> This page doesn't exist... </p>
+                </div>
             </section>
         </>
     );

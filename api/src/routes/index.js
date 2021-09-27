@@ -6,6 +6,7 @@ const message = require("./message");
 const friends = require("./friends");
 const games = require("./games");
 const signup = require("./signup");
+const ranking = require("./ranking");
 
 const filltable = require("./filltable") // Borrar línea en proyecto final
 
@@ -17,7 +18,8 @@ router.use('/user', user);
 router.use("/message", message);
 router.use("/friends", friends);
 router.use("/signup", signup);
-router.use("/games", games)
+router.use("/games", games);
+router.use("/ranking", ranking);
 router.use("/filltable", filltable); // Borrar línea en proyecto final
 
 module.exports = router;

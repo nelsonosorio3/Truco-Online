@@ -5,11 +5,20 @@ import { combineReducers } from "redux";
 import signUpReducer from "./signUpReducer";
 import logReducer from "./logReducer";
 import profileReducer from "./profileReducer";
+import roomsReducer from "./roomsReducer";
+import adminPanelReducer from "./adminPanelReducer";
+import tournamentsReducer from "./tournamentsReducer";
+import rankingReducer from "./rankingReducer";
+
 
 const rootReducer = combineReducers({
   signUpReducer,
   logReducer,
   profileReducer,
+  roomsReducer,
+  adminPanelReducer,
+  tournamentsReducer,
+  rankingReducer
 });
 
 export default rootReducer;

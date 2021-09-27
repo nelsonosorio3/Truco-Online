@@ -1,0 +1,42 @@
+.mainDiv{
+    
+}
+
+.lobby{
+    margin-top: -60%;
+}
+
+.subMainDiv_noGame{
+    background-image: url('../../../img/DarkWood_bg.webp');
+    background-size: contain;
+    background-repeat: no-repeat;
+    width: 100%;
+    height: 0;
+    padding-top: 67%;
+}
+
+.div_Chat_Rooms{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    margin-top: 40px;
+}
+
+.div_CreateRoom_RoomsList{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.subMainDiv_inGame{
+    background-image: url('../../../img/woodBackground.webp');
+    background-size: contain;
+    background-repeat: no-repeat;
+    width: 100%;
+    height: 0;
+    padding-top: 64%;
+}
+
+.game{
+    margin-top: -60%;
+}
