@@ -1,43 +1,35 @@
-import axios from 'axios';
-import React , { useEffect , useState } from 'react';
-import styles from './styles/Ranking.module.css'
-
+import React , { useEffect  } from 'react';
+import styles from './styles/Ranking.module.css';
+import getRanking from '../Redux/actions-types/getRanking';
 import NavBar from './NavBar'; 
+import { useDispatch , useSelector } from 'react-redux';
+
+
+
 
 export default function Ranking() {
-    const [state, setState] = useState() 
+    const state = useSelector(state => state.rankingReducer)
+    const dispatch = useDispatch();
 
-    function getRanking () {
-        axios(`http://localhost:3001/api/ranking`)
-        .then(response => {
-          setState({
-            state : response.data
-          })
-        })
-        .catch((error) => console.error(error))
-    }
-    
+
     useEffect(() => {
-        getRanking()
-    }, [setState])
+        dispatch(getRanking())
+    }, [])
     
-    
-
     console.log(state)
+    
     return(
-
-            
-
         <>
         <NavBar />
             <div > 
               <div className={styles.fondo}> 
                 <section>
                   <ul>
-                    
+                    {/* {state && state.map(u => 
+                      <li>{state.ranking.username}</li>
+                      )} */}
                   </ul>
                 </section>
-                Probando ranking
              </div>
             </div>
         </>
