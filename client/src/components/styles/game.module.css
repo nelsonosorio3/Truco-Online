@@ -96,9 +96,6 @@ ol{
     margin-top: 30px;
 }
 
-#containerChat{
-    width: 30%;
-}
 
 @media screen and (max-width: 1440px) {
     .cardsImg {
@@ -220,6 +217,45 @@ ol{
         display: flex;
         justify-content: space-between;
         align-items:center;
+    }
+ 
+  }
+
+  @media screen and (max-height: 740px) {
+    .cardsImg {
+        width: 49px;
+        height: 70px;
+    }
+    .btnBet, .btnBetNoTurn {
+        width: 100px !important;
+        font-size: medium;
+        height: 40px;
+    }
+    #cardsContainer{
+        height: 100px;
+        width: 200px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
+    .tableCards{
+        margin: 0px
+    }
+    #points{
+        width: 25%;
+        height: 60%;
+    }
+    #points div h2{
+        font-size: larger;
+        padding: 20%;
+    }
+    #cardsContainer{
+        min-height: 150px;
+        min-width: 400px;
+
+    }
+    #rivalHand, #playerHand, #playerHandActive, .tableCards{
+        padding: 0px 10px 0px 10px
     }
  
   }

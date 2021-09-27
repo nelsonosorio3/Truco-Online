@@ -8,7 +8,7 @@
 }
 
 .chatGame{
-    width: 80%;
+    width: 93%;
     min-height: 30vh;
     max-height: 30vh;
     margin: 10px;
@@ -33,7 +33,7 @@
 .writeMessageGame{
     margin: 10px;
     display: flex;
-    width: 80%;
+    width: 93%;
 }
 
 .writeMessage{
