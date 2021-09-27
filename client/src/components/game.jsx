@@ -68,8 +68,8 @@ export default function Game() {
       socket.on("quieroTruco", (bool)=>{
         setPlayer({...player, isTurn: bool, bet: false, betOptions: []});
       });
-      socket.on("quieroEnvido1", (bool, score)=>{
-        setPlayer({...player, isTurn: bool, bet: false, betOptions: [], score});
+      socket.on("quieroEnvido1", (bool, score, scoreRival)=>{
+        setPlayer({...player, isTurn: bool, bet: false, betOptions: [], score: player.score+ score, scoreRival: player.scoreRival + scoreRival});
       });
       socket.on("envido1", (betOptions, bool)=>{
         setPlayer({...player, betOptions: betOptions, bet: true, isTurn: bool});
@@ -101,33 +101,33 @@ export default function Game() {
     
     console.log(player) //para testing
     return(<div id={stylesGame.gameBackground}>
-            {/* <div className={styles.image}>  */}
-            {/* </div> */}
             <div>
-            <ol >{[...Array(3-player.tableRival.length).keys()].map(card=><div key={card} id={stylesGame.rivalHand}><img src={`/cards/0.webp`} className={stylesGame.cardsImg}/></div>)}</ol>
-            <div id={stylesGame.cardsContainer}>
+              <ol >{[...Array(3-player.tableRival.length).keys()].map(card=><div key={card} id={stylesGame.rivalHand}><img src={`/cards/0.webp`} className={stylesGame.cardsImg}/></div>)}</ol>
+              <div id={stylesGame.cardsContainer}>
               
-            <ol>{player.tableRival?.map(card => <div key={card.id} className={stylesGame.tableCards}><img src={`/cards/${card.id}.webp`}  className={stylesGame.cardsImg}/></div>)}</ol>
-            <ol>{player.tablePlayer?.map(card => <div key={card.id} className={stylesGame.tableCards}><img src={`/cards/${card.id}.webp`}  className={stylesGame.cardsImg}/></div>)}</ol>
-            </div>
+                <ol>{player.tableRival?.map(card => <div key={card.id} className={stylesGame.tableCards}><img src={`/cards/${card.id}.webp`}  className={stylesGame.cardsImg}/></div>)}</ol>
+                <ol>{player.tablePlayer?.map(card => <div key={card.id} className={stylesGame.tableCards}><img src={`/cards/${card.id}.webp`}  className={stylesGame.cardsImg}/></div>)}</ol>
+              </div>
             
             <ol>{player.hand?.map(card => <div key={card.id} onClick={()=>playCard(card)} id={player.isTurn && !player.bet? stylesGame.playerHandActive : stylesGame.playerHand}><img src={`/cards/${card.id}.webp`}  className={stylesGame.cardsImg}/></div>)}</ol><br/>
             </div>
 
             <div id={stylesGame.points}>
-              <div><h2>{player.name}</h2>
+              <div>
+                <h2>{player.name}</h2>
                 {player.score? <img src={player.score<=30? `/points/${player.score}.png.webp` : "/points/30.png.webp"}/> : <div></div>}
               </div>
-              <div><h2>{player.nameRival}</h2>
-              {player.scoreRival? <img src={player.scoreRival<=30? `/points/${player.scoreRival}.png.webp` : "/points/30.png.webp"}/> : <div></div>}
+              <div>
+                <h2>{player.nameRival}</h2>
+                {player.scoreRival? <img src={player.scoreRival<=30? `/points/${player.scoreRival}.png.webp` : "/points/30.png.webp"}/> : <div></div>}
               </div>
             </div>
 
             <div id={stylesGame.containerChat}>
-            <Chat name={"test"} roomId={roomId}/>
-            <div className={"betContainer"}>
-            {player.betOptions?.map(betPick=><button onClick={bet} name={betPick} key={betPick} className={player.isTurn? stylesGame.btnBet : stylesGame.btnBetNoTurn}>{betPick}</button>)}<br/>
-            </div>
+            <Chat name={player.name} roomId={roomId}/>
+              <div className={"betContainer"}>
+                {player.betOptions?.map(betPick=><button onClick={bet} name={betPick} key={betPick} className={player.isTurn? stylesGame.btnBet : stylesGame.btnBetNoTurn}>{betPick}</button>)}<br/>
+              </div>
             </div>
           </div> 
     );

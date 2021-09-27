@@ -43,8 +43,8 @@ export default function Chat ({name, roomId, typeofChat}) {
                     typeofChat==='chatLobby'
                     ? 
                     <>
-                    <textarea placeholder={'Message...'} name="" id="" cols="95" rows="1" value={msg} onChange={event => setMsg(event.target.value)}></textarea>
-                    <button className={styles.btn}>Send</button>
+                        <textarea placeholder={'Message...'} name="" id="" cols="95" rows="1" value={msg} onChange={event => setMsg(event.target.value)}></textarea>
+                        <button className={styles.btn}>Send</button>
                     </>
                     : 
                     <input type="text" id="" cols="31" rows="1" value={msg} onChange={event => setMsg(event.target.value)} className={styles.writeMessageGame}></input>
