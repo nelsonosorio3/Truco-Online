@@ -12,7 +12,9 @@ export default function Game() {
     const [player, setPlayer] = useState({ //objeto del jugador en el cliente deberia tener solo propiedades que se usan para renderizar o limitar interacciones en el cliente
         id: 1, // socket id del jugador
         name: "player", // la idea seria que sea el nombre del profile
+        nameRival: "otherPlayer",
         score: 0,  // puntaje que lleva
+        scoreRival: 0,
         hand: [], // las 3 cartas de la ronda
         turnNumber: 1, // numero de turno
         isTurn: false, //para que pueda o no hacer click
@@ -28,7 +30,7 @@ export default function Game() {
     const bet = e => { //emite la apuesta
       if(player.isTurn){
         socket.emit("bet", e.target.name, roomId, player.id);
-        setPlayer({...player, bet:true, isTurn:false})
+        if(e.target.name !== "ir al mazo") setPlayer({...player, bet:true, isTurn:false, betOptions: []})
       };
     };
 
@@ -46,27 +48,37 @@ export default function Game() {
       socket.on("newRoundStarts", player=>{  //escucha para empezar nueva partida
         setPlayer(player);
       });
-      socket.on("bet", async betOptions=>{  //trae la apuesta segun turno
-        // await changeTurn();
-        setPlayer({...player, betOptions});
+      socket.on("bet", async (betOptions, bool)=>{  //trae la apuesta segun turno
+        setPlayer({...player, betOptions, bet: bool});
       });
       socket.on("betting", bool=>{  //cambia el estado de si se esta apostando para bloquear jugar cartas hasta resolverlo
         setPlayer({...player, bet: false, betOptions: [], isTurn: !player.isTurn});
       });
-      socket.on("playCard", async card=>{  //escucha carta jugada por rival
-        // await changeTurn();
+      socket.on("playCard", card=>{  //escucha carta jugada por rival
         setPlayer({...player, tableRival:  [...player.tableRival, card], isTurn: true}); 
       });
-      socket.on("updateScore", score=>{  //trae cambios en el puntaje
-        setPlayer({...player, score: player.score + score})
+      socket.on("updateScore", (score, bool) =>{  //trae cambios en el puntaje
+        setPlayer({...player, score: player.score + score, bet: false, isTurn: bool})
       });
-      socket.on("changeTurn", bool=>{  //cambia turno entre jugadores
+      socket.on("changeTurn", (bool)=>{  //cambia turno entre jugadores
         setPlayer({...player, isTurn: bool});
+      });
+      socket.on("quieroTruco", (bool)=>{
+        setPlayer({...player, isTurn: bool, bet: false, betOptions: []});
+      });
+      socket.on("quieroEnvido1", (bool, score, scoreRival)=>{
+        setPlayer({...player, isTurn: bool, bet: false, betOptions: [], score: player.score+ score, scoreRival: player.scoreRival + scoreRival});
+      });
+      socket.on("envido1", (betOptions, bool)=>{
+        setPlayer({...player, betOptions: betOptions, bet: true, isTurn: bool});
+      });
+      socket.on("updateRivalScore", (score, bool)=>{
+        setPlayer({...player, scoreRival: player.scoreRival + score, bet: false, isTurn: bool})
       });
       socket.on("gameEnds", data=>{
         console.log("termino");
         history.push("/profile");
-        alert("el juego termino, por testing esta a menos puntos");
+        alert("el juego termino");
         dispatch(setIsInRoom({isInRoom: false, roomId: null}))
         //aqui deberia estar el dispatch con data que contiene playerOne, playerTwo, commonhacer el post a la api y agregar info de la partida.
       });
@@ -79,38 +91,41 @@ export default function Game() {
         socket.off("betting");
         socket.off("changeTurn");
         socket.off("gameEnds");
+        socket.off("quieroTruco");
+        socket.off("quieroEnvido1");
+        socket.off("envido1");
       };
     },[player]);
     
     console.log(player) //para testing
     return(<div id={stylesGame.gameBackground}>
-            {/* <div className={styles.image}>  */}
-            {/* </div> */}
             <div>
-            <ol >{[...Array(3-player.tableRival.length).keys()].map(card=><div key={card} id={stylesGame.rivalHand}><img src={`/cards/0.webp`} className={stylesGame.cardsImg}/></div>)}</ol>
-            <div id={stylesGame.cardsContainer}>
+              <ol >{[...Array(3-player.tableRival.length).keys()].map(card=><div key={card} id={stylesGame.rivalHand}><img src={`/cards/0.webp`} className={stylesGame.cardsImg}/></div>)}</ol>
+              <div id={stylesGame.cardsContainer}>
               
-            <ol>{player.tableRival?.map(card => <div key={card.id} className={stylesGame.tableCards}><img src={`/cards/${card.id}.webp`}  className={stylesGame.cardsImg}/></div>)}</ol>
-            <ol>{player.tablePlayer?.map(card => <div key={card.id} className={stylesGame.tableCards}><img src={`/cards/${card.id}.webp`}  className={stylesGame.cardsImg}/></div>)}</ol>
-            </div>
+                <ol>{player.tableRival?.map(card => <div key={card.id} className={stylesGame.tableCards}><img src={`/cards/${card.id}.webp`}  className={stylesGame.cardsImg}/></div>)}</ol>
+                <ol>{player.tablePlayer?.map(card => <div key={card.id} className={stylesGame.tableCards}><img src={`/cards/${card.id}.webp`}  className={stylesGame.cardsImg}/></div>)}</ol>
+              </div>
             
-            <ol>{player.hand?.map(card => <div key={card.id} onClick={()=>playCard(card)} id={player.isTurn? stylesGame.playerHandActive : stylesGame.playerHand}><img src={`/cards/${card.id}.webp`}  className={stylesGame.cardsImg}/></div>)}</ol><br/>
+            <ol>{player.hand?.map(card => <div key={card.id} onClick={()=>playCard(card)} id={player.isTurn && !player.bet? stylesGame.playerHandActive : stylesGame.playerHand}><img src={`/cards/${card.id}.webp`}  className={stylesGame.cardsImg}/></div>)}</ol><br/>
             </div>
 
             <div id={stylesGame.points}>
-              <div><h2>{player.name}</h2>
-              {player.score? <img src={player.score? `/points/${player.score}.png.webp`: null}/> : <div></div>}
+              <div>
+                <h2>{player.name}</h2>
+                {player.score? <img src={player.score<=30? `/points/${player.score}.png.webp` : "/points/30.png.webp"}/> : <div></div>}
               </div>
-              <div><h2>Opponent</h2>
-                {/* <img src={player.score? `/points/${player.score}.png.webp`: null}/> */}
+              <div>
+                <h2>{player.nameRival}</h2>
+                {player.scoreRival? <img src={player.scoreRival<=30? `/points/${player.scoreRival}.png.webp` : "/points/30.png.webp"}/> : <div></div>}
               </div>
             </div>
 
             <div id={stylesGame.containerChat}>
-            <Chat name={"test"} roomId={roomId}/>
-            <div className={"betContainer"}>
-            {player.betOptions?.map(betPick=><button onClick={bet} name={betPick} key={betPick} className={player.isTurn? stylesGame.btnBet : stylesGame.btnBetNoTurn}>{betPick}</button>)}<br/>
-            </div>
+            <Chat name={player.name} roomId={roomId}/>
+              <div className={"betContainer"}>
+                {player.betOptions?.map(betPick=><button onClick={bet} name={betPick} key={betPick} className={player.isTurn? stylesGame.btnBet : stylesGame.btnBetNoTurn}>{betPick}</button>)}<br/>
+              </div>
             </div>
           </div> 
     );
