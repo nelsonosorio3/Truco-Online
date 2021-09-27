@@ -107,5 +107,47 @@ router.get('/mygames', validarUsuario, (req , res) => {
     
 })
 
+//Ruta para ver todas las partidas en las que participo el otro usuario
+router.get('/games/:id', validarUsuario, (req , res) => {
+    
+    const userid = req.params.id
+    let userData = null
+    let userGamesData = null
+
+    User.findOne({ 
+        where: { id: userid},
+        attributes: ['id', 'username'],
+    })
+    .then(user => {
+        userData = user.toJSON()
+        return user.getGames({
+            attributes: ['id','state', "winner", "loser", "createdAt"]
+        })
+    })
+    .then(result => {
+        userGamesData = result.map(r => r.toJSON())
+        userGamesData = userGamesData.map(d => {
+            return {
+                id: d.id,
+                state: d.state,
+                createdAt: d.createdAt,
+                winner: d.winner,
+                loser: d.loser
+            }
+        })
+        const ans = {
+            id: userData.id,
+            username: userData.username,
+            games: userGamesData
+        }
+
+        res.json(ans)
+    })
+    .catch((err) => {
+        return res.json({message: err.message})
+    })
+    
+})
+
 
 module.exports = router;

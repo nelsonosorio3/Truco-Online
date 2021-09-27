@@ -23,6 +23,7 @@ export default function Profile(props) {
     
     const history = useHistory();
     const { logOut } = log;
+    const [isOpenModal, openModal, closeModal] = useModal();
 
 
     //Estados del profileReducer
@@ -56,7 +57,6 @@ export default function Profile(props) {
         })
     }, [userFriends])
 
-    const [isOpenModal, openModal, closeModal] = useModal();
 
 
     const removeFriend = (flag) => {
@@ -81,7 +81,6 @@ export default function Profile(props) {
         dispatch(putFriendRequest(userProfile.id, email, response))
         window.location.reload()
     }
-
 
     //Funcion para hacer log out
     const logout = () => {
