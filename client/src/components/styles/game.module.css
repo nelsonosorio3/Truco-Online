@@ -58,6 +58,7 @@ ol{
     background-size: 100% 100%;
     background-repeat: no-repeat;
     text-decoration: none;
+    font-size: large;
 }
 
 .btnBet:hover {
