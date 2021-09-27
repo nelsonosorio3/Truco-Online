@@ -1,5 +1,5 @@
 import React, {useState, useEffect, useRef } from 'react';
-import {useDispatch, useSelector} from 'react-redux'
+import {useDispatch} from 'react-redux'
 
 import { setIsInRoom } from '../../Redux/actions-types/roomsActions';
 import socket from '../socket';
@@ -7,7 +7,7 @@ import styles from './styles/RoomsList.module.css'
 
 export default function RoomsList(){
     const [allRooms, setAllRooms] = useState([])
-    const [roomId, setRoomId] = useState('')
+    // const [roomId, setRoomId] = useState('')
     const dispatch = useDispatch()
     const listRooms = useRef(null);
     useEffect(() => {
