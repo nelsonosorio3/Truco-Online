@@ -409,7 +409,6 @@ io.on('connection', function (socket) {
         }
         else if(betPick === "quiero truco") {
             common.trucoBet = 2;
-            // io.in(roomId).emit("betting", false);
             if(isPlayerOne){
                 io.to(playerTwo.id).emit("quieroTruco", true);
                 io.to(playerOne.id).emit("quieroTruco", false);
@@ -1155,7 +1154,8 @@ io.on('connection', function (socket) {
                     roundResults: [],}
                 table.games[roomId].common = {...table.games[roomId].common, envidoList: [],
                     trucoBet: 1,
-                    cumulativeScore: 1,
+                    envidoBet: 0,
+                    cumulativeScore: 0,
                     roundResults: [],
                     turn: 1,}
 
