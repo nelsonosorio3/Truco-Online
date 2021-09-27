@@ -9,11 +9,11 @@ export default function Chat ({name, roomId, typeofChat}) {
 
     useEffect(() => {
         socket.emit('connected', name);
-    }, [name])
+    }, [name]);
 
     useEffect(() => {
         socket.on('messages', (message) => {
-            console.log(message)
+            console.log(message);
             setMsgs([...msgs, message]);
         })
 
@@ -23,13 +23,13 @@ export default function Chat ({name, roomId, typeofChat}) {
     const divRef = useRef(null);
 
     useEffect(() => {
-        divRef.current.scrollIntoView({behavior: 'smooth'})
+        divRef.current.scrollIntoView({behavior: 'smooth'});
     })
 
     const submit = (event) => {
         event.preventDefault();
         socket.emit('message', ({name, msg, roomId}));
-        setMsg("")
+        setMsg("");
     }
 
     return(
