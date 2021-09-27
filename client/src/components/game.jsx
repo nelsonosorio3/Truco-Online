@@ -49,14 +49,12 @@ export default function Game() {
         setPlayer(player);
       });
       socket.on("bet", async (betOptions, bool)=>{  //trae la apuesta segun turno
-        // await changeTurn();
         setPlayer({...player, betOptions, bet: bool});
       });
       socket.on("betting", bool=>{  //cambia el estado de si se esta apostando para bloquear jugar cartas hasta resolverlo
         setPlayer({...player, bet: false, betOptions: [], isTurn: !player.isTurn});
       });
-      socket.on("playCard", async card=>{  //escucha carta jugada por rival
-        // await changeTurn();
+      socket.on("playCard", card=>{  //escucha carta jugada por rival
         setPlayer({...player, tableRival:  [...player.tableRival, card], isTurn: true}); 
       });
       socket.on("updateScore", (score, bool) =>{  //trae cambios en el puntaje

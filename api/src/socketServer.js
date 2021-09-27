@@ -337,7 +337,7 @@ io.on('connection', function (socket) {
         const playerOne = table.games[roomId].playerOne;
         const playerTwo = table.games[roomId].playerTwo;
         const common = table.games[roomId].common;
-        const isPlayerOne = playerOne.id === playerId? true: false;
+        const isPlayerOne = playerOne.id === playerId;
         playerOne.bet = true;
         playerTwo.bet = true;
 
@@ -960,44 +960,64 @@ io.on('connection', function (socket) {
                 console.log(common.envidoList)
             if(isPlayerOne){
                 if(common.envidoList.length === 1 && !common.envidoList.includes("realEnvido")){
+                    playerTwo.score += 1;
+                    playerOne.scoreRival += 1;
                     io.to(playerTwo.id).emit("updateScore", 1, !bool);
                     io.to(playerOne.id).emit("updateRivalScore", 1, bool);
                 }
                 else if(common.envidoList.length === 2 && !common.envidoList.includes("realEnvido")){
+                    playerTwo.score += 2;
+                    playerOne.scoreRival += 2;
                     io.to(playerTwo.id).emit("updateScore", 2, !bool);
                     io.to(playerOne.id).emit("updateRivalScore", 2, bool);
                 }
                 else if(common.envidoList.length === 2){
+                    playerTwo.score += 3;
+                    playerOne.scoreRival += 3;
                     io.to(playerTwo.id).emit("updateScore", 3, !bool);
                     io.to(playerOne.id).emit("updateRivalScore", 3, bool);
                 }
                 else if(common.envidoList.length === 3){
+                    playerTwo.score += 5;
+                    playerOne.scoreRival += 5;
                     io.to(playerTwo.id).emit("updateScore", 5, !bool);
                     io.to(playerOne.id).emit("updateRivalScore", 5, bool);
                 }
                 else if(common.envidoList.length === 4){
+                    playerTwo.score += 7;
+                    playerOne.scoreRival += 7;
                     io.to(playerTwo.id).emit("updateScore", 7, !bool);
                     io.to(playerOne.id).emit("updateRivalScore", 7, bool);
                 }
             }
             else{
                 if(common.envidoList.length === 1){
+                    playerOne.score += 1;
+                    playerTwo.scoreRival += 1;
                     io.to(playerTwo.id).emit("updateScore", 1, bool);
                     io.to(playerOne.id).emit("updateRivalScore", 1, !bool);
                 }
                 else if(common.envidoList.length === 2 && !common.envidoList.includes("realEnvido")){
+                    playerOne.score += 2;
+                    playerTwo.scoreRival += 2;
                     io.to(playerTwo.id).emit("updateScore", 2, bool);
                     io.to(playerOne.id).emit("updateRivalScore", 2, !bool);
                 }
                 else if(common.envidoList.length === 2){
+                    playerOne.score += 3;
+                    playerTwo.scoreRival += 3;
                     io.to(playerTwo.id).emit("updateScore", 3, bool);
                     io.to(playerOne.id).emit("updateRivalScore", 3, !bool);
                 }
                 else if(common.envidoList.length === 3){
+                    playerOne.score += 5;
+                    playerTwo.scoreRival += 5;
                     io.to(playerTwo.id).emit("updateScore", 5, bool);
                     io.to(playerOne.id).emit("updateRivalScore", 5, !bool);
                 }
                 else if(common.envidoList.length === 4){
+                    playerOne.score += 7;
+                    playerTwo.scoreRival += 7;
                     io.to(playerTwo.id).emit("updateScore", 7, bool);
                     io.to(playerOne.id).emit("updateRivalScore", 7, !bool);
                 }
@@ -1011,95 +1031,114 @@ io.on('connection', function (socket) {
         }
         
     });
-    socket.on("playCard", async(card, roomId, playerId) => {
-        if(table.games[roomId].playerOne.id === playerId){
-            await io.to(table.games[roomId].playerTwo.id).emit("playCard", card, true);
-            table.games[roomId].playerTwo.tableRival.push(card);
-            table.games[roomId].playerOne.tablePlayer.push(card);
+    socket.on("playCard", (card, roomId, playerId) => {
+        const playerOne = table.games[roomId].playerOne;
+        const playerTwo = table.games[roomId].playerTwo;
+        const common = table.games[roomId].common;
+        const isPlayerOne = playerOne.id === playerId;
+
+        if(isPlayerOne){
+            io.to(playerTwo.id).emit("playCard", card, true);
+            playerTwo.tableRival.push(card);
+            playerOne.tablePlayer.push(card);
+            io.in(roomId).emit("messages", {msg: `${playerOne.name}: juega ${card.number} de ${card.suit}`})
         }
         else{
-            await io.to(table.games[roomId].playerOne.id).emit("playCard", card, true);
-            table.games[roomId].playerOne.tableRival.push(card);
-            table.games[roomId].playerTwo.tablePlayer.push(card);
+            io.to(playerOne.id).emit("playCard", card, true);
+            playerOne.tableRival.push(card);
+            playerTwo.tablePlayer.push(card);
+            io.in(roomId).emit("messages", {msg: `${playerTwo.name}: juega ${card.number} de ${card.suit}`})
         }
 
-        if(table.games[roomId].playerOne.tableRival[0] && table.games[roomId].playerTwo.tableRival[0] && table.games[roomId].common.turn === 1){
-            if(table.games[roomId].playerOne.tablePlayer[0].truco < table.games[roomId].playerTwo.tablePlayer[0].truco){
-                table.games[roomId].common.roundResults.push("playerOne");
+        if(playerOne.tableRival[0] && playerTwo.tableRival[0] && common.turn === 1){
+            if(playerOne.tablePlayer[0].truco < playerTwo.tablePlayer[0].truco){
+                common.roundResults.push("playerOne");
+                io.in(roomId).emit("messages", {msg: `Gana ${playerOne.name}!`});
             }
-            else if(table.games[roomId].playerOne.tablePlayer[0].truco > table.games[roomId].playerTwo.tablePlayer[0].truco){
-                table.games[roomId].common.roundResults.push("playerTwo");
+            else if(playerOne.tablePlayer[0].truco > playerTwo.tablePlayer[0].truco){
+                common.roundResults.push("playerTwo");
+                io.in(roomId).emit("messages", {msg: `Gana ${playerTwo.name}!`});
             }
             else{
-                table.games[roomId].common.roundResults.push("tie");
+                common.roundResults.push("tie");
+                io.in(roomId).emit("messages", {msg: `Empate`});
             }
-            table.games[roomId].common.turn = 2;
-            table.games[roomId].common.trucoBet > 1? io.in(roomId).emit("bet", table.betsList.noTruco) : io.in(roomId).emit("bet", table.betsList.otherTurn);
+            common.turn = 2;
+            common.trucoBet > 1? io.in(roomId).emit("bet", table.betsList.noTruco) : io.in(roomId).emit("bet", table.betsList.otherTurn);
         }
 
-        if(table.games[roomId].playerOne.tableRival[1] && table.games[roomId].playerTwo.tableRival[1] && table.games[roomId].common.turn === 2){
-            if(table.games[roomId].playerOne.tablePlayer[1].truco < table.games[roomId].playerTwo.tablePlayer[1].truco ){
-                table.games[roomId].common.roundResults.push("playerOne");
+        if(playerOne.tableRival[1] && playerTwo.tableRival[1] && common.turn === 2){
+            if(playerOne.tablePlayer[1].truco < playerTwo.tablePlayer[1].truco ){
+                common.roundResults.push("playerOne");
+                io.in(roomId).emit("messages", {msg: `Gana ${playerOne.name}!`})
             }
-            else if(table.games[roomId].playerOne.tablePlayer[1].truco > table.games[roomId].playerTwo.tablePlayer[1].truco){
-                table.games[roomId].common.roundResults.push("playerTwo");
+            else if(playerOne.tablePlayer[1].truco > playerTwo.tablePlayer[1].truco){
+                common.roundResults.push("playerTwo");
+                io.in(roomId).emit("messages", {msg: `Gana ${playerTwo.name}!`});
             }
             else{
-                table.games[roomId].common.roundResults.push("tie");
+                common.roundResults.push("tie");
+                io.in(roomId).emit("messages", {msg: `Empate`});
             }
-            table.games[roomId].common.turn = 3;
-            table.games[roomId].common.trucoBet > 1? io.in(roomId).emit("bet", table.betsList.noTruco) : io.in(roomId).emit("bet", table.betsList.otherTurn);
+            common.turn = 3;
+            common.trucoBet > 1? io.in(roomId).emit("bet", table.betsList.noTruco) : io.in(roomId).emit("bet", table.betsList.otherTurn);
         }
 
-        if(table.games[roomId].playerOne.tableRival[2] && table.games[roomId].playerTwo.tableRival[2] && table.games[roomId].common.turn === 3){
-            if(table.games[roomId].playerOne.tablePlayer[2].truco < table.games[roomId].playerTwo.tablePlayer[2].truco){
-                table.games[roomId].common.roundResults.push("playerOne");
+        if(playerOne.tableRival[2] && playerTwo.tableRival[2] && common.turn === 3){
+            if(playerOne.tablePlayer[2].truco < playerTwo.tablePlayer[2].truco){
+                common.roundResults.push("playerOne");
+                io.in(roomId).emit("messages", {msg: `Gana ${playerOne.name}!`})
             }
-            else if(table.games[roomId].playerOne.tablePlayer[2].truco > table.games[roomId].playerTwo.tablePlayer[2].truco){
-                table.games[roomId].common.roundResults.push("playerTwo");
+            else if(playerOne.tablePlayer[2].truco > playerTwo.tablePlayer[2].truco){
+                common.roundResults.push("playerTwo");
+                io.in(roomId).emit("messages", {msg: `Gana ${playerTwo.name}!`});
             }
             else{
-                table.games[roomId].common.roundResults.push("tie");
+                common.roundResults.push("tie");
+                io.in(roomId).emit("messages", {msg: `Empate`});
             }
-            table.games[roomId].common.turn = 4;
-            table.games[roomId].common.trucoBet > 1? io.in(roomId).emit("bet", table.betsList.noTruco) : io.in(roomId).emit("bet", table.betsList.otherTurn);
+            common.turn = 4;
+            common.trucoBet > 1? io.in(roomId).emit("bet", table.betsList.noTruco) : io.in(roomId).emit("bet", table.betsList.otherTurn);
         }
 
-        console.log(table.games[roomId].common.roundResults)
-        if(table.games[roomId].common.roundResults.length >= 2){
+        console.log(common.roundResults)
+        if(common.roundResults.length >= 2){
             let winner = false;
-            if((table.games[roomId].common.roundResults.filter(round => round === "playerOne").length >1) || 
-            (table.games[roomId].common.roundResults.filter(round => round === "tie").length === 2 && table.games[roomId].common.roundResults.some(round => round === "playerOne")) ||
-            table.games[roomId].common.roundResults.every(round => round === "tie") && table.games[roomId].common.roundResults.length === 3 && table.games[roomId].playerOne.starts){
+            if((common.roundResults.filter(round => round === "playerOne").length > 1) || 
+            (common.roundResults.filter(round => round === "tie").length === 2 && common.roundResults.some(round => round === "playerOne")) ||
+            common.roundResults.every(round => round === "tie") && common.roundResults.length === 3 && playerOne.starts){
                 winner = true;
-                table.games[roomId].playerOne.score+= table.games[roomId].common.trucoBet;
+                playerOne.score += common.trucoBet;
+                io.in(roomId).emit("messages", {msg: `GANADOR MANO ${playerOne.name}!`});
             }
-            else if((table.games[roomId].common.roundResults.filter(round => round === "playerTwo").length >1) || 
-            (table.games[roomId].common.roundResults.filter(round => round === "tie").length === 2 && table.games[roomId].common.roundResults.some(round => round === "playerTwo"))||
-            table.games[roomId].common.roundResults.every(round => round === "tie") && table.games[roomId].common.roundResults.length === 3 && table.games[roomId].playerTwo.starts){
+            else if((common.roundResults.filter(round => round === "playerTwo").length > 1) || 
+            (common.roundResults.filter(round => round === "tie").length === 2 && common.roundResults.some(round => round === "playerTwo"))||
+            common.roundResults.every(round => round === "tie") && common.roundResults.length === 3 && playerTwo.starts){
                 winner = true;
-                table.games[roomId].playerTwo.score+= table.games[roomId].common.trucoBet;
+                playerTwo.score += common.trucoBet;
+                io.in(roomId).emit("messages", {msg: `GANADOR MANO ${playerTwo.name}!`});
             } 
-            else if(table.games[roomId].common.roundResults.length >= 3){
+            else if(common.roundResults.length >= 3){
                 for (let i = 0; i < 3; i++) {
-                  if(table.games[roomId].common.roundResults[i] === "playerOne"){
-                      table.games[roomId].playerOne.score+= table.games[roomId].common.trucoBet;
+                  if(common.roundResults[i] === "playerOne"){
+                      playerOne.score+= common.trucoBet;
                       winner = true;
+                      io.in(roomId).emit("messages", {msg: `GANADOR MANO ${playerOne.name}!`})
                     };
-                  if(table.games[roomId].common.roundResults[i] === "playerTwo") {
-                      table.games[roomId].playerTwo.score+= table.games[roomId].common.trucoBet;
+                  if(common.roundResults[i] === "playerTwo") {
+                      playerTwo.score += common.trucoBet;
                       winner = true;
-                    
+                      io.in(roomId).emit("messages", {msg: `GANADOR MANO ${playerTwo.name}!`});
                     };      
                 };
             };
             //revisar si algun jugador ya gano
-            if(table.games[roomId].playerOne.score >= table.games[roomId].common.scoreToWin || table.games[roomId].playerTwo.score >= table.games[roomId].common.scoreToWin){
-                io.to(table.games[roomId].playerOne.id).emit("gameEnds", (table.games[roomId]))
-                io.to(table.games[roomId].playerTwo.id).emit("gameEnds", (table.games[roomId]))
-                console.log(table.games)
-                delete table.games[roomId]
-                console.log(table.games)
+            if(playerOne.score >= common.scoreToWin || playerTwo.score >= common.scoreToWin){
+                io.to(playerOne.id).emit("gameEnds", (table.games[roomId]));
+                io.to(playerTwo.id).emit("gameEnds", (table.games[roomId]));
+                console.log(table.games);
+                delete table.games[roomId];
+                console.log(table.games);
                 return;
             }
             if(winner){
@@ -1149,8 +1188,6 @@ io.on('connection', function (socket) {
         }
     });
     socket.on("changeTurn", (roomId, playerId)=>{
-        // socket.to(roomId).emit("playerOrder", false);
-        // socket.emit("playerOrder", true);
         if(table.games[roomId].playerOne.id === playerId){
             io.to(table.games[roomId].playerTwo.id).emit("changeTurn", false);
             io.to(table.games[roomId].playerOne.id).emit("changeTurn", true);
