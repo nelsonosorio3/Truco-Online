@@ -10,7 +10,7 @@
 .chatGame{
     width: 93%;
     min-height: 30vh;
-    max-height: 30vh;
+    max-height: 50vh;
     margin: 10px;
     overflow:hidden;
     border: 5px solid rgb(90, 91, 93);
