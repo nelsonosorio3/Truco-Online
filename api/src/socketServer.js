@@ -1108,6 +1108,7 @@ io.on('connection', function (socket) {
             common.roundResults.every(round => round === "tie") && common.roundResults.length === 3 && playerOne.starts){
                 winner = true;
                 playerOne.score += common.trucoBet;
+                playerTwo.scoreRival += common.trucoBet;
                 io.to(playerOne.id).emit("updateScore", common.trucoBet, true);
                 io.to(playerTwo.id).emit("updateRivalScore", common.trucoBet, true);
                 io.in(roomId).emit("messages", {msg: `GANADOR MANO ${playerOne.name}!`});
@@ -1117,6 +1118,7 @@ io.on('connection', function (socket) {
             common.roundResults.every(round => round === "tie") && common.roundResults.length === 3 && playerTwo.starts){
                 winner = true;
                 playerTwo.score += common.trucoBet;
+                playerOne.scoreRival += common.trucoBet;
                 io.to(playerTwo.id).emit("updateScore", common.trucoBet, true);
                 io.to(playerOne.id).emit("updateRivalScore", common.trucoBet, true);
                 io.in(roomId).emit("messages", {msg: `GANADOR MANO ${playerTwo.name}!`});
@@ -1125,6 +1127,7 @@ io.on('connection', function (socket) {
                 for (let i = 0; i < 3; i++) {
                   if(common.roundResults[i] === "playerOne"){
                       playerOne.score+= common.trucoBet;
+                      playerTwo.scoreRival += common.trucoBet;
                       winner = true;
                       io.to(playerOne.id).emit("updateScore", common.trucoBet, true);
                       io.to(playerTwo.id).emit("updateRivalScore", common.trucoBet, true);
@@ -1132,6 +1135,7 @@ io.on('connection', function (socket) {
                     };
                   if(common.roundResults[i] === "playerTwo") {
                       playerTwo.score += common.trucoBet;
+                      playerOne.scoreRival += common.trucoBet;
                       winner = true;
                       io.to(playerTwo.id).emit("updateScore", common.trucoBet, true);
                       io.to(playerOne.id).emit("updateRivalScore", common.trucoBet, true);
