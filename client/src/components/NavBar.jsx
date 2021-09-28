@@ -29,7 +29,10 @@ export default function NavBar() {
                 <Link to='/rooms' className={styles.links + ' ' + styles.rooms}>Lobbys</Link>
                 {
                     isAuth ? 
-                    <Link to='/ranking'className={styles.links + ' ' + styles.ranking}>Ranking</Link>
+                    <div>
+                        <Link to='/ranking'className={styles.links + ' ' + styles.ranking}>Ranking</Link>
+                        <Link to='/tournaments'className={styles.links + ' ' + styles.ranking}>Tournaments</Link>
+                    </div>
                     :
                     null
                 }
