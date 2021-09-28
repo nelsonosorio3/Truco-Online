@@ -24,7 +24,7 @@ export default function TournamentsList(){
 
     const joinTournament = async (event) => {
         event.preventDefault();
-        socket.emit('joinTournament', (parseInt(event.target[0].innerText)))
+        socket.emit('joinTournament', ({tournamentId: parseInt(event.target[0].innerText), user: localStorage.user}))
         dispatch(setIsInTournament({isInTournament: true, tournamentId: parseInt(event.target[0].innerText)}))
     }
 
@@ -35,9 +35,10 @@ export default function TournamentsList(){
             </form>
             <div className={styles.TournamentsList}>
                 {
-                allTournaments.length > 0
+                    allTournaments[0]
+                // allTournaments.length > 0
                 ?
-                allTournaments[0].activeTournaments.map(tournament => 
+                allTournaments[0].map(tournament => 
                     <div key={tournament}>
                         <form onSubmit={joinTournament}>
                             <button type='submit' value={tournament} className={styles.roomBtn} >{tournament}</button>

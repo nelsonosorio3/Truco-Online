@@ -28,5 +28,9 @@ export const GO_TO_N_PAGE = "GO_TO_N_PAGE";
 export const SET_USERS_PER_PAGE = "SET_USERS_PER_PAGE";
 
 export const IS_IN_ROOM = 'ADD_ROOM'
-export const IS_IN_TOURNAMENT = 'IS_IN_TOURNAMENT'
+export const IS_IN_TOURNAMENT = 'IS_IN_TOURNAMENT';
+
+//Ranking
+
+export const GET_RANKING = 'GET_RANKING';
 

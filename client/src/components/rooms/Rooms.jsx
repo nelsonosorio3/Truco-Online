@@ -1,6 +1,6 @@
-import React, {useEffect, useState} from 'react';
-import {useDispatch, useSelector} from 'react-redux'
-import { useHistory } from "react-router-dom";
+import React, {} from 'react';
+import {useSelector} from 'react-redux'
+// import { useHistory } from "react-router-dom";
 import Game from '../game';
 
 import styles from './styles/Rooms.module.css'
@@ -10,14 +10,14 @@ import NavBar from '../NavBar';
 
 import JoinRoomForm from './JoinRoomForm';
 import RoomsList from './RoomsList';
-import socket from '../socket';
+// import socket from '../socket';
 
 export default function Rooms() {
   console.log("localStorage in Rooms", localStorage)
-  const history = useHistory()
+  // const history = useHistory()
 
   let isinRoom = useSelector(store => store.roomsReducer.isInRoom);
-  const roomId = useSelector(store => store.roomsReducer.roomId)
+  // const roomId = useSelector(store => store.roomsReducer.roomId)
 
   // socket.on("roomFull", ()=>isinRoom= false)
   return (
