@@ -120,7 +120,7 @@ export default function SignUp() {
                     onChange={handleChange}
                 />
                 {errors.email && (<p className={styles.danger}> {errors.email} </p>)}
-                <label className={styles.label} htmlFor="health"> Password: </label>
+                <label className={styles.label} htmlFor="password"> Password: </label>
                 <input 
                     type='password'
                     id='password'
