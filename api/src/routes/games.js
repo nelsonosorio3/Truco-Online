@@ -16,8 +16,36 @@ router.get('/' , (req , res) => {
 })
 
 //Agregar validacion
-//Ruta para agregar una partida [TERMINADA] a un usuario /:idUsuarioLoegado/:idDeLaPartida
-router.post('/:userid/:gameid' , (req , res) => {
+//Ruta para agregar una partida nueva que recien inicia a la base de datos
+router.post('/:userId', async (req , res) => {
+    const {userId} = req.params;
+    const games= await Games.create({
+        state: "pendiente",
+        winner: "",
+        loser: "",
+        results: "0|0"
+      });
+    await games.addUser(userId);
+    return res.json(games.id);
+});
+//Ruta para vincular tambien a el otro jugador a la partida
+router.patch('/:userId/:gameId', async (req , res) => {
+    const {userId, gameId} = req.params;
+    const games= await Games.findByPk(parseInt(gameId));
+    await games.addUser(userId);
+    return res.json("se creo")
+});
+//ruta solo para hacer testing
+router.get('/:id', async (req , res) => {
+    const {id} = req.params;
+    const user = await User.findOne({ 
+        where: { id: id}, include: Games,
+       })
+       console.log(user)
+    return res.json(user)
+});
+//Ruta para modificar una partida [TERMINADA] a un usuario /:idUsuarioLoegado/:idDeLaPartida
+router.put('/:userid/:gameid' , (req , res) => {
     const {userid, gameid} = req.params
 
     let gamesData = null

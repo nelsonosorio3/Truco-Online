@@ -116,7 +116,7 @@ ol{
     #points{
         width: 25%;
         height: 60%;
-        display: none;
+        /* display: none; */
     }
     #points div h2{
         font-size: larger;

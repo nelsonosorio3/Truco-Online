@@ -11,7 +11,7 @@ module.exports = {
         turn: 1,
         betsList: {firstTurn: ["truco", "envido1", "realEnvido", "faltaEnvido", "ir al mazo"],
                     otherTurn: ["truco", "ir al mazo"],
-                    noTruco: ["ir al mazo"],
+                    noTruco: [],
                     firstTurnFlor: ["truco", "envido1", "realEnvido", "faltaEnvido", "ir al mazo", "flor"],
                     flor: ["con flor me achico", "con flor quiero", "contraFlorAlResto", "contraFlor"],
                     contraFlorAlResto: ["con flor me achico", "con flor quiero"],
