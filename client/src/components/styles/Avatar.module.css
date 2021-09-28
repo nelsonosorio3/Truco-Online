@@ -9,6 +9,10 @@
     padding: .5em;
 }
 
+.avatarContainer:hover {
+    cursor: pointer;
+}
+
 .avatarContainer img {
     width: 7em;
     height: 7em;
