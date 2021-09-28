@@ -2,14 +2,18 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import FacebookLogin from 'react-facebook-login';
 import HomeButton from './HomeButton';
+import { useDispatch } from "react-redux";
+import {logInFacebook  } from '../Redux/actions-types/logActions'
 
 import styles from './styles/Welcome.module.css';
 
 export default function Welcome() {
-
+    const dispatch = useDispatch()
 
     const responseFacebook = (response) => {
-        console.log(response);
+        console.log(response)
+        dispatch(logInFacebook(response));
+        console.log(response.email)
       }
 
 
@@ -28,7 +32,7 @@ export default function Welcome() {
                             autoLoad={false}
                             fields="name,email,picture"
                             callback={responseFacebook}
-                            icon="fa-facebook" />,
+                            cssClass="facebook"/>,
                         <Link to='/sign-up'>
                             <button className={styles.btnSignUp}>Sign Up</button>
                         </Link>
