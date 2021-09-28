@@ -19,7 +19,7 @@ function validate(state) {
   if(!state.username) {
     errors.username = 'You have to enter a user name...';
   } else if (state.username.length < 4) {
-      errors.username = 'The user is invalid. Must be more than 4 characters...';
+      errors.username = 'The user is invalid. Must be more than 3 characters...';
   } else if(!ALPHA.test(state.username)) {
       errors.username = 'Only letters are allowed...'
   };
@@ -31,7 +31,7 @@ function validate(state) {
   if(!state.password) {
     errors.password = 'You have to enter a password...';
   } else if (state.password.length < 4) {
-      errors.password = 'The password is invalid';
+      errors.password = 'The password is invalid. Must be more than 3 characters...';
   };
   return errors;
 };
@@ -39,8 +39,8 @@ function validate(state) {
 const initialState = {
     username: null,
     email: null,
+    previousEmail: null ,
     password: null,
-    response: null,
     image: null,
 };
 
@@ -48,14 +48,16 @@ export default function EditProfile() {
 
     const history = useHistory();
 
-    const { editProfile, clearData } = editProfileActions;
+    const { getEditProfile, putEditProfile, clearData } = editProfileActions;
 
-    const { registered, message } = useSelector(state => state.signUpReducer);
+    const { status, msg } = useSelector(state => state.signUpReducer);
     const editProfileReducer = useSelector(state => state.editProfileReducer);
     
     const dispatch = useDispatch();
 
     const [state, setState] = useState(initialState);
+
+    const [img, setImg] = useState(null);
 
     const [errors, setErrors] = useState(initialState);
 
@@ -64,11 +66,17 @@ export default function EditProfile() {
     //Trae primeramente los datos del usuario
     useEffect(() => {
         //informacion del usuario
-        dispatch(editProfile({token: localStorage.token}));
+        dispatch(getEditProfile({token: localStorage.token}));
     }, []);
 
     useEffect(() => {
-        setState(editProfileReducer);
+        setState({
+            username: editProfileReducer.username,
+            email: editProfileReducer.email,
+            previousEmail: editProfileReducer.email,
+            password: editProfileReducer.password,
+            image: editProfileReducer.img,
+        });
     }, [editProfileReducer]);
 
     function handleChange(event) {
@@ -85,13 +93,15 @@ export default function EditProfile() {
 
     function handleSubmit(event) {
         event.preventDefault();
-        // dispatch(signUpActions.signUpActions(state));
+        //dispatch(putEditProfile({state, img}));
         //seteo el response en false hasta que me llegue la confirmacion de que 
-        // se cambio con exito, y si asi muestro el modal y redirecciono
-        // dispatch(clearData());
+        //se cambio con exito, y si asi muestro el modal y redirecciono
         openModal();
-        setState(initialState);
-        setErrors(initialState);
+        if(status) {
+            dispatch(clearData());
+            setState(initialState);
+            setErrors(initialState);
+        };
     };
 
     return (
@@ -99,7 +109,7 @@ export default function EditProfile() {
             <section className={styles.container}>
                 <form className={styles.form} onSubmit={handleSubmit}>
                     {
-                        state.response ? 
+                        editProfileReducer.response ? 
                         <>
                             <h3> Edit the field you want to change* </h3>
                             <label className={styles.label} htmlFor="username" > User: </label>
@@ -138,12 +148,13 @@ export default function EditProfile() {
                                 onChange={handleChange}
                             />
                             {errors.password && (<p className={styles.danger}> {errors.password} </p>)}
-                            <Avatars />
+                            <Avatars set={setImg}/>
                             <label className={styles.labelFile} htmlFor="image"> Upload Image: </label>
                             <input 
                                 type='file'
                                 id='image'
                                 name="image"
+                                accept="image/png, image/jpeg"
                                 value={state.image}
                                 className={styles.inputFile}
                                 onChange={handleChange}
@@ -168,9 +179,9 @@ export default function EditProfile() {
             </section>
             <Modal isOpen={isOpenModal} closeModal={closeModal}>
               <h3>Status:</h3>
-              <p>{message}</p>
+              <p>{msg}</p>
               {
-                registered ? 
+                status ? 
                 <p>Redirecting...</p>
                 :
                 null

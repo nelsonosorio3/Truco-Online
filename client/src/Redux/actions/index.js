@@ -14,6 +14,7 @@ export const DELETE_FRIEND = 'DELETE_FRIEND';
 export const PUT_FRIEND_REQUEST = 'PUT_FRIEND_REQUEST';
 //Edit
 export const EDIT_PROFILE = 'EDIT_PROFILE';
+export const PUT_PROFILE = 'PUT_PROFILE';
 export const CLEAR_DATA = 'CLEAR_DATA';
 //AdminPanel
 export const GET_USERS = "GET_USERS";

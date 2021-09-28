@@ -8,30 +8,34 @@ import profileIcon from '../img/profileIcon.png';
 const avatars = [
     {
         name: 'Default',
-        img: profileIcon,
+        image: profileIcon,
     },
     {
         name: 'Default',
-        img: profileIcon,
+        image: profileIcon,
     },
     {
         name: 'Default',
-        img: profileIcon,
+        image: profileIcon,
     },
     {
         name: 'Default',
-        img: profileIcon,
+        image: profileIcon,
     },
 ];
 
-export default function Avatars() {
+export default function Avatars({set}) {
     return (
         <>
             <h4> Choose your Avatar: </h4>
             <div className={styles.avatarsContainer}>
                 {
                     avatars && avatars.map(avatar => {
-                        return <Avatar name={avatar.name} img={avatar.img} />
+                        return <Avatar 
+                                    name={avatar.name} 
+                                    image={avatar.image} 
+                                    set={set}
+                                />
                     })
                 }
             </div>
