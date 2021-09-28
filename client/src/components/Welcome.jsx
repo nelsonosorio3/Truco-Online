@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import FacebookLogin from 'react-facebook-login';
+// import FacebookLogin from 'react-facebook-login';
 import HomeButton from './HomeButton';
 
 import styles from './styles/Welcome.module.css';
@@ -23,12 +23,12 @@ export default function Welcome() {
                         <Link to='/log-in'>
                             <button className={styles.btnLogIn}>Log In</button>
                         </Link>
-                        <FacebookLogin
+                        {/* <FacebookLogin
                             appId="414547080239642"
                             autoLoad={false}
                             fields="name,email,picture"
                             callback={responseFacebook}
-                            icon="fa-facebook" />,
+                            icon="fa-facebook" />, */}
                         <Link to='/sign-up'>
                             <button className={styles.btnSignUp}>Sign Up</button>
                         </Link>
