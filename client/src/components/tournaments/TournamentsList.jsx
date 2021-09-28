@@ -13,9 +13,17 @@ export default function TournamentsList(){
         socket.on('showActiveTournaments', (tournaments) => {
             setAllTournaments([tournaments]);
         })
-
         return () => {socket.off()}
     }, [allTournaments])
+
+    useEffect(()=>{
+        socket.emit('bringActiveTournaments');  
+    }, [])
+
+    useEffect(() => {
+        socket.on("newTournamentCreated",()=> {socket.emit('bringActiveTournaments');})
+        return () => {socket.off("newTournamentCreated")}
+    })
     
     const updateTournaments = (event) => {
         event.preventDefault();
@@ -36,7 +44,6 @@ export default function TournamentsList(){
             <div className={styles.TournamentsList}>
                 {
                     allTournaments[0]
-                // allTournaments.length > 0
                 ?
                 allTournaments[0].map(tournament => 
                     <div key={tournament}>
