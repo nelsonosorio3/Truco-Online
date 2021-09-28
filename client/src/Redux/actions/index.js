@@ -5,6 +5,7 @@ export const SIGN_UP = 'SIGN_UP';
 //LogIn
 export const LOG_OUT = 'LOG_OUT';
 export const LOG_IN = 'LOG_IN';
+export const LOG_IN_FACEBOOK = 'LOG_IN_FACEBOOK';
 //Profile
 export const GET_PROFILE = 'GET_PROFILE';
 export const GET_FRIENDS = 'GET_FRIENDS';
