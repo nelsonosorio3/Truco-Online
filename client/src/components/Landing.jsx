@@ -5,29 +5,30 @@ import styles from './styles/Landing.module.css';
 
 export default function Landing() {
 
-    const [isAuth, setIsAuth] = useState(false); 
+    const [isAuth, setIsAuth] = useState(false);
 
     useEffect(() => {
         const logged = window.localStorage.getItem("isAuth");
-        if(logged) {
-          setIsAuth(logged);
+        if (logged) {
+            setIsAuth(logged);
         };
     }, []);
 
-    return(
+    return (
         <section className={styles.container}>
-            <div className={styles.table}> 
+            <div className={styles.table}>
                 {
                     isAuth ?
                         <NavLink to="/rooms" >
                             <button className={styles.btn1}>Enter</button>
                         </NavLink>
-                    :
+                        :
                         <NavLink to="/welcome" >
                             <button className={styles.btn1}>Enter</button>
                         </NavLink>
                 }
             </div>
+            <div className={styles.containerBottom}>O <NavLink to="/adminpanel">Entrar como administrador</NavLink></div>
         </section>
     );
 };

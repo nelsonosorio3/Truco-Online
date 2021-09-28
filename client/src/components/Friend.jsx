@@ -6,14 +6,13 @@ import FriendInfo from './FriendInfo';
 import styles from './styles/Friend.module.css'
 import profileIcon from '../img/profileIcon.png'
 
-export default function Friend({ name, date, id, profileId, deleteId, email, status }) {
-
+export default function Friend({ name, date, id, deleteId, email, status }) {
+  
+  const [isOpen, open, close] = useModal();
 
   const deleteFriend = () => {
-    deleteId(email)
-  }
-  const [isOpen, open, close] = useModal();
-  
+    deleteId(email);
+  };
 
   return (
     <div className={styles.mainDiv}>
@@ -27,7 +26,7 @@ export default function Friend({ name, date, id, profileId, deleteId, email, sta
       </div>
       {status === "pending" ? null : <button onClick={() => deleteFriend()}>X</button>}
       {/* Desplegar info detallada */}
-      <FriendInfo isOpen={isOpen} close={close} name={name} date={date} email={email} status={status}/>
+      <FriendInfo isOpen={isOpen} close={close} name={name} date={date} email={email} id={id} />
     </div>
   );
 };

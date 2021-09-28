@@ -6,7 +6,7 @@
     align-items: center;
     justify-content: center;
     
-    background-image: url('../../img/landing.jpg');
+    background-image: url('../../img/landing.webp');
     background-size: 100% 100%;
     background-repeat: no-repeat;
 }
@@ -28,7 +28,7 @@
     transition: background-position .7s,box-shadow .4s;
     background: transparent;
     /* box-shadow: 0px 0px 0px 2px rgb(255 255 255 / 16%) inset, 0px 0px 10px 0px #e48a3c; */
-    background-image: url('../../img/button1.png');
+    background-image: url('../../img/button1.webp');
     background-size: 100% 100%;
     background-repeat: no-repeat;
     text-decoration: none;
@@ -43,4 +43,9 @@
     font-size: 50px;
     color: white;
     text-decoration: none;
+}
+
+.containerBottom {
+    position: absolute;
+    bottom: 100px;
 }

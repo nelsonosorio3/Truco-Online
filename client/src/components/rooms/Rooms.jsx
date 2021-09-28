@@ -22,7 +22,7 @@ export default function Rooms() {
   // socket.on("roomFull", ()=>isinRoom= false)
   return (
     <div className={styles.mainDiv}>
-      <NavBar />
+      
       {
         isinRoom
         ?
@@ -34,6 +34,8 @@ export default function Rooms() {
         // history.push("/game")
         <Game/>
         :
+        <>
+        <NavBar />
         <div className={styles.subMainDiv_noGame}>
           <div className={styles.lobby}>
             <div className={styles.div_Chat_Rooms}>
@@ -45,6 +47,7 @@ export default function Rooms() {
             </div>
           </div>
         </div>
+        </>
       }
     </div>
   );
