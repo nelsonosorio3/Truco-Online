@@ -1,4 +1,4 @@
-import { LOG_OUT, LOG_IN } from '../actions/index';
+import { LOG_OUT, LOG_IN , LOG_IN_FACEBOOK} from '../actions/index';
 
 const INITIAL_STATE = {
   isAuth: false, 
@@ -16,6 +16,27 @@ const logReducer = (state = INITIAL_STATE, {type, payload}) => {
         // login: true
         // username: "pedro"
         // token: "String"
+        window.localStorage.setItem("token", payload.token);
+        window.localStorage.setItem("isAuth", payload.login);
+        window.localStorage.setItem("user", payload.username);
+        return {
+          ...state,
+          isAuth: payload.login,
+          user: payload.username,
+          id: payload.id,
+          message: payload.message,
+          token: payload.token
+        };
+      } else {
+        const newState = {
+          ...state,
+          isAuth: false,
+          message: payload.message,
+        };
+        return newState
+      };
+    case LOG_IN_FACEBOOK:
+      if(payload.login) {
         window.localStorage.setItem("token", payload.token);
         window.localStorage.setItem("isAuth", payload.login);
         window.localStorage.setItem("user", payload.username);

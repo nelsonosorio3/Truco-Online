@@ -105,3 +105,14 @@
     transition: all 1s cubic-bezier(0.19, 1, 0.22, 1);
     transform : scale(1.1);
 }
+
+.facebook{
+    background-color: red;
+    background: transparent;
+    background-image: url('../../img/button1.webp');
+    background-size: 100% 100%;
+}
+.facebook:hover{
+    transition: all 1s cubic-bezier(0.19, 1, 0.22, 1);
+    transform : scale(1.1);
+}
