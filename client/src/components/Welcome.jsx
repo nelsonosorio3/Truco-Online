@@ -10,6 +10,7 @@ import { useHistory } from 'react-router';
 import styles from './styles/Welcome.module.css';
 
 export default function Welcome() {
+    
     const dispatch = useDispatch()
     const history = useHistory()
 

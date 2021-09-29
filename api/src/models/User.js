@@ -27,6 +27,15 @@ module.exports = (sequelize) => {
         gamesLost: {
             type: DataTypes.INTEGER,
         },
+        isAdmin: {
+            type: DataTypes.BOOLEAN,
+            defaultValue: false
+        },
+        // image: {
+        //     type: DataTypes.STRING,
+        //     defaultValue: false
+        // },
+
 
     });
 };

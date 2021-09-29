@@ -37,7 +37,6 @@ const logReducer = (state = INITIAL_STATE, {type, payload}) => {
       };
     case LOG_IN_FACEBOOK:
       if(payload.login) {
-        console.log("Login desde facebook", payload)
         window.localStorage.setItem("token", payload.token);
         window.localStorage.setItem("isAuth", payload.login);
         window.localStorage.setItem("user", payload.username);
