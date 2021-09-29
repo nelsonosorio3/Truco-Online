@@ -892,10 +892,10 @@ exports = module.exports = function(io){
         isPlayerOne? io.to(playerTwo.id).emit("bet", table.betsList[betPick], true) : io.to(playerOne.id).emit("bet", table.betsList[betPick], true);
         io.in(roomId).emit("messages", { msg: `${isPlayerOne? playerOne.name : playerTwo.name}: ${betPick.toUpperCase()}!`});
         }
-        // axios.put(`http://localhost:3001/api/games/${common.gameId}/${playerOne.score}/${playerTwo.score}`,{},{
-        //             headers: {
-        //                 "x-access-token": socket.handshake.auth.token || 1,
-        //             }});
+        axios.put(`http://localhost:3001/api/games/${common.gameId}/${playerOne.score}/${playerTwo.score}`,{},{
+                    headers: {
+                        "x-access-token": socket.handshake.auth.token || 1,
+                    }});
         
     });
     socket.on("playCard", (card, roomId, playerId) => {
@@ -1029,7 +1029,7 @@ exports = module.exports = function(io){
             
             //revisar si algun jugador ya gano
             if(playerOne.score >= common.scoreToWin || playerTwo.score >= common.scoreToWin){
-                axios.put(`http://localhost:3001/api/games/${common.gameId}/${playerOne.score}/${playerTwo.score}`);
+                // axios.put(`http://localhost:3001/api/games/${common.gameId}/${playerOne.score}/${playerTwo.score}`);
                 io.to(playerOne.id).emit("gameEnds", (playerOne));
                 io.to(playerTwo.id).emit("gameEnds", (playerTwo));
                 console.log(table.games);
@@ -1082,7 +1082,7 @@ exports = module.exports = function(io){
                 io.to(table.games[roomId].playerOne.id).emit("newRoundStarts", table.games[roomId].playerOne);
                 io.to(table.games[roomId].playerTwo.id).emit("newRoundStarts", table.games[roomId].playerTwo);
                 }
-                // axios.put(`http://localhost:3001/api/games/${common.gameId}/${playerOne.score}/${playerTwo.score}`);
+                axios.put(`http://localhost:3001/api/games/${common.gameId}/${playerOne.score}/${playerTwo.score}`);
         }
         
     });
