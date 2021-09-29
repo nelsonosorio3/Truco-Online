@@ -9,17 +9,13 @@ const router = Router();
 const jwt = require('jsonwebtoken');
 // Funcion para validar usuario
 const {validarUsuario} = require('../controller/index')
+const userControllers = require('../controller/users')
 
-//todas las rutas /api/user 
-router.get('/', async (req, res) => {
-  try {
-    const users = await User.findAll();
-    return res.json(users)
-  } catch (error) {
-    console.log(error)
-    res.sendStatus(404).send(error);
-  }
-});
+//Trae todos los usuarios
+router.get('/', userControllers.allUsers);
+
+// Ruta para hacer login con Facebook
+router.get('/login/facebook', userControllers.facebookLogin)
 
 router.get('/login', async (req, res) => {
 
