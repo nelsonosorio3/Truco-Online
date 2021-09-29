@@ -5,6 +5,7 @@ import {useDispatch, useSelector} from 'react-redux'
 import Chat from './rooms/Chat';
 import { useHistory } from "react-router-dom";
 import { setIsInRoom } from '../Redux/actions-types/roomsActions';
+import axios from 'axios';
 
 
 export default function Game({tournamentMatchId}) {
@@ -80,8 +81,7 @@ export default function Game({tournamentMatchId}) {
         console.log("termino");
         history.push("/profile");
         alert("el juego termino");
-        dispatch(setIsInRoom({isInRoom: false, roomId: null}))
-        //aqui deberia estar el dispatch con data que contiene playerOne, playerTwo, commonhacer el post a la api y agregar info de la partida.
+        dispatch(setIsInRoom({isInRoom: false, roomId: null}));
       });
       return () =>{ //limpieza de eventos
         socket.off("gameStarts");
