@@ -2,7 +2,6 @@ import axios from 'axios';
 import { EDIT_PROFILE, PUT_PROFILE, CLEAR_DATA } from '../actions/index';
 
 const getEditProfile = ({token}) => {
-  //necesito que me retorne: username, password, email e image(no se si esta implementada)
   return function(dispatch) {
     return axios.get(`http://localhost:3001/api/user/edit`, {
       headers: {
@@ -17,7 +16,6 @@ const getEditProfile = ({token}) => {
 };
 
 const putEditProfile = (data) => {
-  //necesito que me retorne status(boolean) y msg('Usuario actualizado con exito!' o 'Error en la actualizacion')
   return function(dispatch) {
     return axios.put(`http://localhost:3001/api/user/edit`, {
       body: data,
