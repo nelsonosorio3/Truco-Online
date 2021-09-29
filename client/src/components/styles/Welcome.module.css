@@ -49,7 +49,7 @@
     text-shadow: 0px 0px 10px rgb(0 0 0 / 50%);
     overflow: hidden;
     padding: 20px 50px 20px 50px;
-    margin-bottom: 20px;
+    /* margin-bottom: 20px; */
     font-size: 20px;
     position: relative;
     color: white;
@@ -81,7 +81,7 @@
     text-shadow: 0px 0px 10px rgb(0 0 0 / 50%);
     overflow: hidden;
     padding: 20px 50px 20px 50px;
-    margin-bottom: 20px;
+    /* margin-bottom: 20px; */
     font-size: 20px;
     position: relative;
     color: white;
@@ -107,10 +107,24 @@
 }
 
 .facebook{
-    background-color: red;
+    border: none;
+    border-radius: 4px;
+    text-shadow: 0px 0px 10px rgb(0 0 0 / 50%);
+    overflow: hidden;
+    padding: 20px 50px 20px 50px;
+    font-size: 20px;
+    position: relative;
+    color: white;
+    outline: none;
+    cursor: pointer;
+    width: 100%;
     background: transparent;
-    background-image: url('../../img/button1.webp');
+    background-image: url('../../img/botonazul.png');
     background-size: 100% 100%;
+    background-repeat: no-repeat;
+    text-decoration: none;
+    font-family: 'Crayon' ;
+    font-size: 20px;
 }
 .facebook:hover{
     transition: all 1s cubic-bezier(0.19, 1, 0.22, 1);
