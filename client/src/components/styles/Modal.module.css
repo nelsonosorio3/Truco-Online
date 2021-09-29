@@ -30,10 +30,10 @@
 
     border-radius: 1em;
     padding: 1rem;
-    font-weight: 800;
-    font-size: 25px;
+    /* font-weight: 800; */
+    /* font-size: 25px; */
     /* new */
-    background-color: #808080d4;
+    background-color: #808080ea;
 }
 
 .close {

@@ -15,7 +15,6 @@ export const logInFacebook = ({email , name}) => {
   return function(dispatch) {
     return axios(`http://localhost:3001/api/user/login/facebook?emailInput=${email}&usernameInput=${name}`)
       .then(response => {
-        console.log(response.data)
         dispatch({ type: LOG_IN_FACEBOOK, payload: response.data });
       })
       .catch(error => console.log(error));
