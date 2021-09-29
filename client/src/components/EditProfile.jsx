@@ -14,33 +14,41 @@ import styles from './styles/EditProfile.module.css';
 const ALPHA = /^[a-zA-Z\s]+$/;
 const EMAIL = /^[^@]+@[^@]+\.[^@]+$/;
 
-function validate(state) {
+function validate(newData) {
   let errors = {};
-  if(!state.username) {
+  if(!newData.username) {
     errors.username = 'Ingresa tu nombre de usuario...';
-  } else if (state.username.length < 4) {
+  } else if (newData.username.length < 4) {
       errors.username = 'Nombre inválido. Debe contener más de 3 caracteres...';
-  } else if(!ALPHA.test(state.username)) {
-      errors.username = 'Solo se aceptan letras...'
+  } else if(!ALPHA.test(newData.username)) {
+      errors.username = 'Solo se aceptan letras...';
   };
-  if(!state.email) {
+  if(!newData.email) {
     errors.email = 'Ingresa tu email...';
-  } else if(!EMAIL.test(state.email)) {
+  } else if(!EMAIL.test(newData.email)) {
       errors.email = 'El email es inválido...';
   };
-  if(!state.password) {
+  if(!newData.password) {
     errors.password = 'Ingresa un contraseña...';
-  } else if (state.password.length < 4) {
+  } else if(newData.password.length < 4) {
       errors.password = 'Contraseña inválida. Debe contener más de 3 caracteres...';
-  };
+    } ;
   return errors;
 };
 
+function doPackage(oldData, newData, img) {
+    const data = {};
+    newData.username.length === 0 ? data.username = oldData.username : data.username = newData.username;
+    newData.email.length === 0 ? data.email = oldData.email : data.email = newData.email;
+    newData.password.length === 0 ? data.password = oldData.password : data.password = newData.password;
+    // img ? data.image = img : data.image = newData.image? : data.image = oldData.image;
+    return data;
+};
+
 const initialState = {
-    username: null,
-    email: null,
-    previousEmail: null ,
-    password: null,
+    username: '',
+    email: '',
+    password: '',
     image: null,
 };
 
@@ -55,7 +63,8 @@ export default function EditProfile() {
     
     const dispatch = useDispatch();
 
-    const [state, setState] = useState(initialState);
+    const [newData, setNewData] = useState(initialState);
+    const [oldData, setOldData] = useState(initialState);
 
     const [img, setImg] = useState(null);
 
@@ -70,38 +79,37 @@ export default function EditProfile() {
     }, []);
 
     useEffect(() => {
-        setState({
+        setOldData({
             username: editProfileReducer.username,
             email: editProfileReducer.email,
-            previousEmail: editProfileReducer.email,
             password: editProfileReducer.password,
             image: editProfileReducer.img,
         });
+        //seteo el response en false hasta que me llegue la confirmacion de que 
+        //se cambio con exito, y si asi muestro el modal y redirecciono
+        if(status) {
+            openModal();
+            dispatch(clearData());
+            setNewData(initialState);
+            setErrors(initialState);
+        };
     }, [editProfileReducer]);
 
     function handleChange(event) {
         const { name, value } = event.target;
         setErrors(validate({
-          ...state,
-          [name]: value
+          ...newData,
+          [name]: value,
         }));
-        setState({
-          ...state,
+        setNewData({
+          ...newData,
           [name]: value,
         });
     };
 
     function handleSubmit(event) {
         event.preventDefault();
-        //dispatch(putEditProfile({state, img}));
-        //seteo el response en false hasta que me llegue la confirmacion de que 
-        //se cambio con exito, y si asi muestro el modal y redirecciono
-        openModal();
-        if(status) {
-            dispatch(clearData());
-            setState(initialState);
-            setErrors(initialState);
-        };
+        dispatch(putEditProfile(doPackage(oldData, newData, img)));
     };
 
     return (
@@ -113,11 +121,12 @@ export default function EditProfile() {
                         <>
                             <h3> Edita el campo que quieras cambiar* </h3>
                             <label className={styles.label} htmlFor="username" > Usuario: </label>
+                            <p className={styles.old}>{oldData.username}</p>
                             <input
                                 type="text"
                                 id="username"
                                 name = "username"
-                                value={state.username}
+                                value={newData.username}
                                 placeholder="Nuevo nombre de usurario"
                                 autoComplete="off"
                                 className={styles.input}
@@ -125,11 +134,12 @@ export default function EditProfile() {
                             />
                             {errors.username && (<p className={styles.danger}> {errors.username} </p>)}
                             <label className={styles.label} htmlFor="email"> Email: </label>
+                            <p className={styles.old}>{oldData.email}</p>
                             <input 
                                 type="email"
                                 id='email'
                                 name="email"
-                                value={state.email}
+                                value={newData.email}
                                 placeholder="Nuevo email"
                                 autoComplete="off"
                                 className={styles.input}
@@ -141,7 +151,7 @@ export default function EditProfile() {
                                 type='password'
                                 id='password'
                                 name="password"
-                                value={state.password}
+                                value={newData.password}
                                 placeholder="Nueva contraseña"
                                 autoComplete="off"
                                 className={styles.input}
@@ -155,7 +165,7 @@ export default function EditProfile() {
                                 id='image'
                                 name="image"
                                 accept="image/png, image/jpeg"
-                                value={state.image}
+                                value={newData.image}
                                 className={styles.inputFile}
                                 onChange={handleChange}
                             />
