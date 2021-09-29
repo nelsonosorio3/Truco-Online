@@ -894,7 +894,7 @@ exports = module.exports = function(io){
         }
         axios.put(`http://localhost:3001/api/games/${common.gameId}/${playerOne.score}/${playerTwo.score}`,{},{
                     headers: {
-                        "x-access-token": socket.handshake.auth.token,
+                        "x-access-token": socket.handshake.auth.token || 1,
                     }});
         
     });

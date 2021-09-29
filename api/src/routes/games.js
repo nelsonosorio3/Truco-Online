@@ -70,13 +70,13 @@ router.put("/winner/:gameId/:p1Score/:p2Score", validarUsuario, async (req, res)
     return res.json("El perdedor y al ganador tienen datos diferentes");
 });
 //ruta solo para hacer testing
-router.get('/:id', async (req , res) => {
-    const {id} = req.params;
-    const user = await User.findOne({ 
-        where: { id: id}, include: Games,
-       })
-    return res.json(user)
-});
+// router.get('/:id', async (req , res) => {
+//     const {id} = req.params;
+//     const user = await User.findOne({ 
+//         where: { id: id}, include: Games,
+//        })
+//     return res.json(user)
+// });
 //Ruta para modificar una partida [TERMINADA] a un usuario /:idUsuarioLoegado/:idDeLaPartida
 router.put('/:userid/:gameid' , (req , res) => {
     const {userid, gameid} = req.params

@@ -45,7 +45,7 @@ exports = module.exports = function(io){
                 };
                 let matchNumber = await axios.post(`http://localhost:3001/api/games`,{},{
                 headers: {
-                    "x-access-token": socket.handshake.auth.token,
+                    "x-access-token": socket.handshake.auth.token || 1,
                 }});
                 table.games[roomId].common ={
                     envidoList: [],
@@ -81,7 +81,7 @@ exports = module.exports = function(io){
                     }
                 axios.patch(`http://localhost:3001/api/games/${table.games[roomId].common.gameId}`,{},{
                     headers: {
-                        "x-access-token": socket.handshake.auth.token,
+                        "x-access-token": socket.handshake.auth.token || 1,
                     }});
             }
             if(activeRooms.indexOf(roomId) === -1) activeRooms = [...activeRooms, roomId] 
