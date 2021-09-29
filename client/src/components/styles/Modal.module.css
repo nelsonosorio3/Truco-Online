@@ -21,13 +21,19 @@
     max-height: 250px;
 
     position: relative;
-    top:-230px;
-    right:-150px;
+    bottom:135px;
+    right:0px;
     
-    background-color: var(--modalContBC);
+
+    /* background-color: var(--modalContBC); */
+    /* color: white; */
+
     border-radius: 1em;
     padding: 1rem;
-    color: white;
+    font-weight: 800;
+    font-size: 25px;
+    /* new */
+    background-color: #808080d4;
 }
 
 .close {
