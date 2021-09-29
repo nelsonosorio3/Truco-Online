@@ -17,11 +17,11 @@ export default function Welcome() {
     const responseFacebook = (response) => {
         console.log(response)
         dispatch(logInFacebook(response));
-
-        // console.log(response.email)
-        // history.push('/rooms');
+        setTimeout(() => {
+            history.push('/rooms');
+          }, 2000);
     }
-
+  
 
     return(
         <>
@@ -32,6 +32,7 @@ export default function Welcome() {
                         <Link to='/log-in'>
                             <button className={styles.btnLogIn}>Log In</button>
                         </Link>
+                      
                         <FacebookLogin
                             appId="414547080239642"
                             autoLoad={false}
@@ -39,7 +40,7 @@ export default function Welcome() {
                             callback={responseFacebook}
                             cssClass={styles.facebook}
                           />,
-
+                     
                         <Link to='/sign-up'>
                             <button className={styles.btnSignUp}>Sign Up</button>
                         </Link>

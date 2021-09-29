@@ -20,6 +20,8 @@ export default function NavBar() {
         };
     }, []);
 
+    
+
     return(
         <nav className={styles.nav}>
             <Link to='/' className={styles.logo}>
