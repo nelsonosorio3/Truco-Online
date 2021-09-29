@@ -1,7 +1,8 @@
-import React, {} from 'react';
+import React, { useEffect} from 'react';
 import {useSelector} from 'react-redux'
 // import { useHistory } from "react-router-dom";
 import Game from '../game';
+
 
 import styles from './styles/Rooms.module.css'
 
