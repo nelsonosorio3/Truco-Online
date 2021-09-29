@@ -13,7 +13,16 @@ var io = require("socket.io")(server, {
         credentials: true
     }
 });
+//Hacer passport
+// io.use((socket, next) => {
+//     console.log("socket.handshake.auth (middleware)", socket.handshake.auth)
+//     if (true) {
+//       next();
 
+//     } else {
+//       next(new Error("invalid"));
+//     }
+// });
 var socketTournaments = require("./socketTournaments")(io)
 var socketRooms = require("./socketRooms")(io)
 var socketGameLogic = require("./socketGameLogic")(io)

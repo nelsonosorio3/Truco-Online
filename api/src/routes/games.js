@@ -16,8 +16,69 @@ router.get('/' , (req , res) => {
 })
 
 //Agregar validacion
-//Ruta para agregar una partida [TERMINADA] a un usuario /:idUsuarioLoegado/:idDeLaPartida
-router.post('/:userid/:gameid' , (req , res) => {
+//Ruta para agregar una partida nueva que recien inicia a la base de datos
+router.post('/', validarUsuario, async (req , res) => {
+    const {userId} = req.body;
+    const game = await Games.create({
+        state: "pendiente",
+        winner: "",
+        loser: "",
+        results: "0|0"
+      });
+    await game.addUser(userId);
+    return res.json(game.id);
+});
+//Ruta para vincular tambien a el otro jugador a la partida
+router.patch('/:gameId', validarUsuario, async (req , res) => {
+    const {userId} = req.body;
+    const {gameId} = req.params;
+    const game= await Games.findByPk(parseInt(gameId));
+    if(game){
+        await game.addUser(userId);
+        return res.json("se creo");
+    }
+    res.sendStatus(404);
+    
+});
+//Ruta para modificar puntaje partida
+router.put("/:gameId/:p1Score/:p2Score", async(req, res)=>{
+    const {gameId, p1Score, p2Score} = req.params;
+    const game = await Games.update({results: `${p1Score}|${p2Score}`}, {where: {id: gameId}});
+    if(game) return res.json("modificado");
+    res.sendStatus(404);
+});
+//Ruta para dar la partida por terminada, parte del perdedor
+router.put("/losser/:gameId/:p1Score/:p2Score", validarUsuario, async (req, res)=>{
+    const {gameId, p1Score, p2Score} = req.params;
+    const {userId} = req.body;
+    const user = await User.findByPk(parseInt(userId));
+    const game = await Games.update({state: "terminada", loser: `${user.dataValues.username}`, results: `${p1Score}|${p2Score}`}, {where: {id: gameId}});
+    const test = await Games.findByPk(parseInt(gameId));
+    return res.json(test);
+});
+//Ruta para dar la partida por terminada,parte del ganador, si es diferente a la del perdedor por ahora la partida se elimina de la base de datos
+router.put("/winner/:gameId/:p1Score/:p2Score", validarUsuario, async (req, res)=>{
+    const {gameId, p1Score, p2Score} = req.params;
+    const {userId} = req.body;
+    const user = await User.findByPk(parseInt(userId));
+    const checkIntegrity = await Games.findByPk(parseInt(gameId));
+    if(checkIntegrity.dataValues.results === `${p1Score}|${p2Score}` && checkIntegrity.dataValues.state === "terminada" && checkIntegrity.dataValues.loser !== ""){
+        await Games.update({winner: `${user.username}`}, {where: {id: gameId}})
+        return res.json("partida finalizada");
+    }
+    Games.destroy({where: {id: gameId}})
+    return res.json("El perdedor y al ganador tienen datos diferentes");
+});
+//ruta solo para hacer testing
+router.get('/:id', async (req , res) => {
+    const {id} = req.params;
+    const user = await User.findOne({ 
+        where: { id: id}, include: Games,
+       })
+    return res.json(user)
+});
+//Ruta para modificar una partida [TERMINADA] a un usuario /:idUsuarioLoegado/:idDeLaPartida
+router.put('/:userid/:gameid' , (req , res) => {
     const {userid, gameid} = req.params
 
     let gamesData = null

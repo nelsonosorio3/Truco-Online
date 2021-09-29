@@ -1,0 +1,23 @@
+.avatarContainer {
+    width: 10em;
+    height: 10em;
+
+    background-color: var(--transBlackColor);
+
+    margin:0 .7em 0 0;
+    border-radius: 1rem;
+    padding: .5em;
+}
+
+.avatarContainer:hover {
+    cursor: pointer;
+}
+
+.avatarContainer img {
+    width: 7em;
+    height: 7em;
+}
+
+.avatarContainer p {
+    color: white;
+}
