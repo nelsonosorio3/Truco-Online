@@ -32,12 +32,10 @@ router.get('/login', async (req, res) => {
     }
   });
   if (users.length === 0) return res.status(200).json(
-
     {
       message: "El correo ingresado no existe.",
       login: false
     }
-
   )
   try {
     if (users.length > 0) {
