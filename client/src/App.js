@@ -13,7 +13,7 @@ import Ranking from './components/Ranking';
 import PrivateRoute from './components/PrivateRoute';
 import AdminPanel from './components/AdminPanel';
 import Tournaments from './components/tournaments/Tournaments';
-
+import EditProfile from './components/EditProfile';
 
 function App() {
   return (
@@ -21,9 +21,10 @@ function App() {
       <Switch>
         <Route exact path='/' component={Landing} />
         <Route exact path='/welcome' component={Welcome} />
+        <Route exact path='/sign-up' component={SignUp} />
         <Route exact path='/log-in' component={LogIn} />
         <PrivateRoute exact path="/profile" component={Profile} />
-        <Route exact path='/sign-up' component={SignUp} />
+        <PrivateRoute exact path="/edit" component={EditProfile} />
         <Route exact path='/rooms' component={Rooms} />
         <Route exact path='/game' component={Game} />
         <PrivateRoute exact path="/tournaments" component={Tournaments} />

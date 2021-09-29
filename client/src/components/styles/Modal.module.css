@@ -21,13 +21,19 @@
     max-height: 250px;
 
     position: relative;
-    top:-230px;
-    right:-150px;
+    bottom:135px;
+    right:0px;
     
-    background-color: var(--modalContBC);
+
+    /* background-color: var(--modalContBC); */
+    /* color: white; */
+
     border-radius: 1em;
     padding: 1rem;
-    color: white;
+    font-weight: 800;
+    font-size: 25px;
+    /* new */
+    background-color: #808080d4;
 }
 
 .close {
@@ -45,7 +51,7 @@
     outline: none;
     cursor: pointer;
     background: transparent;
-    background-image: url('../../img/button1.png');
+    background-image: url('../../img/button1.webp');
     background-size: 100% 100%;
     background-repeat: no-repeat;
     text-decoration: none;
@@ -79,12 +85,13 @@
     position: absolute;
     display: block;
     background: transparent;
-    background-image: url('../../img/button1.png');
+    background-image: url('../../img/button1.webp');
     background-size: 100% 100%;
     background-repeat: no-repeat;
     transform: scale(1.2);
     color: white;
     /* cuando vuelve */
+    /* ok */
     transition: transform .45s;
 }
 

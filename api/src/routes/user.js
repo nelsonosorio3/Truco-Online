@@ -9,17 +9,13 @@ const router = Router();
 const jwt = require('jsonwebtoken');
 // Funcion para validar usuario
 const {validarUsuario} = require('../controller/index')
+const userControllers = require('../controller/users')
 
-//todas las rutas /api/user 
-router.get('/', async (req, res) => {
-  try {
-    const users = await User.findAll();
-    return res.json(users)
-  } catch (error) {
-    console.log(error)
-    res.sendStatus(404).send(error);
-  }
-});
+//Trae todos los usuarios
+router.get('/', userControllers.allUsers);
+
+// Ruta para hacer login con Facebook
+router.get('/login/facebook', userControllers.facebookLogin)
 
 router.get('/login', async (req, res) => {
 
@@ -32,12 +28,10 @@ router.get('/login', async (req, res) => {
     }
   });
   if (users.length === 0) return res.status(200).json(
-
     {
       message: "El correo ingresado no existe.",
       login: false
     }
-
   )
   try {
     if (users.length > 0) {
@@ -80,6 +74,23 @@ router.get("/profile", validarUsuario,  async (req, res) => {
   catch (err) {
     res.json(err.message)
   }
+});
+
+//Ruta para obtener datos del perfil del usuario en ruta edit(necesito el password)
+router.get("/edit", validarUsuario, async (req, res) => {
+  // userId ---> viene del middleware para autenticacion(req.body.userId) - Se utiliza para el query
+  console.log("Authenticated for /edit userId: ", req.body.userId);
+  try {
+    let user = await User.findAll({
+      where: {
+        id: req.body.userId,
+      },
+    });
+    if (!user) throw new Error("El usuario no se encontro")
+    res.json(user);
+  } catch (err) {
+    res.json(err.message);
+  };
 });
 
 //Ruta para traer todos los amigos de un usuario

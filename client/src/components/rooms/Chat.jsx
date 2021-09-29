@@ -9,11 +9,11 @@ export default function Chat ({name, roomId, typeofChat}) {
 
     useEffect(() => {
         socket.emit('connected', name);
-    }, [name])
+    }, [name]);
 
     useEffect(() => {
         socket.on('messages', (message) => {
-            console.log(message)
+            console.log(message);
             setMsgs([...msgs, message]);
         })
 
@@ -23,13 +23,13 @@ export default function Chat ({name, roomId, typeofChat}) {
     const divRef = useRef(null);
 
     useEffect(() => {
-        divRef.current.scrollIntoView({behavior: 'smooth'})
+        divRef.current.scrollIntoView({behavior: 'smooth'});
     })
 
     const submit = (event) => {
         event.preventDefault();
         socket.emit('message', ({name, msg, roomId}));
-        setMsg("")
+        setMsg("");
     }
 
     return(
@@ -43,11 +43,11 @@ export default function Chat ({name, roomId, typeofChat}) {
                     typeofChat==='chatLobby'
                     ? 
                     <>
-                    <textarea placeholder={'Message...'} name="" id="" cols="95" rows="1" value={msg} onChange={event => setMsg(event.target.value)}></textarea>
-                    <button className={styles.btn}>Send</button>
+                        <textarea placeholder={'Message...'} name="" id="" cols="95" rows="1" value={msg} onChange={event => setMsg(event.target.value)}></textarea>
+                        <button className={styles.btn}>Send</button>
                     </>
                     : 
-                    <input placeholder={'Press enter to send messages...'} name="" id="" cols="31" rows="1" value={msg} onChange={event => setMsg(event.target.value)} className={styles.writeMessageGame}></input>
+                    <input type="text" id="" cols="31" rows="1" value={msg} onChange={event => setMsg(event.target.value)} className={styles.writeMessageGame}></input>
                 }
                 
             </form>

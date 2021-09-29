@@ -7,7 +7,7 @@
 }
 
 .subMainDiv_noGame{
-    background-image: url('../../../img/DarkWood_bg.jpg');
+    background-image: url('../../../img/DarkWood_bg.webp');
     background-size: contain;
     background-repeat: no-repeat;
     width: 100%;
@@ -29,7 +29,7 @@
 }
 
 .subMainDiv_inGame{
-    background-image: url('../../../img/woodBackground.jpg');
+    background-image: url('../../../img/woodBackground.webp');
     background-size: contain;
     background-repeat: no-repeat;
     width: 100%;

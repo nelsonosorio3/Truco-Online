@@ -1,8 +1,8 @@
 import React from 'react';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
-import profileIcon from '../img/profileIcon.png';
+// import profileIcon from '../img/profileIcon.png';
 import adminPanelActions from '../Redux/actions-types/adminPanelActions';
 import styles from './styles/AdminPanel.module.css';
 
