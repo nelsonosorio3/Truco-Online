@@ -914,7 +914,7 @@ exports = module.exports = function(io){
         if(playerOne.tableRival[0] && playerTwo.tableRival[0] && common.turn === 1){
             if(playerOne.tablePlayer[0].truco < playerTwo.tablePlayer[0].truco){
                 common.roundResults.push("playerOne");
-                io.in(roomId).emit("messages", {msg: `Gana ${playerOne.name}!`});
+                setTimeio.in(roomId).emit("messages", {msg: `Gana ${playerOne.name}!`});
             }
             else if(playerOne.tablePlayer[0].truco > playerTwo.tablePlayer[0].truco){
                 common.roundResults.push("playerTwo");

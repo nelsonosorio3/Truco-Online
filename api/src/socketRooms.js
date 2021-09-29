@@ -12,31 +12,48 @@ exports = module.exports = function(io){
         });
         socket.on('disconnect', function () {
             io.emit('messages', { server: 'Server', message: 'Has left the room.' });
+            const clients = io.sockets?.adapter.rooms
+            console.log(clients)
+            // for (let i = 0; i < clients.size; i++) {
+            //     console.log(clients.next())
+                
+            // }
+            clients.forEach((value, key, map)=>{
+                if(value.size<2){
+                    console.log("player disconnect")
+                }
+            })
         });
     
         //evento por si alguien crea una sala o entra a una
         socket.on('joinRoom', function (roomId) {
+            console.log(socket.handshake.auth.user)
             const clients = io.sockets?.adapter.rooms.get(roomId) //set de clientes en room
             if(clients?.size < 2 || clients === undefined){ //revisar si la sala esta llena, para evitar que se unan mas, modificar el 2 con variable par ampliar luego a mas jugadores
             socket.join(parseInt(roomId));
-           
-            if(activeRooms.indexOf(roomId) === -1) activeRooms = [...activeRooms, roomId] 
-            else console.log(roomId, 'ya existe');
-            console.log("active rooms: ", activeRooms)
-            }
-            if(clients?.size === 2) { //si la sala esta llena, empieza toda la preparacion de la partida
-                activeRooms =  activeRooms.filter(room=> room!== roomId)
-                socket.emit("roomFull", false);
-                let iterator = clients.values();
-                const player1 = iterator.next().value;
-                const player2 = iterator.next().value;
-                console.log(clients.values())
-    
-                //dejar listo la propiedad con el id de la sala que contendra todo lo que ocurra en esta mientras dure la partida
+            if(!table.games[roomId]){
                 table.games[roomId]={};
                 table.games[roomId].playerOne = {
-                    id: player1,
-                    name: "player1",
+                id: 1,
+                name: socket.handshake.auth.user || "jugador 1",
+                nameRival: "player2",
+                score: 0,
+                scoreRival: 0,
+                hand: [],
+                turnNumber: 1,
+                isTurn: true,
+                betOptions: [],
+                tableRival: [],
+                tablePlayer: [],
+                bet: false,
+                roundResults: [],
+                starts: true,
+                };
+            }
+            else{
+                table.games[roomId].playerTwo = {
+                    id: 2,
+                    name: socket.handshake.auth.user || "jugador 2",
                     nameRival: "player2",
                     score: 0,
                     scoreRival: 0,
@@ -49,23 +66,25 @@ exports = module.exports = function(io){
                     bet: false,
                     roundResults: [],
                     starts: true,
-                };
-                table.games[roomId].playerTwo = {
-                    id: player2,
-                    name: "player2",
-                    nameRival: "player1",
-                    score: 0,
-                    scoreRival: 0,
-                    hand: [],
-                    turnNumber: 1,
-                    isTurn: false,
-                    betOptions: [],
-                    tableRival: [],
-                    tablePlayer: [],
-                    bet: false,
-                    roundResults: [],
-                    starts: false,
-                };
+                    }
+            }
+            if(activeRooms.indexOf(roomId) === -1) activeRooms = [...activeRooms, roomId] 
+            else console.log(roomId, 'ya existe');
+            console.log("active rooms: ", activeRooms)
+            }
+            if(clients?.size === 2) { //si la sala esta llena, empieza toda la preparacion de la partida
+                activeRooms =  activeRooms.filter(room=> room!== roomId)
+                socket.emit("roomFull", false);
+                let iterator = clients.values();
+                const player1 = iterator.next().value;
+                const player2 = iterator.next().value;
+                console.log(clients.values())
+                table.games[roomId].playerOne.id = player1;
+                table.games[roomId].playerTwo.id = player2;
+                table.games[roomId].playerOne.nameRival = table.games[roomId].playerTwo.name;
+                table.games[roomId].playerTwo.nameRival = table.games[roomId].playerOne.name;
+                //dejar listo la propiedad con el id de la sala que contendra todo lo que ocurra en esta mientras dure la partida
+                
                 table.games[roomId].common ={
                     envidoList: [],
                     envidoBet: 0,
