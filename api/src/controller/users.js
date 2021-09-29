@@ -2,7 +2,8 @@ const { User, Friends, Games } = require("../db.js");
 const jwt = require('jsonwebtoken');
 
 module.exports = {
-
+    //Funciones controller para la ruta /user
+    
     allUsers: async (req, res) => {
         try {
           const users = await User.findAll();
