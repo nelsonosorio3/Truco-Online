@@ -30,7 +30,8 @@ export default function Welcome() {
                             autoLoad={false}
                             fields="name,email,picture"
                             callback={responseFacebook}
-                            cssClass="facebook"/>,
+                            cssClass={styles.facebook}
+                          />,
                         <Link to='/sign-up'>
                             <button className={styles.btnSignUp}>Sign Up</button>
                         </Link>
