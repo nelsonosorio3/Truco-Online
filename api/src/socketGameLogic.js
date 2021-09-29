@@ -1,7 +1,69 @@
 const {table, buildDeck, shuffleDeck, getHands, envidoCount} = require("./socketGameLogicConst")
+const axios = require("axios");
 
 let timeOut;
+function setNewRound(playerOne, playerTwo, common, isPlayerOne, roomId, points){
+    if(isPlayerOne){
+        playerTwo.score += points;
+        playerOne.scoreRival += points;
+    }
+    else{
+        playerOne.score += points;
+        playerTwo.scoreRival += points;
+    }
+    // check if there is a winner
+    // if(playerOne.score >= common.scoreToWin || playerTwo.score >= common.scoreToWin){
+    //     io.to(playerOne.id).emit("gameEnds", (table.games[roomId]));
+    //     io.to(playerTwo.id).emit("gameEnds", (table.games[roomId]));
+    //     delete table.games[roomId];
+    //     return;
+    // }
+    //reiniciar estados de playerOne, Two y common para empezar siguiente ronda
+    table.games[roomId].playerOne = {...table.games[roomId].playerOne, turnNumber: 1,
+        tableRival: [],
+        tablePlayer: [],
+        bet: false,
+        roundResults: [],}
+    table.games[roomId].playerTwo = {...table.games[roomId].playerTwo, turnNumber: 1,
+        tableRival: [],
+        tablePlayer: [],
+        bet: false,
+        roundResults: [],}
+    table.games[roomId].common = {...table.games[roomId].common, envidoList: [],
+        trucoBet: 1,
+        envidoBet: 0,
+        cumulativeScore: 0,
+        roundResults: [],
+        turn: 1,}
 
+    let deck = buildDeck(); //contruye deck
+    deck = shuffleDeck(deck); //baraja deck
+    const [playerAhand, playerBhand] = getHands(deck); //obtiene manos de 3 cartas de dos jugadores
+
+    //manos iniciales al iniciar partida
+    table.games[roomId].playerOne.hand = playerAhand;
+    table.games[roomId].playerTwo.hand = playerBhand;
+
+    //cambiar de jugador que inicia y apuesta iniciales
+    if(table.games[roomId].playerOne.starts){
+        table.games[roomId].playerTwo.isTurn = true;
+        table.games[roomId].playerOne.isTurn = false;
+        table.games[roomId].playerOne.starts = false;
+        table.games[roomId].playerTwo.starts = true;
+        //dejar las apuestas al comienzo
+        table.games[roomId].playerOne.betOptions = [];
+        table.games[roomId].playerTwo.betOptions = table.betsList.firstTurn;
+    }
+    else{
+        table.games[roomId].playerOne.isTurn = true;
+        table.games[roomId].playerTwo.isTurn = false;
+        table.games[roomId].playerOne.starts = true;
+        table.games[roomId].playerTwo.starts = false;
+        //dejar las apuestas al comienzo
+        table.games[roomId].playerOne.betOptions = table.betsList.firstTurn;
+        table.games[roomId].playerTwo.betOptions = [];
+    };
+}
 // objeto con todas las propiedasdes comunes de la partida
 // const table = {
 //     //estas son las propiedades que son comunes a todos los juegos
@@ -211,68 +273,9 @@ exports = module.exports = function(io){
         const isPlayerOne = playerOne.id === playerId;
         playerOne.bet = true;
         playerTwo.bet = true;
-
+        
         if(betPick === "ir al mazo") {
-            if(isPlayerOne){
-                playerTwo.score++;
-                playerOne.scoreRival++;
-            }
-            else{
-                playerOne.score+= Math.floor(common.trucoBet/2) || 1;
-                playerTwo.scoreRival+= Math.floor(common.trucoBet/2) || 1;
-            }
-            // check if there is a winner
-            if(playerOne.score >= common.scoreToWin || playerTwo.score >= common.scoreToWin){
-                io.to(playerOne.id).emit("gameEnds", (table.games[roomId]))
-                io.to(playerTwo.id).emit("gameEnds", (table.games[roomId]))
-                delete table.games[roomId]
-                return;
-            }
-            //reiniciar estados de playerOne, Two y common para empezar siguiente ronda
-            table.games[roomId].playerOne = {...table.games[roomId].playerOne, turnNumber: 1,
-                tableRival: [],
-                tablePlayer: [],
-                bet: false,
-                roundResults: [],}
-            table.games[roomId].playerTwo = {...table.games[roomId].playerTwo, turnNumber: 1,
-                tableRival: [],
-                tablePlayer: [],
-                bet: false,
-                roundResults: [],}
-            table.games[roomId].common = {...table.games[roomId].common, envidoList: [],
-                trucoBet: 1,
-                envidoBet: 0,
-                cumulativeScore: 0,
-                roundResults: [],
-                turn: 1,}
-
-            let deck = buildDeck(); //contruye deck
-            deck = shuffleDeck(deck); //baraja deck
-            const [playerAhand, playerBhand] = getHands(deck); //obtiene manos de 3 cartas de dos jugadores
-    
-            //manos iniciales al iniciar partida
-            table.games[roomId].playerOne.hand = playerAhand;
-            table.games[roomId].playerTwo.hand = playerBhand;
-    
-            //cambiar de jugador que inicia y apuesta iniciales
-            if(table.games[roomId].playerOne.starts){
-                table.games[roomId].playerTwo.isTurn = true;
-                table.games[roomId].playerOne.isTurn = false;
-                table.games[roomId].playerOne.starts = false;
-                table.games[roomId].playerTwo.starts = true;
-                //dejar las apuestas al comienzo
-                table.games[roomId].playerOne.betOptions = [];
-                table.games[roomId].playerTwo.betOptions = table.betsList.firstTurn;
-            }
-            else{
-                table.games[roomId].playerOne.isTurn = true;
-                table.games[roomId].playerTwo.isTurn = false;
-                table.games[roomId].playerOne.starts = true;
-                table.games[roomId].playerTwo.starts = false;
-                //dejar las apuestas al comienzo
-                table.games[roomId].playerOne.betOptions = table.betsList.firstTurn;
-                table.games[roomId].playerTwo.betOptions = [];
-            };
+            setNewRound(playerOne, playerTwo, common, isPlayerOne, roomId, common.trucoBet);
             //emitir como deberia cambiar el jugador de cada cliente
             io.to(playerOne.id).emit("newRoundStarts", table.games[roomId].playerOne);
             io.to(playerTwo.id).emit("newRoundStarts", table.games[roomId].playerTwo);
@@ -291,15 +294,11 @@ exports = module.exports = function(io){
             io.in(roomId).emit("messages", { msg: `${isPlayerOne? playerOne.name : playerTwo.name}: QUIERO TRUCO!`})  
         }
         else if(betPick === "no quiero truco") {
-            if(table.games[roomId].playerOne.id === playerId){
-                table.games[roomId].playerTwo.score++;
-                io.to(table.games[roomId].playerTwo.id).emit("updateScore", 1);
-            }
-            else{
-                table.games[roomId].playerOne.score++;
-                io.to(table.games[roomId].playerOne.id).emit("updateScore", 1);
-            }  
-            io.in(roomId).emit("betting", false);
+            setNewRound(playerOne, playerTwo, common, isPlayerOne, roomId, common.trucoBet);
+            //emitir como deberia cambiar el jugador de cada cliente
+            io.to(playerOne.id).emit("newRoundStarts", table.games[roomId].playerOne);
+            io.to(playerTwo.id).emit("newRoundStarts", table.games[roomId].playerTwo);
+            io.in(roomId).emit("messages", { msg: `${isPlayerOne? playerOne.name : playerTwo.name}: NO QUIERO TRUCO!`})  
         }
         else if(betPick === "quiero retruco") {
             common.trucoBet = 3;
@@ -314,38 +313,30 @@ exports = module.exports = function(io){
             io.in(roomId).emit("messages", { msg: `${isPlayerOne? playerOne.name : playerTwo.name}: QUIERO RETRUCO!`}) 
         }
         else if(betPick === "no quiero retruco") {
-            if(table.games[roomId].playerOne.id ===playerId){
-                table.games[roomId].playerTwo.score+= 2;
-                io.to(table.games[roomId].playerTwo.id).emit("updateScore", 2);
-            }
-            else{
-                table.games[roomId].playerOne.score+= 2;
-                io.to(table.games[roomId].playerOne.id).emit("updateScore", 2);
-            } 
-            io.in(roomId).emit("betting", false);      
+            setNewRound(playerOne, playerTwo, common, isPlayerOne, roomId, common.trucoBet);
+            //emitir como deberia cambiar el jugador de cada cliente
+            io.to(playerOne.id).emit("newRoundStarts", table.games[roomId].playerOne);
+            io.to(playerTwo.id).emit("newRoundStarts", table.games[roomId].playerTwo);
+            io.in(roomId).emit("messages", { msg: `${isPlayerOne? playerOne.name : playerTwo.name}: NO QUIERO RETRUCO!`})       
         }
         else if(betPick === "quiero valeCuatro") {
             common.trucoBet = 4;
             if(isPlayerOne){
-                io.to(playerTwo.id).emit("quieroTruco", false);
-                io.to(playerOne.id).emit("quieroTruco", true);
+                io.to(playerTwo.id).emit("quieroTruco", true);
+                io.to(playerOne.id).emit("quieroTruco", false);
             }
             else{
-                io.to(playerOne.id).emit("quieroTruco", false);
-                io.to(playerTwo.id).emit("quieroTruco", true);
+                io.to(playerOne.id).emit("quieroTruco", true);
+                io.to(playerTwo.id).emit("quieroTruco", false);
             }
             io.in(roomId).emit("messages", { msg: `${isPlayerOne? playerOne.name : playerTwo.name}: QUIERO VALE CUATRO!`}) 
         }
         else if(betPick === "no quiero valeCuatro") {
-            if(table.games[roomId].playerOne.id ===playerId){
-                table.games[roomId].playerTwo.score+= 3;
-                io.to(table.games[roomId].playerTwo.id).emit("updateScore", 3);
-            }
-            else{
-                table.games[roomId].playerOne.score+= 3;
-                io.to(table.games[roomId].playerOne.id).emit("updateScore", 3);
-            } 
-            io.in(roomId).emit("betting", false);    
+            setNewRound(playerOne, playerTwo, common, isPlayerOne, roomId, common.trucoBet);
+            //emitir como deberia cambiar el jugador de cada cliente
+            io.to(playerOne.id).emit("newRoundStarts", table.games[roomId].playerOne);
+            io.to(playerTwo.id).emit("newRoundStarts", table.games[roomId].playerTwo);
+            io.in(roomId).emit("messages", { msg: `${isPlayerOne? playerOne.name : playerTwo.name}: NO QUIERO VALE CUATRO!`})     
         }
         else if(betPick === "envido1"){
             common.envidoList.push("envido");
@@ -893,12 +884,18 @@ exports = module.exports = function(io){
                 }
             }
             io.in(roomId).emit("messages", {msg: `${isPlayerOne? playerOne.name : playerTwo.name}: NO QUIERO FALTA ENVIDO!`}) 
+            
         }
         else{
-        table.games[roomId].playerOne.id === playerId? io.to(table.games[roomId].playerTwo.id).emit("changeTurn", true) : io.to(table.games[roomId].playerOne.id).emit("changeTurn", true);
-        table.games[roomId].playerOne.id === playerId? io.to(table.games[roomId].playerTwo.id).emit("bet", table.betsList[betPick], true) : io.to(table.games[roomId].playerOne.id).emit("bet", table.betsList[betPick], true);
+            if(table.betsList[betPick])
+        isPlayerOne? io.to(playerTwo.id).emit("changeTurn", true) : io.to(playerOne.id).emit("changeTurn", true);
+        isPlayerOne? io.to(playerTwo.id).emit("bet", table.betsList[betPick], true) : io.to(playerOne.id).emit("bet", table.betsList[betPick], true);
         io.in(roomId).emit("messages", { msg: `${isPlayerOne? playerOne.name : playerTwo.name}: ${betPick.toUpperCase()}!`});
         }
+        axios.put(`http://localhost:3001/api/games/${common.gameId}/${playerOne.score}/${playerTwo.score}`,{},{
+                    headers: {
+                        "x-access-token": socket.handshake.auth.token,
+                    }});
         
     });
     socket.on("playCard", (card, roomId, playerId) => {
@@ -972,6 +969,7 @@ exports = module.exports = function(io){
         }
 
         console.log(common.roundResults)
+        //revisar ganador de mano
         if(common.roundResults.length >= 2){
             let winner = false;
             if((common.roundResults.filter(round => round === "playerOne").length > 1) || 
@@ -993,31 +991,47 @@ exports = module.exports = function(io){
                 io.to(playerTwo.id).emit("updateScore", common.trucoBet, true);
                 io.to(playerOne.id).emit("updateRivalScore", common.trucoBet, true);
                 io.in(roomId).emit("messages", {msg: `GANADOR MANO ${playerTwo.name}!`});
-            } 
-            else if(common.roundResults.length >= 3){
-                for (let i = 0; i < 3; i++) {
-                  if(common.roundResults[i] === "playerOne"){
-                      playerOne.score+= common.trucoBet;
-                      playerTwo.scoreRival += common.trucoBet;
-                      winner = true;
-                      io.to(playerOne.id).emit("updateScore", common.trucoBet, true);
-                      io.to(playerTwo.id).emit("updateRivalScore", common.trucoBet, true);
-                      io.in(roomId).emit("messages", {msg: `GANADOR MANO ${playerOne.name}!`})
-                    };
-                  if(common.roundResults[i] === "playerTwo") {
-                      playerTwo.score += common.trucoBet;
-                      playerOne.scoreRival += common.trucoBet;
-                      winner = true;
-                      io.to(playerTwo.id).emit("updateScore", common.trucoBet, true);
-                      io.to(playerOne.id).emit("updateRivalScore", common.trucoBet, true);
-                      io.in(roomId).emit("messages", {msg: `GANADOR MANO ${playerTwo.name}!`});
-                    };      
-                };
-            };
+            }
+            else if(common.roundResults === 2 && common.roundResults[0] === "tie"){
+                winnet = true;
+                if(common.roundResults[1] === "playerOne"){
+                    playerTwo.score += common.trucoBet;
+                    playerOne.scoreRival += common.trucoBet;
+                    io.to(playerOne.id).emit("updateScore", common.trucoBet, true);
+                    io.to(playerTwo.id).emit("updateRivalScore", common.trucoBet, true);
+                    io.in(roomId).emit("messages", {msg: `GANADOR MANO ${playerOne.name}!`});
+                }
+                else if(common.roundResults[1] === "playerTwo"){
+                    playerOne.score += common.trucoBet;
+                    playerTwo.scoreRival += common.trucoBet;
+                    io.to(playerTwo.id).emit("updateScore", common.trucoBet, true);
+                    io.to(playerOne.id).emit("updateRivalScore", common.trucoBet, true);
+                    io.in(roomId).emit("messages", {msg: `GANADOR MANO ${playerTwo.name}!`});
+                }
+            }
+            else if(common.roundResults.length === 3){
+                winner = true;
+                if(common.roundResults[0] === "playerOne"){
+                    playerTwo.score += common.trucoBet;
+                    playerOne.scoreRival += common.trucoBet;
+                    io.to(playerOne.id).emit("updateScore", common.trucoBet, true);
+                    io.to(playerTwo.id).emit("updateRivalScore", common.trucoBet, true);
+                    io.in(roomId).emit("messages", {msg: `GANADOR MANO ${playerOne.name}!`});
+                }
+                else if(common.roundResults[0] === "playerTwo"){
+                    playerOne.score += common.trucoBet;
+                    playerTwo.scoreRival += common.trucoBet;
+                    io.to(playerTwo.id).emit("updateScore", common.trucoBet, true);
+                    io.to(playerOne.id).emit("updateRivalScore", common.trucoBet, true);
+                    io.in(roomId).emit("messages", {msg: `GANADOR MANO ${playerTwo.name}!`});
+                }
+            }
+            
             //revisar si algun jugador ya gano
             if(playerOne.score >= common.scoreToWin || playerTwo.score >= common.scoreToWin){
-                io.to(playerOne.id).emit("gameEnds", (table.games[roomId]));
-                io.to(playerTwo.id).emit("gameEnds", (table.games[roomId]));
+                axios.put(`http://localhost:3001/api/games/${common.gameId}/${playerOne.score}/${playerTwo.score}`);
+                io.to(playerOne.id).emit("gameEnds", (playerOne));
+                io.to(playerTwo.id).emit("gameEnds", (playerTwo));
                 console.log(table.games);
                 delete table.games[roomId];
                 console.log(table.games);
@@ -1068,7 +1082,9 @@ exports = module.exports = function(io){
                 io.to(table.games[roomId].playerOne.id).emit("newRoundStarts", table.games[roomId].playerOne);
                 io.to(table.games[roomId].playerTwo.id).emit("newRoundStarts", table.games[roomId].playerTwo);
                 }
+                axios.put(`http://localhost:3001/api/games/${common.gameId}/${playerOne.score}/${playerTwo.score}`);
         }
+        
     });
     socket.on("changeTurn", (roomId, playerId)=>{
         if(table.games[roomId].playerOne.id === playerId){
@@ -1079,7 +1095,8 @@ exports = module.exports = function(io){
             io.to(table.games[roomId].playerTwo.id).emit("changeTurn", true);
             io.to(table.games[roomId].playerOne.id).emit("changeTurn", false);
         }
-    });   
+    });
+       
         
     });
 }
