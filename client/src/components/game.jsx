@@ -5,10 +5,12 @@ import {useDispatch, useSelector} from 'react-redux'
 import Chat from './rooms/Chat';
 import { useHistory } from "react-router-dom";
 import { setIsInRoom } from '../Redux/actions-types/roomsActions';
+import axios from 'axios';
 
 
-export default function Game() {
-    const roomId = useSelector(store => store.roomsReducer.roomId); //traer el id de la sala en la que esta el jugador
+export default function Game({tournamentMatchId}) {
+    var roomId = useSelector(store => store.roomsReducer.roomId); //traer el id de la sala en la que esta el jugador
+    if(tournamentMatchId) roomId = tournamentMatchId;
     const [player, setPlayer] = useState({ //objeto del jugador en el cliente deberia tener solo propiedades que se usan para renderizar o limitar interacciones en el cliente
         id: 1, // socket id del jugador
         name: "player", // la idea seria que sea el nombre del profile
@@ -79,8 +81,7 @@ export default function Game() {
         console.log("termino");
         history.push("/profile");
         alert("el juego termino");
-        dispatch(setIsInRoom({isInRoom: false, roomId: null}))
-        //aqui deberia estar el dispatch con data que contiene playerOne, playerTwo, commonhacer el post a la api y agregar info de la partida.
+        dispatch(setIsInRoom({isInRoom: false, roomId: null}));
       });
       return () =>{ //limpieza de eventos
         socket.off("gameStarts");
@@ -99,7 +100,7 @@ export default function Game() {
     
     console.log(player) //para testing
     return(<div id={stylesGame.gameBackground}>
-            <div>
+            <div id={stylesGame.cardZone}>
               <ol >{[...Array(3-player.tableRival.length).keys()].map(card=><div key={card} id={stylesGame.rivalHand}><img src={`/cards/0.webp`} className={stylesGame.cardsImg}/></div>)}</ol>
               <div id={stylesGame.cardsContainer}>
               
@@ -122,10 +123,10 @@ export default function Game() {
             </div>
 
             <div id={stylesGame.containerChat}>
-            <Chat name={player.name} roomId={roomId}/>
-              <div className={"betContainer"}>
-                {player.betOptions?.map(betPick=><button onClick={bet} name={betPick} key={betPick} className={player.isTurn? stylesGame.btnBet : stylesGame.btnBetNoTurn}>{betPick}</button>)}<br/>
-              </div>
+              <Chat name={player.name} roomId={roomId}/>
+                <div className={"betContainer"}>
+                  {player.betOptions?.map(betPick=><button onClick={bet} name={betPick} key={betPick} className={player.isTurn? stylesGame.btnBet : stylesGame.btnBetNoTurn}>{betPick}</button>)}<br/>
+                </div>
             </div>
           </div> 
     );

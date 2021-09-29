@@ -82,6 +82,23 @@ router.get("/profile", validarUsuario,  async (req, res) => {
   }
 });
 
+//Ruta para obtener datos del perfil del usuario en ruta edit(necesito el password)
+router.get("/edit", validarUsuario, async (req, res) => {
+  // userId ---> viene del middleware para autenticacion(req.body.userId) - Se utiliza para el query
+  console.log("Authenticated for /edit userId: ", req.body.userId);
+  try {
+    let user = await User.findAll({
+      where: {
+        id: req.body.userId,
+      },
+    });
+    if (!user) throw new Error("El usuario no se encontro")
+    res.json(user);
+  } catch (err) {
+    res.json(err.message);
+  };
+});
+
 //Ruta para traer todos los amigos de un usuario
 router.get("/friends",validarUsuario, async (req, res) => {
   console.log("Authenticated for /friends userId: ", req.body.userId)

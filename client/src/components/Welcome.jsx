@@ -32,6 +32,7 @@ export default function Welcome() {
                             callback={responseFacebook}
                             cssClass={styles.facebook}
                           />,
+
                         <Link to='/sign-up'>
                             <button className={styles.btnSignUp}>Sign Up</button>
                         </Link>

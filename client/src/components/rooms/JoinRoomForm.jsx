@@ -8,7 +8,7 @@ import styles from './styles/JoinRoomForm.module.css'
 export default function JoinRoomForm (){
     const [isJoining, setIsJoining] = useState(false);
     const dispatch = useDispatch()
-
+    console.log(typeof localStorage.token)
     const joinRoom = async (event) => {
       event.preventDefault();
       let idGenerator = Math.floor(Math.random()*100000)
