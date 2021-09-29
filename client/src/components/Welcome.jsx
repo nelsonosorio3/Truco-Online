@@ -16,8 +16,6 @@ export default function Welcome() {
         console.log(response.email)
       }
 
-
-
     return(
         <>
             <HomeButton />
