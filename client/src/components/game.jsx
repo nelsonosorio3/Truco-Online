@@ -7,8 +7,9 @@ import { useHistory } from "react-router-dom";
 import { setIsInRoom } from '../Redux/actions-types/roomsActions';
 
 
-export default function Game() {
-    const roomId = useSelector(store => store.roomsReducer.roomId); //traer el id de la sala en la que esta el jugador
+export default function Game({tournamentMatchId}) {
+    var roomId = useSelector(store => store.roomsReducer.roomId); //traer el id de la sala en la que esta el jugador
+    if(tournamentMatchId) roomId = tournamentMatchId;
     const [player, setPlayer] = useState({ //objeto del jugador en el cliente deberia tener solo propiedades que se usan para renderizar o limitar interacciones en el cliente
         id: 1, // socket id del jugador
         name: "player", // la idea seria que sea el nombre del profile

@@ -1,4 +1,4 @@
-import { EDIT_PROFILE, CLEAR_DATA} from '../actions/index';
+import { EDIT_PROFILE, PUT_PROFILE, CLEAR_DATA} from '../actions/index';
 
 const INITIAL_STATE = {
     id: '',
@@ -7,6 +7,8 @@ const INITIAL_STATE = {
     password: '',
     response: false,
     img: null,
+    status: false,
+    msg: '',
 };
 
 const editProfileReducer = (state = INITIAL_STATE, {type, payload}) => {
@@ -20,6 +22,12 @@ const editProfileReducer = (state = INITIAL_STATE, {type, payload}) => {
           password: payload.password,
           response: true,
           //img: payload.img,
+        };
+    case PUT_PROFILE:
+        return {
+          ...state,
+          status:payload.status,
+          msg: payload.msg,
         };
     case CLEAR_DATA:
         return {INITIAL_STATE};

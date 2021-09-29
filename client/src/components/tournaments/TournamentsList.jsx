@@ -24,11 +24,6 @@ export default function TournamentsList(){
         socket.on("newTournamentCreated",()=> {socket.emit('bringActiveTournaments');})
         return () => {socket.off("newTournamentCreated")}
     })
-    
-    const updateTournaments = (event) => {
-        event.preventDefault();
-        socket.emit('bringActiveTournaments');
-    }
 
     const joinTournament = async (event) => {
         event.preventDefault();
@@ -38,9 +33,6 @@ export default function TournamentsList(){
 
     return(
         <div>
-            <form onSubmit={updateTournaments}>
-                <button type='submit' className={styles.btn} >Update Rooms</button>
-            </form>
             <div className={styles.TournamentsList}>
                 {
                     allTournaments[0]
