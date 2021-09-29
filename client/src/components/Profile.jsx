@@ -22,6 +22,7 @@ export default function Profile(props) {
 
     const history = useHistory();
     const { logOut } = log;
+    const [isOpenModal, openModal, closeModal] = useModal();
 
     //Estados del profileReducer
     const [friends, setFriends] = useState({
@@ -57,7 +58,6 @@ export default function Profile(props) {
         })
     }, [userFriends]);
 
-    const [isOpenModal, openModal, closeModal] = useModal();
 
 
     const removeFriend = (flag) => {
