@@ -15,13 +15,13 @@ const EMAIL = /^[^@]+@[^@]+\.[^@]+$/;
 function validate(state) {
   let errors = {};
   if(!state.emailInput) {
-    errors.emailInput = 'You have to enter an email...';
+    errors.emailInput = 'Ingresa tu email...';
   } else if(!EMAIL.test(state.emailInput)) {
-    errors.emailInput = 'The email is invalid';
+    errors.emailInput = 'El email es inválido...';
   };
   if(!state.passwordInput) {
-    errors.passwordInput = 'You have to enter a password...';
-  };
+    errors.passwordInput = 'Contraseña inválida...';
+  }
   return errors;
 };
 
@@ -93,19 +93,19 @@ export default function LogIn() {
                             id="emailInput"
                             name = "emailInput"
                             value={state.emailInput}
-                            placeholder="Put your email"
+                            placeholder="Ingresa tu email"
                             autoComplete="off"
                             className={styles.input}
                             onChange={handleChange}
                         />
                         {errors.emailInput && (<p className={styles.danger}> {errors.emailInput} </p>)}
-                        <label className={styles.label} htmlFor="passwordInput"> Password: </label>
+                        <label className={styles.label} htmlFor="passwordInput"> Contraseña: </label>
                         <input 
                             type='password'
                             id='passwordInput'
                             name="passwordInput"
                             value={state.passwordInput}
-                            placeholder="Put here the password"
+                            placeholder="Ingresa tu contraseña"
                             autoComplete="off"
                             className={styles.input}
                             onChange={handleChange}
@@ -115,9 +115,9 @@ export default function LogIn() {
                             && 
                             (errors.emailInput !== '' && errors.passwordInput !== '')) 
                             ? 
-                            (<button type="submit" className={styles.button}>Login</button>) 
+                            (<button type="submit" className={styles.button}>Entrar</button>) 
                             : 
-                            <button type="submit" className={styles.disabled} disabled>Login</button>}
+                            <button type="submit" className={styles.disabled} disabled>Entrar</button>}
                     </form> 
             </section>
             <Modal isOpen={isOpenModal} closeModal={closeModal}>
@@ -125,7 +125,7 @@ export default function LogIn() {
               <p>{message}</p>
               {
                 isAuth ? 
-                <p>Redirecting...</p>
+                <p>Redireccionando...</p>
                 :
                 null
               }
