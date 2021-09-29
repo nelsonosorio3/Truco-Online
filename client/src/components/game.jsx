@@ -47,8 +47,9 @@ export default function Game({tournamentMatchId}) {
       socket.on("gameStarts", player=>{ //escucha gameStarts para iniciar cuando la sala se llena y dejar el estado jugador listo
         setPlayer(player);
       });
-      socket.on("newRoundStarts", player=>{  //escucha para empezar nueva partida
-        setPlayer(player);
+      socket.on("newRoundStarts", player1=>{  //escucha para empezar nueva partida
+        setPlayer({...player, isTurn: false})
+        setTimeout(()=>setPlayer(player1),5000);
       });
       socket.on("bet", async (betOptions, bool)=>{  //trae la apuesta segun turno
         setPlayer({...player, betOptions, bet: bool});
@@ -95,6 +96,8 @@ export default function Game({tournamentMatchId}) {
         socket.off("quieroTruco");
         socket.off("quieroEnvido1");
         socket.off("envido1");
+        socket.off("updateScore");
+        socket.off("updateRivalScore");
       };
     },[player]);
     

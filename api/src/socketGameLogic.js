@@ -892,10 +892,10 @@ exports = module.exports = function(io){
         isPlayerOne? io.to(playerTwo.id).emit("bet", table.betsList[betPick], true) : io.to(playerOne.id).emit("bet", table.betsList[betPick], true);
         io.in(roomId).emit("messages", { msg: `${isPlayerOne? playerOne.name : playerTwo.name}: ${betPick.toUpperCase()}!`});
         }
-        axios.put(`http://localhost:3001/api/games/${common.gameId}/${playerOne.score}/${playerTwo.score}`,{},{
-                    headers: {
-                        "x-access-token": socket.handshake.auth.token || 1,
-                    }});
+        // axios.put(`http://localhost:3001/api/games/${common.gameId}/${playerOne.score}/${playerTwo.score}`,{},{
+        //             headers: {
+        //                 "x-access-token": socket.handshake.auth.token || 1,
+        //             }});
         
     });
     socket.on("playCard", (card, roomId, playerId) => {
@@ -908,27 +908,27 @@ exports = module.exports = function(io){
             io.to(playerTwo.id).emit("playCard", card, true);
             playerTwo.tableRival.push(card);
             playerOne.tablePlayer.push(card);
-            io.in(roomId).emit("messages", {msg: `${playerOne.name}: juega ${card.number} de ${card.suit}`})
+            // io.in(roomId).emit("messages", {msg: `${playerOne.name}: juega ${card.number} de ${card.suit}`})
         }
         else{
             io.to(playerOne.id).emit("playCard", card, true);
             playerOne.tableRival.push(card);
             playerTwo.tablePlayer.push(card);
-            io.in(roomId).emit("messages", {msg: `${playerTwo.name}: juega ${card.number} de ${card.suit}`})
+            // io.in(roomId).emit("messages", {msg: `${playerTwo.name}: juega ${card.number} de ${card.suit}`})
         }
 
         if(playerOne.tableRival[0] && playerTwo.tableRival[0] && common.turn === 1){
             if(playerOne.tablePlayer[0].truco < playerTwo.tablePlayer[0].truco){
                 common.roundResults.push("playerOne");
-                io.in(roomId).emit("messages", {msg: `Gana ${playerOne.name}!`});
+                // io.in(roomId).emit("messages", {msg: `Gana ${playerOne.name}!`});
             }
             else if(playerOne.tablePlayer[0].truco > playerTwo.tablePlayer[0].truco){
                 common.roundResults.push("playerTwo");
-                io.in(roomId).emit("messages", {msg: `Gana ${playerTwo.name}!`});
+                // io.in(roomId).emit("messages", {msg: `Gana ${playerTwo.name}!`});
             }
             else{
                 common.roundResults.push("tie");
-                io.in(roomId).emit("messages", {msg: `Empate`});
+                // io.in(roomId).emit("messages", {msg: `Empate`});
             }
             common.turn = 2;
             common.trucoBet > 1? io.in(roomId).emit("bet", table.betsList.noTruco) : io.in(roomId).emit("bet", table.betsList.otherTurn);
@@ -937,32 +937,32 @@ exports = module.exports = function(io){
         if(playerOne.tableRival[1] && playerTwo.tableRival[1] && common.turn === 2){
             if(playerOne.tablePlayer[1].truco < playerTwo.tablePlayer[1].truco ){
                 common.roundResults.push("playerOne");
-                io.in(roomId).emit("messages", {msg: `Gana ${playerOne.name}!`})
+                // io.in(roomId).emit("messages", {msg: `Gana ${playerOne.name}!`})
             }
             else if(playerOne.tablePlayer[1].truco > playerTwo.tablePlayer[1].truco){
                 common.roundResults.push("playerTwo");
-                io.in(roomId).emit("messages", {msg: `Gana ${playerTwo.name}!`});
+                // io.in(roomId).emit("messages", {msg: `Gana ${playerTwo.name}!`});
             }
             else{
                 common.roundResults.push("tie");
-                io.in(roomId).emit("messages", {msg: `Empate`});
+                // io.in(roomId).emit("messages", {msg: `Empate`});
             }
             common.turn = 3;
-            common.trucoBet > 1? io.in(roomId).emit("bet", table.betsList.noTruco) : io.in(roomId).emit("bet", table.betsList.otherTurn);
+            // common.trucoBet > 1? io.in(roomId).emit("bet", table.betsList.noTruco) : io.in(roomId).emit("bet", table.betsList.otherTurn);
         }
 
         if(playerOne.tableRival[2] && playerTwo.tableRival[2] && common.turn === 3){
             if(playerOne.tablePlayer[2].truco < playerTwo.tablePlayer[2].truco){
                 common.roundResults.push("playerOne");
-                io.in(roomId).emit("messages", {msg: `Gana ${playerOne.name}!`})
+                // io.in(roomId).emit("messages", {msg: `Gana ${playerOne.name}!`})
             }
             else if(playerOne.tablePlayer[2].truco > playerTwo.tablePlayer[2].truco){
                 common.roundResults.push("playerTwo");
-                io.in(roomId).emit("messages", {msg: `Gana ${playerTwo.name}!`});
+                // io.in(roomId).emit("messages", {msg: `Gana ${playerTwo.name}!`});
             }
             else{
                 common.roundResults.push("tie");
-                io.in(roomId).emit("messages", {msg: `Empate`});
+                // io.in(roomId).emit("messages", {msg: `Empate`});
             }
             common.turn = 4;
             common.trucoBet > 1? io.in(roomId).emit("bet", table.betsList.noTruco) : io.in(roomId).emit("bet", table.betsList.otherTurn);
@@ -1082,7 +1082,7 @@ exports = module.exports = function(io){
                 io.to(table.games[roomId].playerOne.id).emit("newRoundStarts", table.games[roomId].playerOne);
                 io.to(table.games[roomId].playerTwo.id).emit("newRoundStarts", table.games[roomId].playerTwo);
                 }
-                axios.put(`http://localhost:3001/api/games/${common.gameId}/${playerOne.score}/${playerTwo.score}`);
+                // axios.put(`http://localhost:3001/api/games/${common.gameId}/${playerOne.score}/${playerTwo.score}`);
         }
         
     });
