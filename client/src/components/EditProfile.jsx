@@ -17,21 +17,21 @@ const EMAIL = /^[^@]+@[^@]+\.[^@]+$/;
 function validate(state) {
   let errors = {};
   if(!state.username) {
-    errors.username = 'You have to enter a user name...';
+    errors.username = 'Ingresa tu nombre de usuario...';
   } else if (state.username.length < 4) {
-      errors.username = 'The user is invalid. Must be more than 3 characters...';
+      errors.username = 'Nombre inválido. Debe contener más de 3 caracteres...';
   } else if(!ALPHA.test(state.username)) {
-      errors.username = 'Only letters are allowed...'
+      errors.username = 'Solo se aceptan letras...'
   };
   if(!state.email) {
-    errors.email = 'You have to enter an email...';
+    errors.email = 'Ingresa tu email...';
   } else if(!EMAIL.test(state.email)) {
-      errors.email = 'The email is invalid';
+      errors.email = 'El email es inválido...';
   };
   if(!state.password) {
-    errors.password = 'You have to enter a password...';
+    errors.password = 'Ingresa un contraseña...';
   } else if (state.password.length < 4) {
-      errors.password = 'The password is invalid. Must be more than 3 characters...';
+      errors.password = 'Contraseña inválida. Debe contener más de 3 caracteres...';
   };
   return errors;
 };
@@ -111,14 +111,14 @@ export default function EditProfile() {
                     {
                         editProfileReducer.response ? 
                         <>
-                            <h3> Edit the field you want to change* </h3>
-                            <label className={styles.label} htmlFor="username" > User: </label>
+                            <h3> Edita el campo que quieras cambiar* </h3>
+                            <label className={styles.label} htmlFor="username" > Usuario: </label>
                             <input
                                 type="text"
                                 id="username"
                                 name = "username"
                                 value={state.username}
-                                placeholder="Put here your new username"
+                                placeholder="Nuevo nombre de usurario"
                                 autoComplete="off"
                                 className={styles.input}
                                 onChange={handleChange}
@@ -130,26 +130,26 @@ export default function EditProfile() {
                                 id='email'
                                 name="email"
                                 value={state.email}
-                                placeholder="Put here your new email"
+                                placeholder="Nuevo email"
                                 autoComplete="off"
                                 className={styles.input}
                                 onChange={handleChange}
                             />
                             {errors.email && (<p className={styles.danger}> {errors.email} </p>)}
-                            <label className={styles.label} htmlFor="password"> Password: </label>
+                            <label className={styles.label} htmlFor="password"> Contraseña: </label>
                             <input 
                                 type='password'
                                 id='password'
                                 name="password"
                                 value={state.password}
-                                placeholder="Put here your new password"
+                                placeholder="Nueva contraseña"
                                 autoComplete="off"
                                 className={styles.input}
                                 onChange={handleChange}
                             />
                             {errors.password && (<p className={styles.danger}> {errors.password} </p>)}
                             <Avatars set={setImg}/>
-                            <label className={styles.labelFile} htmlFor="image"> Upload Image: </label>
+                            <label className={styles.labelFile} htmlFor="image"> Subir Imagen: </label>
                             <input 
                                 type='file'
                                 id='image'
@@ -165,11 +165,11 @@ export default function EditProfile() {
                                     && 
                                     (errors.username !== '' && errors.email !== '' && errors.password !== '')) 
                                     ? 
-                                    (<button type="submit" className={styles.button}> Save </button>) 
+                                    (<button type="submit" className={styles.button}> Guardar </button>) 
                                     : 
-                                    <button type="submit" className={styles.disabled} disabled> Save </button>
+                                    <button type="submit" className={styles.disabled} disabled> Guardar </button>
                                 }
-                                <button className={styles.button} onClick={() => history.push('profile')}> Cancel </button>
+                                <button className={styles.button} onClick={() => history.push('profile')}> Cancelar </button>
                             </div>
                         </>
                         :
@@ -182,7 +182,7 @@ export default function EditProfile() {
               <p>{msg}</p>
               {
                 status ? 
-                <p>Redirecting...</p>
+                <p>Redireecionando...</p>
                 :
                 null
               }

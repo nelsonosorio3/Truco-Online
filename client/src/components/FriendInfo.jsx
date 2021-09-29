@@ -45,11 +45,11 @@ export default function FriendInfo({ isOpen, close, name, date, email, id }) {
                     <div className={styles.playerInfo}>
                         <h2> {name} </h2>
                         <h3> {email} </h3>
-                        <h3> Games played: </h3>
+                        <h3> Partidas Jugadas: </h3>
                         <p>{state.games?.length || 'No data'}</p>
                         <div className={styles.playerInfo_Games}>
-                            <h3> Wins: {state.games? wins(games) : 'No data'} </h3>
-                            <h3> Loses: {state.games? (games.length - wins(games)) : 'No data'} </h3>
+                            <h3> Ganadas: {state.games? wins(games) : 'No data'} </h3>
+                            <h3> Perdidas: {state.games? (games.length - wins(games)) : 'No data'} </h3>
                         </div>
                     </div>
                 </div>

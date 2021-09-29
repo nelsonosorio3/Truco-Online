@@ -16,8 +16,8 @@ export default function AdminPanel() {
 
   const tableStatus = useSelector(state => state.adminPanelReducer);
   const { getUsers, filterByName, filterByEmail, sortByPlayedAsc, sortByPlayedDesc,
-    sortByWonAsc, sortByWonDesc, sortByLostAsc, sortByLostDesc,
-    sortByUserSinceAsc, sortByUserSinceDesc } = adminPanelActions;
+    sortByWonAsc, sortByWonDesc, sortByLostAsc, sortByLostDesc, goToPage, setSelectedPage,
+    sortByUserSinceAsc, sortByUserSinceDesc, setDisplayedOnPage, setUsersPerPage } = adminPanelActions;
   const dispatch = useDispatch();
 
   //Trae los usuarios
@@ -41,29 +41,44 @@ export default function AdminPanel() {
   }
 
   //var pagesArray = arrCreator(tableStatus.totalPages);
-  var pagesArray = [1];
 
 
   var handleFilterChange = function (event) {
     dispatch(filterByName(event.target.value));
+    dispatch(filterByName(event.target.value));
+    dispatch(goToPage(1));
   };
 
   var handleEmailFilterChange = function (event) {
     dispatch(filterByEmail(event.target.value));
+    dispatch(filterByEmail(event.target.value));
+    dispatch(goToPage(1));
   };
 
-  var handlePageSubmit = function () { };
+  var handlePageSubmit = function (event) {
+    event.preventDefault();
+    dispatch(goToPage(event.target.value));
+  };
 
-  var handlePageChange = function () { };
+  var handlePageChange = function (event) {
+    dispatch(setSelectedPage(event.target.value))
+  };
+
+  var handleUsersPerPageSubmit = function (event) {
+    dispatch(setUsersPerPage(event.target.value));
+    dispatch(goToPage(1));
+  }
 
   var handleSortAscPlayed = function () {
     dispatch(sortByPlayedAsc()); //Ordena el array de fondo, no el que se muestra
     dispatch(filterByName(tableStatus.filterValue))
+    dispatch(goToPage(1));
   };
 
   var handleSortDescPlayed = function () {
     dispatch(sortByPlayedDesc()); //Ordena el array de fondo, no el que se muestra
     dispatch(filterByName(tableStatus.filterValue))
+    dispatch(goToPage(1));
   };
 
   var handleSortAscWon = function () {
@@ -74,27 +89,36 @@ export default function AdminPanel() {
   var handleSortDescWon = function () {
     dispatch(sortByWonDesc());
     dispatch(filterByName(tableStatus.filterValue))
+    dispatch(goToPage(1));
   };
 
   var handleSortAscLost = function () {
     dispatch(sortByLostAsc());
     dispatch(filterByName(tableStatus.filterValue))
+    dispatch(goToPage(1));
   };
 
   var handleSortDescLost = function () {
     dispatch(sortByWonDesc());
     dispatch(filterByName(tableStatus.filterValue))
+    dispatch(goToPage(1));
   };
 
   var handleSortAscUserSince = function () {
     dispatch(sortByUserSinceAsc());
     dispatch(filterByName(tableStatus.filterValue))
+    dispatch(goToPage(1));
   };
 
   var handleSortDescUserSince = function () {
     dispatch(sortByUserSinceDesc());
     dispatch(filterByName(tableStatus.filterValue))
+    dispatch(goToPage(1));
   };
+
+  var pagesButtonsCreator = function () {
+
+  }
 
   var someFunction = function () { };
 
@@ -104,8 +128,7 @@ export default function AdminPanel() {
 
 
     <div className={styles.mainContainer}>
-      <div><NavBar /></div>
-
+      <NavBar />
       <div className={styles.tableContainer}>
         <h2>Usuarios registrados</h2>
 
@@ -138,21 +161,40 @@ export default function AdminPanel() {
           </form>
         </p>
 
-        {/*}
-      <p>Página actual: {tableStatus.currentPage}</p>
+        <form action="/action_page.php" onSubmit={handlePageSubmit} className="paginator">
+          <label for="pageSelector">Página actual: {tableStatus.currentPage} (de un total de {tableStatus.pages.length}). Ir a la página:</label>
+          <select id="pageSelector" name="pageSelector" onChange={handlePageChange}>
+            {
+              tableStatus.pages.map(num => {
+                return <option value={num.toString()}>{num}</option>
+              })
+            }
+          </select>
+          <input type="submit" value="Go to page" />
+        </form>
 
-      <form action="/action_page.php" onSubmit={handlePageSubmit} className="paginator">
-        <label for="pageSelector">Ir a la página:</label>
-        <select id="pageSelector" name="pageSelector" onChange={handlePageChange}>
-          {
-            pagesArray.map(num => {
-              return <option value={num.toString()}>{num}</option>
-            })
-          }
-        </select>
-        <input type="submit" value="Go to page" />
-      </form>
-        {*/}
+        <p>Usuarios por página:
+          <form>
+            <input
+              name="emailFilterValue"
+              value={tableStatus.usersPerPage}
+              onChange={handleUsersPerPageSubmit}
+              type="text"
+              placeholder="Ingrese Email"
+              title="Búsqueda de Usuario (ingresar username)"
+            />
+
+          </form>
+        </p>
+
+
+
+
+        <div>
+
+
+
+        </div>
 
         <table id="myTable">
           <tbody>
@@ -168,7 +210,7 @@ export default function AdminPanel() {
               <th>Medidas </th>
             </tr>
             {
-              tableStatus.displayedUsers.map(u => <FilaDeTabla //nuestros usuarios traídos desde nuestro redux store!
+              tableStatus.displayedInPage.map(u => <FilaDeTabla //nuestros usuarios traídos desde nuestro redux store!
                 key={u.id}
                 id={u.id}
                 //Image={u.flagImage}
