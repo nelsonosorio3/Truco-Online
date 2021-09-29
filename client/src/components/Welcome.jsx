@@ -16,9 +16,11 @@ export default function Welcome() {
     const responseFacebook = (response) => {
         console.log(response)
         dispatch(logInFacebook(response));
+
         // console.log(response.email)
         // history.push('/rooms');
     }
+
 
     return(
         <>
@@ -34,7 +36,9 @@ export default function Welcome() {
                             autoLoad={false}
                             fields="name,email,picture"
                             callback={responseFacebook}
-                            cssClass="facebook"/>
+                            cssClass={styles.facebook}
+                          />,
+
                         <Link to='/sign-up'>
                             <button className={styles.btnSignUp}>Sign Up</button>
                         </Link>
