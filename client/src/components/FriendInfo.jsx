@@ -17,17 +17,14 @@ export default function FriendInfo({ isOpen, close, name, date, email, id }) {
     const conditionalOpen = isOpen ? styles.isOpen : null;
     const dispatch = useDispatch();
 
-    // hardcodeado de momento hasta que funcione la ruta
-    const [state, setState] = useState({games: [{winner: 'pedro',loser: 'juan',},{winner: 'pedro',loser: 'pedro',},{winner: 'juan',loser: 'mati',},{winner: 'pedro',loser: 'pepe',},]});
-
-    const { games } = state;
+    const [games, setGames] = useState([]);
 
     const wins = (games) => {
         var count = 0;
-        games.forEach((game) => {if(game.winner === 'pedro') count++});
-        // games.forEach((game) => {if(game.winner === name) count++});
+        games.forEach((game) => {if(game.winner === name) count++});
         return count;
     };
+
 
     const inviteToGame = ()=>{
         let idGenerator = Math.floor(Math.random()*100000);
@@ -45,9 +42,22 @@ export default function FriendInfo({ isOpen, close, name, date, email, id }) {
     //     .catch(error => console.log(error));
     // };
 
-    // useEffect(() => {
-    //     gamesInfo(id);
-    // }, []);
+    const gamesInfo = (id, token) => {
+        axios(`http://localhost:3001/api/games/games/${id}`, {
+            headers: {
+                "x-access-token": token,
+            },
+        })
+        .then(response => {
+            setGames(response.data.games);
+        })
+        .catch(error => console.log(error));
+    };
+
+
+    useEffect(() => {
+        gamesInfo(id, localStorage.token);
+    }, [isOpen]);
 
     return (
         <article className={styles.info + ' ' + conditionalOpen} onClick={close}>
@@ -60,10 +70,16 @@ export default function FriendInfo({ isOpen, close, name, date, email, id }) {
                         <h2> {name} </h2>
                         <h3> {email} </h3>
                         <h3> Partidas Jugadas: </h3>
-                        <p>{state.games?.length || 'No data'}</p>
+                        <p>{games.length}</p>
                         <div className={styles.playerInfo_Games}>
-                            <h3> Ganadas: {state.games? wins(games) : 'No data'} </h3>
-                            <h3> Perdidas: {state.games? (games.length - wins(games)) : 'No data'} </h3>
+                            <div className={styles.infoGames}>
+                                <h3> Ganadas: </h3>
+                                <p>{games? wins(games) : 'No data'}</p>
+                            </div>    
+                            <div className={styles.infoGames}>
+                                <h3> Perdidas: </h3>
+                                <p>{games? (games.length - wins(games)) : 'No data'}</p>
+                            </div>
                         </div>
                         <button onClick={inviteToGame}>invitar a partida</button>
                     </div>
