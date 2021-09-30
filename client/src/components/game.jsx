@@ -52,7 +52,8 @@ export default function Game({tournamentMatchId}) {
         setTimeout(()=>setPlayer(player1),5000);
       });
       socket.on("bet", (betOptions, bool, turn)=>{  //trae la apuesta segun turno
-        if(turn === null) setPlayer({...player, betOptions, bet: bool});
+        console.log(turn)
+        if(turn === undefined) setPlayer({...player, betOptions, bet: bool});
         else setPlayer({...player, betOptions, bet: bool, isTurn: turn});
       });
       socket.on("betting", bool=>{  //cambia el estado de si se esta apostando para bloquear jugar cartas hasta resolverlo
