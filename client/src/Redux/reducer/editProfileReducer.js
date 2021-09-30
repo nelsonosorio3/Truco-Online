@@ -7,11 +7,12 @@ const INITIAL_STATE = {
     password: '',
     response: false,
     img: null,
-    status: false,
+    status: null,
     msg: '',
 };
 
 const editProfileReducer = (state = INITIAL_STATE, {type, payload}) => {
+  console.log('pay', payload?.data);
   switch (type) {
     case EDIT_PROFILE:
         return {
@@ -26,11 +27,20 @@ const editProfileReducer = (state = INITIAL_STATE, {type, payload}) => {
     case PUT_PROFILE:
         return {
           ...state,
-          status:payload.status,
-          msg: payload.msg,
+          status:payload.data.status,
+          msg: payload.data.message,
         };
     case CLEAR_DATA:
-        return {INITIAL_STATE};
+        return {
+          ...state,
+          id: '',
+          username: '',
+          email: '',
+          password: '',
+          response: false,
+          img: null,
+          status: null,
+        };
     default:
       return state;    
   };
