@@ -16,6 +16,11 @@ exports = module.exports = function(io){
             // const clients = io.sockets?.adapter.rooms
             // notifyFriendOfDisconnect(socket)
         });
+
+        socket.on("invite to game", (roomId, idReceiver, nameSender)=>{
+            console.log(socket.id, "invitacion")
+            socket.broadcast.emit("invite to game",roomId, idReceiver, nameSender);
+        });
       
     
         //evento por si alguien crea una sala o entra a una

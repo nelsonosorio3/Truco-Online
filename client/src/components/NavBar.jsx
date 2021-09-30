@@ -6,6 +6,7 @@ import styles from './styles/NavBar.module.css'
 
 import logo from '../img/logo.png';
 import profileIcon from '../img/profileIcon.png';
+import GameRequest from './GameRequest';
 
 export default function NavBar() {
 
@@ -23,6 +24,7 @@ export default function NavBar() {
     
 
     return(
+        <>
         <nav className={styles.nav}>
             <Link to='/' className={styles.logo}>
                 <img src={logo} alt="TrucoHenry" />
@@ -51,5 +53,7 @@ export default function NavBar() {
                 }
             </div>
         </nav>
+        <GameRequest/>
+        </>
     );
 };

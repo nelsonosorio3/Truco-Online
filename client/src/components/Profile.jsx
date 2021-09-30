@@ -17,6 +17,7 @@ import Match from './Match';
 
 // nav
 import NavBar from './NavBar';
+import GameRequest from './GameRequest';
 
 export default function Profile(props) {
 
@@ -96,6 +97,7 @@ export default function Profile(props) {
     return (
         <>
             <NavBar />
+            <GameRequest/>
             <Modal isOpen={isOpenModal} closeModal={closeModal} removeFriend={removeFriend} deleteButtons={true}></Modal>
             <button className={styles.logoutBtn} onClick={logout}>Log out</button>
             <div className={styles.mainDiv}>
