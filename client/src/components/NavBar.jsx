@@ -1,7 +1,7 @@
 import React, { useState, useEffect }  from 'react';
-import { useSelector } from 'react-redux';
+import { useSelector , useDispatch} from 'react-redux';
 import { Link } from 'react-router-dom';
-
+import getRanking from '../Redux/actions-types/getRanking';
 import styles from './styles/NavBar.module.css'
 
 import logo from '../img/logo.png';
@@ -10,7 +10,7 @@ import profileIcon from '../img/profileIcon.png';
 export default function NavBar() {
 
     const username = window.localStorage.getItem('user');
-
+    const dispatch = useDispatch()
     const [isAuth, setIsAuth] = useState(false); 
 
     useEffect(() => {
@@ -19,6 +19,10 @@ export default function NavBar() {
           setIsAuth(logged);
         };
     }, []);
+
+    useEffect(() => {
+        dispatch(getRanking())
+    }, [])
 
     
 
