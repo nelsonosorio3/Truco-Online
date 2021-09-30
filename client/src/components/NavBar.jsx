@@ -1,17 +1,16 @@
 import React, { useState, useEffect }  from 'react';
-import { useSelector , useDispatch} from 'react-redux';
+import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
-import getRanking from '../Redux/actions-types/getRanking';
+
 import styles from './styles/NavBar.module.css'
 
 import logo from '../img/logo.png';
 import profileIcon from '../img/profileIcon.png';
-import GameRequest from './GameRequest';
 
 export default function NavBar() {
 
     const username = window.localStorage.getItem('user');
-    const dispatch = useDispatch()
+
     const [isAuth, setIsAuth] = useState(false); 
 
     useEffect(() => {
@@ -21,14 +20,9 @@ export default function NavBar() {
         };
     }, []);
 
-    useEffect(() => {
-        dispatch(getRanking())
-    }, [])
-
     
 
     return(
-        <>
         <nav className={styles.nav}>
             <Link to='/' className={styles.logo}>
                 <img src={logo} alt="TrucoHenry" />
@@ -57,7 +51,5 @@ export default function NavBar() {
                 }
             </div>
         </nav>
-        <GameRequest/>
-        </>
     );
 };
