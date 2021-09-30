@@ -58,7 +58,6 @@ export default function EditProfile() {
 
     const { getEditProfile, putEditProfile, clearData } = editProfileActions;
 
-    const { status, msg } = useSelector(state => state.signUpReducer);
     const editProfileReducer = useSelector(state => state.editProfileReducer);
     
     const dispatch = useDispatch();
@@ -85,14 +84,17 @@ export default function EditProfile() {
             password: editProfileReducer.password,
             image: editProfileReducer.img,
         });
-        //seteo el response en false hasta que me llegue la confirmacion de que 
-        //se cambio con exito, y si asi muestro el modal y redirecciono
-        if(status) {
+        if(editProfileReducer.status) {
             openModal();
             dispatch(clearData());
             setNewData(initialState);
             setErrors(initialState);
-        };
+            setTimeout(() => {
+                history.push("/profile");
+            }, 3000);
+        } else if(editProfileReducer.status === false) {
+            openModal();
+        }
     }, [editProfileReducer]);
 
     function handleChange(event) {
@@ -189,10 +191,10 @@ export default function EditProfile() {
             </section>
             <Modal isOpen={isOpenModal} closeModal={closeModal}>
               <h3>Status:</h3>
-              <p>{msg}</p>
+              <p>{editProfileReducer.msg}</p>
               {
-                status ? 
-                <p>Redireecionando...</p>
+                editProfileReducer.status ? 
+                <p>Redireccionando...</p>
                 :
                 null
               }

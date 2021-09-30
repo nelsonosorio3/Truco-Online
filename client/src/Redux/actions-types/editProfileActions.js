@@ -16,14 +16,11 @@ const getEditProfile = ({token}) => {
 };
 
 const putEditProfile = (data, token) => {
-  console.log('Data/token', {data, token});
+  const headers = {
+    "x-access-token": token,
+  };
   return function(dispatch) {
-    return axios.put(`http://localhost:3001/api/user/edit`, {
-      headers: {
-        "x-access-token": token,
-      },  
-      body: data,
-    })
+    return axios.put(`http://localhost:3001/api/user/edit`, data, { headers })
     .then(data => {
       console.log('Response put', data);
       dispatch({ type: PUT_PROFILE, payload: data });
