@@ -109,7 +109,7 @@ export default function EditProfile() {
 
     function handleSubmit(event) {
         event.preventDefault();
-        dispatch(putEditProfile(doPackage(oldData, newData, img)));
+        dispatch(putEditProfile(doPackage(oldData, newData, img), localStorage.token));
     };
 
     return (
