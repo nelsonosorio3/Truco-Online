@@ -17,7 +17,6 @@ import Match from './Match';
 
 // nav
 import NavBar from './NavBar';
-import GameRequest from './GameRequest';
 
 export default function Profile(props) {
 
@@ -109,13 +108,8 @@ export default function Profile(props) {
     return (
         <>
             <NavBar />
-
-            <GameRequest/>
-
-
             <Modal isOpen={isOpenModal} closeModal={closeModal} removeFriend={removeFriend} deleteButtons={isDelete} friend={deleteFriend}></Modal>
-
-            <button className={styles.logoutBtn} onClick={logout}>Log out</button>
+            <button className={styles.logoutBtn} onClick={logout}></button>
             <div className={styles.mainDiv}>
                 <div className={styles.subMainDiv}>
                     <div className={styles.player}>
@@ -126,17 +120,24 @@ export default function Profile(props) {
                         <div className={styles.playerInfo}>
                             <h2>{userProfile?.username}</h2>
                             <h3>{userProfile?.email}</h3>
-                            <h3>Games played: {userProfile?.gamesPlayed}</h3>
+                            <h3> Partidas Jugadas: </h3>
+                            <p> {userProfile?.gamesPlayed} </p>
                             <div className={styles.playerInfo_Games}>
-                                <h3>Wins: {userProfile?.gamesLost}</h3>
-                                <h3>Loses: {userProfile?.gamesWon}</h3>
+                                <div className={styles.infoGames}>
+                                    <h3> Ganadas: </h3>
+                                    <p> {userProfile?.gamesLost} </p>
+                                </div>
+                                <div className={styles.infoGames}>
+                                    <h3> Perdidas: </h3>
+                                    <p> {userProfile?.gamesWon} </p>
+                                </div>
                             </div>
                         </div>
                     </div>
                     <br />
                     <div className={styles.friends}>
                         <div className={styles.friendsDiv}>
-                            <h3 classname={styles.title}>Amigos</h3>
+                            <h3 className={styles.title}>Amigos</h3>
                             <div className={styles.friendsList}>
                                 {
                                     !friends.sender.length ? <p>No tienes amigos</p> : friends.sender.map(f => <Friend
@@ -153,10 +154,10 @@ export default function Profile(props) {
                             </div>
                         </div>
                         <div className={styles.friendsDiv}>
-                            <h3>Solicitudes pendientes</h3>
+                            <h3 className={styles.title}>Solicitudes pendientes</h3>
                             <div className={styles.friendsList}>
                                 {
-                                    !friends.requested.length ? <p>No solicitudes pendientes</p> : friends.requested.map(f => <AddFriend
+                                    !friends.requested.length ? <p>Sin solicitudes pendientes</p> : friends.requested.map(f => <AddFriend
                                         username={f.username}
                                         respond={respondFriendFunction}
                                         email={f.email}

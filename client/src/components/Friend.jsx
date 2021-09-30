@@ -20,10 +20,6 @@ export default function Friend({ name, date, id, deleteId, email, status }) {
       <h3 className={styles.name} onClick={open}>{name}</h3>
       <p>Status:</p>
       <p>{status}</p>
-      <div className={styles.div2}>
-        <p className={styles.text}>Amigos desde:</p>
-        <div className={styles.text}>{date.split("T")[0]}</div>
-      </div>
       {status === "pending" ? null : <button onClick={() => deleteFriend()}>X</button>}
       {/* Desplegar info detallada */}
       <FriendInfo isOpen={isOpen} close={close} name={name} date={date} email={email} id={id} />

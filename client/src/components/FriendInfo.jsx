@@ -11,10 +11,12 @@ import {useDispatch} from 'react-redux'
 import { setIsInRoom } from '../Redux/actions-types/roomsActions';
 
 export default function FriendInfo({ isOpen, close, name, date, email, id }) {
-    console.log(id)
     const history = useHistory();
+
     const handleContainerClick = (e) => e.stopPropagation();
+    
     const conditionalOpen = isOpen ? styles.isOpen : null;
+    
     const dispatch = useDispatch();
 
     const [games, setGames] = useState([]);
@@ -25,22 +27,13 @@ export default function FriendInfo({ isOpen, close, name, date, email, id }) {
         return count;
     };
 
-
-    const inviteToGame = ()=>{
+    const inviteToGame = () => {
         let idGenerator = Math.floor(Math.random()*100000);
         socket.emit("invite to game", idGenerator, id, localStorage.user);
         socket.emit('joinRoom', (idGenerator));
         dispatch(setIsInRoom({isInRoom: true, roomId: idGenerator}));
         history.push("/rooms");
-    }
-    // const gamesInfo = (id) => {
-    //     axios(`http://localhost:3001/api/games/games/${id}`)
-    //     .then(response => {
-    //         console.log('aaa', response);
-    //         setState(response);
-    //     })
-    //     .catch(error => console.log(error));
-    // };
+    };
 
     const gamesInfo = (id, token) => {
         axios(`http://localhost:3001/api/games/games/${id}`, {
@@ -53,7 +46,6 @@ export default function FriendInfo({ isOpen, close, name, date, email, id }) {
         })
         .catch(error => console.log(error));
     };
-
 
     useEffect(() => {
         gamesInfo(id, localStorage.token);
@@ -81,7 +73,7 @@ export default function FriendInfo({ isOpen, close, name, date, email, id }) {
                                 <p>{games? (games.length - wins(games)) : 'No data'}</p>
                             </div>
                         </div>
-                        <button onClick={inviteToGame}>invitar a partida</button>
+                        <button onClick={inviteToGame}>Invitar a partida</button>
                     </div>
                 </div>
             </div>
