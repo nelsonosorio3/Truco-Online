@@ -5,10 +5,17 @@ import axios from 'axios';
 import styles from './styles/FriendInfo.module.css';
 import profileIcon from '../img/profileIcon.png';
 
-export default function FriendInfo({ isOpen, close, name, date, email, id }) {
+import { useHistory } from "react-router-dom";
+import socket from './socket';
+import {useDispatch} from 'react-redux'
+import { setIsInRoom } from '../Redux/actions-types/roomsActions';
 
+export default function FriendInfo({ isOpen, close, name, date, email, id }) {
+    console.log(id)
+    const history = useHistory();
     const handleContainerClick = (e) => e.stopPropagation();
     const conditionalOpen = isOpen ? styles.isOpen : null;
+    const dispatch = useDispatch();
 
     const [games, setGames] = useState([]);
 
@@ -17,6 +24,23 @@ export default function FriendInfo({ isOpen, close, name, date, email, id }) {
         games.forEach((game) => {if(game.winner === name) count++});
         return count;
     };
+
+
+    const inviteToGame = ()=>{
+        let idGenerator = Math.floor(Math.random()*100000);
+        socket.emit("invite to game", idGenerator, id, localStorage.user);
+        socket.emit('joinRoom', (idGenerator));
+        dispatch(setIsInRoom({isInRoom: true, roomId: idGenerator}));
+        history.push("/rooms");
+    }
+    // const gamesInfo = (id) => {
+    //     axios(`http://localhost:3001/api/games/games/${id}`)
+    //     .then(response => {
+    //         console.log('aaa', response);
+    //         setState(response);
+    //     })
+    //     .catch(error => console.log(error));
+    // };
 
     const gamesInfo = (id, token) => {
         axios(`http://localhost:3001/api/games/games/${id}`, {
@@ -29,6 +53,7 @@ export default function FriendInfo({ isOpen, close, name, date, email, id }) {
         })
         .catch(error => console.log(error));
     };
+
 
     useEffect(() => {
         gamesInfo(id, localStorage.token);
@@ -56,6 +81,7 @@ export default function FriendInfo({ isOpen, close, name, date, email, id }) {
                                 <p>{games? (games.length - wins(games)) : 'No data'}</p>
                             </div>
                         </div>
+                        <button onClick={inviteToGame}>invitar a partida</button>
                     </div>
                 </div>
             </div>

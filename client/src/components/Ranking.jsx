@@ -4,6 +4,7 @@ import getRanking from '../Redux/actions-types/getRanking';
 import NavBar from './NavBar'; 
 import { useDispatch , useSelector } from 'react-redux';
 import Cup from './cup';
+import GameRequest from './GameRequest';
 
 
 
@@ -23,12 +24,13 @@ export default function Ranking() {
     return(
         <>
         <NavBar />
+        <GameRequest/>
           <div className={styles.fondo}> 
            <h2 className={styles.title}> Mejores Jugadores</h2>
               <div className={styles.cups}> 
-                  <Cup username={one.username} pos='1' won={one.gamesWon} /> 
-                  <Cup username={two.username} pos='2' won={two.gamesWon} />
-                  <Cup username={three.username} pos='3' won={three.gamesWon} />
+                  <Cup username={one?.username} pos='1' won={one?.gamesWon} /> 
+                  <Cup username={two?.username} pos='2' won={two?.gamesWon} />
+                  <Cup username={three?.username} pos='3' won={three?.gamesWon} />
              </div>
             </div>
         </>
