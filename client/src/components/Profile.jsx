@@ -58,29 +58,31 @@ export default function Profile(props) {
             sender: userFriends.sender,
             requested: userFriends.requested
         })
-
         if(removeSuccess){
             setIsDelete("success")
             openModal()
             setRemoveSuccess(false)
-
         }
-
     }, [userFriends]);
 
+    //funcionque luego de la confirmacion del modal hace el dispatch y elimina al amigo de la base de datos
     const removeFriend = (flag) => {
         if(flag){
             dispatch(deleteFriends(userProfile.id, deleteFriend));
             setRemoveSuccess(true)
         };
+        // setDeleteFriend({
+        //     flag:false,
+        //     email: ""
+        // });
+    };
+
+    // Funcion para eliminar un amigo que se pasa a cada componente de amigos
+    const deleteFriendFunction = (email) => {
         setDeleteFriend({
             flag:false,
             email: ""
         });
-    };
-
-    // Funcion para eliminar un amigo
-    const deleteFriendFunction = (email) => {
         setDeleteFriend(email);
         setIsDelete("delete")
         openModal();
@@ -106,7 +108,7 @@ export default function Profile(props) {
     return (
         <>
             <NavBar />
-            <Modal isOpen={isOpenModal} closeModal={closeModal} removeFriend={removeFriend} deleteButtons={isDelete}></Modal>
+            <Modal isOpen={isOpenModal} closeModal={closeModal} removeFriend={removeFriend} deleteButtons={isDelete} friend={deleteFriend}></Modal>
             <button className={styles.logoutBtn} onClick={logout}>Log out</button>
             <div className={styles.mainDiv}>
                 <div className={styles.subMainDiv}>
