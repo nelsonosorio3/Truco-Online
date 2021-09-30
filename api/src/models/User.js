@@ -15,7 +15,8 @@ module.exports = (sequelize) => {
         },
         password: {
             type: DataTypes.STRING,
-            allowNull: false,
+            //Se desactiva el allownull para aquellos usuarios que ingresan con facebook, no se les requeire contraseña
+            // allowNull: false,
         },
         gamesPlayed: {
             type: DataTypes.INTEGER,
@@ -26,6 +27,15 @@ module.exports = (sequelize) => {
         gamesLost: {
             type: DataTypes.INTEGER,
         },
+        isAdmin: {
+            type: DataTypes.BOOLEAN,
+            defaultValue: false
+        },
+        // image: {
+        //     type: DataTypes.STRING,
+        //     defaultValue: false
+        // },
+
 
     });
 };

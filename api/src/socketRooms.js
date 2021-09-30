@@ -16,6 +16,11 @@ exports = module.exports = function(io){
             // const clients = io.sockets?.adapter.rooms
             // notifyFriendOfDisconnect(socket)
         });
+
+        socket.on("invite to game", (roomId, idReceiver, nameSender)=>{
+            console.log(socket.id, "invitacion")
+            socket.broadcast.emit("invite to game",roomId, idReceiver, nameSender);
+        });
       
     
         //evento por si alguien crea una sala o entra a una
@@ -45,7 +50,7 @@ exports = module.exports = function(io){
                 };
                 let matchNumber = await axios.post(`http://localhost:3001/api/games`,{},{
                 headers: {
-                    "x-access-token": socket.handshake.auth.token,
+                    "x-access-token": socket.handshake.auth.token || 1,
                 }});
                 table.games[roomId].common ={
                     envidoList: [],
@@ -81,7 +86,7 @@ exports = module.exports = function(io){
                     }
                 axios.patch(`http://localhost:3001/api/games/${table.games[roomId].common.gameId}`,{},{
                     headers: {
-                        "x-access-token": socket.handshake.auth.token,
+                        "x-access-token": socket.handshake.auth.token || 1,
                     }});
             }
             if(activeRooms.indexOf(roomId) === -1) activeRooms = [...activeRooms, roomId] 

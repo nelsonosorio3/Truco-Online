@@ -5,7 +5,9 @@
   margin: 20px;
   padding: 10px;
   max-width: 130px;
-  background-color: #F8F8FF
+  background-color: #F8F8FF;
+
+  height: 85%;
 }
 
 .profileIconSmall{

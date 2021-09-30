@@ -47,11 +47,14 @@ export default function Game({tournamentMatchId, setShowSecondMatch, setShowFirs
       socket.on("gameStarts", player=>{ //escucha gameStarts para iniciar cuando la sala se llena y dejar el estado jugador listo
         setPlayer(player);
       });
-      socket.on("newRoundStarts", player=>{  //escucha para empezar nueva partida
-        setPlayer(player);
+      socket.on("newRoundStarts", player1=>{  //escucha para empezar nueva partida
+        setPlayer({...player, isTurn: false})
+        setTimeout(()=>setPlayer(player1),5000);
       });
-      socket.on("bet", async (betOptions, bool)=>{  //trae la apuesta segun turno
-        setPlayer({...player, betOptions, bet: bool});
+      socket.on("bet", (betOptions, bool, turn)=>{  //trae la apuesta segun turno
+        console.log(turn)
+        if(turn === undefined) setPlayer({...player, betOptions, bet: bool});
+        else setPlayer({...player, betOptions, bet: bool, isTurn: turn});
       });
       socket.on("betting", bool=>{  //cambia el estado de si se esta apostando para bloquear jugar cartas hasta resolverlo
         setPlayer({...player, bet: false, betOptions: [], isTurn: !player.isTurn});
@@ -104,6 +107,8 @@ export default function Game({tournamentMatchId, setShowSecondMatch, setShowFirs
         socket.off("quieroTruco");
         socket.off("quieroEnvido1");
         socket.off("envido1");
+        socket.off("updateScore");
+        socket.off("updateRivalScore");
       };
     },[player]);
     

@@ -20,11 +20,11 @@ export default function Landing() {
                 {
                     isAuth ?
                         <NavLink to="/rooms" >
-                            <button className={styles.btn1}>Enter</button>
+                            <button className={styles.btn1}>Ingresar</button>
                         </NavLink>
                         :
                         <NavLink to="/welcome" >
-                            <button className={styles.btn1}>Enter</button>
+                            <button className={styles.btn1}>Ingresar</button>
                         </NavLink>
                 }
             </div>

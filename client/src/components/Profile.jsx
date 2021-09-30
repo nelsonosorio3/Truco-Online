@@ -17,18 +17,22 @@ import Match from './Match';
 
 // nav
 import NavBar from './NavBar';
+import GameRequest from './GameRequest';
 
 export default function Profile(props) {
 
     const history = useHistory();
     const { logOut } = log;
+    const [isOpenModal, openModal, closeModal] = useModal();
+
 
     //Estados del profileReducer
     const [friends, setFriends] = useState({
         sender: [],
         requested: []
     });
-
+    const [removeSuccess, setRemoveSuccess] = useState(false)
+    const [isDelete, setIsDelete] = useState("delete")
     const [deleteFriend, setDeleteFriend] = useState("");
 
     //userProfile: es el estado del usuario logeado
@@ -55,24 +59,33 @@ export default function Profile(props) {
             sender: userFriends.sender,
             requested: userFriends.requested
         })
+        if(removeSuccess){
+            setIsDelete("success")
+            openModal()
+            setRemoveSuccess(false)
+        }
     }, [userFriends]);
 
-    const [isOpenModal, openModal, closeModal] = useModal();
-
-
+    //funcionque luego de la confirmacion del modal hace el dispatch y elimina al amigo de la base de datos
     const removeFriend = (flag) => {
         if(flag){
             dispatch(deleteFriends(userProfile.id, deleteFriend));
+            setRemoveSuccess(true)
         };
+        // setDeleteFriend({
+        //     flag:false,
+        //     email: ""
+        // });
+    };
+
+    // Funcion para eliminar un amigo que se pasa a cada componente de amigos
+    const deleteFriendFunction = (email) => {
         setDeleteFriend({
             flag:false,
             email: ""
         });
-    };
-
-    // Funcion para eliminar un amigo
-    const deleteFriendFunction = (email) => {
         setDeleteFriend(email);
+        setIsDelete("delete")
         openModal();
     };
 
@@ -96,7 +109,12 @@ export default function Profile(props) {
     return (
         <>
             <NavBar />
-            <Modal isOpen={isOpenModal} closeModal={closeModal} removeFriend={removeFriend} deleteButtons={true}></Modal>
+
+            <GameRequest/>
+
+
+            <Modal isOpen={isOpenModal} closeModal={closeModal} removeFriend={removeFriend} deleteButtons={isDelete} friend={deleteFriend}></Modal>
+
             <button className={styles.logoutBtn} onClick={logout}>Log out</button>
             <div className={styles.mainDiv}>
                 <div className={styles.subMainDiv}>
