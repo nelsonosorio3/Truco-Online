@@ -169,7 +169,7 @@ export default function Profile(props) {
                         <h3 classname={styles.title}>Últimos resultados</h3>
                         <div className={styles.history}>
                             {
-                                !userHistory.length ? null : userHistory.map(m => <Match
+                                !userHistory?.length ? null : userHistory.map(m => <Match
                                     key={m?.id}
                                     id={m?.id}
                                     result={m?.winner === userProfile.username ? "Ganaste" : "Perdiste"}
