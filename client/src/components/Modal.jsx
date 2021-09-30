@@ -17,9 +17,8 @@ export default function Modal({ children, isOpen, closeModal, removeFriend, dele
           X
         </button>
         {children}
-
         {
-          deleteButtons === true ?
+          deleteButtons === "delete" ?
           <div>
             <p>¿estas seguro de que deseas eliminar esta amistad?</p> 
             <div className={styles.btnDiv}>
@@ -31,7 +30,13 @@ export default function Modal({ children, isOpen, closeModal, removeFriend, dele
               </button>
             </div>
            
-          </div> : null
+          </div> 
+          : deleteButtons === "success" ?
+          <div className={styles.successDiv}>
+              <h5>Amigo Eliminado con Exito</h5>
+              <button onClick={closeModal} className={styles.successBtn}>Cerrar</button>
+          </div>
+          : null
           
         }
       

@@ -24,12 +24,14 @@ export default function Profile(props) {
     const { logOut } = log;
     const [isOpenModal, openModal, closeModal] = useModal();
 
+
     //Estados del profileReducer
     const [friends, setFriends] = useState({
         sender: [],
         requested: []
     });
-
+    const [removeSuccess, setRemoveSuccess] = useState(false)
+    const [isDelete, setIsDelete] = useState("delete")
     const [deleteFriend, setDeleteFriend] = useState("");
 
     //userProfile: es el estado del usuario logeado
@@ -56,13 +58,20 @@ export default function Profile(props) {
             sender: userFriends.sender,
             requested: userFriends.requested
         })
+
+        if(removeSuccess){
+            setIsDelete("success")
+            openModal()
+            setRemoveSuccess(false)
+
+        }
+
     }, [userFriends]);
-
-
 
     const removeFriend = (flag) => {
         if(flag){
             dispatch(deleteFriends(userProfile.id, deleteFriend));
+            setRemoveSuccess(true)
         };
         setDeleteFriend({
             flag:false,
@@ -73,6 +82,7 @@ export default function Profile(props) {
     // Funcion para eliminar un amigo
     const deleteFriendFunction = (email) => {
         setDeleteFriend(email);
+        setIsDelete("delete")
         openModal();
     };
 
@@ -96,7 +106,7 @@ export default function Profile(props) {
     return (
         <>
             <NavBar />
-            <Modal isOpen={isOpenModal} closeModal={closeModal} removeFriend={removeFriend} deleteButtons={true}></Modal>
+            <Modal isOpen={isOpenModal} closeModal={closeModal} removeFriend={removeFriend} deleteButtons={isDelete}></Modal>
             <button className={styles.logoutBtn} onClick={logout}>Log out</button>
             <div className={styles.mainDiv}>
                 <div className={styles.subMainDiv}>
