@@ -1,6 +1,6 @@
 import styles from './styles/Modal.module.css';
 
-export default function Modal({ children, isOpen, closeModal, removeFriend, deleteButtons }) {
+export default function Modal({ children, isOpen, closeModal, removeFriend, deleteButtons, friend }) {
 
   const handleModalContainerClick = (e) => e.stopPropagation();
   const conditionalOpen = isOpen ? styles.isOpen : null;
@@ -10,6 +10,8 @@ export default function Modal({ children, isOpen, closeModal, removeFriend, dele
     closeModal()
   }
 
+  console.log("AMIGO A ELIMINAR",friend )
+
   return (
     <article className={styles.modal + ' ' + conditionalOpen} onClick={closeModal}>
       <div className={styles.container} onClick={handleModalContainerClick}>
@@ -17,9 +19,8 @@ export default function Modal({ children, isOpen, closeModal, removeFriend, dele
           X
         </button>
         {children}
-
         {
-          deleteButtons === true ?
+          deleteButtons === "delete" ?
           <div>
             <p>¿estas seguro de que deseas eliminar esta amistad?</p> 
             <div className={styles.btnDiv}>
@@ -31,7 +32,13 @@ export default function Modal({ children, isOpen, closeModal, removeFriend, dele
               </button>
             </div>
            
-          </div> : null
+          </div> 
+          : deleteButtons === "success" ?
+          <div className={styles.successDiv}>
+              <h5>Se ha eliminado con exito a {friend}</h5>
+              <button onClick={closeModal} className={styles.successBtn}>Cerrar</button>
+          </div>
+          : null
           
         }
       
