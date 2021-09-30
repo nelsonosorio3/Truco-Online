@@ -941,9 +941,8 @@ exports = module.exports = function(io){
             
         }
         else{
-            if(table.betsList[betPick])
-        isPlayerOne? io.to(playerTwo.id).emit("changeTurn", true) : io.to(playerOne.id).emit("changeTurn", true);
-        isPlayerOne? io.to(playerTwo.id).emit("bet", table.betsList[betPick], true) : io.to(playerOne.id).emit("bet", table.betsList[betPick], true);
+        // isPlayerOne? io.to(playerTwo.id).emit("changeTurn", true) : io.to(playerOne.id).emit("changeTurn", true);
+        isPlayerOne? io.to(playerTwo.id).emit("bet", table.betsList[betPick], true, true) : io.to(playerOne.id).emit("bet", table.betsList[betPick], true, true);
         io.in(roomId).emit("messages", { msg: `${isPlayerOne? playerOne.name : playerTwo.name}: ${betPick.toUpperCase()}!`});
         }
         axios.put(`http://localhost:3001/api/games/${common.gameId}/${playerOne.score}/${playerTwo.score}`,{},{
@@ -1034,9 +1033,9 @@ exports = module.exports = function(io){
                 }
             }
             
-            //revisar si algun jugador ya gano
+            //revisar si algun jugador ya gano antes de iniciar nueva mano
             if(playerOne.score >= common.scoreToWin || playerTwo.score >= common.scoreToWin){
-                // axios.put(`http://localhost:3001/api/games/${common.gameId}/${playerOne.score}/${playerTwo.score}`);
+                axios.put(`http://localhost:3001/api/games/${common.gameId}/${playerOne.score}/${playerTwo.score}`);
                 io.to(playerOne.id).emit("gameEnds", (playerOne));
                 io.to(playerTwo.id).emit("gameEnds", (playerTwo));
                 console.log(table.games);
