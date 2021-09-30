@@ -74,6 +74,7 @@ router.put("/winner/:gameId/:p1Score/:p2Score", validarUsuario, async (req, res)
     return res.json("El perdedor y al ganador tienen datos diferentes");
 });
 
+
 //ruta solo para hacer testing [CUIDADO CON LA RUTA, HAY CONFLICTO CON OTRAS RUTA ---> EJ /mygames]
 // router.get('/:id', async (req , res) => {
 //     const {id} = req.params;

@@ -1,0 +1,30 @@
+.cupCard{
+    background-image: url('../../img/copa.webp');
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+    height: 350px;
+    width: 400px;
+    margin: 0px 40px 30px 30px;
+    padding: 0px 10px 10px 10px;
+    color:black;
+    background-color: transparent;
+    text-decoration: none !important;
+    justify-content: center;
+    
+}
+
+.name{
+    justify-content: center;
+    margin-top: 23%;
+    margin-left: 37%;
+    font-size: 18px;
+    font-weight: bold;
+    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+}
+
+.pos{
+    font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+    font-size: 50px;
+    font-weight: 800;
+    margin-left: 46%;
+}

@@ -5,6 +5,7 @@ let socket = io('//localhost:9000',{
     auth: {
       token: localStorage.token,
       user: localStorage.user,
+      id: localStorage.id
     }
 });
 
