@@ -8,7 +8,7 @@ import { setIsInRoom } from '../Redux/actions-types/roomsActions';
 import axios from 'axios';
 
 
-export default function Game({tournamentMatchId}) {
+export default function Game({tournamentMatchId, setShowSecondMatch, setShowFirstMatch, setFinishedFirstMatch}) {
     var roomId = useSelector(store => store.roomsReducer.roomId); //traer el id de la sala en la que esta el jugador
     if(tournamentMatchId) roomId = tournamentMatchId;
     const [player, setPlayer] = useState({ //objeto del jugador en el cliente deberia tener solo propiedades que se usan para renderizar o limitar interacciones en el cliente
@@ -78,10 +78,19 @@ export default function Game({tournamentMatchId}) {
         setPlayer({...player, scoreRival: player.scoreRival + score, bet: false, isTurn: bool})
       });
       socket.on("gameEnds", data=>{
-        console.log("termino");
-        history.push("/profile");
-        alert("el juego termino");
-        dispatch(setIsInRoom({isInRoom: false, roomId: null}));
+        if(tournamentMatchId){
+          alert("el juego termino");
+          dispatch(setIsInRoom({isInRoom: false, roomId: null}));
+          setShowSecondMatch(true)
+          setShowFirstMatch(false)
+          setFinishedFirstMatch(true)
+          // setFinishedGames([...finishedGames, tournamentMatchId])
+        } else{
+          console.log("termino");
+          history.push("/profile");
+          alert("el juego termino");
+          dispatch(setIsInRoom({isInRoom: false, roomId: null}));
+        }
       });
       return () =>{ //limpieza de eventos
         socket.off("gameStarts");

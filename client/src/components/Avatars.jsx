@@ -27,7 +27,7 @@ const avatars = [
 export default function Avatars({set}) {
     return (
         <>
-            <h4> Choose your Avatar: </h4>
+            <h4 className={styles.h4}> Choose your Avatar: </h4>
             <div className={styles.avatarsContainer}>
                 {
                     avatars && avatars.map(avatar => {
