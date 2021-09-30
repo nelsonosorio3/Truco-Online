@@ -64,6 +64,60 @@ function setNewRound(playerOne, playerTwo, common, isPlayerOne, roomId, points){
         table.games[roomId].playerTwo.betOptions = [];
     };
 }
+function checkWinnerCards(number, playerOne, playerTwo, common, roomId, io){
+    if(playerOne.tableRival[number] && playerTwo.tableRival[number] && common.turn === number+1){
+        if(playerOne.tablePlayer[number].truco < playerTwo.tablePlayer[number].truco){
+            common.roundResults.push("playerOne");
+            if(common.trucoBet > 1){
+                io.to(playerOne.id).emit("bet", table.betsList.noTruco, false, true);
+                io.to(playerTwo.id).emit("bet", table.betsList.noTruco, false, false);
+            }
+            else{
+                io.to(playerOne.id).emit("bet", table.betsList.otherTurn, false, true);
+                io.to(playerTwo.id).emit("bet", table.betsList.otherTurn, false, false);
+            }
+            // io.in(roomId).emit("messages", {msg: `Gana ${playerOne.name}!`});
+        }
+        else if(playerOne.tablePlayer[number].truco > playerTwo.tablePlayer[number].truco){
+            common.roundResults.push("playerTwo");
+            if(common.trucoBet > 1){
+                io.to(playerOne.id).emit("bet", table.betsList.noTruco, false, false);
+                io.to(playerTwo.id).emit("bet", table.betsList.noTruco, false, true);
+            }
+            else{
+                io.to(playerOne.id).emit("bet", table.betsList.otherTurn, false, false);
+                io.to(playerTwo.id).emit("bet", table.betsList.otherTurn, false, true);
+            }
+            // io.in(roomId).emit("messages", {msg: `Gana ${playerTwo.name}!`});
+        }
+        else{
+            common.roundResults.push("tie");
+            if(playerOne.starts){
+                if(common.trucoBet > 1){
+                    io.to(playerOne.id).emit("bet", table.betsList.noTruco, false, true);
+                    io.to(playerTwo.id).emit("bet", table.betsList.noTruco, false, false);
+                }
+                else{
+                    io.to(playerOne.id).emit("bet", table.betsList.otherTurn, false, true);
+                    io.to(playerTwo.id).emit("bet", table.betsList.otherTurn, false, false);
+                }
+            }
+            else{
+                if(common.trucoBet > 1){
+                    io.to(playerOne.id).emit("bet", table.betsList.noTruco, false, false);
+                    io.to(playerTwo.id).emit("bet", table.betsList.noTruco, false, true);
+                }
+                else{
+                    io.to(playerOne.id).emit("bet", table.betsList.otherTurn, false, false);
+                    io.to(playerTwo.id).emit("bet", table.betsList.otherTurn, false, true);
+                }
+            }
+            // io.in(roomId).emit("messages", {msg: `Empate`});
+        }
+        common.turn++;
+        // common.trucoBet > 1? io.in(roomId).emit("bet", table.betsList.noTruco, false) : io.in(roomId).emit("bet", table.betsList.otherTurn, false);
+    }
+}
 // objeto con todas las propiedasdes comunes de la partida
 // const table = {
 //     //estas son las propiedades que son comunes a todos los juegos
@@ -917,56 +971,9 @@ exports = module.exports = function(io){
             // io.in(roomId).emit("messages", {msg: `${playerTwo.name}: juega ${card.number} de ${card.suit}`})
         }
 
-        if(playerOne.tableRival[0] && playerTwo.tableRival[0] && common.turn === 1){
-            if(playerOne.tablePlayer[0].truco < playerTwo.tablePlayer[0].truco){
-                common.roundResults.push("playerOne");
-                // io.in(roomId).emit("messages", {msg: `Gana ${playerOne.name}!`});
-            }
-            else if(playerOne.tablePlayer[0].truco > playerTwo.tablePlayer[0].truco){
-                common.roundResults.push("playerTwo");
-                // io.in(roomId).emit("messages", {msg: `Gana ${playerTwo.name}!`});
-            }
-            else{
-                common.roundResults.push("tie");
-                // io.in(roomId).emit("messages", {msg: `Empate`});
-            }
-            common.turn = 2;
-            common.trucoBet > 1? io.in(roomId).emit("bet", table.betsList.noTruco) : io.in(roomId).emit("bet", table.betsList.otherTurn);
-        }
-
-        if(playerOne.tableRival[1] && playerTwo.tableRival[1] && common.turn === 2){
-            if(playerOne.tablePlayer[1].truco < playerTwo.tablePlayer[1].truco ){
-                common.roundResults.push("playerOne");
-                // io.in(roomId).emit("messages", {msg: `Gana ${playerOne.name}!`})
-            }
-            else if(playerOne.tablePlayer[1].truco > playerTwo.tablePlayer[1].truco){
-                common.roundResults.push("playerTwo");
-                // io.in(roomId).emit("messages", {msg: `Gana ${playerTwo.name}!`});
-            }
-            else{
-                common.roundResults.push("tie");
-                // io.in(roomId).emit("messages", {msg: `Empate`});
-            }
-            common.turn = 3;
-            // common.trucoBet > 1? io.in(roomId).emit("bet", table.betsList.noTruco) : io.in(roomId).emit("bet", table.betsList.otherTurn);
-        }
-
-        if(playerOne.tableRival[2] && playerTwo.tableRival[2] && common.turn === 3){
-            if(playerOne.tablePlayer[2].truco < playerTwo.tablePlayer[2].truco){
-                common.roundResults.push("playerOne");
-                // io.in(roomId).emit("messages", {msg: `Gana ${playerOne.name}!`})
-            }
-            else if(playerOne.tablePlayer[2].truco > playerTwo.tablePlayer[2].truco){
-                common.roundResults.push("playerTwo");
-                // io.in(roomId).emit("messages", {msg: `Gana ${playerTwo.name}!`});
-            }
-            else{
-                common.roundResults.push("tie");
-                // io.in(roomId).emit("messages", {msg: `Empate`});
-            }
-            common.turn = 4;
-            common.trucoBet > 1? io.in(roomId).emit("bet", table.betsList.noTruco) : io.in(roomId).emit("bet", table.betsList.otherTurn);
-        }
+        checkWinnerCards(0, playerOne, playerTwo, common, roomId, io);
+        checkWinnerCards(1, playerOne, playerTwo, common, roomId, io);
+        checkWinnerCards(2, playerOne, playerTwo, common, roomId, io);
 
         console.log(common.roundResults)
         //revisar ganador de mano

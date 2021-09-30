@@ -51,8 +51,9 @@ export default function Game({tournamentMatchId}) {
         setPlayer({...player, isTurn: false})
         setTimeout(()=>setPlayer(player1),5000);
       });
-      socket.on("bet", async (betOptions, bool)=>{  //trae la apuesta segun turno
-        setPlayer({...player, betOptions, bet: bool});
+      socket.on("bet", (betOptions, bool, turn)=>{  //trae la apuesta segun turno
+        if(turn === null) setPlayer({...player, betOptions, bet: bool});
+        else setPlayer({...player, betOptions, bet: bool, isTurn: turn});
       });
       socket.on("betting", bool=>{  //cambia el estado de si se esta apostando para bloquear jugar cartas hasta resolverlo
         setPlayer({...player, bet: false, betOptions: [], isTurn: !player.isTurn});
