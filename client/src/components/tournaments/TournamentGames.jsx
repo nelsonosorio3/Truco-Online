@@ -7,7 +7,9 @@ import socket from '../socket';
 export default function TournamentGames ({matchesList, savedData}){
     const [showGame, setShowGame] = useState(false)
     const [actualIdGame, setActualIdGame] = useState('')
-    const [finishedGames, setFinishedGames] = useState([])
+    const [wins, setWins] = useState([])
+    const [allPlayersWins, setAllPlayersWins] = useState([])
+    const [showWinner, setShowWinner] = useState(false)
     const [matches, setMatches] = useState([])
     ////////////// Activadores para iniciar las partidas //////////////
     const [firstMatch, setFirstMatch] = useState(false)
@@ -120,6 +122,10 @@ export default function TournamentGames ({matchesList, savedData}){
             setShowThirdMatch(true);
             setActualIdGame(matchId)
         })
+        socket.on('showWinner', (results) => {
+            setAllPlayersWins(results)
+            setShowWinner(true)
+        })
     })
 
     useEffect(() => {
@@ -135,6 +141,12 @@ export default function TournamentGames ({matchesList, savedData}){
             setThirdMatch(true)
         }
     }, [finishedSecondMatch])
+
+    useEffect(() => {
+        if(finishedFirstMatch===true && finishedSecondMatch===true && finishedThirdMatch===true){
+            socket.emit('setWinner', ({tournamentId: savedData[0].tournamentId, playerWins: wins}))
+        }
+    }, [finishedFirstMatch, finishedSecondMatch, finishedThirdMatch])
 
     return(
         <div>
@@ -152,6 +164,9 @@ export default function TournamentGames ({matchesList, savedData}){
                     tournamentMatchId={actualIdGame} 
                     setShowFirstMatch={setShowFirstMatch}
                     setFinishedFirstMatch={setFinishedFirstMatch}
+
+                    wins={wins}
+                    setWins={setWins}
                     
                     finishedFirstMatch={finishedFirstMatch}
                     finishedSecondMatch={finishedSecondMatch}
@@ -169,6 +184,9 @@ export default function TournamentGames ({matchesList, savedData}){
                         tournamentMatchId={actualIdGame}
                         setShowSecondMatch={setShowSecondMatch} 
                         setFinishedSecondMatch={setFinishedSecondMatch}
+
+                        wins={wins}
+                        setWins={setWins}
 
                         finishedFirstMatch={finishedFirstMatch}
                         finishedSecondMatch={finishedSecondMatch}
@@ -188,6 +206,9 @@ export default function TournamentGames ({matchesList, savedData}){
                         setShowThirdMatch={setShowThirdMatch}
                         setFinishedThirdMatch={setFinishedThirdMatch}
 
+                        wins={wins}
+                        setWins={setWins}
+
                         finishedFirstMatch={finishedFirstMatch}
                         finishedSecondMatch={finishedSecondMatch}
                         finishedThirdMatch={finishedThirdMatch} 
@@ -195,7 +216,22 @@ export default function TournamentGames ({matchesList, savedData}){
                 </div>
                 : null
             }
-            {finishedFirstMatch && finishedSecondMatch && finishedThirdMatch ? <h1>EL TORNEO HA TERMINADO</h1> : null}
+            {
+            finishedFirstMatch && finishedSecondMatch && finishedThirdMatch 
+            ? 
+                <div>
+                    <h1>EL TORNEO HA TERMINADO</h1> 
+                    {
+                        allPlayersWins.length > 0
+                        ? allPlayersWins.map(w => {
+                            if(w.length > 0){
+                                return(<h6>{`${w[0]}: ${w.length} puntos.`}</h6>)
+                            }
+                        })
+                        : null
+                    }
+                </div>
+            : null}
             {console.log(showGame, actualIdGame)}
         </div>
     )
