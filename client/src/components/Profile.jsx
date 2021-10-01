@@ -2,30 +2,30 @@ import React from 'react';
 import { useEffect, useState } from 'react';
 import { useDispatch , useSelector } from 'react-redux';
 import { useHistory } from 'react-router';
-import log from '../Redux/actions-types/logActions';
-import Modal from './Modal';
-import profileIcon from '../img/profileIcon.png';
-import profileActions from '../Redux/actions-types/profileActions';
-import styles from './styles/Profile.module.css';
 
 import { useModal } from '../hooks/useModal';
 
+import Modal from './Modal';
 /* Los dos siguientes imports agregados por guille */
 import Friend from './Friend';
 import AddFriend from './addFriend';
 import Match from './Match';
-
 // nav
 import NavBar from './NavBar';
 // request de partida amigos
 import GameRequest from './GameRequest';
+
+import log from '../Redux/actions-types/logActions';
+import profileActions from '../Redux/actions-types/profileActions';
+
+import styles from './styles/Profile.module.css';
+import profileIcon from '../img/profileIcon.png';
 
 export default function Profile(props) {
 
     const history = useHistory();
     const { logOut } = log;
     const [isOpenModal, openModal, closeModal] = useModal();
-
 
     //Estados del profileReducer
     const [friends, setFriends] = useState({
@@ -52,7 +52,6 @@ export default function Profile(props) {
         //todas las partidas del usuario
         dispatch(getGames(localStorage.token));
     }, []);
-
 
     // Esto es para que se actualice el estado una vez que se elimina
     useEffect(() => {
@@ -109,14 +108,13 @@ export default function Profile(props) {
 
     //Confirmacion para el modal
     const confirmation = (flag) => {
-        removeFriend(flag)
-        closeModal()
-    }
+        removeFriend(flag);
+        closeModal();
+    };
 
     return (
         <>
             <NavBar />
-
             <Modal isOpen={isOpenModal} closeModal={closeModal} removeFriend={removeFriend} deleteButtons={isDelete} friend={deleteFriend}>
                 {
                 // Esto confirma la eliminacion de un amigo
@@ -145,7 +143,6 @@ export default function Profile(props) {
             </Modal>
             <GameRequest/>
             <button className={styles.logoutBtn} onClick={logout}>Log out</button>
-
             <div className={styles.mainDiv}>
                 <div className={styles.subMainDiv}>
                     <div className={styles.player}>
@@ -193,10 +190,15 @@ export default function Profile(props) {
                             <h3 className={styles.title}>Solicitudes pendientes</h3>
                             <div className={styles.friendsList}>
                                 {
-                                    !friends.requested.length ? <p>Sin solicitudes pendientes</p> : friends.requested.map(f => <AddFriend
-                                        username={f.username}
-                                        respond={respondFriendFunction}
-                                        email={f.email}
+                                    !friends.requested.length 
+                                        ? 
+                                        <p className={styles.text}>Sin solicitudes pendientes</p> 
+                                        : 
+                                        friends.requested.map(f => <AddFriend
+                                            key={f.username}
+                                            username={f.username}
+                                            respond={respondFriendFunction}
+                                            email={f.email}
                                     />)
                                 }
                             </div>

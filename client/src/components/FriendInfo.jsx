@@ -73,7 +73,9 @@ export default function FriendInfo({ isOpen, close, name, date, email, id }) {
                                 <p>{games? (games.length - wins(games)) : 'No data'}</p>
                             </div>
                         </div>
-                        <button onClick={inviteToGame}>Invitar a partida</button>
+                        <button className={styles.inviteBtn} onClick={inviteToGame}>
+                            Invitar a partida
+                        </button>
                     </div>
                 </div>
             </div>
