@@ -39,9 +39,11 @@ export default function Rooms() {
         <>
         <NavBar />
         <GameRequest/>
+        
         <div className={styles.subMainDiv_noGame}>
           <div className={styles.lobby}>
-            <div className={styles.div_Chat_Rooms}>
+            <h2 className={styles.title}>Bienvenidos a Truco Henry</h2>
+            <div className={styles.div_Chat_Rooms}>  
               <Chat typeofChat={'chatLobby'}/>
               <div className={styles.div_CreateRoom_RoomsList}>
                 <JoinRoomForm />

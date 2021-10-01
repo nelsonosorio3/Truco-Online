@@ -45,7 +45,7 @@ export default function RoomsList(){
     return(
         <div>
             <form onSubmit={updateRooms} ref={listRooms}>
-                <button type='submit' className={styles.btn} >Update Rooms</button>
+                <button type='submit' className={styles.btn} >Actualizar Salas</button>
             </form>
             <div className={styles.roomsList}>
                 {

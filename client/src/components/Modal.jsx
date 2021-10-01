@@ -1,16 +1,9 @@
 import styles from './styles/Modal.module.css';
 
-export default function Modal({ children, isOpen, closeModal, removeFriend, deleteButtons, friend }) {
+export default function Modal({ children, isOpen, closeModal }) {
 
   const handleModalContainerClick = (e) => e.stopPropagation();
   const conditionalOpen = isOpen ? styles.isOpen : null;
-
-  // const confirmation = (flag) => {
-  //   removeFriend(flag)
-  //   closeModal()
-  // }
-
-  console.log(children )
 
   return (
     <article className={styles.modal + ' ' + conditionalOpen} onClick={closeModal}>
