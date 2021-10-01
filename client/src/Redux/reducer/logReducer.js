@@ -1,16 +1,16 @@
-import { LOG_OUT, LOG_IN , LOG_IN_FACEBOOK} from '../actions/index';
+import { LOG_OUT, LOG_IN, LOG_IN_FACEBOOK } from '../actions/index';
 
 const INITIAL_STATE = {
-  isAuth: false, 
+  isAuth: false,
   user: null,
   id: null,
   message: ''
 };
 
-const logReducer = (state = INITIAL_STATE, {type, payload}) => {
+const logReducer = (state = INITIAL_STATE, { type, payload }) => {
   switch (type) {
     case LOG_IN:
-      if(payload.login) {
+      if (payload.login) {
         //Se almacena en el state las respuesta obtenida del server, en caso de afirmativa, el payload queda asi:
         // id: 1
         // login: true
@@ -19,6 +19,7 @@ const logReducer = (state = INITIAL_STATE, {type, payload}) => {
         window.localStorage.setItem("token", payload.token);
         window.localStorage.setItem("isAuth", payload.login);
         window.localStorage.setItem("user", payload.username);
+        window.localStorage.setItem("isAdmin", payload.isAdmin);
         return {
           ...state,
           isAuth: payload.login,
@@ -36,7 +37,7 @@ const logReducer = (state = INITIAL_STATE, {type, payload}) => {
         return newState
       };
     case LOG_IN_FACEBOOK:
-      if(payload.login) {
+      if (payload.login) {
         window.localStorage.setItem("token", payload.token);
         window.localStorage.setItem("isAuth", payload.login);
         window.localStorage.setItem("user", payload.username);
@@ -60,14 +61,15 @@ const logReducer = (state = INITIAL_STATE, {type, payload}) => {
       window.localStorage.removeItem("token");
       window.localStorage.removeItem("isAuth");
       window.localStorage.removeItem("user");
+      window.localStorage.removeItem("isAdmin");
       return {
         ...state,
         isAuth: false,
         user: null,
         id: null,
-      };  
+      };
     default:
-      return state;    
+      return state;
   };
 };
 

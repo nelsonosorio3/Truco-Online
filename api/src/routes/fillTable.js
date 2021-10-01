@@ -105,6 +105,22 @@ router.post("/", async (req, res) => {
     var d7 = await User.create(u7)
     var d8 = await User.create(u8)
 
+    d1.isAdmin = true;
+    d2.isAdmin = true;
+    d3.isAdmin = true;
+    d4.isAdmin = true;
+    d5.isAdmin = true;
+    d6.isAdmin = true;
+    d7.isAdmin = true;
+
+    await d1.save();
+    await d2.save();
+    await d3.save();
+    await d4.save();
+    await d5.save();
+    await d6.save();
+    await d7.save();
+
     for await (u of users) {
       User.create(u)
     }
@@ -125,5 +141,7 @@ router.post("/", async (req, res) => {
 
 
 })
+
+
 
 module.exports = router;
