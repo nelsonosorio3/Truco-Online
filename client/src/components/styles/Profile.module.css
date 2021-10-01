@@ -147,6 +147,13 @@
     padding: 1em;
 }
 
+.text {
+    margin-left: 28%;
+
+    font-size: 1.3em;
+    color: black;
+}
+
 .title {
     position: absolute;
     top: 0;
@@ -226,7 +233,6 @@
     margin-bottom: .8rem;
 }
 
-
 .editBtn {
     position: absolute;
     top: 6.3em;
@@ -241,7 +247,6 @@
 
     font-size: 1.3rem;
 }
-
 
 /* Esto es para el modal dentro de profile */
 .btnDiv{
