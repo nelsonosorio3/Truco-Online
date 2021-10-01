@@ -24,6 +24,9 @@ export default function Game({
   finishedSecondMatch,
   finishedThirdMatch,
 
+  wins,
+  setWins
+
   }) {
     var roomId = useSelector(store => store.roomsReducer.roomId); //traer el id de la sala en la que esta el jugador
     if(tournamentMatchId) roomId = tournamentMatchId;
@@ -98,23 +101,28 @@ export default function Game({
       socket.on("updateRivalScore", (score, bool)=>{
         setPlayer({...player, scoreRival: player.scoreRival + score, bet: false, isTurn: bool})
       });
-      socket.on("gameEnds", data=>{
+      socket.on("gameEnds", (data) =>{
+        let dataCopy = Object.assign({}, data)
+        console.log('ESTA ES LA DATA DE GAME ENDS:', dataCopy)
         if(tournamentMatchId){
           if(finishedFirstMatch===false && finishedSecondMatch===false && finishedThirdMatch===false){
-            alert("el juego termino");
+            alert("Partida terminada. Ganador:", dataCopy.winner);
             dispatch(setIsInRoom({isInRoom: false, roomId: null}));
+            if(dataCopy.winner === localStorage.user) setWins([...wins, dataCopy.winner])
             setShowFirstMatch(false)
             setFinishedFirstMatch(true)
           }
           if(finishedFirstMatch===true && finishedSecondMatch===false && finishedThirdMatch===false){
-            alert("el juego termino");
+            alert("Partida terminada. Ganador:", dataCopy.winner);
             dispatch(setIsInRoom({isInRoom: false, roomId: null}));
+            if(dataCopy.winner === localStorage.user) setWins([...wins, dataCopy.winner])
             setShowSecondMatch(false)
             setFinishedSecondMatch(true)
           }
           if(finishedFirstMatch===true && finishedSecondMatch===true && finishedThirdMatch===false){
-            alert("el juego termino");
+            alert("Partida terminada. Ganador:", dataCopy.winner);
             dispatch(setIsInRoom({isInRoom: false, roomId: null}));
+            if(dataCopy.winner === localStorage.user) setWins([...wins, dataCopy.winner])
             setShowThirdMatch(false)
             setFinishedThirdMatch(true)
           }
