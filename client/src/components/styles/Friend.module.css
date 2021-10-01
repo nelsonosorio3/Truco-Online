@@ -98,3 +98,28 @@
 
   margin-top: .8em;
 }
+
+@media screen and (max-width: 1024px) {
+  .mainDiv {
+    min-width: 9em;
+    height: 15em;
+  }
+
+  .profileIconSmall {
+    width: 3.5em;
+    height: auto;
+  
+    top: 1em;
+  
+  }
+
+  .friendReq {
+    top: 1.8em;
+  }
+
+  .status {
+    height: 4em;
+
+    margin-top: .5em;
+  }
+}
