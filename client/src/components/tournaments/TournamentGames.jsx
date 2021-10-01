@@ -38,36 +38,53 @@ export default function TournamentGames ({matchesList, savedData}){
     })
 
     useEffect(() => {
+        if(finishedFirstMatch===false && finishedSecondMatch===false && finishedThirdMatch===false){
             if(matches.length>0){
                 if(matches[0].participants[0] === localStorage.user || (matches[0].participants[1] === localStorage.user)){
+                    console.log('EN CASO DE QUE SE REPITA ARRIBA')
                     socket.emit('tournamentGame', ({tournamentId: savedData[0].tournamentId, matchId: matches[0].matchId}));
-                    // matches.shift();
                 }
                 else if(matches[matches.length-1].participants[0] === localStorage.user || (matches[matches.length-1].participants[1] === localStorage.user)){
+                    console.log('EN CASO DE QUE SE REPITA ABAJO')
                     socket.emit('tournamentGame', ({tournamentId: savedData[0].tournamentId, matchId: matches[matches.length-1].matchId}));
-                    // matches.pop();
                 }
             }
+        }
         // return () => {socket.off()}
     }, [firstMatch])
     
     useEffect(() => {
-        if(finishedFirstMatch===true && secondMatch===true){
+        if(finishedFirstMatch===true && finishedSecondMatch===false && finishedThirdMatch===false ){
             // console.log(secondMatch, 'ENTRAMOSSSSSSS USEEFFECT SECONDMATCH')
             if(matches.length>0){
                 if(matches[1].participants[0] === localStorage.user || (matches[1].participants[1] === localStorage.user)){
                     console.log(localStorage.user, 'HA ENTRADO A SEGUNDA PARTIDA ARRIBA')
                     socket.emit('tournamentGame', ({tournamentId: savedData[0].tournamentId, matchId: matches[1].matchId, matchNumber: 2}));
-                    matches.shift();
                 }
                 else if(matches[matches.length-2].participants[0] === localStorage.user || (matches[matches.length-2].participants[1] === localStorage.user)){
                     console.log(localStorage.user, 'HA ENTRADO A SEGUNDA PARTIDA ABAJO')
                     socket.emit('tournamentGame', ({tournamentId: savedData[0].tournamentId, matchId: matches[matches.length-2].matchId, matchNumber: 2}));
-                    matches.pop();
                 }
             }
         }
     }, [secondMatch])
+
+    useEffect(() => {
+        if(finishedFirstMatch===true && finishedSecondMatch===true && finishedThirdMatch===false){
+            // console.log(secondMatch, 'ENTRAMOSSSSSSS USEEFFECT SECONDMATCH')
+            if(matches.length>0){
+                if(matches[2].participants[0] === localStorage.user || (matches[2].participants[1] === localStorage.user)){
+                    console.log(localStorage.user, 'HA ENTRADO A TERCERA PARTIDA ARRIBA')
+                    socket.emit('tournamentGame', ({tournamentId: savedData[0].tournamentId, matchId: matches[2].matchId, matchNumber: 3}));
+                }
+                else if(matches[matches.length-3].participants[0] === localStorage.user || (matches[matches.length-3].participants[1] === localStorage.user)){
+                    console.log(localStorage.user, 'HA ENTRADO A TERCERA PARTIDA ABAJO')
+                    socket.emit('tournamentGame', ({tournamentId: savedData[0].tournamentId, matchId: matches[matches.length-3].matchId, matchNumber: 3}));
+
+                }
+            }
+        }
+    }, [thirdMatch])
 
     // useEffect(() => {
     //     if(matchesList.length>0){
@@ -98,6 +115,11 @@ export default function TournamentGames ({matchesList, savedData}){
             setShowSecondMatch(true);
             setActualIdGame(matchId)
         })
+        socket.on('showGameThree', (matchId) => {
+            console.log('EL ID DE LA SEGUNDA PARTIDA ES: ', matchId)
+            setShowThirdMatch(true);
+            setActualIdGame(matchId)
+        })
     })
 
     useEffect(() => {
@@ -106,6 +128,13 @@ export default function TournamentGames ({matchesList, savedData}){
             setSecondMatch(true)
         }
     }, [finishedFirstMatch])
+
+    useEffect(() => {
+        if(finishedSecondMatch===true){
+            console.log('SEGUNDA PARTIDA TERMINADA')
+            setThirdMatch(true)
+        }
+    }, [finishedSecondMatch])
 
     return(
         <div>
@@ -121,39 +150,52 @@ export default function TournamentGames ({matchesList, savedData}){
                 showFirstMatch ?
                 <Game 
                     tournamentMatchId={actualIdGame} 
-                    setShowSecondMatch={setShowSecondMatch} 
                     setShowFirstMatch={setShowFirstMatch}
                     setFinishedFirstMatch={setFinishedFirstMatch}
-                    // setFinishedGames={setFinishedGames} 
+                    
+                    finishedFirstMatch={finishedFirstMatch}
+                    finishedSecondMatch={finishedSecondMatch}
+                    finishedThirdMatch={finishedThirdMatch}
                 /> 
                 : null
             }
             
-             {/*///////////// SEGUNDA PARTIDA /////////////*/}
-             {
+            {/*///////////// SEGUNDA PARTIDA /////////////*/}
+            {
                 showSecondMatch ?
-                <h1>SEGUNDA PARTIDA: {actualIdGame}</h1> 
-                // <Game 
-                //     tournamentMatchId={actualIdGame} 
-                //     setShowGame={setShowGame} 
-                //     finishedGames={finishedGames} 
-                //     setFinishedGames={setFinishedGames} 
-                // /> 
+                <div>
+                    <h1>SEGUNDA PARTIDA: {actualIdGame}</h1> 
+                    <Game 
+                        tournamentMatchId={actualIdGame}
+                        setShowSecondMatch={setShowSecondMatch} 
+                        setFinishedSecondMatch={setFinishedSecondMatch}
+
+                        finishedFirstMatch={finishedFirstMatch}
+                        finishedSecondMatch={finishedSecondMatch}
+                        finishedThirdMatch={finishedThirdMatch}
+                    /> 
+                </div>
                 : null
             }
 
              {/*///////////// TERCERA PARTIDA /////////////*/}
              {
                 showThirdMatch ? 
-                <h1>TERCERA PARTIDA</h1> 
-                // <Game 
-                //     tournamentMatchId={actualIdGame} 
-                //     setShowGame={setShowGame} 
-                //     finishedGames={finishedGames} 
-                //     setFinishedGames={setFinishedGames} 
-                // /> 
+                <div>
+                    <h1>TERCERA PARTIDA</h1> 
+                    <Game 
+                        tournamentMatchId={actualIdGame} 
+                        setShowThirdMatch={setShowThirdMatch}
+                        setFinishedThirdMatch={setFinishedThirdMatch}
+
+                        finishedFirstMatch={finishedFirstMatch}
+                        finishedSecondMatch={finishedSecondMatch}
+                        finishedThirdMatch={finishedThirdMatch} 
+                    /> 
+                </div>
                 : null
             }
+            {finishedFirstMatch && finishedSecondMatch && finishedThirdMatch ? <h1>EL TORNEO HA TERMINADO</h1> : null}
             {console.log(showGame, actualIdGame)}
         </div>
     )

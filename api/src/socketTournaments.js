@@ -120,16 +120,19 @@ exports = module.exports = function(io){
         }
       
         if(clients?.size === 2) { //si la sala esta llena, empieza toda la preparacion de la partida
-          console.log('SE HA LLENADO LA CAPACIDAD')
           if(data.matchNumber === 2) {
             io.to(data.matchId).emit("showGameTwo", (data.matchId));
+          }
+          else if(data.matchNumber === 3) {
+            console.log('SE HA LLENADO LA CAPACIDAD PARA LA TERCERA PARTIDA')
+            io.to(data.matchId).emit("showGameThree", (data.matchId));
           }
           else io.to(data.matchId).emit("showGame", (data.matchId));
       
           let iterator = clients.values();
           const player1 = iterator.next().value;
           const player2 = iterator.next().value;
-          // console.log(clients.values())
+          console.log('PLAYER 1:', player1, 'PLAYER 2:', player2)
           table.games[data.matchId].playerOne.id = player1;
           table.games[data.matchId].playerTwo.id = player2;
           table.games[data.matchId].playerOne.nameRival = table.games[data.matchId].playerTwo.name;
