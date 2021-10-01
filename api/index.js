@@ -18,7 +18,7 @@ conn.sync({ force: true }).then(() => {
 
   .then(() =>
     axios({
-      url: "http://localhost:3001/api/filltable",
+      url: "http://143.198.96.96:3001/api/filltable",
       method: "POST",
       headers: {
         'Accept': 'application/json',

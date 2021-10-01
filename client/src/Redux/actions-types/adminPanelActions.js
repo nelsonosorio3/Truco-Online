@@ -11,7 +11,7 @@ function getUsers() { //por ahora, token no es necesario como parámetro, luego 
   //fetch data from server
 
   return function (dispatch) {
-    return axios.get(`http://localhost:3001/api/user`
+    return axios.get(`http://143.198.96.96:3001/api/user`
       /*,{
         headers: {
           "x-access-token": token,
