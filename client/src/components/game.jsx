@@ -8,7 +8,26 @@ import { setIsInRoom } from '../Redux/actions-types/roomsActions';
 import axios from 'axios';
 
 
-export default function Game({tournamentMatchId}) {
+export default function Game({
+  tournamentMatchId,
+
+  setShowFirstMatch, 
+  setFinishedFirstMatch,
+
+  setShowSecondMatch,
+  setFinishedSecondMatch,
+
+  setShowThirdMatch,
+  setFinishedThirdMatch,
+
+  finishedFirstMatch,
+  finishedSecondMatch,
+  finishedThirdMatch,
+
+  wins,
+  setWins
+
+  }) {
     var roomId = useSelector(store => store.roomsReducer.roomId); //traer el id de la sala en la que esta el jugador
     if(tournamentMatchId) roomId = tournamentMatchId;
     const [player, setPlayer] = useState({ //objeto del jugador en el cliente deberia tener solo propiedades que se usan para renderizar o limitar interacciones en el cliente
@@ -27,6 +46,7 @@ export default function Game({tournamentMatchId}) {
         roundResults: [], //deberia contener el resultado de la mano por ejemplo ["tie", "win", "loss"]
         starts: false, // referencia para cambiar turnos al finalizar ronda
       });
+    const [newRound, setNewRound] = useState(false);
     const history = useHistory();
     const dispatch = useDispatch();
     const bet = e => { //emite la apuesta
@@ -47,11 +67,15 @@ export default function Game({tournamentMatchId}) {
       socket.on("gameStarts", player=>{ //escucha gameStarts para iniciar cuando la sala se llena y dejar el estado jugador listo
         setPlayer(player);
       });
-      socket.on("newRoundStarts", player=>{  //escucha para empezar nueva partida
-        setPlayer(player);
+      socket.on("newRoundStarts", player1=>{  //escucha para empezar nueva partida
+        setPlayer({...player, isTurn: false})
+        setNewRound(true);
+        setTimeout(()=>setPlayer(player1),3000);
       });
-      socket.on("bet", async (betOptions, bool)=>{  //trae la apuesta segun turno
-        setPlayer({...player, betOptions, bet: bool});
+      socket.on("bet", (betOptions, bool, turn)=>{  //trae la apuesta segun turno
+        console.log(turn)
+        if(turn === undefined) setPlayer({...player, betOptions, bet: bool});
+        else setPlayer({...player, betOptions, bet: bool, isTurn: turn});
       });
       socket.on("betting", bool=>{  //cambia el estado de si se esta apostando para bloquear jugar cartas hasta resolverlo
         setPlayer({...player, bet: false, betOptions: [], isTurn: !player.isTurn});
@@ -77,12 +101,39 @@ export default function Game({tournamentMatchId}) {
       socket.on("updateRivalScore", (score, bool)=>{
         setPlayer({...player, scoreRival: player.scoreRival + score, bet: false, isTurn: bool})
       });
-      socket.on("gameEnds", data=>{
-        console.log("termino");
-        history.push("/profile");
-        alert("el juego termino");
-        dispatch(setIsInRoom({isInRoom: false, roomId: null}));
-      });
+      socket.on("gameEnds", (data) =>{
+        let dataCopy = Object.assign({}, data)
+        console.log('ESTA ES LA DATA DE GAME ENDS:', dataCopy)
+        if(tournamentMatchId){
+          if(finishedFirstMatch===false && finishedSecondMatch===false && finishedThirdMatch===false){
+            alert("Partida terminada. Ganador:", dataCopy.winner);
+            dispatch(setIsInRoom({isInRoom: false, roomId: null}));
+            if(dataCopy.winner === localStorage.user) setWins([...wins, dataCopy.winner])
+            setShowFirstMatch(false)
+            setFinishedFirstMatch(true)
+          }
+          if(finishedFirstMatch===true && finishedSecondMatch===false && finishedThirdMatch===false){
+            alert("Partida terminada. Ganador:", dataCopy.winner);
+            dispatch(setIsInRoom({isInRoom: false, roomId: null}));
+            if(dataCopy.winner === localStorage.user) setWins([...wins, dataCopy.winner])
+            setShowSecondMatch(false)
+            setFinishedSecondMatch(true)
+          }
+          if(finishedFirstMatch===true && finishedSecondMatch===true && finishedThirdMatch===false){
+            alert("Partida terminada. Ganador:", dataCopy.winner);
+            dispatch(setIsInRoom({isInRoom: false, roomId: null}));
+            if(dataCopy.winner === localStorage.user) setWins([...wins, dataCopy.winner])
+            setShowThirdMatch(false)
+            setFinishedThirdMatch(true)
+          }
+
+        } else{
+          console.log("termino");
+          history.push("/profile");
+          alert("el juego termino");
+          dispatch(setIsInRoom({isInRoom: false, roomId: null}));
+        }
+      }, );
       return () =>{ //limpieza de eventos
         socket.off("gameStarts");
         socket.off('newRoundStarts');
@@ -95,9 +146,13 @@ export default function Game({tournamentMatchId}) {
         socket.off("quieroTruco");
         socket.off("quieroEnvido1");
         socket.off("envido1");
+        socket.off("updateScore");
+        socket.off("updateRivalScore");
       };
     },[player]);
-    
+    useEffect(()=>{
+      setTimeout(()=>setNewRound(false), 3000);
+    },[newRound])
     console.log(player) //para testing
     return(<div id={stylesGame.gameBackground}>
             <div id={stylesGame.cardZone}>
@@ -128,6 +183,7 @@ export default function Game({tournamentMatchId}) {
                   {player.betOptions?.map(betPick=><button onClick={bet} name={betPick} key={betPick} className={player.isTurn? stylesGame.btnBet : stylesGame.btnBetNoTurn}>{betPick}</button>)}<br/>
                 </div>
             </div>
+            <div><img src={`/cards/shuffle.gif`} style={{width: "50%", heigth: "30%", display: newRound? "flex" : "none", position: "absolute", left:"30%", bottom: "0%",zIndex:"999"}}/></div>
           </div> 
     );
 };

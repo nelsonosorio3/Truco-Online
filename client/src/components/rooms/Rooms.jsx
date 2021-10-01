@@ -1,7 +1,9 @@
-import React, {} from 'react';
+import React, { useEffect} from 'react';
 import {useSelector} from 'react-redux'
 // import { useHistory } from "react-router-dom";
 import Game from '../game';
+import GameRequest from '../GameRequest';
+
 
 import styles from './styles/Rooms.module.css'
 
@@ -36,9 +38,12 @@ export default function Rooms() {
         :
         <>
         <NavBar />
+        <GameRequest/>
+        
         <div className={styles.subMainDiv_noGame}>
           <div className={styles.lobby}>
-            <div className={styles.div_Chat_Rooms}>
+            <h2 className={styles.title}>Bienvenidos a Truco Henry</h2>
+            <div className={styles.div_Chat_Rooms}>  
               <Chat typeofChat={'chatLobby'}/>
               <div className={styles.div_CreateRoom_RoomsList}>
                 <JoinRoomForm />

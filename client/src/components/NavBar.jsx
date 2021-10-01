@@ -20,18 +20,20 @@ export default function NavBar() {
         };
     }, []);
 
+    
+
     return(
         <nav className={styles.nav}>
             <Link to='/' className={styles.logo}>
                 <img src={logo} alt="TrucoHenry" />
             </Link>
             <div className={styles.groupLinks}> 
-                <Link to='/rooms' className={styles.links + ' ' + styles.rooms}>Lobbys</Link>
+                <Link to='/rooms' className={styles.links + ' ' + styles.rooms}>Salas</Link>
                 {
                     isAuth ? 
                     <div>
                         <Link to='/ranking'className={styles.links + ' ' + styles.ranking}>Ranking</Link>
-                        <Link to='/tournaments'className={styles.links + ' ' + styles.ranking}>Tournaments</Link>
+                        <Link to='/tournaments'className={styles.links + ' ' + styles.ranking}>Torneos</Link>
                     </div>
                     :
                     null
@@ -42,7 +44,7 @@ export default function NavBar() {
                     isAuth ? 
                     <Link to='/profile' className={styles.links}>
                         <img src={profileIcon} alt="profile picture" />
-                        {`Hi, ${username}!`}
+                        {`Hola ${username}!`}
                     </Link>
                     :
                     null

@@ -41,6 +41,7 @@ const logReducer = (state = INITIAL_STATE, { type, payload }) => {
         window.localStorage.setItem("token", payload.token);
         window.localStorage.setItem("isAuth", payload.login);
         window.localStorage.setItem("user", payload.username);
+        window.localStorage.setItem("id", payload.id);
         return {
           ...state,
           isAuth: payload.login,

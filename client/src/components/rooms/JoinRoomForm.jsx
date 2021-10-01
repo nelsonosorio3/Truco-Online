@@ -21,7 +21,7 @@ export default function JoinRoomForm (){
     return(
       <div>
         <form onSubmit={joinRoom}>
-          <button type='submit' className={styles.btn}>{isJoining ? 'Joining...' : 'Create new room'}</button>
+          <button type='submit' className={styles.btn}>{isJoining ? 'Entrando...' : 'Crear nueva Sala'}</button>
         </form>
       </div>
     )
