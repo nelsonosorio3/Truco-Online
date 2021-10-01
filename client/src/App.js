@@ -29,7 +29,7 @@ function App() {
         <Route exact path='/game' component={Game} />
         <PrivateRoute exact path="/tournaments" component={Tournaments} />
         <PrivateRoute exact path="/ranking" component={Ranking} />
-        <Route path='/adminpanel' component={AdminPanel} />
+        <PrivateRoute exact path='/adminpanel' component={AdminPanel} />
         <Route path="*" component={ErrorPage} />
       </Switch>
     </div>
