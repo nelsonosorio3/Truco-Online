@@ -143,3 +143,72 @@
 
     font-size: 1.3rem;
 }
+
+
+/* Esto es para el modal dentro de profile */
+.btnDiv{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    margin-top: 30px;
+}
+
+.btnDiv button{
+    padding: 3px;
+    border: none;
+    width: 50px;
+    border-radius: 5px;
+    margin: 1px;
+    position: absolute;
+    display: block;
+    background: transparent;
+    background-image: url('../../img/button1.webp');
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+    transform: scale(1.2);
+    color: white;
+    /* cuando vuelve */
+    /* ok */
+    transition: transform .45s;
+}
+
+.rightBtn{
+    right: 40px;
+}
+
+.leftBtn{
+    left: 40px;
+}
+
+.btnDiv button:hover{
+ /* cuando se va */
+ transition: transform .45s;
+ transform: scale(1.3);
+}
+
+.successDiv{
+    position: relative;
+    top: 30px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.successBtn{
+    padding: 3px;
+    border: none;
+    width: 50px;
+    border-radius: 5px;
+    margin: 20px 0px;
+    position: relative;
+    display: block;
+    background: transparent;
+    background-image: url('../../img/button1.webp');
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+    transform: scale(1.2);
+    color: white;
+    /* cuando vuelve */
+    /* ok */
+    transition: transform .45s;
+}
