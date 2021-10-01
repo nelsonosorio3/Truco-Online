@@ -770,7 +770,7 @@ exports = module.exports = function(io){
                     const points = 15 > playerOne.score? 15 : common.scoreToWin;
                     playerOne.score = points;
                     playerTwo.scoreRival = points;
-                    if(points === 30){
+                    if(points === common.scoreToWin){
                         setTimeout(()=> io.in(roomId).emit("messages", {msg: `${isPlayerOne? playerTwo.name : playerOne.name}: Tengo ${isPlayerOne? playerTwoEnvido : playerOneEnvido}.`}),200);
                         setTimeout(()=> io.in(roomId).emit("messages", {msg: `${!isPlayerOne? playerTwo.name : playerOne.name}: Tengo ${!isPlayerOne? playerTwoEnvido : playerOneEnvido}.`}),400);
                         setTimeout(()=> io.in(roomId).emit("messages", {msg: `Gana el falta envido y la partida ${playerOne.name}!`}),800);
