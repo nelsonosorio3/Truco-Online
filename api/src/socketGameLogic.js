@@ -2,7 +2,7 @@ const {table, buildDeck, shuffleDeck, getHands, envidoCount} = require("./socket
 const axios = require("axios");
 
 let timeOut;
-function setNewRound(playerOne, playerTwo, common, isPlayerOne, roomId, points){
+function setNewRound(playerOne, playerTwo, common, isPlayerOne, roomId, points, io){
     if(isPlayerOne){
         playerTwo.score += points;
         playerOne.scoreRival += points;
@@ -12,12 +12,12 @@ function setNewRound(playerOne, playerTwo, common, isPlayerOne, roomId, points){
         playerTwo.scoreRival += points;
     }
     // check if there is a winner
-    // if(playerOne.score >= common.scoreToWin || playerTwo.score >= common.scoreToWin){
-    //     io.to(playerOne.id).emit("gameEnds", (table.games[roomId]));
-    //     io.to(playerTwo.id).emit("gameEnds", (table.games[roomId]));
-    //     delete table.games[roomId];
-    //     return;
-    // }
+    if(playerOne.score >= common.scoreToWin || playerTwo.score >= common.scoreToWin){
+        io.to(playerOne.id).emit("gameEnds", (table.games[roomId]));
+        io.to(playerTwo.id).emit("gameEnds", (table.games[roomId]));
+        delete table.games[roomId];
+        return;
+    }
     //reiniciar estados de playerOne, Two y common para empezar siguiente ronda
     table.games[roomId].playerOne = {...table.games[roomId].playerOne, turnNumber: 1,
         tableRival: [],
@@ -329,7 +329,7 @@ exports = module.exports = function(io){
         playerTwo.bet = true;
         
         if(betPick === "ir al mazo") {
-            setNewRound(playerOne, playerTwo, common, isPlayerOne, roomId, common.trucoBet);
+            setNewRound(playerOne, playerTwo, common, isPlayerOne, roomId, common.trucoBet, io);
             //emitir como deberia cambiar el jugador de cada cliente
             io.to(playerOne.id).emit("newRoundStarts", table.games[roomId].playerOne);
             io.to(playerTwo.id).emit("newRoundStarts", table.games[roomId].playerTwo);
@@ -348,7 +348,7 @@ exports = module.exports = function(io){
             io.in(roomId).emit("messages", { msg: `${isPlayerOne? playerOne.name : playerTwo.name}: QUIERO TRUCO!`})  
         }
         else if(betPick === "no quiero truco") {
-            setNewRound(playerOne, playerTwo, common, isPlayerOne, roomId, common.trucoBet);
+            setNewRound(playerOne, playerTwo, common, isPlayerOne, roomId, common.trucoBet, io);
             //emitir como deberia cambiar el jugador de cada cliente
             io.to(playerOne.id).emit("newRoundStarts", table.games[roomId].playerOne);
             io.to(playerTwo.id).emit("newRoundStarts", table.games[roomId].playerTwo);
@@ -367,7 +367,7 @@ exports = module.exports = function(io){
             io.in(roomId).emit("messages", { msg: `${isPlayerOne? playerOne.name : playerTwo.name}: QUIERO RETRUCO!`}) 
         }
         else if(betPick === "no quiero retruco") {
-            setNewRound(playerOne, playerTwo, common, isPlayerOne, roomId, common.trucoBet);
+            setNewRound(playerOne, playerTwo, common, isPlayerOne, roomId, common.trucoBet, io);
             //emitir como deberia cambiar el jugador de cada cliente
             io.to(playerOne.id).emit("newRoundStarts", table.games[roomId].playerOne);
             io.to(playerTwo.id).emit("newRoundStarts", table.games[roomId].playerTwo);
@@ -386,7 +386,7 @@ exports = module.exports = function(io){
             io.in(roomId).emit("messages", { msg: `${isPlayerOne? playerOne.name : playerTwo.name}: QUIERO VALE CUATRO!`}) 
         }
         else if(betPick === "no quiero valeCuatro") {
-            setNewRound(playerOne, playerTwo, common, isPlayerOne, roomId, common.trucoBet);
+            setNewRound(playerOne, playerTwo, common, isPlayerOne, roomId, common.trucoBet, io);
             //emitir como deberia cambiar el jugador de cada cliente
             io.to(playerOne.id).emit("newRoundStarts", table.games[roomId].playerOne);
             io.to(playerTwo.id).emit("newRoundStarts", table.games[roomId].playerTwo);
@@ -709,163 +709,119 @@ exports = module.exports = function(io){
             const isMalas = (playerOne.score < common.scoreToWin/2 && playerTwo.score < common.scoreToWin/2);
             const playerOneEnvido = envidoCount(playerOne.hand);
             const playerTwoEnvido = envidoCount(playerTwo.hand);
+            const playerOneWins = playerOneEnvido > playerTwoEnvido;
             io.in(roomId).emit("messages", { msg: `${isPlayerOne? playerOne.name : playerTwo.name}: QUIERO FALTA ENVIDO!`});
-            if(isMalas){
-                console.log(playerOneEnvido);
-                console.log(playerTwoEnvido);
-                if(playerOneEnvido > playerTwoEnvido){
-                    playerOne.score = common.scoreToWin;
-                    playerTwo.scoreRival = common.scoreToWin;
+            if(playerOneEnvido>playerTwoEnvido){
+                const points = 15 > playerOne.score? 15 : common.scoreToWin;
+                playerOne.score = points;
+                playerTwo.scoreRival = points;
+                if(points === common.scoreToWin){
                     setTimeout(()=> io.in(roomId).emit("messages", {msg: `${isPlayerOne? playerTwo.name : playerOne.name}: Tengo ${isPlayerOne? playerTwoEnvido : playerOneEnvido}.`}),200);
                     setTimeout(()=> io.in(roomId).emit("messages", {msg: `${!isPlayerOne? playerTwo.name : playerOne.name}: Tengo ${!isPlayerOne? playerTwoEnvido : playerOneEnvido}.`}),400);
-                    setTimeout(()=> io.in(roomId).emit("messages", {msg: `Gana el falta envido en malas y por lo tanto la partida ${playerOne.name}!`}),800);
+                    setTimeout(()=> io.in(roomId).emit("messages", {msg: `Gana el falta envido y la partida ${playerOne.name}!`}),800);
                     setTimeout(()=> io.in(roomId).emit("gameEnds", table.games[roomId]), 1600);
-                    delete table.games[roomId]
-                    console.log(table.games)
-                    return;
-                }
-                else if(playerTwoEnvido < playerOneEnvido){
-                    playerTwo.score = common.scoreToWin;
-                    playerOne.scoreRival = common.scoreToWin;
-                    setTimeout(()=> io.in(roomId).emit("messages", {msg: `${isPlayerOne? playerTwo.name : playerOne.name}: Tengo ${isPlayerOne? playerTwoEnvido : playerOneEnvido}.`}),200);
-                    setTimeout(()=> io.in(roomId).emit("messages", {msg: `${!isPlayerOne? playerTwo.name : playerOne.name}: Tengo ${!isPlayerOne? playerTwoEnvido : playerOneEnvido}.`}),400);
-                    setTimeout(()=> io.in(roomId).emit("messages", {msg: `Gana el falta envido en malas y por lo tanto la partida ${playerOne.name}!`}),800);
-                    setTimeout(()=> io.in(roomId).emit("gameEnds", table.games[roomId]), 1600);
-                    delete table.games[roomId]
-                    console.log(table.games)
-                    return;
                 }
                 else{
-                    if(playerOne.starts){
-                        playerOne.score = common.scoreToWin; 
-                        playerTwo.scoreRival = common.scoreToWin;
+                    if(isPlayerOne){
+                        io.to(playerTwo.id).emit("quieroEnvido1", bool, points, 0);
+                        io.to(playerOne.id).emit("quieroEnvido1", !bool, 0, points);
                         setTimeout(()=> io.in(roomId).emit("messages", {msg: `${isPlayerOne? playerTwo.name : playerOne.name}: Tengo ${isPlayerOne? playerTwoEnvido : playerOneEnvido}.`}),200);
                         setTimeout(()=> io.in(roomId).emit("messages", {msg: `${!isPlayerOne? playerTwo.name : playerOne.name}: Tengo ${!isPlayerOne? playerTwoEnvido : playerOneEnvido}.`}),400);
-                        setTimeout(()=> io.in(roomId).emit("messages", {msg: `Empate, gana el falta envido en malas y por lo tanto la partida  ${playerOne.name} por empezar turno!`}),800);
-                        delete table.games[roomId]
-                        console.log(table.games)
-                        return;
+                        setTimeout(()=> io.in(roomId).emit("messages", {msg: `Gana el falta envido ${playerOne.name}!`}),800);
                     }
                     else{
-                        playerTwo.score = common.scoreToWin;
-                        playerOne.scoreRival = common.scoreToWin;
+                        io.to(playerOne.id).emit("quieroEnvido1", bool, 0, points);
+                        io.to(playerTwo.id).emit("quieroEnvido1", !bool, points, 0);
                         setTimeout(()=> io.in(roomId).emit("messages", {msg: `${isPlayerOne? playerTwo.name : playerOne.name}: Tengo ${isPlayerOne? playerTwoEnvido : playerOneEnvido}.`}),200);
                         setTimeout(()=> io.in(roomId).emit("messages", {msg: `${!isPlayerOne? playerTwo.name : playerOne.name}: Tengo ${!isPlayerOne? playerTwoEnvido : playerOneEnvido}.`}),400);
-                        setTimeout(()=> io.in(roomId).emit("messages", {msg: `Empate, gana el falta envido en malas y por lo tanto la partida ${playerTwo.name} por empezar turno!`}),800);
-                        delete table.games[roomId]
-                        console.log(table.games)
-                        return;
-                    }       
+                        setTimeout(()=> io.in(roomId).emit("messages", {msg: `Gana el falta envido ${playerOne.name}!`}),800);
+                    }
+                }
+            }
+            else if(playerOneEnvido<playerTwoEnvido){
+                const points = 15 > playerTwo.score? 15 : common.scoreToWin;
+                playerTwo.score = points;
+                playerOne.scoreRival = points;
+                if(points === common.scoreToWin){
+                    setTimeout(()=> io.in(roomId).emit("messages", {msg: `${isPlayerOne? playerTwo.name : playerOne.name}: Tengo ${isPlayerOne? playerTwoEnvido : playerOneEnvido}.`}),200);
+                    setTimeout(()=> io.in(roomId).emit("messages", {msg: `${!isPlayerOne? playerTwo.name : playerOne.name}: Tengo ${!isPlayerOne? playerTwoEnvido : playerOneEnvido}.`}),400);
+                    setTimeout(()=> io.in(roomId).emit("messages", {msg: `Gana el falta envido y la partida ${playerTwo.name}!`}),800);
+                    setTimeout(()=> io.in(roomId).emit("gameEnds", table.games[roomId]), 1600);
+                }
+                else{
+                    if(isPlayerOne){
+                        io.to(playerTwo.id).emit("quieroEnvido1", bool, points, 0);
+                        io.to(playerOne.id).emit("quieroEnvido1", !bool, 0, points);
+                        setTimeout(()=> io.in(roomId).emit("messages", {msg: `${isPlayerOne? playerTwo.name : playerOne.name}: Tengo ${isPlayerOne? playerTwoEnvido : playerOneEnvido}.`}),200);
+                        setTimeout(()=> io.in(roomId).emit("messages", {msg: `${!isPlayerOne? playerTwo.name : playerOne.name}: Tengo ${!isPlayerOne? playerTwoEnvido : playerOneEnvido}.`}),400);
+                        setTimeout(()=> io.in(roomId).emit("messages", {msg: `Gana el falta envido ${playerTwo.name}!`}),800);
+                    }
+                    else{
+                        io.to(playerOne.id).emit("quieroEnvido1", bool, 0, points);
+                        io.to(playerTwo.id).emit("quieroEnvido1", !bool, points, 0);
+                        setTimeout(()=> io.in(roomId).emit("messages", {msg: `${isPlayerOne? playerTwo.name : playerOne.name}: Tengo ${isPlayerOne? playerTwoEnvido : playerOneEnvido}.`}),200);
+                        setTimeout(()=> io.in(roomId).emit("messages", {msg: `${!isPlayerOne? playerTwo.name : playerOne.name}: Tengo ${!isPlayerOne? playerTwoEnvido : playerOneEnvido}.`}),400);
+                        setTimeout(()=> io.in(roomId).emit("messages", {msg: `Gana el falta envido ${playerTwo.name}!`}),800);
+                    }
                 }
             }
             else{
-                let bool = false;
-                for (let i = 0; i < common.envidoList.length; i++) {
-                    common.envidoList[i] === "envido"? common.envidoBet += 2 : common.envidoBet +=3;
-                    bool = !bool;
-                }
-                const points = playerOne.score > playerTwo.score? common.scoreToWin - playerOne.score : common.scoreToWin - playerTwo.score;
-                console.log(playerOneEnvido);
-                console.log(playerTwoEnvido);
-                if(playerOneEnvido > playerTwoEnvido){
-                    let bool = true;
-                    playerOne.score += points;
-                    playerTwo.scoreRival += points;
-                    setTimeout(()=> io.in(roomId).emit("messages", {msg: `${isPlayerOne? playerTwo.name : playerOne.name}: Tengo ${isPlayerOne? playerTwoEnvido : playerOneEnvido}.`}),200);
-                    setTimeout(()=> io.in(roomId).emit("messages", {msg: `${!isPlayerOne? playerTwo.name : playerOne.name}: Tengo ${!isPlayerOne? playerTwoEnvido : playerOneEnvido}.`}),400);
-                    setTimeout(()=> io.in(roomId).emit("messages", {msg: `Gana el falta envido en buenas ${playerOne.name}!`}),800);
-                    if(playerOne.score > common.scoreToWin){
+                if(playerOne.Starts){
+                    const points = 15 > playerOne.score? 15 : common.scoreToWin;
+                    playerOne.score = points;
+                    playerTwo.scoreRival = points;
+                    if(points === common.scoreToWin){
+                        setTimeout(()=> io.in(roomId).emit("messages", {msg: `${isPlayerOne? playerTwo.name : playerOne.name}: Tengo ${isPlayerOne? playerTwoEnvido : playerOneEnvido}.`}),200);
+                        setTimeout(()=> io.in(roomId).emit("messages", {msg: `${!isPlayerOne? playerTwo.name : playerOne.name}: Tengo ${!isPlayerOne? playerTwoEnvido : playerOneEnvido}.`}),400);
+                        setTimeout(()=> io.in(roomId).emit("messages", {msg: `Gana el falta envido y la partida ${playerOne.name}!`}),800);
                         setTimeout(()=> io.in(roomId).emit("gameEnds", table.games[roomId]), 1600);
-                        delete table.games[roomId];
-                        console.log(table.games);
                     }
                     else{
                         if(isPlayerOne){
                             io.to(playerTwo.id).emit("quieroEnvido1", bool, points, 0);
                             io.to(playerOne.id).emit("quieroEnvido1", !bool, 0, points);
+                            setTimeout(()=> io.in(roomId).emit("messages", {msg: `${isPlayerOne? playerTwo.name : playerOne.name}: Tengo ${isPlayerOne? playerTwoEnvido : playerOneEnvido}.`}),200);
+                            setTimeout(()=> io.in(roomId).emit("messages", {msg: `${!isPlayerOne? playerTwo.name : playerOne.name}: Tengo ${!isPlayerOne? playerTwoEnvido : playerOneEnvido}.`}),400);
+                            setTimeout(()=> io.in(roomId).emit("messages", {msg: `Gana el falta envido ${playerOne.name}!`}),800);
                         }
                         else{
                             io.to(playerOne.id).emit("quieroEnvido1", bool, 0, points);
                             io.to(playerTwo.id).emit("quieroEnvido1", !bool, points, 0);
-                        }
-                    }
-                }
-                else if(playerTwoEnvido < playerOneEnvido){
-                    playerTwo.score += points;
-                    playerOne.scoreRival += points;
-                    setTimeout(()=> io.in(roomId).emit("messages", {msg: `${isPlayerOne? playerTwo.name : playerOne.name}: Tengo ${isPlayerOne? playerTwoEnvido : playerOneEnvido}.`}),200);
-                    setTimeout(()=> io.in(roomId).emit("messages", {msg: `${!isPlayerOne? playerTwo.name : playerOne.name}: Tengo ${!isPlayerOne? playerTwoEnvido : playerOneEnvido}.`}),400);
-                    setTimeout(()=> io.in(roomId).emit("messages", {msg: `Gana el falta envido en buenas ${playerOne.name}!`}),800);
-                    setTimeout(()=> io.in(roomId).emit("gameEnds", table.games[roomId]), 1600);
-                    delete table.games[roomId]
-                    console.log(table.games)
-                    if(playerTwo.score > common.scoreToWin){
-                        setTimeout(()=> io.in(roomId).emit("gameEnds", table.games[roomId]), 1600);
-                        delete table.games[roomId];
-                        console.log(table.games);
-                    }
-                    else{
-                        if(isPlayerOne){
-                            io.to(playerTwo.id).emit("quieroEnvido1", bool, points, 0);
-                            io.to(playerOne.id).emit("quieroEnvido1", !bool, 0, points);
-                        }
-                        else{
-                            io.to(playerOne.id).emit("quieroEnvido1", bool, 0, points);
-                            io.to(playerTwo.id).emit("quieroEnvido1", !bool, points, 0);
+                            setTimeout(()=> io.in(roomId).emit("messages", {msg: `${isPlayerOne? playerTwo.name : playerOne.name}: Tengo ${isPlayerOne? playerTwoEnvido : playerOneEnvido}.`}),200);
+                            setTimeout(()=> io.in(roomId).emit("messages", {msg: `${!isPlayerOne? playerTwo.name : playerOne.name}: Tengo ${!isPlayerOne? playerTwoEnvido : playerOneEnvido}.`}),400);
+                            setTimeout(()=> io.in(roomId).emit("messages", {msg: `Gana el falta envido ${playerOne.name}!`}),800);
                         }
                     }
                 }
                 else{
-                    if(playerOne.starts){
-                        playerOne.score += points; 
-                        playerTwo.scoreRival += points;
+                    const points = 15 > playerTwo.score? 15 : common.scoreToWin;
+                    playerTwo.score = points;
+                    playerOne.scoreRival = points;
+                    if(points === common.scoreToWin){
                         setTimeout(()=> io.in(roomId).emit("messages", {msg: `${isPlayerOne? playerTwo.name : playerOne.name}: Tengo ${isPlayerOne? playerTwoEnvido : playerOneEnvido}.`}),200);
                         setTimeout(()=> io.in(roomId).emit("messages", {msg: `${!isPlayerOne? playerTwo.name : playerOne.name}: Tengo ${!isPlayerOne? playerTwoEnvido : playerOneEnvido}.`}),400);
-                        setTimeout(()=> io.in(roomId).emit("messages", {msg: `Empate, gana el falta envido en buenas ${playerOne.name} por empezar turno!`}),800);
-                        delete table.games[roomId]
-                        console.log(table.games)
-                        if(playerOne.score > common.scoreToWin){
-                            setTimeout(()=> io.in(roomId).emit("gameEnds", table.games[roomId]), 1600);
-                            delete table.games[roomId];
-                            console.log(table.games);
-                        }
-                        else{
-                            if(isPlayerOne){
-                                io.to(playerTwo.id).emit("quieroEnvido1", bool, points, 0);
-                                io.to(playerOne.id).emit("quieroEnvido1", !bool, 0, points);
-                            }
-                            else{
-                                io.to(playerOne.id).emit("quieroEnvido1", bool, 0, points);
-                                io.to(playerTwo.id).emit("quieroEnvido1", !bool, points, 0);
-                            }
-                        }
+                        setTimeout(()=> io.in(roomId).emit("messages", {msg: `Gana el falta envido y la partida ${playerTwo.name}!`}),800);
+                        setTimeout(()=> io.in(roomId).emit("gameEnds", table.games[roomId]), 1600);
                     }
                     else{
-                        playerTwo.score += points;
-                        playerOne.scoreRival += points;
-                        setTimeout(()=> io.in(roomId).emit("messages", {msg: `${isPlayerOne? playerTwo.name : playerOne.name}: Tengo ${isPlayerOne? playerTwoEnvido : playerOneEnvido}.`}),200);
-                        setTimeout(()=> io.in(roomId).emit("messages", {msg: `${!isPlayerOne? playerTwo.name : playerOne.name}: Tengo ${!isPlayerOne? playerTwoEnvido : playerOneEnvido}.`}),400);
-                        setTimeout(()=> io.in(roomId).emit("messages", {msg: `Empate, gana el falta envido en buenas ${playerTwo.name} por empezar turno!`}),800);
-                        delete table.games[roomId]
-                        console.log(table.games)
-                        if(playerTwo.score > common.scoreToWin){
-                            setTimeout(()=> io.in(roomId).emit("gameEnds", table.games[roomId]), 1600);
-                            delete table.games[roomId];
-                            console.log(table.games);
+                        if(isPlayerOne){
+                            io.to(playerTwo.id).emit("quieroEnvido1", bool, points, 0);
+                            io.to(playerOne.id).emit("quieroEnvido1", !bool, 0, points);
+                            setTimeout(()=> io.in(roomId).emit("messages", {msg: `${isPlayerOne? playerTwo.name : playerOne.name}: Tengo ${isPlayerOne? playerTwoEnvido : playerOneEnvido}.`}),200);
+                            setTimeout(()=> io.in(roomId).emit("messages", {msg: `${!isPlayerOne? playerTwo.name : playerOne.name}: Tengo ${!isPlayerOne? playerTwoEnvido : playerOneEnvido}.`}),400);
+                            setTimeout(()=> io.in(roomId).emit("messages", {msg: `Gana el falta envido ${playerTwo.name}!`}),800);
                         }
                         else{
-                            if(isPlayerOne){
-                                io.to(playerTwo.id).emit("quieroEnvido1", bool, points, 0);
-                                io.to(playerOne.id).emit("quieroEnvido1", !bool, 0, points);
-                            }
-                            else{
-                                io.to(playerOne.id).emit("quieroEnvido1", bool, 0, points);
-                                io.to(playerTwo.id).emit("quieroEnvido1", !bool, points, 0);
-                            }
+                            io.to(playerOne.id).emit("quieroEnvido1", bool, 0, points);
+                            io.to(playerTwo.id).emit("quieroEnvido1", !bool, points, 0);
+                            setTimeout(()=> io.in(roomId).emit("messages", {msg: `${isPlayerOne? playerTwo.name : playerOne.name}: Tengo ${isPlayerOne? playerTwoEnvido : playerOneEnvido}.`}),200);
+                            setTimeout(()=> io.in(roomId).emit("messages", {msg: `${!isPlayerOne? playerTwo.name : playerOne.name}: Tengo ${!isPlayerOne? playerTwoEnvido : playerOneEnvido}.`}),400);
+                            setTimeout(()=> io.in(roomId).emit("messages", {msg: `Gana el falta envido ${playerTwo.name}!`}),800);
                         }
-                    }
+                    } 
                 }
             }
+            
         }
         else if(betPick === "no quiero faltaEnvido"){
             let bool = true;

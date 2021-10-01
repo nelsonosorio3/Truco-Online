@@ -43,6 +43,7 @@ export default function Game({
         roundResults: [], //deberia contener el resultado de la mano por ejemplo ["tie", "win", "loss"]
         starts: false, // referencia para cambiar turnos al finalizar ronda
       });
+    const [newRound, setNewRound] = useState(false);
     const history = useHistory();
     const dispatch = useDispatch();
     const bet = e => { //emite la apuesta
@@ -65,7 +66,8 @@ export default function Game({
       });
       socket.on("newRoundStarts", player1=>{  //escucha para empezar nueva partida
         setPlayer({...player, isTurn: false})
-        setTimeout(()=>setPlayer(player1),5000);
+        setNewRound(true);
+        setTimeout(()=>setPlayer(player1),3000);
       });
       socket.on("bet", (betOptions, bool, turn)=>{  //trae la apuesta segun turno
         console.log(turn)
@@ -123,7 +125,7 @@ export default function Game({
           alert("el juego termino");
           dispatch(setIsInRoom({isInRoom: false, roomId: null}));
         }
-      });
+      }, );
       return () =>{ //limpieza de eventos
         socket.off("gameStarts");
         socket.off('newRoundStarts');
@@ -140,7 +142,9 @@ export default function Game({
         socket.off("updateRivalScore");
       };
     },[player]);
-    
+    useEffect(()=>{
+      setTimeout(()=>setNewRound(false), 3000);
+    },[newRound])
     console.log(player) //para testing
     return(<div id={stylesGame.gameBackground}>
             <div id={stylesGame.cardZone}>
@@ -171,6 +175,7 @@ export default function Game({
                   {player.betOptions?.map(betPick=><button onClick={bet} name={betPick} key={betPick} className={player.isTurn? stylesGame.btnBet : stylesGame.btnBetNoTurn}>{betPick}</button>)}<br/>
                 </div>
             </div>
+            <div><img src={`/cards/shuffle.gif`} style={{width: "50%", heigth: "30%", display: newRound? "flex" : "none", position: "absolute", left:"30%", bottom: "0%",zIndex:"999"}}/></div>
           </div> 
     );
 };
