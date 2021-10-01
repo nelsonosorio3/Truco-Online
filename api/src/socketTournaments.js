@@ -16,7 +16,7 @@ exports = module.exports = function(io){
             socketsInfo.push({socketId: socket.id, tournamentId: tournamentData.tournamentId})
         }
         else console.log(tournamentID, 'ya existe');
-        console.log("active tournaments: ", activeTournaments)
+        // console.log("active tournaments: ", activeTournaments)
         io.emit("newTournamentCreated");
         io.emit("newPlayerInside");
       });
@@ -35,6 +35,8 @@ exports = module.exports = function(io){
         io.emit("newPlayerInside");
       })
 
+//////////////////////////// LÓGICA PARA LA SUCUESIÓN DE PARTIDAS ////////////////////////////
+
       socket.on('matchesList', function(dataObject) {
         let newArray = []
         for(let i=0; i<dataObject.players.length; i++){
@@ -48,91 +50,235 @@ exports = module.exports = function(io){
         socket.emit('matches', (newArray));
       })
 
-      socket.on('tournamentGame', function (matchId) {
-        const clients = io.sockets?.adapter.rooms.get(matchId) //set de clientes en room
-        console.log(matchId)
-        // io.to(matchId).emit('startGame');
+      socket.on('tournamentGame', function (data) {
+        const clients = io.sockets?.adapter.rooms.get(data.matchId) //set de clientes en room
+        console.log('DATA', data)
+        
+        io.to(data.matchId).emit('startGame');
         if(clients?.size < 2 || clients === undefined){ //revisar si la sala esta llena, para evitar que se unan mas, modificar el 2 con variable par ampliar luego a mas jugadores
-          socket.join(matchId);           
+          socket.join(data.matchId);           
+      
+          if(!table.games[data.matchId]){
+            table.games[data.matchId]={};
+            table.games[data.matchId].playerOne = {
+              id: 1,
+              name: socket.handshake.auth.user || "jugador 1",
+              nameRival: "player2",
+              score: 0,
+              scoreRival: 0,
+              hand: [],
+              turnNumber: 1,
+              isTurn: true,
+              betOptions: [],
+              tableRival: [],
+              tablePlayer: [],
+              bet: false,
+              roundResults: [],
+              starts: true,
+            };
+            // let matchNumber = await axios.post(`http://localhost:3001/api/games`,{},{
+            // headers: {
+            //     "x-access-token": socket.handshake.auth.token,
+            // }});
+            table.games[data.matchId].common = {
+              envidoList: [],
+              envidoBet: 0,
+              trucoBet: 1,
+              scoreToWin: 15,
+              matchesToWin: 1, 
+              flor: true,
+              cumulativeScore: 1,
+              time: 15 * 1000,
+              numberPlayers: 2,
+              roundResults: [],
+              turn: 1,
+              // gameId: matchNumber.data,
+            }
+          }
+          else{
+            table.games[data.matchId].playerTwo = {
+              id: 2,
+              name: socket.handshake.auth.user || "jugador 2",
+              nameRival: "player2",
+              score: 0,
+              scoreRival: 0,
+              hand: [],
+              turnNumber: 1,
+              isTurn: false,
+              betOptions: [],
+              tableRival: [],
+              tablePlayer: [],
+              bet: false,
+              roundResults: [],
+              starts: true,
+            }
+            // axios.patch(`http://localhost:3001/api/games/${table.games[roomId].common.gameId}`,{},{
+            //     headers: {
+            //         "x-access-token": socket.handshake.auth.token,
+            //     }});
+          }
         }
+      
         if(clients?.size === 2) { //si la sala esta llena, empieza toda la preparacion de la partida
-          io.to(matchId).emit("showGame", (matchId));
+          console.log('SE HA LLENADO LA CAPACIDAD')
+          if(data.matchNumber === 2) {
+            io.to(data.matchId).emit("showGameTwo", (data.matchId));
+          }
+          else io.to(data.matchId).emit("showGame", (data.matchId));
+      
           let iterator = clients.values();
           const player1 = iterator.next().value;
           const player2 = iterator.next().value;
-          console.log(clients.values())
+          // console.log(clients.values())
+          table.games[data.matchId].playerOne.id = player1;
+          table.games[data.matchId].playerTwo.id = player2;
+          table.games[data.matchId].playerOne.nameRival = table.games[data.matchId].playerTwo.name;
+          table.games[data.matchId].playerTwo.nameRival = table.games[data.matchId].playerOne.name;
           //dejar listo la propiedad con el id de la sala que contendra todo lo que ocurra en esta mientras dure la partida
-          table.games[matchId]={};
-          table.games[matchId].playerOne = {
-            id: player1,
-            name: "player1",
-            nameRival: "player2",
-            score: 0,
-            scoreRival: 0,
-            hand: [],
-            turnNumber: 1,
-            isTurn: true,
-            betOptions: [],
-            tableRival: [],
-            tablePlayer: [],
-            bet: false,
-            roundResults: [],
-            starts: true,
-          };
-          table.games[matchId].playerTwo = {
-            id: player2,
-            name: "player2",
-            nameRival: "player1",
-            score: 0,
-            scoreRival: 0,
-            hand: [],
-            turnNumber: 1,
-            isTurn: false,
-            betOptions: [],
-            tableRival: [],
-            tablePlayer: [],
-            bet: false,
-            roundResults: [],
-            starts: false,
-          };
-          table.games[matchId].common = {
-            envidoList: [],
-            envidoBet: 0,
-            trucoBet: 1,
-            scoreToWin: 15,
-            matchesToWin: 1, 
-            flor: true,
-            cumulativeScore: 1,
-            time: 15 * 1000,
-            numberPlayers: 2,
-            roundResults: [],
-            turn: 1,
-          }
-    
+      
           let deck = buildDeck(); //construye deck
           deck = shuffleDeck(deck); //baraja deck
           const [playerAhand, playerBhand] = getHands(deck); //obtiene manos de 3 cartas de dos jugadores
-    
+      
           //manos iniciales al iniciar partida
-          table.games[matchId].playerOne.hand = playerAhand;
-          table.games[matchId].playerTwo.hand = playerBhand;
-    
+          table.games[data.matchId].playerOne.hand = playerAhand;
+          table.games[data.matchId].playerTwo.hand = playerBhand;
+      
           //dejar las apuestas al comienzo
-          table.games[matchId].playerOne.betOptions = table.betsList.firstTurn;
-          table.games[matchId].playerTwo.betOptions = table.betsList.firstTurn;
-    
+          table.games[data.matchId].playerOne.betOptions = table.betsList.firstTurn;
+          table.games[data.matchId].playerTwo.betOptions = table.betsList.firstTurn;
+      
           //emitir como deberia ser el jugador de cada cliente
-          io.to(player1).emit("gameStarts", table.games[matchId].playerOne);
-          io.to(player2).emit("gameStarts", table.games[matchId].playerTwo);
-    
+          io.to(player1).emit("gameStarts", table.games[data.matchId].playerOne);
+          io.to(player2).emit("gameStarts", table.games[data.matchId].playerTwo);
+      
         } //remover la sala de la lista si esta llena
+        console.log('CLIENTES', clients)
+      })
 
+      // socket.on('tournamentGameTwo', function (data) {
+      //   const clients = io.sockets?.adapter.rooms.get(data.matchId) //set de clientes en room
+      //   console.log('DATA SECOND MATCH', data)
+        
+      //   io.to(data.matchId).emit('startGame');
+      //   if(clients?.size < 2 || clients === undefined){ //revisar si la sala esta llena, para evitar que se unan mas, modificar el 2 con variable par ampliar luego a mas jugadores
+      //     socket.join(data.matchId);           
+      //     if(!table.games[data.matchId]){
+      //       table.games[data.matchId]={};
+      //       table.games[data.matchId].playerOne = {
+      //         id: 1,
+      //         name: socket.handshake.auth.user || "jugador 1",
+      //         nameRival: "player2",
+      //         score: 0,
+      //         scoreRival: 0,
+      //         hand: [],
+      //         turnNumber: 1,
+      //         isTurn: true,
+      //         betOptions: [],
+      //         tableRival: [],
+      //         tablePlayer: [],
+      //         bet: false,
+      //         roundResults: [],
+      //         starts: true,
+      //       };
+      //       // let matchNumber = await axios.post(`http://localhost:3001/api/games`,{},{
+      //       // headers: {
+      //       //     "x-access-token": socket.handshake.auth.token,
+      //       // }});
+      //       table.games[data.matchId].common = {
+      //         envidoList: [],
+      //         envidoBet: 0,
+      //         trucoBet: 1,
+      //         scoreToWin: 15,
+      //         matchesToWin: 1, 
+      //         flor: true,
+      //         cumulativeScore: 1,
+      //         time: 15 * 1000,
+      //         numberPlayers: 2,
+      //         roundResults: [],
+      //         turn: 1,
+      //         // gameId: matchNumber.data,
+      //       }
+      //     }
+      //     else{
+      //       table.games[data.matchId].playerTwo = {
+      //         id: 2,
+      //         name: socket.handshake.auth.user || "jugador 2",
+      //         nameRival: "player2",
+      //         score: 0,
+      //         scoreRival: 0,
+      //         hand: [],
+      //         turnNumber: 1,
+      //         isTurn: false,
+      //         betOptions: [],
+      //         tableRival: [],
+      //         tablePlayer: [],
+      //         bet: false,
+      //         roundResults: [],
+      //         starts: true,
+      //       }
+      //       // axios.patch(`http://localhost:3001/api/games/${table.games[roomId].common.gameId}`,{},{
+      //       //     headers: {
+      //       //         "x-access-token": socket.handshake.auth.token,
+      //       //     }});
+      //     }
+      //   }
+      
+      //   if(clients?.size === 2) { //si la sala esta llena, empieza toda la preparacion de la partida
+      //     io.to(data.matchId).emit("showGameTwo", (data.matchId));
+      
+      //     let iterator = clients.values();
+      //     const player1 = iterator.next().value;
+      //     const player2 = iterator.next().value;
+      //     // console.log(clients.values())
+      //     table.games[data.matchId].playerOne.id = player1;
+      //     table.games[data.matchId].playerTwo.id = player2;
+      //     table.games[data.matchId].playerOne.nameRival = table.games[data.matchId].playerTwo.name;
+      //     table.games[data.matchId].playerTwo.nameRival = table.games[data.matchId].playerOne.name;
+      //     //dejar listo la propiedad con el id de la sala que contendra todo lo que ocurra en esta mientras dure la partida
+      
+      //     let deck = buildDeck(); //construye deck
+      //     deck = shuffleDeck(deck); //baraja deck
+      //     const [playerAhand, playerBhand] = getHands(deck); //obtiene manos de 3 cartas de dos jugadores
+      
+      //     //manos iniciales al iniciar partida
+      //     table.games[data.matchId].playerOne.hand = playerAhand;
+      //     table.games[data.matchId].playerTwo.hand = playerBhand;
+      
+      //     //dejar las apuestas al comienzo
+      //     table.games[data.matchId].playerOne.betOptions = table.betsList.firstTurn;
+      //     table.games[data.matchId].playerTwo.betOptions = table.betsList.firstTurn;
+      
+      //     //emitir como deberia ser el jugador de cada cliente
+      //     io.to(player1).emit("gameStarts", table.games[data.matchId].playerOne);
+      //     io.to(player2).emit("gameStarts", table.games[data.matchId].playerTwo);
+      
+      //   } //remover la sala de la lista si esta llena
+      //   // const clients = io.sockets?.adapter.rooms.get('') //set de clientes en room
+      //   console.log('CLIENTES 2', clients)
+      // })
+////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+      socket.on('addMatchesList', function(data){
+        let dataCopy = Object.assign({},data)
+        if(dataCopy.matchesList.length > 0){
+          tournamentsInCourse.map(t => {
+            if(t.tournamentId === dataCopy.savedData[0].tournamentId) { 
+              if(!t.matchesList && dataCopy.matchesList) {
+                t.matchesList = dataCopy.matchesList;
+                // socket.emit('setMatchesList', t.matchesList)
+                io.to(dataCopy.savedData[0].tournamentId).emit('setMatchesList', t.matchesList)
+              }
+            }
+          })
+        }
       })
 
       socket.on('bringTournamentData', function (tournamentId) {
         let tournamentData;
         activeTournaments.forEach(t => t.tournamentId === tournamentId ? tournamentData = t : null)
-        console.log(tournamentData)
+        // console.log(tournamentData)
         socket.emit('sendTournamentData', (tournamentData))
       })
 

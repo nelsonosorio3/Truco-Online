@@ -5,12 +5,12 @@ export default function Modal({ children, isOpen, closeModal, removeFriend, dele
   const handleModalContainerClick = (e) => e.stopPropagation();
   const conditionalOpen = isOpen ? styles.isOpen : null;
 
-  const confirmation = (flag) => {
-    removeFriend(flag)
-    closeModal()
-  }
+  // const confirmation = (flag) => {
+  //   removeFriend(flag)
+  //   closeModal()
+  // }
 
-  console.log("AMIGO A ELIMINAR",friend )
+  console.log(children )
 
   return (
     <article className={styles.modal + ' ' + conditionalOpen} onClick={closeModal}>
@@ -19,29 +19,6 @@ export default function Modal({ children, isOpen, closeModal, removeFriend, dele
           X
         </button>
         {children}
-        {
-          deleteButtons === "delete" ?
-          <div>
-            <p>¿estas seguro de que deseas eliminar esta amistad?</p> 
-            <div className={styles.btnDiv}>
-              <button className={styles.leftBtn} onClick={() => confirmation(true)}>
-                Si
-              </button>
-              <button className={styles.rightBtn} onClick={() => confirmation(false)}>
-                No
-              </button>
-            </div>
-           
-          </div> 
-          : deleteButtons === "success" ?
-          <div className={styles.successDiv}>
-              <h5>Se ha eliminado con exito a {friend}</h5>
-              <button onClick={closeModal} className={styles.successBtn}>Cerrar</button>
-          </div>
-          : null
-          
-        }
-      
       </div>
     </article>
   );

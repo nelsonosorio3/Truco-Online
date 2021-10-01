@@ -105,11 +105,45 @@ export default function Profile(props) {
         history.push("/edit");
     };
 
+    //Confirmacion para el modal
+    const confirmation = (flag) => {
+        removeFriend(flag)
+        closeModal()
+    }
+
     return (
         <>
             <NavBar />
-            <Modal isOpen={isOpenModal} closeModal={closeModal} removeFriend={removeFriend} deleteButtons={isDelete} friend={deleteFriend}></Modal>
-            <button className={styles.logoutBtn} onClick={logout}></button>
+
+            <Modal isOpen={isOpenModal} closeModal={closeModal} removeFriend={removeFriend} deleteButtons={isDelete} friend={deleteFriend}>
+                {
+                // Esto confirma la eliminacion de un amigo
+                isDelete === "delete" ?
+                <div>
+                    <h5>¿Estas seguro de que deseas eliminar esta amistad?</h5> 
+                    <div className={styles.btnDiv}>
+                        <button className={styles.leftBtn} onClick={() => confirmation(true)}>
+                            Si
+                        </button>
+                        <button className={styles.rightBtn} onClick={() => confirmation(false)}>
+                            No
+                        </button>
+                    </div>
+                </div> 
+                : 
+                //Comunica que efectivamente se elimino el usuario
+                isDelete === "success" ?
+                    <div className={styles.successDiv}>
+                        <h5>Se ha eliminado con exito a {deleteFriend}</h5>
+                        <button onClick={closeModal} className={styles.successBtn}>Cerrar</button>
+                    </div>
+                : 
+                null
+                }
+            </Modal>
+            <GameRequest/>
+            <button className={styles.logoutBtn} onClick={logout}>Log out</button>
+
             <div className={styles.mainDiv}>
                 <div className={styles.subMainDiv}>
                     <div className={styles.player}>
@@ -170,7 +204,7 @@ export default function Profile(props) {
                         <h3 classname={styles.title}>Últimos resultados</h3>
                         <div className={styles.history}>
                             {
-                                !userHistory.length ? null : userHistory.map(m => <Match
+                                !userHistory?.length ? null : userHistory.map(m => <Match
                                     key={m?.id}
                                     id={m?.id}
                                     result={m?.winner === userProfile.username ? "Ganaste" : "Perdiste"}
