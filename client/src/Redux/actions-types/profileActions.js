@@ -52,7 +52,7 @@ const putFriendRequest = (id, email, response) => {
 
 const getGames = (token) => {
   return function(dispatch) {
-    return axios(`http://143.198.96.96:3001/api/games/mygames`, {
+    return axios(`https://trucohenry.com/api/games/mygames`, {
       headers: {
         "x-access-token": token,
       }

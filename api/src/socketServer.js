@@ -11,7 +11,8 @@ var io = require("socket.io")(server, {
         methods: ["GET", "POST"],
         allowedHeaders: ["my-custom-header"],
         credentials: true
-    }
+    },
+    path: "/test",
 });
 //Hacer passport
 // io.use((socket, next) => {

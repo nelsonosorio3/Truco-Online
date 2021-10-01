@@ -4,7 +4,7 @@ import { GET_RANKING } from "../actions";
 
 function getRanking() { 
     return async function (dispatch) {
-      return await axios.get(`http://143.198.96.96:3001/api/ranking`)
+      return await axios.get(`https://trucohenry.com/api/ranking`)
         .then(response => {
           dispatch({ type: GET_RANKING, payload: response.data });
         })

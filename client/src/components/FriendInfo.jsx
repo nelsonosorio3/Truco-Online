@@ -36,7 +36,7 @@ export default function FriendInfo({ isOpen, close, name, date, email, id }) {
     };
 
     const gamesInfo = (id, token) => {
-        axios(`http://143.198.96.96:3001/api/games/games/${id}`, {
+        axios(`https://trucohenry.com/api/games/games/${id}`, {
             headers: {
                 "x-access-token": token,
             },

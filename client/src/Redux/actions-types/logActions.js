@@ -3,7 +3,7 @@ import { LOG_IN, LOG_OUT , LOG_IN_FACEBOOK} from '../actions/index';
 
 const logIn = ({emailInput, passwordInput}) => {
   return function(dispatch) {
-    return axios(`http://143.198.96.96:3001/api/user/login?emailInput=${emailInput}&passwordInput=${passwordInput}`)
+    return axios(`https://trucohenry.com/api/user/login?emailInput=${emailInput}&passwordInput=${passwordInput}`)
       .then(response => {
         dispatch({ type: LOG_IN, payload: response.data });
       })
@@ -13,7 +13,7 @@ const logIn = ({emailInput, passwordInput}) => {
 
 export const logInFacebook = ({email , name}) => {
   return function(dispatch) {
-    return axios(`http://143.198.96.96:3001/api/user/login/facebook?emailInput=${email}&usernameInput=${name}`)
+    return axios(`https://trucohenry.com/api/user/login/facebook?emailInput=${email}&usernameInput=${name}`)
       .then(response => {
         dispatch({ type: LOG_IN_FACEBOOK, payload: response.data });
       })
