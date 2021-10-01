@@ -17,6 +17,7 @@ import Match from './Match';
 
 // nav
 import NavBar from './NavBar';
+// request de partida amigos
 import GameRequest from './GameRequest';
 
 export default function Profile(props) {
