@@ -9,14 +9,14 @@ import TournamentsList from './TournamentsList';
 import TournamentInCourse from './TournamentInCourse';
 
 export default function Tournaments(){
-    const isinRoom = useSelector(store => store.tournamentsReducer.isInTournament);
+    const isinTournament = useSelector(store => store.tournamentsReducer.isInTournament);
     
     return(
         <div>
             <NavBar />
             <div className={styles.submainDiv}>
                 {
-                    isinRoom
+                    isinTournament
                     ?
                         <TournamentInCourse />
                     :
