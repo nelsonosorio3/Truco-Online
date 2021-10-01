@@ -121,6 +121,7 @@
 .friends {
     width: 100%;
     min-height: 32em;
+    max-height: 32em;
 
     display: flex;
     justify-content: space-between;
@@ -213,6 +214,7 @@
 .lastResults {
     width: 100%;
     min-height: 10em;
+    max-height: 10em;
 
     display: flex;
     flex-direction: column;
@@ -345,7 +347,8 @@
     }
 
     .friendsList {
-        height: 50vh;
+        min-height: 50vh;
+        max-height: 50vh;
     }
 }
 
@@ -394,6 +397,7 @@
 
     .friendsList {
         width: 90%;
-        height: 50vh;
+        max-height: 50vh;
+        min-height: 50vh;
     }
 }

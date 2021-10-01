@@ -2,7 +2,6 @@
     width: 100%;
     height: 4em;
     
-    
     position: absolute;
     top: 2.5em;
     left: 0;
@@ -42,12 +41,10 @@
 }
 
 .logo:hover {
-        transition: all 1s cubic-bezier(0.19, 1, 0.22, 1);
+    transition: all 1s cubic-bezier(0.19, 1, 0.22, 1);
 }
 
 .contProfile {
-    
-
     display: flex;
     align-items: center;
 
@@ -64,10 +61,79 @@
 
 .groupLinks {
     width: 250px;
-    padding-left: 30px;
+    
     display: flex;
     justify-content: space-between;
+    
+    position: absolute;
+    left: 10rem;
+
+    padding-left: 30px;
+}
+
+.btn {
+    display: none;
 
     position: absolute;
-    left: 13rem;
+    right: .5em;
+    top: auto;
+
+    color: #000;
+    font-size: 1.1rem;
+    border: none;
+    padding: 5px;
+}
+
+@media screen and (max-width: 1024px) {
+    .nav {
+        height: 3.5em;
+    }
+    
+    .groupLinks {
+        left: 8rem;
+    }
+
+    .links {
+        font-size: 1.6rem;
+    }
+}
+
+@media screen and (max-width: 896px) {
+    .nav {
+        height: 3em;
+    }
+
+    .groupLinks {
+        left: 6rem;
+    }
+
+    .links {
+        font-size: 1.4rem;
+    }
+}
+
+@media screen and (max-width: 768px) {
+    .nav {
+        background-color: transparent;
+    }
+
+    .btn {
+        display: block;
+    }
+
+    .logo {
+        margin-left: 1rem;
+    }
+
+    .logo img {
+        width: 8%;
+
+        margin-left: 0;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .logo img {
+        width: 10%;
+    }
 }
