@@ -173,7 +173,7 @@ export default function Profile(props) {
                             <h3 className={styles.title}>Amigos</h3>
                             <div className={styles.friendsList}>
                                 {
-                                    !friends.sender.length ? <p>No tienes amigos</p> : friends.sender.map(f => <Friend
+                                    !friends.sender.length ? <p className={styles.text}>No tienes amigos</p> : friends.sender.map(f => <Friend
                                         key={f?.id}
                                         email={f?.email}
                                         deleteId={deleteFriendFunction}
