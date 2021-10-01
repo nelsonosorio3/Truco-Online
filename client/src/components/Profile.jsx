@@ -17,7 +17,6 @@ import Match from './Match';
 
 // nav
 import NavBar from './NavBar';
-import GameRequest from './GameRequest';
 
 export default function Profile(props) {
 
@@ -106,16 +105,45 @@ export default function Profile(props) {
         history.push("/edit");
     };
 
+    //Confirmacion para el modal
+    const confirmation = (flag) => {
+        removeFriend(flag)
+        closeModal()
+    }
+
     return (
         <>
             <NavBar />
 
+            <Modal isOpen={isOpenModal} closeModal={closeModal} removeFriend={removeFriend} deleteButtons={isDelete} friend={deleteFriend}>
+                {
+                // Esto confirma la eliminacion de un amigo
+                isDelete === "delete" ?
+                <div>
+                    <h5>¿Estas seguro de que deseas eliminar esta amistad?</h5> 
+                    <div className={styles.btnDiv}>
+                        <button className={styles.leftBtn} onClick={() => confirmation(true)}>
+                            Si
+                        </button>
+                        <button className={styles.rightBtn} onClick={() => confirmation(false)}>
+                            No
+                        </button>
+                    </div>
+                </div> 
+                : 
+                //Comunica que efectivamente se elimino el usuario
+                isDelete === "success" ?
+                    <div className={styles.successDiv}>
+                        <h5>Se ha eliminado con exito a {deleteFriend}</h5>
+                        <button onClick={closeModal} className={styles.successBtn}>Cerrar</button>
+                    </div>
+                : 
+                null
+                }
+            </Modal>
             <GameRequest/>
-
-
-            <Modal isOpen={isOpenModal} closeModal={closeModal} removeFriend={removeFriend} deleteButtons={isDelete} friend={deleteFriend}></Modal>
-
             <button className={styles.logoutBtn} onClick={logout}>Log out</button>
+
             <div className={styles.mainDiv}>
                 <div className={styles.subMainDiv}>
                     <div className={styles.player}>
@@ -126,17 +154,24 @@ export default function Profile(props) {
                         <div className={styles.playerInfo}>
                             <h2>{userProfile?.username}</h2>
                             <h3>{userProfile?.email}</h3>
-                            <h3>Games played: {userProfile?.gamesPlayed}</h3>
+                            <h3> Partidas Jugadas: </h3>
+                            <p> {userProfile?.gamesPlayed} </p>
                             <div className={styles.playerInfo_Games}>
-                                <h3>Wins: {userProfile?.gamesLost}</h3>
-                                <h3>Loses: {userProfile?.gamesWon}</h3>
+                                <div className={styles.infoGames}>
+                                    <h3> Ganadas: </h3>
+                                    <p> {userProfile?.gamesLost} </p>
+                                </div>
+                                <div className={styles.infoGames}>
+                                    <h3> Perdidas: </h3>
+                                    <p> {userProfile?.gamesWon} </p>
+                                </div>
                             </div>
                         </div>
                     </div>
                     <br />
                     <div className={styles.friends}>
                         <div className={styles.friendsDiv}>
-                            <h3 classname={styles.title}>Amigos</h3>
+                            <h3 className={styles.title}>Amigos</h3>
                             <div className={styles.friendsList}>
                                 {
                                     !friends.sender.length ? <p>No tienes amigos</p> : friends.sender.map(f => <Friend
@@ -153,10 +188,10 @@ export default function Profile(props) {
                             </div>
                         </div>
                         <div className={styles.friendsDiv}>
-                            <h3>Solicitudes pendientes</h3>
+                            <h3 className={styles.title}>Solicitudes pendientes</h3>
                             <div className={styles.friendsList}>
                                 {
-                                    !friends.requested.length ? <p>No solicitudes pendientes</p> : friends.requested.map(f => <AddFriend
+                                    !friends.requested.length ? <p>Sin solicitudes pendientes</p> : friends.requested.map(f => <AddFriend
                                         username={f.username}
                                         respond={respondFriendFunction}
                                         email={f.email}
@@ -169,7 +204,7 @@ export default function Profile(props) {
                         <h3 classname={styles.title}>Últimos resultados</h3>
                         <div className={styles.history}>
                             {
-                                !userHistory.length ? null : userHistory.map(m => <Match
+                                !userHistory?.length ? null : userHistory.map(m => <Match
                                     key={m?.id}
                                     id={m?.id}
                                     result={m?.winner === userProfile.username ? "Ganaste" : "Perdiste"}
