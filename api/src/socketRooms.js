@@ -48,7 +48,7 @@ exports = module.exports = function(io){
                 roundResults: [],
                 starts: true,
                 };
-                let matchNumber = await axios.post(`http://143.198.96.96:3001/api/games`,{},{
+                let matchNumber = await axios.post(`https://trucohenry.com/api/games`,{},{
                 headers: {
                     "x-access-token": socket.handshake.auth.token || 1,
                 }});
@@ -84,7 +84,7 @@ exports = module.exports = function(io){
                     roundResults: [],
                     starts: true,
                     }
-                axios.patch(`http://143.198.96.96:3001/api/games/${table.games[roomId].common.gameId}`,{},{
+                axios.patch(`https://trucohenry.com/api/games/${table.games[roomId].common.gameId}`,{},{
                     headers: {
                         "x-access-token": socket.handshake.auth.token || 1,
                     }});
