@@ -16,11 +16,18 @@ export default function Friend({ name, date, id, deleteId, email, status }) {
 
   return (
     <div className={styles.mainDiv}>
-      <img src={profileIcon} alt="" className={styles.profileIconSmall} />
+      <img src={profileIcon} alt="Avatar" className={styles.profileIconSmall} />
       <h3 className={styles.name} onClick={open}>{name}</h3>
-      <p>Status:</p>
-      <p>{status}</p>
-      {status === "pending" ? null : <button onClick={() => deleteFriend()}>X</button>}
+      <div className={styles.status}> 
+        <p>Status:</p>
+        <p>{status}</p>
+      </div>
+      { 
+        status === "pending" ? 
+        null 
+        : 
+        <button className={styles.btn} onClick={() => deleteFriend()}>Eliminar</button>
+      }
       {/* Desplegar info detallada */}
       <FriendInfo isOpen={isOpen} close={close} name={name} date={date} email={email} id={id} />
     </div>
