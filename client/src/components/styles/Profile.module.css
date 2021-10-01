@@ -235,8 +235,8 @@
 
 .editBtn {
     position: absolute;
-    top: 6.3em;
-    left: 6.8em;
+    top: 5.8em;
+    left: 6.5em;
 
     background-color: transparent;
     border-radius: 50%;
@@ -249,14 +249,14 @@
 }
 
 /* Esto es para el modal dentro de profile */
-.btnDiv{
+.btnDiv {
     display: flex;
     flex-direction: row;
     justify-content: space-evenly;
     margin-top: 30px;
 }
 
-.btnDiv button{
+.btnDiv button {
     padding: 3px;
     border: none;
     width: 50px;
@@ -275,7 +275,7 @@
     transition: transform .45s;
 }
 
-.rightBtn{
+.rightBtn {
     right: 40px;
 }
 
@@ -289,7 +289,7 @@
  transform: scale(1.3);
 }
 
-.successDiv{
+.successDiv {
     position: relative;
     top: 30px;
     display: flex;
@@ -297,7 +297,7 @@
     align-items: center;
 }
 
-.successBtn{
+.successBtn {
     padding: 3px;
     border: none;
     width: 50px;
@@ -316,3 +316,84 @@
     transition: transform .45s;
 }
 
+@media screen and (max-width: 1024px) {
+    .logoutBtn {
+        right: 1em;
+    }
+
+    .profileIcon {
+        width: 7.5em;
+
+        margin-top: .8em;
+    }
+
+    .editBtn {
+        top: 5.3em;
+        left: 5.4em;
+    }
+
+    .friends {
+        width: 100%;
+        min-height: 28em;
+        max-height: 28em;
+    }
+
+    .friendsDiv {
+        width: 48%;
+        min-height: 26em;
+        max-height: 26em;
+    }
+
+    .friendsList {
+        height: 50vh;
+    }
+}
+
+@media screen and (max-width: 768px) {
+    .logoutBtn {
+        right: 1em;
+    }
+
+    .profileIcon {
+        width: 6em;
+
+        margin-top: 1.8em;
+    }
+
+    .editBtn {
+        top: 4.8em;
+        left: 4.2em;
+    }
+
+    .playerInfo h3 {
+        font-size: 1.4rem;
+    }
+    
+    .playerInfo p {
+        font-size: 1.3rem;
+    }
+
+    .friends {
+        min-height: 52em;
+        max-height: 52em;
+
+        flex-direction: column;
+        justify-content: space-around;
+        align-items: center;
+    }
+
+    .friendsDiv {
+        width: 100%;
+        min-height: 25em;
+        max-height: 25em;
+    }
+
+    .title {
+        font-size: 1.5rem;
+    }
+
+    .friendsList {
+        width: 90%;
+        height: 50vh;
+    }
+}

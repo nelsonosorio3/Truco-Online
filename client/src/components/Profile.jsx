@@ -117,32 +117,32 @@ export default function Profile(props) {
             <NavBar />
             <Modal isOpen={isOpenModal} closeModal={closeModal} removeFriend={removeFriend} deleteButtons={isDelete} friend={deleteFriend}>
                 {
-                // Esto confirma la eliminacion de un amigo
-                isDelete === "delete" ?
-                <div>
-                    <h5>¿Estas seguro de que deseas eliminar esta amistad?</h5> 
-                    <div className={styles.btnDiv}>
-                        <button className={styles.leftBtn} onClick={() => confirmation(true)}>
-                            Si
-                        </button>
-                        <button className={styles.rightBtn} onClick={() => confirmation(false)}>
-                            No
-                        </button>
-                    </div>
-                </div> 
-                : 
-                //Comunica que efectivamente se elimino el usuario
-                isDelete === "success" ?
-                    <div className={styles.successDiv}>
-                        <h5>Se ha eliminado con exito a {deleteFriend}</h5>
-                        <button onClick={closeModal} className={styles.successBtn}>Cerrar</button>
-                    </div>
-                : 
-                null
+                    // Esto confirma la eliminacion de un amigo
+                    isDelete === "delete" ?
+                    <div>
+                        <h5>¿Estas seguro de que deseas eliminar esta amistad?</h5> 
+                        <div className={styles.btnDiv}>
+                            <button className={styles.leftBtn} onClick={() => confirmation(true)}>
+                                Si
+                            </button>
+                            <button className={styles.rightBtn} onClick={() => confirmation(false)}>
+                                No
+                            </button>
+                        </div>
+                    </div> 
+                    : 
+                    //Comunica que efectivamente se elimino el usuario
+                    isDelete === "success" ?
+                        <div className={styles.successDiv}>
+                            <h5>Se ha eliminado con exito a {deleteFriend}</h5>
+                            <button onClick={closeModal} className={styles.successBtn}>Cerrar</button>
+                        </div>
+                    : 
+                    null
                 }
             </Modal>
             <GameRequest/>
-            <button className={styles.logoutBtn} onClick={logout}>Log out</button>
+            <button className={styles.logoutBtn} onClick={logout}></button>
             <div className={styles.mainDiv}>
                 <div className={styles.subMainDiv}>
                     <div className={styles.player}>
