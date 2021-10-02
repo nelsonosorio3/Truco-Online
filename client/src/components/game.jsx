@@ -50,6 +50,18 @@ export default function Game({
     const [pointBox, setPointsBox] = useState(false);
     const history = useHistory();
     const dispatch = useDispatch();
+    const addFriend = ()=>{
+
+    }
+    const surrender = ()=>{
+
+    }
+    const tutorial = ()=>{
+
+    }
+    const report = ()=> {
+      
+    }
     const bet = e => { //emite la apuesta
       if(player.isTurn){
         socket.emit("bet", e.target.name, roomId, player.id);
@@ -182,10 +194,10 @@ export default function Game({
 
             <div id={stylesGame.containerChat}>
               <div id={stylesGame.optionsButtons}>
-                <button className={stylesGame.btnOptions} >Reportar</button>
-                <button className={stylesGame.btnOptions}>Agregar amigo</button>
-                <button className={stylesGame.btnOptions}>Salir</button>
-                <button className={stylesGame.btnOptions}>❔</button>
+                <button className={stylesGame.btnOptions} onClick={report}>Reportar</button>
+                <button className={stylesGame.btnOptions} onClick={addFriend}>Agregar amigo</button>
+                <button className={stylesGame.btnOptions} onClick={surrender}>Salir</button>
+                <button className={stylesGame.btnOptions} onClick={tutorial}>❔</button>
               </div>
               <Chat name={player.name} roomId={roomId}/>
                 <div className={"betContainer"}>
