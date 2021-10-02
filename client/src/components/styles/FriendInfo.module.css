@@ -141,3 +141,110 @@
     transition: all 1s cubic-bezier(0.19, 1, 0.22, 1);
     transform : scale(1.1);
 }
+
+
+@media screen and (max-width: 1240px) {
+    .profileIcon {
+        width: 8em;
+    }
+
+    .player {
+        height: 80%;
+    }
+}
+  
+@media screen and (max-width: 1024px) {
+    .container {
+        width: 60%;
+    }
+
+    .profileIcon {
+        width: 7em;
+    }
+
+    .player {
+        height: 80%;
+    }
+
+    .playerInfo h2 {
+        font-size: 1.6rem;
+    }
+
+    .playerInfo h3 {
+        font-size: 1.4rem;
+    }
+
+    .playerInfo p {
+        font-size: 1.2rem;
+    }
+
+    .inviteBtn {
+        top: 27em;
+        left: auto;
+        right: auto;
+    }
+}
+  
+@media screen and (max-width: 768px) {
+    .container {
+        width: 70%;
+    }
+
+    .profileIcon {
+        width: 6em;
+    }
+
+    .player {
+        height: 80%;
+    }
+
+    .playerInfo h2 {
+        font-size: 1.6rem;
+    }
+
+    .playerInfo h3 {
+        font-size: 1.4rem;
+    }
+
+    .playerInfo p {
+        font-size: 1.2rem;
+    }
+
+    .inviteBtn {
+        top: 26em;
+        left: auto;
+        right: auto;
+    }
+}
+  
+@media screen and (max-width: 480px) {   
+    .container {
+        width: 80%;
+    }
+
+    .profileIcon {
+        width: 5em;
+    }
+
+    .player {
+        height: 80%;
+    }
+
+    .playerInfo h2 {
+        font-size: 1.5rem;
+    }
+
+    .playerInfo h3 {
+        font-size: 1.3rem;
+    }
+
+    .playerInfo p {
+        font-size: 1.1rem;
+    }
+
+    .inviteBtn {
+        top: 26em;
+        left: auto;
+        right: auto;
+    }
+}
