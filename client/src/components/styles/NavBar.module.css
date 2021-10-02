@@ -37,7 +37,7 @@
 }
 
 .logo img {
-    width: 8%;
+    width: 6em;
 }
 
 .logo:hover {
@@ -96,6 +96,10 @@
     .links {
         font-size: 1.6rem;
     }
+
+    .logo img {
+        width: 5em;
+    }
 }
 
 @media screen and (max-width: 896px) {
@@ -109,6 +113,14 @@
 
     .links {
         font-size: 1.4rem;
+    }
+
+    .logo {
+        margin-left: 1.5rem;
+    }
+
+    .logo img {
+        width: 4.5em;
     }
 }
 
@@ -126,14 +138,8 @@
     }
 
     .logo img {
-        width: 8%;
+        width: 3em;
 
         margin-left: 0;
-    }
-}
-
-@media screen and (max-width: 480px) {
-    .logo img {
-        width: 10%;
     }
 }

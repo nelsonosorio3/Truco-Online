@@ -94,9 +94,11 @@ export default function NavBar() {
 
     return (
         <nav className={styles.nav}>
-            <Link to='/' className={styles.logo}>
-                <img src={logo} alt="TrucoHenry" />             
-            </Link>
+            <div className={styles.logo}>
+                <Link to='/'>
+                        <img src={logo} alt="TrucoHenry" />             
+                </Link>
+            </div>
             {
                 (toggleMenu || screenWidth > 768) && (
                     <>
