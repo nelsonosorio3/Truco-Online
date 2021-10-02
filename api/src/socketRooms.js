@@ -5,11 +5,14 @@ const {table, buildDeck, shuffleDeck, getHands} = require("./socketGameLogicCons
 exports = module.exports = function(io){
     io.sockets.on('connection', function (socket) {
 
-        socket.on('connected', function (name) {
-            // socket.broadcast.emit('messages', { name: name, msg: name + " has joined." });
+        socket.on('connect', function (name) {
+            socket.broadcast.emit('messages', { name: name, msg: name + " has joined." });
+            console.log("test")
         });
         socket.on('message', function (data) {
-            io.to(data.roomId).emit('messages', { msg: `${data.name}: ${data.msg}` });
+            if(socket.handshake.auth.token) io.to(data.roomId).emit('messages', { msg: `${data.name}: ${data.msg}` });
+            else io.to(socket.id).emit('messages', { msg: `No estas registrado no puedes enviar mensajes` });
+            
         });
         socket.on('disconnect', function (reason) {
             io.emit('messages', { server: 'Server', message: 'Has left the room.' });
