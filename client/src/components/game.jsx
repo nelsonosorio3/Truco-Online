@@ -47,6 +47,7 @@ export default function Game({
         starts: false, // referencia para cambiar turnos al finalizar ronda
       });
     const [newRound, setNewRound] = useState(false);
+    const [pointBox, setPointsBox] = useState(false);
     const history = useHistory();
     const dispatch = useDispatch();
     const bet = e => { //emite la apuesta
@@ -152,6 +153,8 @@ export default function Game({
     },[player]);
     useEffect(()=>{
       setTimeout(()=>setNewRound(false), 3000);
+      setTimeout(()=>setPointsBox(true), 3000);
+      setTimeout(()=>setPointsBox(false), 4000);
     },[newRound])
     console.log(player) //para testing
     return(<div id={stylesGame.gameBackground}>
@@ -166,12 +169,12 @@ export default function Game({
             <ol>{player.hand?.map(card => <div key={card.id} onClick={()=>playCard(card)} id={player.isTurn && !player.bet? stylesGame.playerHandActive : stylesGame.playerHand}><img src={`/cards/${card.id}.webp`}  className={stylesGame.cardsImg}/></div>)}</ol><br/>
             </div>
 
-            <div id={stylesGame.points}>
-              <div>
+            <div id={stylesGame.points} style={{ display: pointBox? "none" : "none", position: "absolute",zIndex:"999"}}>
+              <div style={{ height: "20%"}}>
                 <h2>{player.name}</h2>
                 {player.score? <img src={player.score<=30? `/points/${player.score}.png.webp` : "/points/30.png.webp"}/> : <div></div>}
               </div>
-              <div>
+              <div style={{ height: "20%"}}>
                 <h2>{player.nameRival}</h2>
                 {player.scoreRival? <img src={player.scoreRival<=30? `/points/${player.scoreRival}.png.webp` : "/points/30.png.webp"}/> : <div></div>}
               </div>
