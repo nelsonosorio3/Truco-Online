@@ -96,7 +96,7 @@ ol{
 }
 #points div img{
     width: 100%;
-    height: 80%;
+    height: 100%;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -133,8 +133,8 @@ ol{
 }
 @media screen and (max-width: 2560px) {
     .cardsImg {
-        width: 220px;
-        height: 180px;
+        width: 210px;
+        height: 170px;
     }
     .btnBet, .btnBetNoTurn {
         /* width: 200px !important; */
@@ -151,11 +151,14 @@ ol{
         height: 600px;
         top: 100px;
     }
+    #points div img{
+        height: 520px;
+    }
 }
 @media screen and (max-width: 1980px) {
     .cardsImg {
-        width: 200px;
-        height: 170px;
+        width: 190px;
+        height: 160px;
     }
     .btnBet, .btnBetNoTurn {
         /* width: 200px !important; */
@@ -167,9 +170,17 @@ ol{
         min-width: 500px;
     }
     #points{
-        width: 600px;
-        height: 500px;
+        width: 30%;
+        height: 80%;
         top: 100px;
+    }
+    #points div img{
+        height: 520px;
+    }
+    #points div h2{
+        text-align: center;
+        padding-top: 10%;
+        word-wrap: break-word;
     }
 }
 @media screen and (max-width: 1440px) {
@@ -183,13 +194,16 @@ ol{
         height: 50px;
     }
     #points{
-        width: 25%;
-        height: 60%;
-        /* display: none; */
+        width: 40%;
+        height: 80%;
+        top: 100px;
+    }
+    #points div img{
+        height: 400%;
     }
     #points div h2{
-        font-size: larger;
-        padding: 20%;
+        font-size: xx-large;
+        padding: 10%;
     }
     #cardsContainer{
         min-height: 350px;
@@ -232,7 +246,12 @@ ol{
         height: 100px;
     }
     #points{
-        display: none;
+        width: 50%;
+        height: 70%;
+        top: 100px;
+    }
+    #points div img{
+        height: 400%;
     }
     #cardsContainer{
         display: flex;
@@ -251,25 +270,28 @@ ol{
     }
     #containerChat{
         width: 100%;
+        left: 0;
+        /* display:flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center; */
     }
     #rivalHand, #playerHand, #playerHandActive, .tableCards{
         padding: 5px 10px 5px 10px
     }
-    .betContainer{
+    #betContainer{
+        left: 50px;
         display: flex;
+        flex-direction: column;
         justify-content: space-between;
         align-items:center;
-    }
-    .betContainer button{
-        justify-self: center;
     }
     ol{
         padding: 0;
     }
-    #points{
-        width: 500px;
-        height: 500px;
-        top: 100px;
+    #optionsButtons{
+        display: flex;
+        justify-content: center;
     }
   }
   @media screen and (max-width: 768px) {
@@ -281,20 +303,19 @@ ol{
         /* width: 200px !important; */
         font-size: larger;
         height: 40px;
+        justify-content: center;
     }
     #cardsContainer{
         min-height: 300px;
         min-width: 500px;
     }
     #points{
-        width: 400px;
-        height: 500px;
+        width: 60%;
+        height: 60%;
         top: 100px;
     }
-    #points{
-        width: 400px;
-        height: 500px;
-        top: 100px;
+    #points div img{
+        height: 400%;
     }
     
 }
@@ -323,9 +344,6 @@ ol{
         width: 85px;
         height: 80px;
     }
-    #points{
-        display: none;
-    }
     #cardsContainer{
         display: flex;
         justify-content: center;
@@ -347,7 +365,7 @@ ol{
     #rivalHand, #playerHand, #playerHandActive, .tableCards{
         padding: 5px 10px 5px 10px
     }
-    .betContainer{
+    #betContainer{
         display: flex;
         justify-content: space-between;
         align-items:center;
@@ -356,8 +374,12 @@ ol{
         padding: 0;
     }
     #points{
-        width: 200px;
-        height: 500px;
+        width: 90%;
+        height: 50%;
+        top: 100px;
+    }
+    #points div img{
+        height: 400%;
     }
   }
   @media screen and (max-width: 320px) {
@@ -408,7 +430,7 @@ ol{
     #rivalHand, #playerHand, #playerHandActive, .tableCards{
         padding: 5px 10px 5px 10px
     }
-    .betContainer{
+    #betContainer{
         display: flex;
         justify-content: space-between;
         align-items:center;
@@ -417,7 +439,11 @@ ol{
         padding: 0;
     }
     #points{
-        width: 200px;
-        height: 500px;
+        width: 90%;
+        height: 50%;
+        top: 100px;
+    }
+    #points div img{
+        height: 400%;
     }
   }

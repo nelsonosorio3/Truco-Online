@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import stylesGame from './styles/game.module.css';
 import socket from './socket';
 import {useDispatch, useSelector} from 'react-redux'
@@ -33,8 +33,8 @@ export default function Game({
     if(tournamentMatchId) roomId = tournamentMatchId;
     const [player, setPlayer] = useState({ //objeto del jugador en el cliente deberia tener solo propiedades que se usan para renderizar o limitar interacciones en el cliente
         id: 1, // socket id del jugador
-        name: "player", // la idea seria que sea el nombre del profile
-        nameRival: "otherPlayer",
+        name: localStorage.user, // la idea seria que sea el nombre del profile
+        nameRival: "jugador 2",
         score: 0,  // puntaje que lleva
         scoreRival: 0,
         hand: [], // las 3 cartas de la ronda
@@ -50,6 +50,7 @@ export default function Game({
     const [newRound, setNewRound] = useState(false);
     const [pointBox, setPointsBox] = useState(false);
     const history = useHistory();
+    const scoreBox = useRef();
     const dispatch = useDispatch();
     const addFriend = ()=>{
 
@@ -63,6 +64,9 @@ export default function Game({
     }
     const report = ()=> {
 
+    }
+    const showScore = ()=>{
+      setPointsBox(!pointBox)
     }
     const bet = e => { //emite la apuesta
       if(player.isTurn){
@@ -154,6 +158,12 @@ export default function Game({
         socket.emit("surrender2", roomId);
         dispatch(setIsInRoom({isInRoom: false, roomId: null}));
       });
+      let handler = event =>{
+        if(!scoreBox.current.contains(event.target)){
+          setPointsBox(false);
+        }
+      }
+      document.addEventListener("mousedown", handler)
       return () =>{ //limpieza de eventos
         socket.off("gameStarts");
         socket.off('newRoundStarts');
@@ -169,13 +179,19 @@ export default function Game({
         socket.off("updateScore");
         socket.off("updateRivalScore");
         socket.off("surrender");
+        document.removeEventListener("mousedown", handler)
       };
     },[player]);
     useEffect(()=>{
       setTimeout(()=>setNewRound(false), 3000);
-      setTimeout(()=>setPointsBox(true), 3000);
-      setTimeout(()=>setPointsBox(false), 4000);
     },[newRound])
+    useEffect(()=>{
+      setPointsBox(true)
+      setTimeout(()=>setPointsBox(false), 2000);
+    },[player.score, player.scoreRival])
+    useEffect(()=>{
+      if(player.isTurn) socket.emit("messages", ({name: player.name, msg:"es tu turno", roomId}))
+    },[player.isTurn])
     console.log(player) //para testing
     return(<div id={stylesGame.gameBackground}>
             <div id={stylesGame.cardZone}>
@@ -189,7 +205,7 @@ export default function Game({
             <ol>{player.hand?.map(card => <div key={card.id} onClick={()=>playCard(card)} id={player.isTurn && !player.bet? stylesGame.playerHandActive : stylesGame.playerHand}><img src={`/cards/${card.id}.webp`}  className={stylesGame.cardsImg}/></div>)}</ol><br/>
             </div>
 
-            <div id={stylesGame.points} style={{ display: pointBox? "none" : "none", position: "absolute",zIndex:"999"}}>
+            <div id={stylesGame.points} ref={scoreBox} style={{ display: pointBox? "flex" : "none", position: "absolute",zIndex:"999"}}>
               <div style={{ height: "20%"}}>
                 <h2>{player.name}</h2>
                 {player.score? <img src={player.score<=30? `/points/${player.score}.png.webp` : "/points/30.png.webp"}/> : <div></div>}
@@ -202,13 +218,14 @@ export default function Game({
 
             <div id={stylesGame.containerChat}>
               <div id={stylesGame.optionsButtons}>
+                <button className={stylesGame.btnOptions} onClick={showScore}>Puntaje</button>
                 <button className={stylesGame.btnOptions} onClick={report}>Reportar</button>
                 <button className={stylesGame.btnOptions} onClick={addFriend}>Agregar amigo</button>
                 <button className={stylesGame.btnOptions} onClick={surrender}>Salir</button>
                 <button className={stylesGame.btnOptions} onClick={tutorial}>❔</button>
               </div>
               <Chat name={player.name} roomId={roomId}/>
-                <div className={"betContainer"}>
+                <div id={"betContainer"}>
                   {player.betOptions?.map(betPick=><button onClick={bet} name={betPick} key={betPick} className={player.isTurn? stylesGame.btnBet : stylesGame.btnBetNoTurn}>{betPick}</button>)}
                 </div>
             </div>
