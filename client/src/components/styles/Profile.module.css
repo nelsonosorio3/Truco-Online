@@ -252,37 +252,42 @@
 
 /* Esto es para el modal dentro de profile */
 .btnDiv {
+    width: 100%;
+    height: auto;
+
     display: flex;
-    flex-direction: row;
-    justify-content: space-evenly;
-    margin-top: 30px;
+    justify-content: space-around;
+}
+
+.modalTextCont {
+    width: 90%;
+    height: auto;
 }
 
 .btnDiv button {
-    padding: 3px;
+    width: auto;
+    padding: 5px;
     border: none;
-    width: 50px;
     border-radius: 5px;
-    margin: 1px;
-    position: absolute;
-    display: block;
+    font-size: 1rem;
     background: transparent;
     background-image: url('../../img/button1.webp');
     background-size: 100% 100%;
     background-repeat: no-repeat;
     transform: scale(1.2);
     color: white;
+    font-family: 'Crayon';
     /* cuando vuelve */
     /* ok */
     transition: transform .45s;
 }
 
 .rightBtn {
-    right: 40px;
+    right: 1.5em;
 }
 
 .leftBtn{
-    left: 40px;
+    left: 1.5em;
 }
 
 .btnDiv button:hover{

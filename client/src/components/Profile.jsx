@@ -119,8 +119,8 @@ export default function Profile(props) {
                 {
                     // Esto confirma la eliminacion de un amigo
                     isDelete === "delete" ?
-                    <div>
-                        <h5>¿Estas seguro de que deseas eliminar esta amistad?</h5> 
+                    <div className={styles.modalTextCont}>
+                        <p>¿Estas seguro de que deseas eliminar esta amistad?</p> 
                         <div className={styles.btnDiv}>
                             <button className={styles.leftBtn} onClick={() => confirmation(true)}>
                                 Si
@@ -134,8 +134,7 @@ export default function Profile(props) {
                     //Comunica que efectivamente se elimino el usuario
                     isDelete === "success" ?
                         <div className={styles.successDiv}>
-                            <h5>Se ha eliminado con exito a {deleteFriend}</h5>
-                            <button onClick={closeModal} className={styles.successBtn}>Cerrar</button>
+                            <p>Se ha eliminado con exito a {deleteFriend}</p>
                         </div>
                     : 
                     null
