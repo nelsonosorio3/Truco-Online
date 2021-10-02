@@ -103,6 +103,30 @@ ol{
     border: none;
     margin-top: 30px;
 }
+.btnOptions{
+    /* width: 110px !important; */
+    height: 40px;
+    padding: 0 5px 0 5px;
+    border: none;
+    border-radius: 4px;
+    text-shadow: 0px 0px 10px rgb(0 0 0 / 50%);
+    margin: 5px;
+    /* padding: 20px 50px 20px 50px; */
+    font-family: 'Crayon' ;
+    font-size: 15px;
+    color: white;
+    outline: none;
+    cursor: pointer;
+    -webkit-transition: background-position .7s,box-shadow .4s;
+    transition: background-position .7s,box-shadow .4s;
+    background: transparent;
+    /* box-shadow: 0px 0px 0px 2px rgb(255 255 255 / 16%) inset, 0px 0px 10px 0px #e48a3c; */
+    background-image: url('../../img/button1.webp');
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+    text-decoration: none;
+    /* font-size: large; */
+}
 @media screen and (max-width: 2560px) {
     .cardsImg {
         width: 220px;

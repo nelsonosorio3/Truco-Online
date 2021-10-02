@@ -181,6 +181,12 @@ export default function Game({
             </div>
 
             <div id={stylesGame.containerChat}>
+              <div id={stylesGame.optionsButtons}>
+                <button className={stylesGame.btnOptions} >Reportar</button>
+                <button className={stylesGame.btnOptions}>Agregar amigo</button>
+                <button className={stylesGame.btnOptions}>Salir</button>
+                <button className={stylesGame.btnOptions}>❔</button>
+              </div>
               <Chat name={player.name} roomId={roomId}/>
                 <div className={"betContainer"}>
                   {player.betOptions?.map(betPick=><button onClick={bet} name={betPick} key={betPick} className={player.isTurn? stylesGame.btnBet : stylesGame.btnBetNoTurn}>{betPick}</button>)}
