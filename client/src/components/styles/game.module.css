@@ -208,7 +208,8 @@ ol{
     #cardsContainer{
         min-height: 350px;
         min-width: 500px;
-    }#cardZone {
+    }
+    #cardZone {
         width: 50%;
     }
  
@@ -216,8 +217,29 @@ ol{
 
   @media screen and (max-height: 750px) {
     .cardsImg {
-        width: 130px;
-        height: 120px;
+        width: 100px;
+        height: 100px;
+    }
+    #cardsContainer{
+        min-height: 250px;
+        min-width: 500px;
+    }
+    #points{
+        width: 40%;
+        height: 70%;
+        top: 100px;
+    }
+    #points div img{
+        height: 400%;
+    }
+    #points div h2{
+        font-size: large;
+        padding: 5%;
+    }
+    .btnBet, .btnBetNoTurn {
+        /* width: 180px !important; */
+        font-size: medium;
+        height: 40px;
     }
   }
 
@@ -317,7 +339,6 @@ ol{
     #points div img{
         height: 400%;
     }
-    
 }
 
   @media screen and (max-width: 500px) {

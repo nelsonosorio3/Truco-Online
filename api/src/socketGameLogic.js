@@ -124,6 +124,49 @@ function checkWinnerCards(number, playerOne, playerTwo, common, roomId, io){
         // common.trucoBet > 1? io.in(roomId).emit("bet", table.betsList.noTruco, false) : io.in(roomId).emit("bet", table.betsList.otherTurn, false);
     }
 }
+function noQuieroEnvido(playerOne, playerTwo, isPlayerOne, score, io){
+    if(isPlayerOne){
+        playerTwo.score += score;
+        playerOne.scoreRival += score;
+        if(playerOne.starts && !playerOne.tablePlayer[0]){
+            io.to(playerTwo.id).emit("updateScore", score, false);
+            io.to(playerOne.id).emit("updateRivalScore", score, true);
+        }
+        else if((playerTwo.starts && !playerTwo.tablePlayer[0])){
+            io.to(playerTwo.id).emit("updateScore", score, true);
+            io.to(playerOne.id).emit("updateRivalScore", score, false);
+        }
+        else if(playerOne.starts){
+            io.to(playerTwo.id).emit("updateScore", score, true);
+            io.to(playerOne.id).emit("updateRivalScore", score, false);
+        }
+        else{
+            io.to(playerTwo.id).emit("updateScore", score, false);
+            io.to(playerOne.id).emit("updateRivalScore", score, true);
+        } 
+    }
+    else{
+        playerOne.score += score;
+        playerTwo.scoreRival += score;
+        if(playerOne.starts && !playerOne.tablePlayer[0]){
+            io.to(playerTwo.id).emit("updateRivalScore", score, false);
+            io.to(playerOne.id).emit("updateScore", score, true);
+        }
+        else if((playerTwo.starts && !playerTwo.tablePlayer[0])){
+            io.to(playerTwo.id).emit("updateRivalScore", score, true);
+            io.to(playerOne.id).emit("updateScore", score, false);
+        }
+        else if(playerOne.starts){
+            io.to(playerTwo.id).emit("updateRivalScore", score, true);
+            io.to(playerOne.id).emit("updateScore", score, false);
+        }
+        else{
+            io.to(playerTwo.id).emit("updateRivalScore", score, false);
+            io.to(playerOne.id).emit("updateScore", score, true);
+        } 
+
+    }
+}
 // objeto con todas las propiedasdes comunes de la partida
 // const table = {
 //     //estas son las propiedades que son comunes a todos los juegos
@@ -480,31 +523,7 @@ exports = module.exports = function(io){
                 }      
         }
         else if(betPick === "no quiero envido1"){
-            if(isPlayerOne){
-                playerTwo.score += 1;
-                playerOne.scoreRival +=1;
-            }
-            else{
-                playerOne.score += 1;
-                playerTwo.scoreRival +=1;
-
-            }
-            if(playerOne.starts && !playerOne.tablePlayer[0]){
-                io.to(playerTwo.id).emit("updateScore", 1, false);
-                io.to(playerOne.id).emit("updateRivalScore", 1, true);
-            }
-            else if((playerTwo.starts && !playerTwo.tablePlayer[0])){
-                io.to(playerTwo.id).emit("updateScore", 1, true);
-                io.to(playerOne.id).emit("updateRivalScore", 1, false);
-            }
-            else if(playerOne.starts){
-                io.to(playerTwo.id).emit("updateScore", 1, true);
-                io.to(playerOne.id).emit("updateRivalScore", 1, false);
-            }
-            else{
-                io.to(playerTwo.id).emit("updateScore", 1, false);
-                io.to(playerOne.id).emit("updateRivalScore", 1, true);
-            } 
+            noQuieroEnvido(playerOne, playerTwo, isPlayerOne, 1, io); 
             io.in(roomId).emit("messages", {msg: `${isPlayerOne? playerOne.name : playerTwo.name}: NO QUIERO ENVIDO!`})
         }
         else if(betPick === "envido2"){
@@ -589,18 +608,7 @@ exports = module.exports = function(io){
                 }      
         }
         else if(betPick === "no quiero envido2"){
-            if(playerOne.id === playerId){
-                playerTwo.score += 2;
-                playerOne.scoreRival += 2;
-                io.to(playerTwo.id).emit("updateScore", 2, false);
-                io.to(playerOne.id).emit("updateRivalScore", 2, true);
-            }
-            else{
-                playerOne.score += 2;
-                playerTwo.scoreRival += 2;
-                io.to(playerOne.id).emit("updateScore", 2, true);
-                io.to(playerTwo.id).emit("updateRivalScore", 2, false);
-            } 
+            noQuieroEnvido(playerOne, playerTwo, isPlayerOne, 2, io); 
             io.in(roomId).emit("messages", {msg: `${isPlayerOne? playerOne.name : playerTwo.name}: NO QUIERO ENVIDO!`})
         }
         else if(betPick === "realEnvido"){
@@ -698,18 +706,7 @@ exports = module.exports = function(io){
             }
             common.envidoBet =  Math.floor(common.envidoBet/2);
             if(common.envidoBet === 3) common.envidoBet = 4;
-            if(isPlayerOne){
-                playerTwo.score += common.envidoBet;
-                playerOne.scoreRival += common.envidoBet;
-                io.to(playerTwo.id).emit("updateScore", common.envidoBet, !bool);
-                io.to(playerOne.id).emit("updateRivalScore", common.envidoBet, bool);
-            }
-            else{
-                playerOne.score += common.envidoBet;
-                playerTwo.scoreRival += common.envidoBet;
-                io.to(playerOne.id).emit("updateScore", common.envidoBet, bool);
-                io.to(playerTwo.id).emit("updateRivalScore", common.envidoBet, !bool);
-            } 
+            noQuieroEnvido(playerOne, playerTwo, isPlayerOne, common.envidoBet, io); 
             io.in(roomId).emit("messages", {msg: `${isPlayerOne? playerOne.name : playerTwo.name}: NO QUIERO REAL ENVIDO!`})
         }
         else if(betPick === "faltaEnvido"){
@@ -850,66 +847,36 @@ exports = module.exports = function(io){
                 console.log(common.envidoList)
             if(isPlayerOne){
                 if(common.envidoList.length === 1 && !common.envidoList.includes("realEnvido")){
-                    playerTwo.score += 1;
-                    playerOne.scoreRival += 1;
-                    io.to(playerTwo.id).emit("updateScore", 1, !bool);
-                    io.to(playerOne.id).emit("updateRivalScore", 1, bool);
+                    noQuieroEnvido(playerOne, playerTwo, isPlayerOne, 1, io); 
                 }
                 else if(common.envidoList.length === 2 && !common.envidoList.includes("realEnvido")){
-                    playerTwo.score += 2;
-                    playerOne.scoreRival += 2;
-                    io.to(playerTwo.id).emit("updateScore", 2, !bool);
-                    io.to(playerOne.id).emit("updateRivalScore", 2, bool);
+                    noQuieroEnvido(playerOne, playerTwo, isPlayerOne, 2, io); 
                 }
                 else if(common.envidoList.length === 2){
-                    playerTwo.score += 3;
-                    playerOne.scoreRival += 3;
-                    io.to(playerTwo.id).emit("updateScore", 3, !bool);
-                    io.to(playerOne.id).emit("updateRivalScore", 3, bool);
+                    noQuieroEnvido(playerOne, playerTwo, isPlayerOne, 3, io); 
                 }
                 else if(common.envidoList.length === 3){
-                    playerTwo.score += 5;
-                    playerOne.scoreRival += 5;
-                    io.to(playerTwo.id).emit("updateScore", 5, !bool);
-                    io.to(playerOne.id).emit("updateRivalScore", 5, bool);
+                    noQuieroEnvido(playerOne, playerTwo, isPlayerOne, 5, io); 
                 }
                 else if(common.envidoList.length === 4){
-                    playerTwo.score += 7;
-                    playerOne.scoreRival += 7;
-                    io.to(playerTwo.id).emit("updateScore", 7, !bool);
-                    io.to(playerOne.id).emit("updateRivalScore", 7, bool);
+                    noQuieroEnvido(playerOne, playerTwo, isPlayerOne, 7, io); 
                 }
             }
             else{
                 if(common.envidoList.length === 1){
-                    playerOne.score += 1;
-                    playerTwo.scoreRival += 1;
-                    io.to(playerTwo.id).emit("updateScore", 1, bool);
-                    io.to(playerOne.id).emit("updateRivalScore", 1, !bool);
+                    noQuieroEnvido(playerOne, playerTwo, isPlayerOne, 1, io); 
                 }
                 else if(common.envidoList.length === 2 && !common.envidoList.includes("realEnvido")){
-                    playerOne.score += 2;
-                    playerTwo.scoreRival += 2;
-                    io.to(playerTwo.id).emit("updateScore", 2, bool);
-                    io.to(playerOne.id).emit("updateRivalScore", 2, !bool);
+                    noQuieroEnvido(playerOne, playerTwo, isPlayerOne, 2, io); 
                 }
                 else if(common.envidoList.length === 2){
-                    playerOne.score += 3;
-                    playerTwo.scoreRival += 3;
-                    io.to(playerTwo.id).emit("updateScore", 3, bool);
-                    io.to(playerOne.id).emit("updateRivalScore", 3, !bool);
+                    noQuieroEnvido(playerOne, playerTwo, isPlayerOne, 3, io); 
                 }
                 else if(common.envidoList.length === 3){
-                    playerOne.score += 5;
-                    playerTwo.scoreRival += 5;
-                    io.to(playerTwo.id).emit("updateScore", 5, bool);
-                    io.to(playerOne.id).emit("updateRivalScore", 5, !bool);
+                    noQuieroEnvido(playerOne, playerTwo, isPlayerOne, 5, io); 
                 }
                 else if(common.envidoList.length === 4){
-                    playerOne.score += 7;
-                    playerTwo.scoreRival += 7;
-                    io.to(playerTwo.id).emit("updateScore", 7, bool);
-                    io.to(playerOne.id).emit("updateRivalScore", 7, !bool);
+                    noQuieroEnvido(playerOne, playerTwo, isPlayerOne, 7, io); 
                 }
             }
             io.in(roomId).emit("messages", {msg: `${isPlayerOne? playerOne.name : playerTwo.name}: NO QUIERO FALTA ENVIDO!`}) 
