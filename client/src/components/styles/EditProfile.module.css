@@ -348,6 +348,18 @@
   .form h3 {
     margin: .5em 1em .5em 2em;
   }
+
+  .label {
+    font-size: 1rem;
+  }
+
+  .input {
+    font-size: 1rem;
+  }
+
+  .danger {
+    font-size: .8rem;
+  }
 }
 
 @media screen and (max-width: 480px) {
