@@ -21,14 +21,14 @@
     height: 60%;
     background-size: 100% 100%;
     margin: 20px;
-    display: flex;
+    display: none;
     flex-direction: row;
     font-family: 'Crayon' ;
     color: white;
 }
 .cardsImg {
     width: 100%;
-    height: 170px;
+    height: 180px;
 }
 #cardsContainer{
     height: 100px;
@@ -109,7 +109,7 @@ ol{
         height: 160px;
     }
     .btnBet, .btnBetNoTurn {
-        width: 110px !important;
+        width: 180px !important;
         font-size: larger;
         height: 50px;
     }
@@ -131,8 +131,13 @@ ol{
  
   }
 
-  
- /* @media screen and (max-width: 1024px) {
+  @media screen and (max-height: 750px) {
+    .cardsImg {
+        width: 130px;
+        height: 120px;
+    }
+  }
+ @media screen and (max-width: 1024px) {
     .cardsImg {
         width: 150px;
         height: 160px;
@@ -158,22 +163,45 @@ ol{
  
   }
 
-  @media screen and (max-width: 768px) {
+  @media screen and (max-width: 1000px) {
     #gameBackground {
+        background-image: url('../../img/gameBackground.webp');
+        width: 100vw;
+        height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        background-size: 100% 100%;
+        background-repeat: no-repeat;
+        flex-direction: column;    
+    }
+    #cardZone {
+        display: flex;
         flex-direction: column;
-        
+        justify-content: center;
+        align-items: center;
+        margin-bottom: -20px;
     }
     .cardsImg {
-        width: 150px;
-        height: 160px;
+        width: 120px;
+        height: 100px;
     }
-    .btnBet, .btnBetNoTurn {
-        width: 90px !important;
-        height: 30px;
-        font-size: small;
+    #points{
+        display: none;
     }
     #cardsContainer{
-        min-height: 20px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-width: 80%;
+    }
+    .btnBet, .btnBetNoTurn {
+        width: 80px !important;
+        height: 40px;
+        font-size: xx-small;
+    }
+    #cardsContainer{
+        min-height: 180px;
         min-width: 100%;
     }
     #containerChat{
@@ -187,8 +215,14 @@ ol{
         justify-content: space-between;
         align-items:center;
     }
- 
+    .betContainer button{
+        justify-self: center;
+    }
+    ol{
+        padding: 0;
+    }
   }
+
 
   @media screen and (max-width: 425px) {
     #gameBackground {
@@ -203,17 +237,33 @@ ol{
         flex-direction: column;
         
     }
+    #cardZone {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        margin-bottom: -20px;
+    }
     .cardsImg {
-        width: 80px;
-        height: 150px;
+        width: 85px;
+        height: 80px;
+    }
+    #points{
+        display: none;
+    }
+    #cardsContainer{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-width: 80%;
     }
     .btnBet, .btnBetNoTurn {
-        width: 50px !important;
+        width: 80px !important;
         height: 20px;
         font-size: xx-small;
     }
     #cardsContainer{
-        min-height: 20px;
+        min-height: 180px;
         min-width: 100%;
     }
     #containerChat{
@@ -227,5 +277,64 @@ ol{
         justify-content: space-between;
         align-items:center;
     }
- 
-  } */
+    ol{
+        padding: 0;
+    }
+  }
+  @media screen and (max-width: 320px) {
+    #gameBackground {
+        background-image: url('../../img/gameBackground.webp');
+        width: 100vw;
+        height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: space-evenly;
+        background-size: 100% 100%;
+        background-repeat: no-repeat;
+        flex-direction: column;
+        
+    }
+    #cardZone {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        margin-bottom: -20px;
+    }
+    .cardsImg {
+        width: 70px;
+        height: 75px;
+    }
+    #points{
+        display: none;
+    }
+    #cardsContainer{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-width: 80%;
+    }
+    .btnBet, .btnBetNoTurn {
+        width: 80px !important;
+        height: 20px;
+        font-size: xx-small;
+    }
+    #cardsContainer{
+        min-height: 180px;
+        min-width: 100%;
+    }
+    #containerChat{
+        width: 100%;
+    }
+    #rivalHand, #playerHand, #playerHandActive, .tableCards{
+        padding: 5px 10px 5px 10px
+    }
+    .betContainer{
+        display: flex;
+        justify-content: space-between;
+        align-items:center;
+    }
+    ol{
+        padding: 0;
+    }
+  }
