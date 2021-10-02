@@ -206,31 +206,7 @@ ol{
         height: 120px;
     }
   }
- @media screen and (max-width: 1024px) {
-    .cardsImg {
-        width: 150px;
-        height: 160px;
-    }
-    .btnBet, .btnBetNoTurn {
-        /* width: 90px !important; */
-        height: 50px;
-        font-size: small;
-    }
-    #points{
-        width: 25%;
-        height: 50%;
-        display: none;
-    }
-    #points div h2{
-        font-size: medium;
-        padding: 20%;
-    }
-    #cardsContainer{
-        min-height: 350px;
-        min-width: 500px;
-    }
- 
-  }
+
 
   @media screen and (max-width: 1000px) {
     #gameBackground {

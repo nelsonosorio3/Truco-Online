@@ -29,6 +29,7 @@ export default function Game({
 
   }) {
     var roomId = useSelector(store => store.roomsReducer.roomId); //traer el id de la sala en la que esta el jugador
+    // let isinRoom = useSelector(store => store.roomsReducer.isInRoom); // traer si esta en sala
     if(tournamentMatchId) roomId = tournamentMatchId;
     const [player, setPlayer] = useState({ //objeto del jugador en el cliente deberia tener solo propiedades que se usan para renderizar o limitar interacciones en el cliente
         id: 1, // socket id del jugador
@@ -54,13 +55,14 @@ export default function Game({
 
     }
     const surrender = ()=>{
-
+      socket.emit("surrender", roomId, player.id);
+      dispatch(setIsInRoom({isInRoom: false, roomId: null}));
     }
     const tutorial = ()=>{
-
+      /// mostrar valor cartas y puntos de apuestas?
     }
     const report = ()=> {
-      
+
     }
     const bet = e => { //emite la apuesta
       if(player.isTurn){
@@ -146,7 +148,12 @@ export default function Game({
           alert("el juego termino");
           dispatch(setIsInRoom({isInRoom: false, roomId: null}));
         }
-      }, );
+      },);
+      socket.on("surrender",()=>{
+        alert("El otro jugador se rindio, TU GANAS!");
+        socket.emit("surrender2", roomId);
+        dispatch(setIsInRoom({isInRoom: false, roomId: null}));
+      });
       return () =>{ //limpieza de eventos
         socket.off("gameStarts");
         socket.off('newRoundStarts');
@@ -161,6 +168,7 @@ export default function Game({
         socket.off("envido1");
         socket.off("updateScore");
         socket.off("updateRivalScore");
+        socket.off("surrender");
       };
     },[player]);
     useEffect(()=>{

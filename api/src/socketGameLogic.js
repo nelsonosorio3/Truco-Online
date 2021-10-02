@@ -1071,8 +1071,19 @@ exports = module.exports = function(io){
             io.to(table.games[roomId].playerTwo.id).emit("changeTurn", true);
             io.to(table.games[roomId].playerOne.id).emit("changeTurn", false);
         }
-    });
-       
-        
+    }); 
+    socket.on("surrender", (roomId, playerId)=>{
+        socket.leave(roomId);
+        if(table.games[roomId].playerOne.id === playerId){
+            io.to(table.games[roomId].playerTwo.id).emit("surrender");
+        }
+        else{
+            io.to(table.games[roomId].playerOne.id).emit("surrender");
+        }
+    })   
+    socket.on("surrender2", roomId=>{
+        delete table.games[roomId];
+        socket.leave(roomId);
+    })
     });
 }
