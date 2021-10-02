@@ -4,11 +4,12 @@ const {table, buildDeck, shuffleDeck, getHands} = require("./socketGameLogicCons
 
 exports = module.exports = function(io){
     io.sockets.on('connection', function (socket) {
-
+        if(socket.handshake.auth.user)
         socket.on('connect', function (name) {
             socket.broadcast.emit('messages', { name: name, msg: name + " has joined." });
             console.log("test")
         });
+        // socket.on("log", ()=> io.to(socket.id).emit("log"))
         socket.on('message', function (data) {
             if(socket.handshake.auth.token) io.to(data.roomId).emit('messages', { msg: `${data.name}: ${data.msg}` });
             else io.to(socket.id).emit('messages', { msg: `No estas registrado no puedes enviar mensajes` });
@@ -27,8 +28,8 @@ exports = module.exports = function(io){
       
     
         //evento por si alguien crea una sala o entra a una
-        socket.on('joinRoom', async function (roomId) {
-            console.log(socket.handshake.auth.token)
+        socket.on('joinRoom', async function (roomId, name) {
+            console.log(socket.handshake.auth.user)
             const clients = io.sockets?.adapter.rooms.get(roomId) //set de clientes en room
             if(clients?.size < 2 || clients === undefined){ //revisar si la sala esta llena, para evitar que se unan mas, modificar el 2 con variable par ampliar luego a mas jugadores
             socket.join(parseInt(roomId));
@@ -37,7 +38,7 @@ exports = module.exports = function(io){
                 table.games[roomId]={};
                 table.games[roomId].playerOne = {
                 id: 1,
-                name: socket.handshake.auth.user || "jugador 1",
+                name: name || "jugador 1",
                 nameRival: "player2",
                 score: 0,
                 scoreRival: 0,
@@ -73,7 +74,7 @@ exports = module.exports = function(io){
             else{
                 table.games[roomId].playerTwo = {
                     id: 2,
-                    name: socket.handshake.auth.user || "jugador 2",
+                    name: name || "jugador 2",
                     nameRival: "player2",
                     score: 0,
                     scoreRival: 0,
