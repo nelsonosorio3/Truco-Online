@@ -423,3 +423,36 @@
         font-size: 1rem;
     }
 }
+
+@media screen and (max-width: 480px) {
+    .friends {
+        min-height: 45em;
+        max-height: 45em;
+    }
+    
+    .friendsDiv {
+        min-height: 22em;
+        max-height: 22em;
+    }
+
+    .friendsList {
+        max-height: 40vh;
+        min-height: 40vh;
+    }
+
+    .player {
+        width: 80%;
+    }
+    
+    .playerInfo {
+        padding: 1em;
+    }
+
+    .playerInfo h3 {
+        font-size: 1.1rem;
+    }
+    
+    .playerInfo p {
+        font-size: 1rem;
+    }
+}
