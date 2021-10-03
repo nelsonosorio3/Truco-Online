@@ -1074,11 +1074,11 @@ exports = module.exports = function(io){
     }); 
     socket.on("surrender", (roomId, playerId)=>{
         socket.leave(roomId);
-        if(table.games[roomId].playerOne.id === playerId){
-            io.to(table.games[roomId].playerTwo?.id).emit("surrender");
+        if(table.games[roomId]?.playerOne.id === playerId){
+            io.to(table.games[roomId]?.playerTwo?.id).emit("surrender");
         }
         else{
-            io.to(table.games[roomId].playerOne.id).emit("surrender");
+            io.to(table.games[roomId]?.playerOne.id).emit("surrender");
         }
     });
     socket.on("surrender2", roomId=>{
