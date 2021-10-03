@@ -89,7 +89,7 @@ export default function Game({
       socket.on("gameStarts", player=>{ //escucha gameStarts para iniciar cuando la sala se llena y dejar el estado jugador listo
         setPlayer(player);
       });
-      socket.on("newRoundStarts", player1=>{  //escucha para empezar nueva partida
+      socket.on("newRoundStarts", player1=>{  //escucha para empezar nueva mano
         setPlayer({...player, isTurn: false})
         setNewRound(true);
         setTimeout(()=>setPlayer(player1),3000);

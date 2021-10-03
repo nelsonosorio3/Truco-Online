@@ -962,7 +962,7 @@ exports = module.exports = function(io){
                 // io.to(playerOne.id).emit("updateRivalScore", common.trucoBet, true);
                 io.in(roomId).emit("messages", {msg: `GANADOR MANO ${playerTwo.name}!`});
             }
-            else if(common.roundResults === 2 && common.roundResults[0] === "tie" && common.roundResults[1]!== "tie"){
+            else if(common.roundResults.length === 2 && common.roundResults[0] === "tie" && common.roundResults[1] !== "tie"){
                 winner = true;
                 if(common.roundResults[1] === "playerOne"){
                     playerTwo.score += common.trucoBet;
