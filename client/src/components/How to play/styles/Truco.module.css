@@ -1,0 +1,61 @@
+.board{
+    
+    height: 100%;
+}
+.title {
+    color: white;
+    font-family: 'Crayon';
+    font-size: 25px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    text-align: center;
+    padding-top: 5%;
+}
+
+.botones {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    margin-top: 1%;
+}
+
+.card{
+    height: 250px;
+    width: 200px;
+}
+.boton {
+    background: transparent;
+    font-family: 'Crayon';
+    font-size: 25px;
+    border: transparent;
+    color:white;
+    padding-left: 5%;   
+}
+
+.boton:hover {
+    transform: scale(1.1);
+    color: lightgray
+}
+
+.truco {
+    width: auto;
+    height: 350px;
+    display: flex;
+    justify-content: center;
+    
+}
+
+.imgBot {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-content: center;
+}
+
+.opciones {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+  
+}

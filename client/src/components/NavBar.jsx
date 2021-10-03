@@ -55,6 +55,7 @@ export default function NavBar() {
                                 <>
                                     <Link to='/ranking' className={styles.links}>Ranking</Link>
                                     <Link to='/tournaments' className={styles.links}>Torneos</Link>
+                                    <Link to='/tutorial' className={styles.links}>Tutorial</Link>
                                 </>
                                 :
                                 null
