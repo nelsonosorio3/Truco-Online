@@ -8,6 +8,27 @@
     background-size: 100% 100%;
     background-repeat: no-repeat;  
 }
+#isYourTurn{
+    z-index: 9999;
+    position: absolute;
+    top:45%;
+    text-align: center;
+    padding: 30px;
+    border-radius: 10%;
+    /* left: clamp(15%, 25%, 55%);
+    right: clamp(15%, 20%, 55%); */
+    /* background-color: black; */
+    color: blanchedalmond;
+    font-family: crayon;
+    background-image: url('../../img/button1.webp');
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+    text-decoration: none;
+}
+#isYourTurn h1{
+    font-size: 72px;
+    text-align: center;
+}
 #cardZone {
     width: 40%;
 

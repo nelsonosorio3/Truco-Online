@@ -928,8 +928,8 @@ exports = module.exports = function(io){
                 winner = true;
                 playerOne.score += common.trucoBet;
                 playerTwo.scoreRival += common.trucoBet;
-                io.to(playerOne.id).emit("updateScore", common.trucoBet, true);
-                io.to(playerTwo.id).emit("updateRivalScore", common.trucoBet, true);
+                // io.to(playerOne.id).emit("updateScore", common.trucoBet, true);
+                // io.to(playerTwo.id).emit("updateRivalScore", common.trucoBet, true);
                 io.in(roomId).emit("messages", {msg: `GANADOR MANO ${playerOne.name}!`});
             }
             else if((common.roundResults.filter(round => round === "playerTwo").length > 1) || 
@@ -938,8 +938,8 @@ exports = module.exports = function(io){
                 winner = true;
                 playerTwo.score += common.trucoBet;
                 playerOne.scoreRival += common.trucoBet;
-                io.to(playerTwo.id).emit("updateScore", common.trucoBet, true);
-                io.to(playerOne.id).emit("updateRivalScore", common.trucoBet, true);
+                // io.to(playerTwo.id).emit("updateScore", common.trucoBet, true);
+                // io.to(playerOne.id).emit("updateRivalScore", common.trucoBet, true);
                 io.in(roomId).emit("messages", {msg: `GANADOR MANO ${playerTwo.name}!`});
             }
             else if(common.roundResults === 2 && common.roundResults[0] === "tie" && common.roundResults[1]!== "tie"){
@@ -947,15 +947,15 @@ exports = module.exports = function(io){
                 if(common.roundResults[1] === "playerOne"){
                     playerTwo.score += common.trucoBet;
                     playerOne.scoreRival += common.trucoBet;
-                    io.to(playerOne.id).emit("updateScore", common.trucoBet, true);
-                    io.to(playerTwo.id).emit("updateRivalScore", common.trucoBet, true);
+                    // io.to(playerOne.id).emit("updateScore", common.trucoBet, true);
+                    // io.to(playerTwo.id).emit("updateRivalScore", common.trucoBet, true);
                     io.in(roomId).emit("messages", {msg: `GANADOR MANO ${playerOne.name}!`});
                 }
                 else if(common.roundResults[1] === "playerTwo"){
                     playerOne.score += common.trucoBet;
                     playerTwo.scoreRival += common.trucoBet;
-                    io.to(playerTwo.id).emit("updateScore", common.trucoBet, true);
-                    io.to(playerOne.id).emit("updateRivalScore", common.trucoBet, true);
+                    // io.to(playerTwo.id).emit("updateScore", common.trucoBet, true);
+                    // io.to(playerOne.id).emit("updateRivalScore", common.trucoBet, true);
                     io.in(roomId).emit("messages", {msg: `GANADOR MANO ${playerTwo.name}!`});
                 }
             }
@@ -964,15 +964,15 @@ exports = module.exports = function(io){
                 if(common.roundResults[0] === "playerOne"){
                     playerTwo.score += common.trucoBet;
                     playerOne.scoreRival += common.trucoBet;
-                    io.to(playerOne.id).emit("updateScore", common.trucoBet, true);
-                    io.to(playerTwo.id).emit("updateRivalScore", common.trucoBet, true);
+                    // io.to(playerOne.id).emit("updateScore", common.trucoBet, true);
+                    // io.to(playerTwo.id).emit("updateRivalScore", common.trucoBet, true);
                     io.in(roomId).emit("messages", {msg: `GANADOR MANO ${playerOne.name}!`});
                 }
                 else if(common.roundResults[0] === "playerTwo"){
                     playerOne.score += common.trucoBet;
                     playerTwo.scoreRival += common.trucoBet;
-                    io.to(playerTwo.id).emit("updateScore", common.trucoBet, true);
-                    io.to(playerOne.id).emit("updateRivalScore", common.trucoBet, true);
+                    // io.to(playerTwo.id).emit("updateScore", common.trucoBet, true);
+                    // io.to(playerOne.id).emit("updateRivalScore", common.trucoBet, true);
                     io.in(roomId).emit("messages", {msg: `GANADOR MANO ${playerTwo.name}!`});
                 }
             }

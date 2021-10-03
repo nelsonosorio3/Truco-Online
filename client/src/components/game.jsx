@@ -49,21 +49,24 @@ export default function Game({
       });
     const [newRound, setNewRound] = useState(false);
     const [pointBox, setPointsBox] = useState(false);
+    const [isYourTurn, setIsYourTurn] = useState(false);
     const history = useHistory();
     const scoreBox = useRef();
+    
     const dispatch = useDispatch();
-    const addFriend = ()=>{
 
+    const addFriend = ()=>{
+      axios.post(`http://localhost:3001/api/friends/${localStorage.id}/nelson@mail.com`);
     }
     const surrender = ()=>{
       socket.emit("surrender", roomId, player.id);
       dispatch(setIsInRoom({isInRoom: false, roomId: null}));
     }
     const tutorial = ()=>{
-      /// mostrar valor cartas y puntos de apuestas?
+      /// mostrar valor cartas y explicacion corta de apuestas
     }
     const report = ()=> {
-
+      /// falta crear la ruta a donde enviarlo en el back
     }
     const showScore = ()=>{
       setPointsBox(!pointBox)
@@ -99,8 +102,8 @@ export default function Game({
       socket.on("betting", bool=>{  //cambia el estado de si se esta apostando para bloquear jugar cartas hasta resolverlo
         setPlayer({...player, bet: false, betOptions: [], isTurn: !player.isTurn});
       });
-      socket.on("playCard", card=>{  //escucha carta jugada por rival
-        setPlayer({...player, tableRival:  [...player.tableRival, card], isTurn: true}); 
+      socket.on("playCard", (card, bool)=>{  //escucha carta jugada por rival
+        setPlayer({...player, tableRival:  [...player.tableRival, card], isTurn: bool}); 
       });
       socket.on("updateScore", (score, bool) =>{  //trae cambios en el puntaje
         setPlayer({...player, score: player.score + score, bet: false, isTurn: bool})
@@ -190,7 +193,11 @@ export default function Game({
       setTimeout(()=>setPointsBox(false), 2000);
     },[player.score, player.scoreRival])
     useEffect(()=>{
-      if(player.isTurn) socket.emit("messages", ({name: player.name, msg:"es tu turno", roomId}))
+      if(player.isTurn && !isYourTurn && !player.tablePlayer[2]){
+        setIsYourTurn(true)
+        console.log("is your turn")
+        setTimeout(()=>setIsYourTurn(false), 1000);
+      } 
     },[player.isTurn])
     console.log(player) //para testing
     return(<div id={stylesGame.gameBackground}>
@@ -230,6 +237,7 @@ export default function Game({
                 </div>
             </div>
             <div><img src={`/cards/shuffle.gif`} style={{width: "50%", heigth: "30%", display: newRound? "flex" : "none", position: "absolute", left:"30%", bottom: "0%",zIndex:"999"}}/></div>
+            <div id={stylesGame.isYourTurn} style={{display: isYourTurn? "flex" : "none"}}><h1>ES TU TURNO</h1></div>
           </div> 
     );
 };
