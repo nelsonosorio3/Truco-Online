@@ -50,6 +50,17 @@ exports = module.exports = function(io){
         socket.emit('matches', (newArray));
       })
 
+      socket.on('setWinner', function(data) {
+        console.log('DATA DE WINS:', data)
+        tournamentsInCourse.map(t => {
+          if(t.tournamentId === data.tournamentId) { 
+            if(!t.results) t.results = [];
+            t.results = [...t.results, data.playerWins]
+          }
+          if(t.results.length===4) io.to(data.tournamentId).emit('showWinner', (t.results));
+        })
+      })
+
       socket.on('tournamentGame', function (data) {
         const clients = io.sockets?.adapter.rooms.get(data.matchId) //set de clientes en room
         console.log('DATA', data)

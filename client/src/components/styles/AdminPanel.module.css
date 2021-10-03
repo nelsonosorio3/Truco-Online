@@ -1,6 +1,7 @@
 .mainContainer {
   background-color: #DCDCDC;
   padding-top: 120px;
+  height: 100%;
 }
 
 .tableContainer {

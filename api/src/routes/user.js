@@ -8,7 +8,8 @@ const router = Router();
 //jwt es necesario para crear el token luego del login
 const jwt = require('jsonwebtoken');
 // Funcion para validar usuario
-const {validarUsuario} = require('../controller/index')
+const { validarUsuario } = require('../controller/index')
+const { validarAdmin } = require('../controller/validarAdmin')
 const userControllers = require('../controller/users')
 
 //Trae todos los usuarios
@@ -24,7 +25,7 @@ router.get('/login/facebook', userControllers.facebookLogin)
 router.get("/profile", validarUsuario, userControllers.getUserProfile);
 
 //Ruta para traer todos los amigos de un usuario
-router.get("/friends",validarUsuario, userControllers.getUserFriends);
+router.get("/friends", validarUsuario, userControllers.getUserFriends);
 
 //Ruta para crear nuevo usuario
 router.post("/", userControllers.createNewUser)
@@ -34,6 +35,9 @@ router.get("/edit", validarUsuario, userControllers.getEditProfile);
 
 //Ruta para modificar datos del usuario en la base de datos ---> para el caso que se quiera cambiar todos los datos
 router.put('/edit', validarUsuario, userControllers.updateUser)
+
+//Ruta para acceder a TODOS los usuarios, pasando por dos middleware de autenticación (login === true y usuario.isAdmin === true)
+router.get("/users", [validarUsuario, validarAdmin], userControllers.allUsers)
 
 
 

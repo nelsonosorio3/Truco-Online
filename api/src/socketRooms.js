@@ -4,12 +4,14 @@ const {table, buildDeck, shuffleDeck, getHands} = require("./socketGameLogicCons
 
 exports = module.exports = function(io){
     io.sockets.on('connection', function (socket) {
-
         socket.on('connected', function (name) {
             // socket.broadcast.emit('messages', { name: name, msg: name + " has joined." });
         });
-        socket.on('message', function (data) {
-            io.to(data.roomId).emit('messages', { msg: `${data.name}: ${data.msg}` });
+        // socket.on("log", ()=> io.to(socket.id).emit("log"))
+        socket.on('message', function (data, isAuth) {
+            if(isAuth) io.to(data.roomId).emit('messages', { msg: `${data.name}: ${data.msg}` });
+            else io.to(socket.id).emit('messages', { msg: `No estas registrado no puedes enviar mensajes` });
+            
         });
         socket.on('disconnect', function (reason) {
             io.emit('messages', { server: 'Server', message: 'Has left the room.' });
@@ -24,8 +26,8 @@ exports = module.exports = function(io){
       
     
         //evento por si alguien crea una sala o entra a una
-        socket.on('joinRoom', async function (roomId) {
-            console.log(socket.handshake.auth.token)
+        socket.on('joinRoom', async function (roomId, name) {
+            console.log(socket.handshake.auth.user)
             const clients = io.sockets?.adapter.rooms.get(roomId) //set de clientes en room
             if(clients?.size < 2 || clients === undefined){ //revisar si la sala esta llena, para evitar que se unan mas, modificar el 2 con variable par ampliar luego a mas jugadores
             socket.join(parseInt(roomId));
@@ -34,7 +36,7 @@ exports = module.exports = function(io){
                 table.games[roomId]={};
                 table.games[roomId].playerOne = {
                 id: 1,
-                name: socket.handshake.auth.user || "jugador 1",
+                name: name || "jugador 1",
                 nameRival: "player2",
                 score: 0,
                 scoreRival: 0,
@@ -66,11 +68,12 @@ exports = module.exports = function(io){
                     turn: 1,
                     gameId: matchNumber.data,
                 }
+                io.to(roomId).emit('messages', { msg: `Esperando que se una otro jugador...` });
             }
             else{
                 table.games[roomId].playerTwo = {
                     id: 2,
-                    name: socket.handshake.auth.user || "jugador 2",
+                    name: name || "jugador 2",
                     nameRival: "player2",
                     score: 0,
                     scoreRival: 0,
@@ -88,6 +91,7 @@ exports = module.exports = function(io){
                     headers: {
                         "x-access-token": socket.handshake.auth.token || 1,
                     }});
+                io.to(roomId).emit('messages', { msg: `Se ha unido ${name || "invitado"}, empieza la partida!` });
             }
             if(activeRooms.indexOf(roomId) === -1) activeRooms = [...activeRooms, roomId] 
             else console.log(roomId, 'ya existe');
@@ -132,7 +136,18 @@ exports = module.exports = function(io){
         socket.on('bringActiveRooms', function () {
             io.emit('showActiveRooms', { activeRooms });
         });
-    
+        
+        socket.on("addFriend", (idSender, roomId, playerId, name)=>{
+            if(!idSender) return;
+            if(table.games[roomId]?.playerOne.id === playerId){
+                io.to(table.games[roomId]?.playerTwo.id).emit("addFriend", idSender);
+                io.to(table.games[roomId]?.playerTwo.id).emit("messages", { msg: `${name}, te ha enviado una solicitud de amistad!` });
+            }
+            else{
+                io.to(table.games[roomId]?.playerOne.id).emit("addFriend", idSender);
+                io.to(table.games[roomId]?.playerOne.id).emit("messages", { msg: `${name}, te ha enviado una solicitud de amistad!` });
+            }
+        })
       
     });
 }

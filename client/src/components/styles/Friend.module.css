@@ -123,3 +123,72 @@
     margin-top: .5em;
   }
 }
+
+@media screen and (max-width: 768px) {
+  .mainDiv {
+    min-width: 9em;
+    max-width: 9em;
+    height: 15em;
+  }
+
+  .profileIconSmall {
+    width: 3.5em;
+    height: auto;
+  
+    top: 1em;
+  
+  }
+
+  .friendReq {
+    top: 1.8em;
+  }
+
+  .status {
+    height: 4em;
+
+    margin-top: .5em;
+  }
+}
+
+@media screen and (max-width: 500px) {
+  .mainDiv {
+    min-width: 7em;
+    max-width: 7em;
+    height: 12em;
+  }
+
+  .mainDiv h3 {
+    font-size: 1.2rem;
+  }
+
+  .profileIconSmall {
+    width: 3em;
+    height: auto;
+  
+    top: .7em;
+  }
+
+  .friendReq {
+    top: 1.8em;
+  }
+
+  .status {
+    height: 3.5em;
+
+    margin-top: .5em;
+  }
+
+  .status p {
+    font-size: .8rem;
+  }
+
+  .btn {
+    width: 4.5em;
+    height: auto;
+
+    bottom: .8em;
+
+    padding: 4px;
+    font-size: .8rem;
+  }
+}

@@ -119,8 +119,8 @@ export default function Profile(props) {
                 {
                     // Esto confirma la eliminacion de un amigo
                     isDelete === "delete" ?
-                    <div>
-                        <h5>¿Estas seguro de que deseas eliminar esta amistad?</h5> 
+                    <div className={styles.modalTextCont}>
+                        <p>¿Estas seguro de que deseas eliminar esta amistad?</p> 
                         <div className={styles.btnDiv}>
                             <button className={styles.leftBtn} onClick={() => confirmation(true)}>
                                 Si
@@ -134,8 +134,7 @@ export default function Profile(props) {
                     //Comunica que efectivamente se elimino el usuario
                     isDelete === "success" ?
                         <div className={styles.successDiv}>
-                            <h5>Se ha eliminado con exito a {deleteFriend}</h5>
-                            <button onClick={closeModal} className={styles.successBtn}>Cerrar</button>
+                            <p>Se ha eliminado con exito a {deleteFriend}</p>
                         </div>
                     : 
                     null
@@ -147,10 +146,10 @@ export default function Profile(props) {
                 <div className={styles.subMainDiv}>
                     <div className={styles.player}>
                         <div className={styles.playerName}>
-                            <img src={profileIcon} alt="" className={styles.profileIcon} />
-                            <button className={styles.editBtn} onClick={editProfile}>✍</button>
+                            <img src={userProfile.image ? userProfile.image : profileIcon} alt="" className={styles.profileIcon} />
                         </div>
                         <div className={styles.playerInfo}>
+                            <button className={styles.editBtn} onClick={editProfile}>Editar</button>
                             <h2>{userProfile?.username}</h2>
                             <h3>{userProfile?.email}</h3>
                             <h3> Partidas Jugadas: </h3>
@@ -173,7 +172,7 @@ export default function Profile(props) {
                             <h3 className={styles.title}>Amigos</h3>
                             <div className={styles.friendsList}>
                                 {
-                                    !friends.sender.length ? <p>No tienes amigos</p> : friends.sender.map(f => <Friend
+                                    !friends.sender.length ? <p className={styles.text}>No tienes amigos</p> : friends.sender.map(f => <Friend
                                         key={f?.id}
                                         email={f?.email}
                                         deleteId={deleteFriendFunction}

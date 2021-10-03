@@ -11,7 +11,7 @@
 
 .form {
     width: 35%;
-    height: 450px;
+    min-height: 30em;
 
     display: flex;
     align-items: center;
@@ -152,6 +152,9 @@
 }
 
 .danger {
+    position: relative;
+    margin: 0 auto 0 10%;
+
     color: rgb(247, 8, 8);
     font-weight: bold;
 }

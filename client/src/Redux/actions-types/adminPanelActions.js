@@ -7,18 +7,19 @@ import {
 } from '../actions/index';
 
 
-function getUsers() { //por ahora, token no es necesario como parámetro, luego lo será.
+function getUsers({ token }) { //por ahora, token no es necesario como parámetro, luego lo será.
   //fetch data from server
 
   return function (dispatch) {
-    return axios.get(`https://trucohenry.com/api/user`
-      /*,{
+    return axios.get(`https://trucohenry.com/api/user/users`,
+      {
         headers: {
           "x-access-token": token,
         }
-      }*/
+      }
     )
       .then(data => {
+        console.log(data);
         dispatch({ type: GET_USERS, payload: data.data });
       })
       .catch((error) => console.error(error));

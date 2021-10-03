@@ -1,24 +1,29 @@
 .modal {
     width: 100%;
     min-height: 100vh;
+
     display: none;
     justify-content: center;
     align-items: center;
+
     position: fixed;
     top: 0;
     left: 0;
     z-index: 999;
+
     background-color: var(--transBlackColor);
 }
 
 .container {
-    min-width:250px;
-    max-width: 280px;
-    min-height: 150px;
-    max-height: 250px;
-    position: relative;
-    bottom:135px;
-    right:0px;
+    min-width:15em;
+    max-width: 15em;
+    min-height: 8em;
+    max-height: 10em;
+
+    position: absolute;
+    top: 1em;
+    left:50%;
+
     border-radius: 1em;
     padding: 1rem;
     background-color: #808080ea;
@@ -43,7 +48,7 @@
     background-size: 100% 100%;
     background-repeat: no-repeat;
     text-decoration: none;
-    font-family: 'Crayon' ;
+    font-family: 'Crayon';
 }
 
 .close:hover {
@@ -55,4 +60,20 @@
   display: flex;
 }
 
+@media screen and (max-width: 768px) {
+    .container {
+        left:auto;
+        right: auto;
+        top: auto;
+        bottom: auto;
+    }
+}
 
+@media screen and (max-width: 480px) {
+    .container {
+        min-width:12em;
+        max-width: 12em;
+        min-height: 6em;
+        max-height: 8em;
+    }
+}
