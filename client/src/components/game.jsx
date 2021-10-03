@@ -6,6 +6,7 @@ import Chat from './rooms/Chat';
 import { useHistory } from "react-router-dom";
 import { setIsInRoom } from '../Redux/actions-types/roomsActions';
 import axios from 'axios';
+import profileActions from '../Redux/actions-types/profileActions';
 
 
 export default function Game({
@@ -52,11 +53,12 @@ export default function Game({
     const [isYourTurn, setIsYourTurn] = useState(false);
     const history = useHistory();
     const scoreBox = useRef();
-    
+    const {getProfile} = profileActions;
+    const { userProfile} = useSelector(state => state.profileReducer);
     const dispatch = useDispatch();
 
     const addFriend = ()=>{
-      axios.post(`http://localhost:3001/api/friends/${localStorage.id}/nelson@mail.com`);
+      player?.id && socket.emit("addFriend", localStorage.id, roomId, player.id, player.name);
     }
     const surrender = ()=>{
       socket.emit("surrender", roomId, player.id);
@@ -85,6 +87,9 @@ export default function Game({
       };
     };
     
+    useEffect(()=>{
+      localStorage?.isAuth && dispatch(getProfile({token: localStorage?.token}));
+    },[]);
     useEffect(()=>{
       socket.on("gameStarts", player=>{ //escucha gameStarts para iniciar cuando la sala se llena y dejar el estado jugador listo
         setPlayer(player);
@@ -161,6 +166,11 @@ export default function Game({
         socket.emit("surrender2", roomId);
         dispatch(setIsInRoom({isInRoom: false, roomId: null}));
       });
+      socket.on("addFriend", (idSender)=>{
+        // dispatch(sendFriendRequest({idSender, email: userProfile.email}));
+        console.log("casi");
+        userProfile.email && idSender && axios.post(`http://localhost:3001/api/friends/${idSender}/${userProfile.email}`)
+      })
       let handler = event =>{
         if(!scoreBox.current.contains(event.target)){
           setPointsBox(false);
@@ -182,6 +192,7 @@ export default function Game({
         socket.off("updateScore");
         socket.off("updateRivalScore");
         socket.off("surrender");
+        socket.off("addFriend");
         document.removeEventListener("mousedown", handler)
       };
     },[player]);

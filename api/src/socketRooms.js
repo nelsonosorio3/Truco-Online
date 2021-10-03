@@ -68,6 +68,7 @@ exports = module.exports = function(io){
                     turn: 1,
                     gameId: matchNumber.data,
                 }
+                io.to(roomId).emit('messages', { msg: `Esperando que se una otro jugador...` });
             }
             else{
                 table.games[roomId].playerTwo = {
@@ -90,6 +91,7 @@ exports = module.exports = function(io){
                     headers: {
                         "x-access-token": socket.handshake.auth.token || 1,
                     }});
+                io.to(roomId).emit('messages', { msg: `Se ha unido ${name || "invitado"}, empieza la partida!` });
             }
             if(activeRooms.indexOf(roomId) === -1) activeRooms = [...activeRooms, roomId] 
             else console.log(roomId, 'ya existe');
@@ -134,7 +136,18 @@ exports = module.exports = function(io){
         socket.on('bringActiveRooms', function () {
             io.emit('showActiveRooms', { activeRooms });
         });
-    
+        
+        socket.on("addFriend", (idSender, roomId, playerId, name)=>{
+            if(!idSender) return;
+            if(table.games[roomId]?.playerOne.id === playerId){
+                io.to(table.games[roomId]?.playerTwo.id).emit("addFriend", idSender);
+                io.to(table.games[roomId]?.playerTwo.id).emit("messages", { msg: `${name}, te ha enviado una solicitud de amistad!` });
+            }
+            else{
+                io.to(table.games[roomId]?.playerOne.id).emit("addFriend", idSender);
+                io.to(table.games[roomId]?.playerOne.id).emit("messages", { msg: `${name}, te ha enviado una solicitud de amistad!` });
+            }
+        })
       
     });
 }
