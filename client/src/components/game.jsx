@@ -169,7 +169,7 @@ export default function Game({
       socket.on("addFriend", (idSender)=>{
         // dispatch(sendFriendRequest({idSender, email: userProfile.email}));
         console.log("casi");
-        userProfile.email && idSender && axios.post(`http://localhost:3001/api/friends/${idSender}/${userProfile.email}`)
+        userProfile.email && idSender && axios.post(`https://trucohenry.com/api/friends/${idSender}/${userProfile.email}`)
       })
       let handler = event =>{
         if(!scoreBox.current.contains(event.target)){

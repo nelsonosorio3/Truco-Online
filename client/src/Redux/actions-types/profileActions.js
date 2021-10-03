@@ -4,7 +4,7 @@ import { GET_PROFILE, GET_FRIENDS, GET_HISTORY, DELETE_FRIEND, PUT_FRIEND_REQUES
 const getProfile = ({token}) => {
 
   return function(dispatch) {
-    return axios.get(`http://143.198.96.96:3001/api/user/profile`,{
+    return axios.get(`https://trucohenry.com/api/user/profile`,{
       headers: {
         "x-access-token": token,
       }
@@ -18,7 +18,7 @@ const getProfile = ({token}) => {
 
 const getFriends = (token) => {
   return function(dispatch) {
-    return axios(`http://143.198.96.96:3001/api/user/friends`, {
+    return axios(`https://trucohenry.com/api/user/friends`, {
       headers: {
         "x-access-token": token,
       }
@@ -32,7 +32,7 @@ const getFriends = (token) => {
 
 const deleteFriends = (id, email) => {
   return function(dispatch) {
-    return axios.delete(`http://143.198.96.96:3001/api/friends/${id}/${email}`)
+    return axios.delete(`https://trucohenry.com/api/friends/${id}/${email}`)
       .then(data => {
         dispatch({ type: DELETE_FRIEND, payload: data.data.id});
       })
@@ -42,7 +42,7 @@ const deleteFriends = (id, email) => {
 
 const putFriendRequest = (id, email, response) => {
   return function(dispatch) {
-    return axios.put(`http://143.198.96.96:3001/api/friends/${id}/${email}?response=${response}`)
+    return axios.put(`https://trucohenry.com/api/friends/${id}/${email}?response=${response}`)
       .then(data => {
         dispatch({ type: PUT_FRIEND_REQUEST, payload: data.data.id});
       })
