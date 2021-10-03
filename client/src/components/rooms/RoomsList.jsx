@@ -31,11 +31,6 @@ export default function RoomsList(){
         }
     })
 
-    const updateRooms = (event) => {
-        event.preventDefault();
-        socket.emit('bringActiveRooms'); 
-    }
-
     const joinRoom = async (event) => {
         event.preventDefault();
         socket.emit('joinRoom', (parseInt(event.target[0].innerText)), localStorage.user)
@@ -44,9 +39,6 @@ export default function RoomsList(){
 
     return(
         <div>
-            <form onSubmit={updateRooms} ref={listRooms}>
-                <button type='submit' className={styles.btn} >Actualizar Salas</button>
-            </form>
             <div className={styles.roomsList}>
                 {
                 allRooms.length > 0
