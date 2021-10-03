@@ -44,7 +44,7 @@ export default function Rooms() {
           <div className={styles.lobby}>
             <h2 className={styles.title}>Bienvenidos a Truco Henry</h2>
             <div className={styles.div_Chat_Rooms}>  
-              <Chat typeofChat={'chatLobby'}/>
+              <Chat typeofChat={'chatLobby'} roomId={"lobby"} name={localStorage.user}/>
               <div className={styles.div_CreateRoom_RoomsList}>
                 <JoinRoomForm />
                 <RoomsList />

@@ -38,7 +38,7 @@ export default function RoomsList(){
 
     const joinRoom = async (event) => {
         event.preventDefault();
-        socket.emit('joinRoom', (parseInt(event.target[0].innerText)))
+        socket.emit('joinRoom', (parseInt(event.target[0].innerText)), localStorage.user)
         dispatch(setIsInRoom({isInRoom: true, roomId: parseInt(event.target[0].innerText)}))
       }
 

@@ -28,7 +28,7 @@ export default function Chat ({name, roomId, typeofChat}) {
 
     const submit = (event) => {
         event.preventDefault();
-        socket.emit('message', ({name, msg, roomId}));
+        socket.emit('message', ({name, msg, roomId}), localStorage.isAuth);
         setMsg("");
     }
 
