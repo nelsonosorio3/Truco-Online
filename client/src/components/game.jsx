@@ -33,7 +33,7 @@ export default function Game({
     if(tournamentMatchId) roomId = tournamentMatchId;
     const [player, setPlayer] = useState({ //objeto del jugador en el cliente deberia tener solo propiedades que se usan para renderizar o limitar interacciones en el cliente
         id: 1, // socket id del jugador
-        name: localStorage.user, // la idea seria que sea el nombre del profile
+        name: localStorage.user || "jugador 1", // la idea seria que sea el nombre del profile
         nameRival: "jugador 2",
         score: 0,  // puntaje que lleva
         scoreRival: 0,
@@ -237,7 +237,7 @@ export default function Game({
                 </div>
             </div>
             <div><img src={`/cards/shuffle.gif`} style={{width: "50%", heigth: "30%", display: newRound? "flex" : "none", position: "absolute", left:"30%", bottom: "0%",zIndex:"999"}}/></div>
-            <div id={stylesGame.isYourTurn} style={{display: isYourTurn? "flex" : "none"}}><h1>ES TU TURNO</h1></div>
+            <div id={stylesGame.isYourTurn} style={{display: isYourTurn? "flex" : "flex"}}><h1>ES TU TURNO</h1></div>
           </div> 
     );
 };

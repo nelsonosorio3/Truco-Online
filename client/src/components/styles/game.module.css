@@ -360,6 +360,10 @@ ol{
     #points div img{
         height: 400%;
     }
+    #points div h2{
+        padding: 10px;
+        font-size: x-large;
+    }
 }
 
   @media screen and (max-width: 500px) {
@@ -422,6 +426,10 @@ ol{
     }
     #points div img{
         height: 400%;
+    }
+    #points div h2{
+        padding: 5px;
+        font-size: x-large;
     }
   }
   @media screen and (max-width: 320px) {
@@ -488,4 +496,97 @@ ol{
     #points div img{
         height: 400%;
     }
+    #points div h2{
+        padding: 10px;
+        font-size: large;
+    }
   }
+
+  @media only screen 
+  and (min-device-width: 320px) 
+  and (max-device-width: 900px)
+  and (orientation: landscape) {
+    #gameBackground {
+        /* display: flex; */
+        align-items: center;
+        flex-direction: row;
+        justify-content: space-evenly;
+    }
+    #cardZone {
+        width: 50%;
+    }
+    #containerChat{
+        width: 50%;
+    }
+    #points{
+        background-image: url('../../img/puntos.webp');
+        width: 50%;
+        height: 70%;
+        top: 10%;
+        margin: 20px;
+        flex-direction: row;
+        font-family: 'Crayon' ;
+        color: white;
+    }
+    .cardsImg {
+        width: 50px;
+        height: 50px;
+    }
+    ol{
+        display: flex;
+        justify-content: center;
+    }
+    #cardsContainer{
+        min-height: 120px;
+        min-width: 350px;
+    }
+    #points div{
+        width: 50%;
+    }
+    #points div h2{
+        text-align: center;
+        padding: 2%;
+        word-wrap: break-word;
+    }
+    #points div img{
+        width: 100%;
+        height: 400%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border: none;
+        margin: 0;
+    }
+    .btnOptions{
+        /* width: 110px !important; */
+        height: 20px;
+        padding: 0 10px 0 10px;
+        /* flex-wrap: wrap; */
+        border: none;
+        border-radius: 4px;
+        text-shadow: 0px 0px 10px rgb(0 0 0 / 50%);
+        margin: 2px;
+        /* padding: 20px 50px 20px 50px; */
+        font-family: 'Crayon' ;
+        font-size: 8px;
+        color: white;
+        outline: none;
+        cursor: pointer;
+        
+    }
+    .btnBet, .btnBetNoTurn {
+        /* width: 200px !important; */
+        font-size: xx-small;
+        height: 20px;
+        padding: 0px 15px 0px 15px;
+    }
+    #optionsButtons{
+        justify-content: left;
+    }
+}
+@media screen and (width: 540px) and (height: 720px) {
+    #cardsContainer{
+        min-height: 220px;
+        min-width: 350px;
+    }
+}

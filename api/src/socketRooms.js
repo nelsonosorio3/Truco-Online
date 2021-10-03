@@ -10,8 +10,8 @@ exports = module.exports = function(io){
             console.log("test")
         });
         // socket.on("log", ()=> io.to(socket.id).emit("log"))
-        socket.on('message', function (data) {
-            if(socket.handshake.auth.token) io.to(data.roomId).emit('messages', { msg: `${data.name}: ${data.msg}` });
+        socket.on('message', function (data, isAuth) {
+            if(isAuth) io.to(data.roomId).emit('messages', { msg: `${data.name}: ${data.msg}` });
             else io.to(socket.id).emit('messages', { msg: `No estas registrado no puedes enviar mensajes` });
             
         });
