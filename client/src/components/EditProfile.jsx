@@ -41,7 +41,7 @@ function doPackage(oldData, newData, img) {
     newData.username.length === 0 ? data.username = oldData.username : data.username = newData.username;
     newData.email.length === 0 ? data.email = oldData.email : data.email = newData.email;
     newData.password.length === 0 ? data.password = oldData.password : data.password = newData.password;
-    // img ? data.image = img : data.image = newData.image? : data.image = oldData.image;
+    img ? data.image = img : data.image = oldData.image;
     return data;
 };
 
@@ -161,7 +161,7 @@ export default function EditProfile() {
                             />
                             {errors.password && (<p className={styles.danger}> {errors.password} </p>)}
                             <Avatars set={setImg}/>
-                            <label className={styles.labelFile} htmlFor="image"> Subir Imagen: </label>
+                            {/* <label className={styles.labelFile} htmlFor="image"> Subir Imagen: </label>
                             <input 
                                 type='file'
                                 id='image'
@@ -170,7 +170,7 @@ export default function EditProfile() {
                                 value={newData.image}
                                 className={styles.inputFile}
                                 onChange={handleChange}
-                            />
+                            /> */}
                             <div className={styles.buttons}>
                                 {
                                     ((!errors.username && !errors.email && !errors.password) 

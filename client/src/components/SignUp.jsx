@@ -74,7 +74,6 @@ export default function SignUp() {
         openModal();
         setState(initialState);
         setErrors(initialState);
-
     };
 
     useEffect(() => {

@@ -53,8 +53,8 @@
 }
 
 .contProfile img {
-    width: 25px;
-    height: 25px;
+    width: 2em;
+    height: auto;
 
     margin-right: .8rem;
 }
@@ -135,6 +135,10 @@
     .logo img {
         width: 5em;
     }
+
+    .contProfile img {
+        width: 1.8em;
+    }
 }
 
 @media screen and (max-width: 896px) {
@@ -156,6 +160,10 @@
 
     .logo img {
         width: 4.5em;
+    }
+
+    .contProfile img {
+        width: 1.7em;
     }
 }
 
@@ -202,6 +210,10 @@
     .links:hover {
         color: rgb(161, 157, 157);
     }
+
+    .contProfile img {
+        width: 1.6em;
+    }
 }
 
 @media screen and (max-width: 480) {
@@ -223,5 +235,9 @@
     .links img {
         width: 1em;
         height: auto;
+    }
+
+    .contProfile img {
+        width: 1.5em;
     }
 }

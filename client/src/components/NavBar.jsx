@@ -1,4 +1,6 @@
 import React, { useState, useEffect }  from 'react';
+import { useSelector } from 'react-redux';
+
 import { Link } from 'react-router-dom';
 
 import styles from './styles/NavBar.module.css'
@@ -8,8 +10,8 @@ import profileIcon from '../img/profileIcon.png';
 
 export default function NavBar() {
     
-    const username = window.localStorage.getItem('user');
-    
+    const { userProfile } = useSelector(state => state.profileReducer);
+
     const [toggleMenu, setToggleMenu] = useState(false);
     const [screenWidth, setScreenWidth] = useState(window.innerWidth);
 
@@ -64,13 +66,13 @@ export default function NavBar() {
                             {
                                 isAuth && screenWidth > 768 ? 
                                 <Link to='/profile' className={styles.links}>
-                                    <img src={profileIcon} alt="profile picture" />
-                                    {`Hola, ${username}!`}
+                                    <img src={userProfile.image ? userProfile.image : profileIcon} alt="profile picture" />
+                                    {`Hola, ${userProfile.username}!`}
                                 </Link>
                                 :
                                 isAuth ?
                                 <Link to='/profile' className={styles.links}>
-                                    <img src={profileIcon} alt="profile picture" />
+                                    <img src={userProfile.image ? userProfile.image : profileIcon} alt="profile picture" />
                                 </Link>
                                 :
                                 null
