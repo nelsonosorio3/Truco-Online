@@ -14,6 +14,7 @@ import PrivateRoute from './components/PrivateRoute';
 import AdminPanel from './components/AdminPanel';
 import Tournaments from './components/tournaments/Tournaments';
 import EditProfile from './components/EditProfile';
+import Tutorial from './components/How to play/Tutorial';
 
 function App() {
   return (
@@ -30,6 +31,7 @@ function App() {
         <PrivateRoute exact path="/tournaments" component={Tournaments} />
         <PrivateRoute exact path="/ranking" component={Ranking} />
         <PrivateRoute exact path='/adminpanel' component={AdminPanel} />
+        <Route exact path='/tutorial' component={Tutorial} />
         <Route path="*" component={ErrorPage} />
       </Switch>
     </div>
