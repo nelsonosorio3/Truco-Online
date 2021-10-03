@@ -902,15 +902,35 @@ exports = module.exports = function(io){
         const isPlayerOne = playerOne.id === playerId;
 
         if(isPlayerOne){
-            io.to(playerTwo.id).emit("playCard", card, true);
             playerTwo.tableRival.push(card);
             playerOne.tablePlayer.push(card);
+            if(playerOne.tablePlayer[0] && playerTwo.tablePlayer[0] &&
+                !playerOne.tablePlayer[1] && !playerTwo.tablePlayer[1] &&
+                !playerOne.tablePlayer[2] && !playerTwo.tablePlayer[2]){
+                io.to(playerTwo.id).emit("playCard", card, false);
+            }
+            else if(playerOne.tablePlayer[1] && playerTwo.tablePlayer[1] &&
+                !playerOne.tablePlayer[2] && !playerTwo.tablePlayer[2]){
+                io.to(playerTwo.id).emit("playCard", card, false);
+            }
+            else io.to(playerTwo.id).emit("playCard", card, true);
+            
             // io.in(roomId).emit("messages", {msg: `${playerOne.name}: juega ${card.number} de ${card.suit}`})
         }
         else{
-            io.to(playerOne.id).emit("playCard", card, true);
             playerOne.tableRival.push(card);
             playerTwo.tablePlayer.push(card);
+            if(playerOne.tablePlayer[0] && playerTwo.tablePlayer[0] &&
+                !playerOne.tablePlayer[1] && !playerTwo.tablePlayer[1] &&
+                !playerOne.tablePlayer[2] && !playerTwo.tablePlayer[2]){
+                io.to(playerOne.id).emit("playCard", card, false);
+            }
+            else if(playerOne.tablePlayer[1] && playerTwo.tablePlayer[1]  &&
+                !playerOne.tablePlayer[2] && !playerTwo.tablePlayer[2]){
+                io.to(playerOne.id).emit("playCard", card, false);
+            }
+            else io.to(playerOne.id).emit("playCard", card, true);
+            
             // io.in(roomId).emit("messages", {msg: `${playerTwo.name}: juega ${card.number} de ${card.suit}`})
         }
 
