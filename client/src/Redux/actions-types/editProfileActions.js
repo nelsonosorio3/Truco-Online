@@ -22,7 +22,6 @@ const putEditProfile = (data, token) => {
   return function(dispatch) {
     return axios.put(`http://localhost:3001/api/user/edit`, data, { headers })
     .then(data => {
-      console.log('Response put', data);
       dispatch({ type: PUT_PROFILE, payload: data });
     })
     .catch((error) => console.error(error));

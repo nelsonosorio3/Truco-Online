@@ -146,10 +146,10 @@ export default function Profile(props) {
                 <div className={styles.subMainDiv}>
                     <div className={styles.player}>
                         <div className={styles.playerName}>
-                            <img src={profileIcon} alt="" className={styles.profileIcon} />
-                            <button className={styles.editBtn} onClick={editProfile}>✍</button>
+                            <img src={userProfile.image ? userProfile.image : profileIcon} alt="" className={styles.profileIcon} />
                         </div>
                         <div className={styles.playerInfo}>
+                            <button className={styles.editBtn} onClick={editProfile}>Editar</button>
                             <h2>{userProfile?.username}</h2>
                             <h3>{userProfile?.email}</h3>
                             <h3> Partidas Jugadas: </h3>

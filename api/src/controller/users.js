@@ -211,7 +211,7 @@ module.exports = {
 
   updateUser: (req, res) => {
     const { userId } = req.body
-    const { username, email, password } = req.body
+    const { username, email, password, image } = req.body
 
     User.findByPk(userId)
       .then(updateUser => {
@@ -219,6 +219,7 @@ module.exports = {
         updateUser.username = username
         updateUser.email = email
         updateUser.password = password
+        updateUser.image = image
 
         return updateUser.save()
       })

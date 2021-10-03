@@ -12,7 +12,6 @@ const INITIAL_STATE = {
 };
 
 const editProfileReducer = (state = INITIAL_STATE, {type, payload}) => {
-  console.log('pay', payload?.data);
   switch (type) {
     case EDIT_PROFILE:
         return {

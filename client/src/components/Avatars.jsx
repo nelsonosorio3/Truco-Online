@@ -4,6 +4,8 @@ import Avatar from './Avatar';
 
 import styles from './styles/Avatars.module.css';
 import profileIcon from '../img/profileIcon.png';
+import avatar1 from '../img/avatar1.png';
+import avatar2 from '../img/avatar2.png';
 
 const avatars = [
     {
@@ -11,16 +13,12 @@ const avatars = [
         image: profileIcon,
     },
     {
-        name: 'Default',
-        image: profileIcon,
+        name: 'Avatar1',
+        image: avatar1,
     },
     {
-        name: 'Default',
-        image: profileIcon,
-    },
-    {
-        name: 'Default',
-        image: profileIcon,
+        name: 'Avatar2',
+        image: avatar2,
     },
 ];
 
@@ -32,6 +30,7 @@ export default function Avatars({set}) {
                 {
                     avatars && avatars.map(avatar => {
                         return <Avatar 
+                                    key={avatar.name}
                                     name={avatar.name} 
                                     image={avatar.image} 
                                     set={set}
