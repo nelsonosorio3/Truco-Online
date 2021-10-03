@@ -37,7 +37,7 @@
 }
 
 .logo img {
-    width: 8%;
+    width: 6em;
 }
 
 .logo:hover {
@@ -71,17 +71,52 @@
     padding-left: 30px;
 }
 
-.btn {
+.menuOn {
+    width: 30px;
+	height: 20px;
+
     display: none;
-
+	
     position: absolute;
-    right: .5em;
-    top: auto;
+	right: 1em;
+    top: 1em;
+    z-index: 2;
+}
 
-    color: #000;
-    font-size: 1.1rem;
-    border: none;
-    padding: 5px;
+.menuOn span {
+    width: 100%;
+	height: 4px;
+	border-radius: 4px;
+	display: block;
+	position: absolute;
+    background: white;
+	transition: all 0.25s ease; 
+	transform-origin : 0px 100%;
+}
+
+.menuOn span:hover {
+    color: rgb(161, 157, 157);
+    cursor: pointer;
+}
+
+.menuOn span:nth-child(2) {
+    top: calc(50% - 2px);
+}
+
+.menuOn span:nth-child(3) {
+    bottom: 0;
+}
+
+.visible span:nth-child(1){
+    transform: rotate(45deg) translate(-2px,1px); 
+}
+
+.visible span:nth-child(2){
+    opacity: 0;
+}
+
+.visible span:nth-child(3){
+    transform: rotate(-45deg) translate(-3px,3px); 
 }
 
 @media screen and (max-width: 1024px) {
@@ -95,6 +130,10 @@
 
     .links {
         font-size: 1.6rem;
+    }
+
+    .logo img {
+        width: 5em;
     }
 }
 
@@ -110,6 +149,14 @@
     .links {
         font-size: 1.4rem;
     }
+
+    .logo {
+        margin-left: 1.5rem;
+    }
+
+    .logo img {
+        width: 4.5em;
+    }
 }
 
 @media screen and (max-width: 768px) {
@@ -117,23 +164,64 @@
         background-color: transparent;
     }
 
-    .btn {
-        display: block;
+    .menuOn {
+        display: inline-block;
     }
 
     .logo {
         margin-left: 1rem;
+        display: none;
     }
 
     .logo img {
-        width: 8%;
+        width: 3em;
 
         margin-left: 0;
     }
+
+    .contProfile {
+        top: .85em;
+        right: 3em;
+    }
+
+    .groupLinks {
+        top: .85em;
+        left: -1.5em;
+    }
+
+    .links {
+        font-size: 1.2rem;
+        color: white;
+    }
+
+    .links img {
+        width: 1.5em;
+        height: auto;
+    }
+
+    .links:hover {
+        color: rgb(161, 157, 157);
+    }
 }
 
-@media screen and (max-width: 480px) {
-    .logo img {
-        width: 10%;
+@media screen and (max-width: 480) {
+    .contProfile {
+        top: .85em;
+        right: 3em;
+    }
+
+    .groupLinks {
+        top: .85em;
+        left: -1.5em;
+    }
+
+    .links {
+        font-size: 1rem;
+        color: white;
+    }
+
+    .links img {
+        width: 1em;
+        height: auto;
     }
 }

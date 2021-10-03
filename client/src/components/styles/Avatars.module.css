@@ -45,8 +45,34 @@
   background: transparent;
 }
 
-.h4 {
+.title {
     margin-top: 1em;
 
+    font-size: 1.5rem;
     color: white;
+}
+
+@media screen and (max-width: 1024px) {
+  .avatarsContainer {
+    min-height: 11em;
+    max-height: 11em;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .avatarsContainer {
+    min-height: 10em;
+    max-height: 10em;
+  }
+  
+  .title {
+    font-size: 1.3rem;
+  }
+
+}
+
+@media screen and (max-width: 480px) {
+  .title {
+    font-size: 1rem;
+  }
 }

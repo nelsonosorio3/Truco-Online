@@ -220,13 +220,16 @@
 }
 
 .danger {
+    position: relative;
+    margin: 0 auto 0 10%;
+
     color: rgb(247, 8, 8);
     font-weight: bold;
 }
 
 @media screen and (max-width: 1240px) {
   .form {
-      width: 45%;
+      width: 60%;
       height: 450px;
 
       margin-top: -45%;
@@ -258,7 +261,7 @@
 
 @media screen and (max-width: 1024px) {
   .form {
-      width: 45%;
+      width: 70%;
       height: 450px;
 
       margin-top: -45%;
@@ -290,7 +293,7 @@
 
 @media screen and (max-width: 768px) {
   .form {
-      width: 50%;
+      width: 80%;
       height: 450px;
 
       margin-top: -45%;
@@ -348,11 +351,23 @@
   .form h3 {
     margin: .5em 1em .5em 2em;
   }
+
+  .label {
+    font-size: 1rem;
+  }
+
+  .input {
+    font-size: 1rem;
+  }
+
+  .danger {
+    font-size: .8rem;
+  }
 }
 
 @media screen and (max-width: 480px) {
   .form {
-      width: 80%;
+      width: 90%;
       height: 450px;
 
       margin-top: -50%;

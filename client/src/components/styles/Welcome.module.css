@@ -1,132 +1,123 @@
-.mainDiv{
+.mainDiv {
+    width: 100%;
+    height: 100%;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column; 
+
     background-image: url('../../img/landing.webp');
-    background-size: 100% 100%;
+    background-size: cover;
     background-repeat: no-repeat;
-    padding-top: 57%;
 }
 
-.form{
-    margin-top: -40%;
-}
+.divButtons {
+    width: 16em;
 
-.divButtons{
     display: flex;
     flex-direction: column;
-    margin: 0px 40% 0px 40%;
+    justify-content: center;
+    align-items: center;
+
+    margin-top: 35%;
+    margin-bottom: 3em;
 }
 
-.btnLogIn{
+.btn {
+    width: 12.5em;
+    height: 3em;
+
     border: none;
     border-radius: 4px;
     text-shadow: 0px 0px 10px rgb(0 0 0 / 50%);
     overflow: hidden;
-    padding: 20px 50px 20px 50px;
-    margin-top: 200px;
-    font-size: 20px;
-    position: relative;
+    padding: 1rem 1.5rem 1rem 1.5rem;
+    font-size: 1.2rem;
     color: white;
     outline: none;
     cursor: pointer;
-    width: 100%;
     background: transparent;
     background-image: url('../../img/button1.webp');
     background-size: 100% 100%;
     background-repeat: no-repeat;
     text-decoration: none;
     font-family: 'Crayon' ;
-    font-size: 20px;
 }
 
-.btnLogIn:hover {
+.btn:hover {
     transition: all 1s cubic-bezier(0.19, 1, 0.22, 1);
     transform : scale(1.1);
 }
 
-.btnSignUp{
-    border: none;
-    border-radius: 4px;
-    text-decoration: none;
-    text-shadow: 0px 0px 10px rgb(0 0 0 / 50%);
-    overflow: hidden;
-    padding: 20px 50px 20px 50px;
-    /* margin-bottom: 20px; */
-    font-size: 20px;
-    position: relative;
-    color: white;
-    outline: none;
-    cursor: pointer;
-    width: 100%;
-    background: transparent;
-    background-image: url('../../img/button1.webp');
-    background-size: 100% 100%;
-    background-repeat: no-repeat;
-    text-decoration: none;
-    font-family: 'Crayon' ;
-    font-size: 20px;
-    /* -webkit-transition: background-position .7s,box-shadow .4s;
-    transition: background-position .7s,box-shadow .4s;
-    font-family: 'Oswald', sans-serif;
-    background: linear-gradient(to bottom, #36C176, rgb(147 225 183));
-    box-shadow: 0px 0px 0px 2px rgb(255 255 255 / 16%) inset, 0px 0px 10px 0px #e48a3c; */
-}
+.facebook {
+    width: 12em;
+    height: 3.5em;
 
-.btnSignUp:hover {
-    transition: all 1s cubic-bezier(0.19, 1, 0.22, 1);
-    transform : scale(1.1);
-}
-
-.btnGuest{
     border: none;
     border-radius: 4px;
     text-shadow: 0px 0px 10px rgb(0 0 0 / 50%);
     overflow: hidden;
-    padding: 20px 50px 20px 50px;
-    /* margin-bottom: 20px; */
-    font-size: 20px;
-    position: relative;
+    padding: 1rem 1.5rem 1rem 1.5rem;
+    font-size: 1.3rem;
     color: white;
     outline: none;
     cursor: pointer;
-    width: 100%;
-    background: transparent;
-    background-image: url('../../img/button1.webp');
-    background-size: 100% 100%;
-    background-repeat: no-repeat;
-    text-decoration: none;
-    font-family: 'Crayon' ;
-    font-size: 20px;
-    /* -webkit-transition: background-position .7s,box-shadow .4s;
-    transition: background-position .7s,box-shadow .4s;
-    font-family: 'Oswald', sans-serif;
-    background: linear-gradient(to bottom, #baea45, rgb(222 238 160));
-    box-shadow: 0px 0px 0px 2px rgb(255 255 255 / 16%) inset, 0px 0px 10px 0px #e48a3c; */
-}
-.btnGuest:hover {
-    transition: all 1s cubic-bezier(0.19, 1, 0.22, 1);
-    transform : scale(1.1);
-}
-
-.facebook{
-    border: none;
-    border-radius: 4px;
-    text-shadow: 0px 0px 10px rgb(0 0 0 / 50%);
-    overflow: hidden;
-    padding: 20px 50px 20px 50px;
-    font-size: 20px;
-    position: relative;
-    color: white;
-    outline: none;
-    cursor: pointer;
-    width: 100%;
     background: transparent;
     background-image: url('../../img/botonazul.png');
     background-size: 100% 100%;
     background-repeat: no-repeat;
     text-decoration: none;
     font-family: 'Crayon' ;
-    font-size: 20px;
 }
 .facebook:hover{
     transition: all 1s cubic-bezier(0.19, 1, 0.22, 1);
     transform : scale(1.1);
+}
+
+@media screen and (max-width: 1320px) {
+    .mainDiv {
+        height: 100vh;
+        background-position: center center;
+    }
+
+    .divButtons {
+        margin-top: 40%;
+    }
+}
+
+@media screen and (max-width: 1172px) {
+    .divButtons {
+        margin-top: 45%;
+    }
+}
+
+@media screen and (max-width: 1024px) {
+    .divButtons {
+        margin-top: 50%;
+    }
+}
+
+@media screen and (max-width: 896px) {
+    .divButtons {
+        margin-bottom: -2em;
+    }
+}
+
+@media screen and (max-width: 768px) {
+    .divButtons {
+        margin-bottom: -4em;
+    }
+}
+
+@media screen and (max-width: 600px) {
+    .divButtons {
+        margin-bottom: -6em;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .divButtons {
+        margin-bottom: -6em;
+    }
 }
