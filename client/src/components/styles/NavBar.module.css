@@ -120,6 +120,11 @@
 }
 
 @media screen and (max-width: 1024px) {
+    .contProfile {
+        right: .8em;
+    }
+}
+@media screen and (max-width: 1024px) {
     .nav {
         height: 3.5em;
     }

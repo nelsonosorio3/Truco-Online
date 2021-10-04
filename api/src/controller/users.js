@@ -156,7 +156,7 @@ module.exports = {
 
     console.log("ingreso aca 1")
 
-    var { username, email, password } = req.body;
+    var { username, email, password, image } = req.body;
 
     const userData = await User.findAll({
       where: {
@@ -175,6 +175,7 @@ module.exports = {
         username,
         email,
         password,
+        image,
         gamesPlayed: 0,
         gamesWon: 0,
         gamesLost: 0
