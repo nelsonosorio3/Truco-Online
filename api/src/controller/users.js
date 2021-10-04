@@ -6,8 +6,12 @@ module.exports = {
 
   allUsers: async (req, res) => {
     try {
-      const users = await User.findAll();
-      console.log(users)
+      const users = await User.findAll({
+        include: {
+          model: User,
+          as: "reportedUser",
+        }
+      });
       return res.json(users)
     } catch (error) {
       console.log(error)
