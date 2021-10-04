@@ -167,6 +167,43 @@ function noQuieroEnvido(playerOne, playerTwo, isPlayerOne, score, io){
 
     }
 }
+async function endGame(playerOne, playerTwo, common, roomId, io){
+    if(playerOne.score >= common.scoreToWin || playerTwo.score >= common.scoreToWin){
+        common?.gameId && await axios.put(`http://localhost:3001/api/games/${common.gameId}/${playerOne.score}/${playerTwo.score}`);
+        if(playerOne.score >= common.scoreToWin){
+            common?.gameId && await axios.put(`http://localhost:3001/api/games/losser/${common.gameId}/${playerOne.score}/${playerTwo.score}`,{},{
+                headers: {
+                    "x-access-token": playerTwo.token || 1,
+                }})
+            common?.gameId && await axios.put(`http://localhost:3001/api/games/winner/${common.gameId}/${playerOne.score}/${playerTwo.score}`,{},{
+            headers: {
+                "x-access-token": playerOne.token || 1,
+            }})
+            io.to(playerOne.id).emit("gameEnds", ({data: playerOne, winner: playerOne.name}));
+            io.to(playerTwo.id).emit("gameEnds", ({data: playerOne, winner: playerOne.name}));
+        }
+        else if(playerTwo.score >= common.scoreToWin){
+            common?.gameId && await axios.put(`http://localhost:3001/api/games/losser/${common.gameId}/${playerOne.score}/${playerTwo.score}`,{},{
+                headers: {
+                    "x-access-token": playerOne.token || 1,
+                }})
+            common?.gameId && await axios.put(`http://localhost:3001/api/games/winner/${common.gameId}/${playerOne.score}/${playerTwo.score}`,{},{
+                headers: {
+                    "x-access-token": playerTwo.token || 1,
+                }})
+            io.to(playerOne.id).emit("gameEnds", ({data: playerOne, winner: playerTwo.name}));
+            io.to(playerTwo.id).emit("gameEnds", ({data: playerOne, winner: playerTwo.name}));
+        }
+        socket.leave(roomId);
+        const clients = io.sockets.adapter.rooms.get(roomId);
+        for(const clientId of clients) {
+            const clientSocket = io.sockets.sockets.get(clientId);
+            clientSocket.leave(roomId)
+        };
+        delete table.games[roomId];
+        return;
+    }
+}
 // objeto con todas las propiedasdes comunes de la partida
 // const table = {
 //     //estas son las propiedades que son comunes a todos los juegos
@@ -887,7 +924,7 @@ exports = module.exports = function(io){
         isPlayerOne? io.to(playerTwo.id).emit("bet", table.betsList[betPick], true, true) : io.to(playerOne.id).emit("bet", table.betsList[betPick], true, true);
         io.in(roomId).emit("messages", { msg: `${isPlayerOne? playerOne.name : playerTwo.name}: ${betPick.toUpperCase()}!`});
         }
-
+        endGame(playerOne, playerTwo, common, roomId, io);
         common?.gameId && axios.put(`http://localhost:3001/api/games/${common.gameId}/${playerOne.score}/${playerTwo.score}`);
 
         
@@ -993,23 +1030,9 @@ exports = module.exports = function(io){
                     io.in(roomId).emit("messages", {msg: `GANADOR MANO ${playerTwo.name}!`});
                 }
             }
-            
             //revisar si algun jugador ya gano antes de iniciar nueva mano
-            if(playerOne.score >= common.scoreToWin || playerTwo.score >= common.scoreToWin){
-                common?.gameId && axios.put(`http://localhost:3001/api/games/${common.gameId}/${playerOne.score}/${playerTwo.score}`);
-                if(playerOne.score >= common.scoreToWin){
-                    io.to(playerOne.id).emit("gameEnds", ({data: playerOne, winner: playerOne.name}));
-                    io.to(playerTwo.id).emit("gameEnds", ({data: playerOne, winner: playerOne.name}));
-                }
-                else if(playerTwo.score >= common.scoreToWin){
-                    io.to(playerOne.id).emit("gameEnds", ({data: playerOne, winner: playerTwo.name}));
-                    io.to(playerTwo.id).emit("gameEnds", ({data: playerOne, winner: playerTwo.name}));
-                }
-                console.log(table.games);
-                delete table.games[roomId];
-                console.log(table.games);
-                return;
-            }
+            endGame(playerOne, playerTwo, common, roomId, io);
+            
             if(winner){
                 //reiniciar estados de playerOne, Two y common para empezar siguiente ronda
                 table.games[roomId].playerOne = {...table.games[roomId].playerOne, turnNumber: 1,

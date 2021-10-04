@@ -26,7 +26,7 @@ exports = module.exports = function(io){
       
     
         //evento por si alguien crea una sala o entra a una
-        socket.on('joinRoom', async function (roomId, name) {
+        socket.on('joinRoom', async function (roomId, name, token) {
             console.log(socket.handshake.auth.user)
             const clients = io.sockets?.adapter.rooms.get(roomId) //set de clientes en room
             if(clients?.size < 2 || clients === undefined){ //revisar si la sala esta llena, para evitar que se unan mas, modificar el 2 con variable par ampliar luego a mas jugadores
@@ -49,10 +49,11 @@ exports = module.exports = function(io){
                 bet: false,
                 roundResults: [],
                 starts: true,
+                token: token,
                 };
                 let matchNumber = await axios.post(`http://localhost:3001/api/games`,{},{
                 headers: {
-                    "x-access-token": socket.handshake.auth.token || 1,
+                    "x-access-token": token || 1,
                 }});
                 table.games[roomId].common ={
                     envidoList: [],
@@ -86,10 +87,11 @@ exports = module.exports = function(io){
                     bet: false,
                     roundResults: [],
                     starts: false,
+                    token: token,
                     }
-                axios.patch(`http://localhost:3001/api/games/${table.games[roomId].common.gameId}`,{},{
+                await axios.patch(`http://localhost:3001/api/games/${table.games[roomId].common.gameId}`,{},{
                     headers: {
-                        "x-access-token": socket.handshake.auth.token || 1,
+                        "x-access-token": token || 1,
                     }});
                 io.to(roomId).emit('messages', { msg: `Se ha unido ${name || "invitado"}, empieza la partida!` });
             }

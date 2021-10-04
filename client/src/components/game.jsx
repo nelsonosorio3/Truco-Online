@@ -60,6 +60,7 @@ export default function Game({
         bet: false, // llevar registro de si aposto
         roundResults: [], //deberia contener el resultado de la mano por ejemplo ["tie", "win", "loss"]
         starts: false, // referencia para cambiar turnos al finalizar ronda
+        token: localStorage.token,
       });
     const [newRound, setNewRound] = useState(false);
     const [pointBox, setPointsBox] = useState(false);
