@@ -14,7 +14,7 @@ import PrivateRoute from './components/PrivateRoute';
 import AdminPanel from './components/AdminPanel';
 import Tournaments from './components/tournaments/Tournaments';
 import EditProfile from './components/EditProfile';
-import Tutorial from './components/How to play/Tutorial';
+import Tutorial from './components/tutorial/Tutorial';
 
 function App() {
   return (
