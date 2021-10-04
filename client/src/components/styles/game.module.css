@@ -8,6 +8,21 @@
     background-size: 100% 100%;
     background-repeat: no-repeat;  
 }
+#shuffle2{
+    position: absolute;
+    left:30%;
+    bottom: 0%;
+    z-Index:999;
+    width: 50%;
+}
+#shuffle1{
+    position: absolute;
+    left:30%;
+    top: 0%;
+    z-Index:999;
+    width: 50%;
+    transform: rotateX(180deg);
+}
 #isYourTurn{
     z-index: 9999;
     position: absolute;

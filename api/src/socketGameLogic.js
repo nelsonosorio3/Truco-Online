@@ -380,7 +380,7 @@ exports = module.exports = function(io){
         if(betPick === "ir al mazo") {
             setNewRound(playerOne, playerTwo, common, isPlayerOne, roomId, common.trucoBet, io);
             //emitir como deberia cambiar el jugador de cada cliente
-            io.to(playerOne.id).emit("newRoundStarts", table.games[roomId].playerOne);
+            io.to(playerOne.id).emit("newRoundStarts", table.games[roomId]?.playerOne);
             io.to(playerTwo.id).emit("newRoundStarts", table.games[roomId].playerTwo);
             io.in(roomId).emit("messages", { msg: `${isPlayerOne? playerOne.name : playerTwo.name}: IR AL MAZO!`})
         }

@@ -85,7 +85,7 @@ exports = module.exports = function(io){
                     tablePlayer: [],
                     bet: false,
                     roundResults: [],
-                    starts: true,
+                    starts: false,
                     }
                 axios.patch(`http://localhost:3001/api/games/${table.games[roomId].common.gameId}`,{},{
                     headers: {
