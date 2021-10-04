@@ -22,11 +22,11 @@
 
 .div_CreateRoom_RoomsList{
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     justify-self: center;
     justify-content: center;
     justify-items: center;
-    align-items: flex-start;
+    align-items: center;
 
   
 }

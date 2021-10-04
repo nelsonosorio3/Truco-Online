@@ -1,3 +1,5 @@
+const axios = require("axios");
+
 function getCard(deck) {
     return deck.pop();
 }
@@ -113,5 +115,5 @@ module.exports = {
             hand = hand.sort((a, b)=> (a.number < b.number) ? 1 : -1);
             return (hand[0].number + hand[1].number + 20);
         }
-    }
+    },
 }
