@@ -30,7 +30,7 @@ export default function FriendInfo({ isOpen, close, name, date, email, id }) {
     const inviteToGame = () => {
         let idGenerator = Math.floor(Math.random()*100000);
         socket.emit("invite to game", idGenerator, id, localStorage.user);
-        socket.emit('joinRoom', (idGenerator));
+        socket.emit('joinRoom', (idGenerator), localStorage.user);
         dispatch(setIsInRoom({isInRoom: true, roomId: idGenerator}));
         history.push("/rooms");
     };

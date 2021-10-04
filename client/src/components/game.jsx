@@ -8,7 +8,20 @@ import { setIsInRoom } from '../Redux/actions-types/roomsActions';
 import axios from 'axios';
 import profileActions from '../Redux/actions-types/profileActions';
 
+const correctBetName = (betPick)=>{
+  let properBet = "";
+  if(betPick.includes("no quiero")) properBet = "No Quiero";
+  else if(betPick.includes("quiero")) properBet = "Quiero";
+  else if(betPick.at(-1) === "1" || betPick.at(-1) === "2") properBet = "Envido";
+  else if(betPick === "realEnvido") properBet = "Real Envido";
+  else if(betPick === "faltaEnvido") properBet = "Falta Envido";
+  else if(betPick === "truco") properBet = "Truco";
+  else if(betPick === "retruco") properBet = "Retruco";
+  else if(betPick === "valeCuatro") properBet = "Vale Cuatro";
+  else if(betPick === "ir al mazo") properBet = "Ir al Mazo";
 
+  return properBet || betPick;
+}
 export default function Game({
   tournamentMatchId,
 
@@ -47,6 +60,7 @@ export default function Game({
         bet: false, // llevar registro de si aposto
         roundResults: [], //deberia contener el resultado de la mano por ejemplo ["tie", "win", "loss"]
         starts: false, // referencia para cambiar turnos al finalizar ronda
+        token: localStorage.token,
       });
     const [newRound, setNewRound] = useState(false);
     const [pointBox, setPointsBox] = useState(false);
@@ -61,7 +75,7 @@ export default function Game({
       player?.id && socket.emit("addFriend", localStorage.id, roomId, player.id, player.name);
     }
     const surrender = ()=>{
-      socket.emit("surrender", roomId, player.id);
+      socket.emit("surrender", roomId, player.id, localStorage.token);
       dispatch(setIsInRoom({isInRoom: false, roomId: null}));
     }
     const tutorial = ()=>{
@@ -163,7 +177,7 @@ export default function Game({
       },);
       socket.on("surrender",()=>{
         alert("El otro jugador se rindio, TU GANAS!");
-        socket.emit("surrender2", roomId);
+        socket.emit("surrender2", roomId, localStorage.token);
         dispatch(setIsInRoom({isInRoom: false, roomId: null}));
       });
       socket.on("addFriend", (idSender)=>{
@@ -244,10 +258,10 @@ export default function Game({
               </div>
               <Chat name={player.name} roomId={roomId}/>
                 <div id={"betContainer"}>
-                  {player.betOptions?.map(betPick=><button onClick={bet} name={betPick} key={betPick} className={player.isTurn? stylesGame.btnBet : stylesGame.btnBetNoTurn}>{betPick}</button>)}
+                  {player.betOptions?.map(betPick=><button onClick={bet} name={betPick} key={betPick} className={player.isTurn? stylesGame.btnBet : stylesGame.btnBetNoTurn}>{correctBetName(betPick)}</button>)}
                 </div>
             </div>
-            <div><img src={`/cards/shuffle.gif`} style={{width: "50%", heigth: "30%", display: newRound? "flex" : "none", position: "absolute", left:"30%", bottom: "0%",zIndex:"999"}}/></div>
+            <div><img src={`/cards/shuffle.gif`} style={{display: newRound? "flex" : "none"}} id={player.starts? stylesGame.shuffle1 : stylesGame.shuffle2}/></div>
             <div id={stylesGame.isYourTurn} style={{display: isYourTurn? "flex" : "none"}}><h1>ES TU TURNO</h1></div>
           </div> 
     );

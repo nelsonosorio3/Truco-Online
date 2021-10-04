@@ -25,7 +25,7 @@ export default function GameRequest({tournamentMatchId}) {
   });
 
   const onAccept = ()=>{
-    socket.emit('joinRoom', (data.roomId));
+    socket.emit('joinRoom', (data.roomId), localStorage.user);
     dispatch(setIsInRoom({isInRoom: true, roomId: data.roomId}))
     history.push("/rooms")
     setData({nameFriend: "", show: false, roomId: null});
@@ -34,6 +34,7 @@ export default function GameRequest({tournamentMatchId}) {
   };
 
   const onReject = ()=>{
+    socket.emit('message', ({name: localStorage.user, msg: "Tu amigo rechazo la invitacion", roomId: data.roomId}), localStorage.isAuth)
     setData({nameFriend: "", show: false, roomId: null,});
   };
 

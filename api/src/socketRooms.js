@@ -7,9 +7,19 @@ exports = module.exports = function(io){
         socket.on('connected', function (name) {
             // socket.broadcast.emit('messages', { name: name, msg: name + " has joined." });
         });
+
+        socket.on('joinToGlobalChat', function () {
+            console.log('Conectado al chat global')
+            socket.join(1);
+            const clients = io.sockets?.adapter.rooms.get(1)
+            console.log(clients)
+        })
         // socket.on("log", ()=> io.to(socket.id).emit("log"))
         socket.on('message', function (data, isAuth) {
-            if(isAuth) io.to(data.roomId).emit('messages', { msg: `${data.name}: ${data.msg}` });
+            if(isAuth) {
+                console.log('DATA:', data)
+                io.to(data.roomId).emit('messages', { msg: `${data.name}: ${data.msg}` });
+            }
             else io.to(socket.id).emit('messages', { msg: `No estas registrado no puedes enviar mensajes` });
             
         });
@@ -26,8 +36,9 @@ exports = module.exports = function(io){
       
     
         //evento por si alguien crea una sala o entra a una
-        socket.on('joinRoom', async function (roomId, name) {
-            console.log(socket.handshake.auth.user)
+        socket.on('joinRoom', async function (roomId, name, token) {
+            socket.leave(1);
+            console.log(socket.handshake.auth.user);
             const clients = io.sockets?.adapter.rooms.get(roomId) //set de clientes en room
             if(clients?.size < 2 || clients === undefined){ //revisar si la sala esta llena, para evitar que se unan mas, modificar el 2 con variable par ampliar luego a mas jugadores
             socket.join(parseInt(roomId));
@@ -49,10 +60,11 @@ exports = module.exports = function(io){
                 bet: false,
                 roundResults: [],
                 starts: true,
+                token: token,
                 };
                 let matchNumber = await axios.post(`https://trucohenry.com/api/games`,{},{
                 headers: {
-                    "x-access-token": socket.handshake.auth.token || 1,
+                    "x-access-token": token || 1,
                 }});
                 table.games[roomId].common ={
                     envidoList: [],
@@ -85,20 +97,26 @@ exports = module.exports = function(io){
                     tablePlayer: [],
                     bet: false,
                     roundResults: [],
-                    starts: true,
+                    starts: false,
+                    token: token,
                     }
-                axios.patch(`https://trucohenry.com/api/games/${table.games[roomId].common.gameId}`,{},{
+                await axios.patch(`https://trucohenry.com/api/games/${table.games[roomId].common.gameId}`,{},{
                     headers: {
-                        "x-access-token": socket.handshake.auth.token || 1,
+                        "x-access-token": token || 1,
                     }});
                 io.to(roomId).emit('messages', { msg: `Se ha unido ${name || "invitado"}, empieza la partida!` });
             }
-            if(activeRooms.indexOf(roomId) === -1) activeRooms = [...activeRooms, roomId] 
+            let findedRoom = activeRooms.findIndex(function (room) {
+                return room.id === roomId;
+            });
+
+            if(findedRoom === -1) activeRooms = [...activeRooms, {id: roomId, host: name}]
+            // if(activeRooms.indexOf(roomId) === -1) activeRooms = [...activeRooms, roomId] 
             else console.log(roomId, 'ya existe');
             console.log("active rooms: ", activeRooms)
             }
             if(clients?.size === 2) { //si la sala esta llena, empieza toda la preparacion de la partida
-                activeRooms =  activeRooms.filter(room=> room!== roomId)
+                activeRooms = activeRooms.filter(room => room.id!== roomId)
                 socket.emit("roomFull", false);
                 let iterator = clients.values();
                 const player1 = iterator.next().value;

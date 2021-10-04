@@ -1,7 +1,8 @@
 import React, { useState, useEffect }  from 'react';
-import { useSelector } from 'react-redux';
-
+import { useDispatch , useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
+
+import profileActions from '../Redux/actions-types/profileActions';
 
 import styles from './styles/NavBar.module.css'
 
@@ -10,10 +11,16 @@ import profileIcon from '../img/profileIcon.png';
 
 export default function NavBar() {
     
+    const { getProfile } = profileActions;
+
     const { userProfile } = useSelector(state => state.profileReducer);
+
+    const dispatch = useDispatch();
 
     const [toggleMenu, setToggleMenu] = useState(false);
     const [screenWidth, setScreenWidth] = useState(window.innerWidth);
+    
+    const showLogo = toggleMenu ? styles.showLogo : null;
 
     const [isAuth, setIsAuth] = useState(false); 
 
@@ -22,7 +29,10 @@ export default function NavBar() {
     useEffect(() => {
         const logged = window.localStorage.getItem("isAuth");
         if(logged) {
-          setIsAuth(logged);
+            setIsAuth(logged);
+            dispatch(getProfile({token: localStorage.token}));
+            console.log('img:', userProfile.image);
+            console.log('user:', userProfile.username);
         };
     }, []);
     
@@ -42,7 +52,7 @@ export default function NavBar() {
 
     return (
         <nav className={styles.nav}>
-            <div className={styles.logo}>
+            <div className={styles.logo + ' ' + showLogo}>
                 <Link to='/'>
                         <img src={logo} alt="TrucoHenry" />             
                 </Link>
@@ -52,12 +62,12 @@ export default function NavBar() {
                     <>
                         <div className={styles.groupLinks}> 
                             <Link to='/rooms' className={styles.links}>Salas</Link>
+                            <Link to='/tutorial' className={styles.links}>Tutorial</Link>
                             {
                                 isAuth ? 
                                 <>
                                     <Link to='/ranking' className={styles.links}>Ranking</Link>
                                     <Link to='/tournaments' className={styles.links}>Torneos</Link>
-                                    <Link to='/tutorial' className={styles.links}>Tutorial</Link>
                                 </>
                                 :
                                 null
@@ -65,15 +75,15 @@ export default function NavBar() {
                         </div>
                         <div className={styles.contProfile}>
                             {
-                                isAuth && screenWidth > 768 ? 
+                                isAuth && screenWidth > 1240 ? 
                                 <Link to='/profile' className={styles.links}>
-                                    <img src={userProfile.image ? userProfile.image : profileIcon} alt="profile picture" />
+                                    <img src={userProfile.image === 'false' ? profileIcon : userProfile.image} alt="profile picture" />
                                     {`Hola, ${userProfile.username}!`}
                                 </Link>
                                 :
                                 isAuth ?
                                 <Link to='/profile' className={styles.links}>
-                                    <img src={userProfile.image ? userProfile.image : profileIcon} alt="profile picture" />
+                                    <img src={userProfile.image === 'false' ? profileIcon : userProfile.image} alt="profile picture" />
                                 </Link>
                                 :
                                 null
