@@ -9,6 +9,7 @@ import Modal from "./Modal";
 import signUpActions from '../Redux/actions-types/signUpActions';
 
 import styles from './styles/SignUp.module.css';
+import profileIcon from '../img/profileIcon.png';
 
 const ALPHA = /^[a-zA-Z\s]+$/;
 const EMAIL = /^[^@]+@[^@]+\.[^@]+$/;
@@ -39,6 +40,7 @@ const initialState = {
     username: '',
     email: '',
     password: '',
+    image: profileIcon,
 };
 
 export default function SignUp() {
