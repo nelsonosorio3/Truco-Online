@@ -12,7 +12,7 @@ export default function JoinRoomForm (){
     const joinRoom = async (event) => {
       event.preventDefault();
       let idGenerator = Math.floor(Math.random()*100000)
-      socket.emit('joinRoom', (idGenerator), localStorage.user)
+      socket.emit('joinRoom', (idGenerator), localStorage.user, localStorage.token)
       socket.on("fullRoom", (bool)=>setIsInRoom(bool))
       dispatch(setIsInRoom({isInRoom: true, roomId: idGenerator}))
     }
