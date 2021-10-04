@@ -74,7 +74,7 @@ export default function Game({
       player?.id && socket.emit("addFriend", localStorage.id, roomId, player.id, player.name);
     }
     const surrender = ()=>{
-      socket.emit("surrender", roomId, player.id);
+      socket.emit("surrender", roomId, player.id, localStorage.token);
       dispatch(setIsInRoom({isInRoom: false, roomId: null}));
     }
     const tutorial = ()=>{
@@ -176,7 +176,7 @@ export default function Game({
       },);
       socket.on("surrender",()=>{
         alert("El otro jugador se rindio, TU GANAS!");
-        socket.emit("surrender2", roomId);
+        socket.emit("surrender2", roomId, localStorage.token);
         dispatch(setIsInRoom({isInRoom: false, roomId: null}));
       });
       socket.on("addFriend", (idSender)=>{
