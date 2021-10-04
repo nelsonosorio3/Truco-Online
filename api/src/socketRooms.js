@@ -37,6 +37,7 @@ exports = module.exports = function(io){
     
         //evento por si alguien crea una sala o entra a una
         socket.on('joinRoom', async function (roomId, name, token) {
+            socket.leave(1);
             console.log(socket.handshake.auth.user);
             const clients = io.sockets?.adapter.rooms.get(roomId) //set de clientes en room
             if(clients?.size < 2 || clients === undefined){ //revisar si la sala esta llena, para evitar que se unan mas, modificar el 2 con variable par ampliar luego a mas jugadores
