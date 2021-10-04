@@ -19,6 +19,8 @@ export default function NavBar() {
 
     const [toggleMenu, setToggleMenu] = useState(false);
     const [screenWidth, setScreenWidth] = useState(window.innerWidth);
+    
+    const showLogo = toggleMenu ? styles.showLogo : null;
 
     const [isAuth, setIsAuth] = useState(false); 
 
@@ -50,7 +52,7 @@ export default function NavBar() {
 
     return (
         <nav className={styles.nav}>
-            <div className={styles.logo}>
+            <div className={styles.logo + ' ' + showLogo}>
                 <Link to='/'>
                         <img src={logo} alt="TrucoHenry" />             
                 </Link>
@@ -60,12 +62,12 @@ export default function NavBar() {
                     <>
                         <div className={styles.groupLinks}> 
                             <Link to='/rooms' className={styles.links}>Salas</Link>
+                            <Link to='/tutorial' className={styles.links}>Tutorial</Link>
                             {
                                 isAuth ? 
                                 <>
                                     <Link to='/ranking' className={styles.links}>Ranking</Link>
                                     <Link to='/tournaments' className={styles.links}>Torneos</Link>
-                                    <Link to='/tutorial' className={styles.links}>Tutorial</Link>
                                 </>
                                 :
                                 null
