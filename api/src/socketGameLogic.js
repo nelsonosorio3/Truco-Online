@@ -1073,6 +1073,10 @@ exports = module.exports = function(io){
         }
     }); 
     socket.on("surrender", (roomId, playerId)=>{
+        axios.put(`http://localhost:3001/api/games/losser/${table.games[roomId].common.gameId}/${table.games[roomId].playerOne.score}/${table.games[roomId].playerTwo.score}`,{},{
+                headers: {
+                    "x-access-token": socket.handshake.auth.token || 1,
+                }});
         socket.leave(roomId);
         if(table.games[roomId]?.playerOne.id === playerId){
             io.to(table.games[roomId]?.playerTwo?.id).emit("surrender");
@@ -1082,6 +1086,10 @@ exports = module.exports = function(io){
         }
     });
     socket.on("surrender2", roomId=>{
+        axios.put(`http://localhost:3001/api/games/winner/${table.games[roomId].common.gameId}/${table.games[roomId].playerOne.score}/${table.games[roomId].playerTwo.score}`,{},{
+                headers: {
+                    "x-access-token": socket.handshake.auth.token || 1,
+                }});
         delete table.games[roomId];
         socket.leave(roomId);
     });

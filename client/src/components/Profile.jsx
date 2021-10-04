@@ -111,7 +111,7 @@ export default function Profile(props) {
         removeFriend(flag);
         closeModal();
     };
-
+    console.log(userHistory)
     return (
         <>
             <NavBar />
