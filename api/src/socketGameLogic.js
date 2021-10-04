@@ -1107,7 +1107,7 @@ exports = module.exports = function(io){
             }
         }
         else{
-            axios.put(`http://localhost:3001/api/games/winner/${table.games[roomId].common.gameId}/99/99`,{},{
+            table.games[roomId]?.common && axios.put(`http://localhost:3001/api/games/winner/${table.games[roomId].common.gameId}/99/99`,{},{
                     headers: {
                         "x-access-token": token || 1,
                     }});
