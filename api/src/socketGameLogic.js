@@ -1093,17 +1093,25 @@ exports = module.exports = function(io){
         }
     }); 
     socket.on("surrender", (roomId, playerId, token)=>{
-        axios.put(`http://localhost:3001/api/games/losser/${table.games[roomId].common.gameId}/${table.games[roomId].playerOne.score}/${table.games[roomId].playerTwo.score}`,{},{
+        if(table.games[roomId].playerTwo && table.games[roomId].common){
+            axios.put(`http://localhost:3001/api/games/losser/${table.games[roomId].common.gameId}/${table.games[roomId].playerOne.score}/${table.games[roomId].playerTwo.score}`,{},{
                 headers: {
                     "x-access-token": token || 1,
                 }});
-        socket.leave(roomId);
-        if(table.games[roomId]?.playerOne.id === playerId){
-            io.to(table.games[roomId]?.playerTwo?.id).emit("surrender");
+            socket.leave(roomId);
+            if(table.games[roomId]?.playerOne.id === playerId){
+                io.to(table.games[roomId]?.playerTwo?.id).emit("surrender");
+            }
+            else{
+                io.to(table.games[roomId]?.playerOne.id).emit("surrender");
+            }
         }
         else{
-            io.to(table.games[roomId]?.playerOne.id).emit("surrender");
-        }
+            axios.put(`http://localhost:3001/api/games/winner/${table.games[roomId].common.gameId}/99/99`,{},{
+                    headers: {
+                        "x-access-token": token || 1,
+                    }});
+            }
     });
     socket.on("surrender2", (roomId, token)=>{
         axios.put(`http://localhost:3001/api/games/winner/${table.games[roomId].common.gameId}/${table.games[roomId].playerOne.score}/${table.games[roomId].playerTwo.score}`,{},{
