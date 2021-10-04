@@ -169,13 +169,13 @@ function noQuieroEnvido(playerOne, playerTwo, isPlayerOne, score, io){
 }
 async function endGame(playerOne, playerTwo, common, roomId, io){
     if(playerOne.score >= common.scoreToWin || playerTwo.score >= common.scoreToWin){
-        common?.gameId && await axios.put(`http://localhost:3001/api/games/${common.gameId}/${playerOne.score}/${playerTwo.score}`);
+        await axios.put(`http://localhost:3001/api/games/${common.gameId}/${playerOne.score}/${playerTwo.score}`);
         if(playerOne.score >= common.scoreToWin){
-            common?.gameId && await axios.put(`http://localhost:3001/api/games/losser/${common.gameId}/${playerOne.score}/${playerTwo.score}`,{},{
+            await axios.put(`http://localhost:3001/api/games/losser/${common.gameId}/${playerOne.score}/${playerTwo.score}`,{},{
                 headers: {
                     "x-access-token": playerTwo.token || 1,
                 }})
-            common?.gameId && await axios.put(`http://localhost:3001/api/games/winner/${common.gameId}/${playerOne.score}/${playerTwo.score}`,{},{
+            await axios.put(`http://localhost:3001/api/games/winner/${common.gameId}/${playerOne.score}/${playerTwo.score}`,{},{
             headers: {
                 "x-access-token": playerOne.token || 1,
             }})
@@ -183,18 +183,18 @@ async function endGame(playerOne, playerTwo, common, roomId, io){
             io.to(playerTwo.id).emit("gameEnds", ({data: playerOne, winner: playerOne.name}));
         }
         else if(playerTwo.score >= common.scoreToWin){
-            common?.gameId && await axios.put(`http://localhost:3001/api/games/losser/${common.gameId}/${playerOne.score}/${playerTwo.score}`,{},{
+            await axios.put(`http://localhost:3001/api/games/losser/${common.gameId}/${playerOne.score}/${playerTwo.score}`,{},{
                 headers: {
                     "x-access-token": playerOne.token || 1,
                 }})
-            common?.gameId && await axios.put(`http://localhost:3001/api/games/winner/${common.gameId}/${playerOne.score}/${playerTwo.score}`,{},{
+            await axios.put(`http://localhost:3001/api/games/winner/${common.gameId}/${playerOne.score}/${playerTwo.score}`,{},{
                 headers: {
                     "x-access-token": playerTwo.token || 1,
                 }})
             io.to(playerOne.id).emit("gameEnds", ({data: playerOne, winner: playerTwo.name}));
             io.to(playerTwo.id).emit("gameEnds", ({data: playerOne, winner: playerTwo.name}));
         }
-        socket.leave(roomId);
+        // socket.leave(roomId); 
         const clients = io.sockets.adapter.rooms.get(roomId);
         for(const clientId of clients) {
             const clientSocket = io.sockets.sockets.get(clientId);
@@ -925,7 +925,7 @@ exports = module.exports = function(io){
         io.in(roomId).emit("messages", { msg: `${isPlayerOne? playerOne.name : playerTwo.name}: ${betPick.toUpperCase()}!`});
         }
         endGame(playerOne, playerTwo, common, roomId, io);
-        common?.gameId && axios.put(`http://localhost:3001/api/games/${common.gameId}/${playerOne.score}/${playerTwo.score}`);
+        axios.put(`http://localhost:3001/api/games/${common.gameId}/${playerOne.score}/${playerTwo.score}`);
 
         
     });
@@ -1078,7 +1078,7 @@ exports = module.exports = function(io){
                 io.to(table.games[roomId].playerOne.id).emit("newRoundStarts", table.games[roomId].playerOne);
                 io.to(table.games[roomId].playerTwo.id).emit("newRoundStarts", table.games[roomId].playerTwo);
                 }
-                common?.gameId && axios.put(`http://localhost:3001/api/games/${common.gameId}/${playerOne.score}/${playerTwo.score}`);
+                axios.put(`http://localhost:3001/api/games/${common.gameId}/${playerOne.score}/${playerTwo.score}`);
         }
         
     });
