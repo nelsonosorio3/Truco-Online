@@ -8,11 +8,19 @@ export default function Chat ({name, roomId, typeofChat}) {
     const [msgs, setMsgs] = useState([]);
 
     useEffect(() => {
+        if(roomId === 1) {
+            console.log('Conectándose al chat global...')
+            socket.emit('joinToGlobalChat');
+        }
+    }, [roomId])
+
+    useEffect(() => {
         socket.emit('connected', name);
     }, [name]);
 
     useEffect(() => {
         socket.on('messages', (message) => {
+            console.log('ENTRAMOS A MENSAJES')
             console.log(message);
             setMsgs([...msgs, message]);
         })
@@ -45,6 +53,7 @@ export default function Chat ({name, roomId, typeofChat}) {
                     <>
                         <textarea placeholder={'Message...'} name="" id="" cols="95" rows="1" value={msg} onChange={event => setMsg(event.target.value)}></textarea>
                         <button className={styles.btn}>Send</button>
+                        {/* <input placeholder='Message...' type="text" id="" cols="95" rows="1" value={msg} onChange={event => setMsg(event.target.value)}></input> */}
                     </>
                     : 
                     <input type="text" id="" cols="31" rows="1" value={msg} onChange={event => setMsg(event.target.value)} className={styles.writeMessageGame}></input>

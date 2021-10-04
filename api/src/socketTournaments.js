@@ -138,7 +138,12 @@ exports = module.exports = function(io){
         }
       
         if(clients?.size === 2) { //si la sala esta llena, empieza toda la preparacion de la partida
-          console.log('TERCERO TEST:', table.games[data.matchId])
+          console.log('TEST:', table.games[data.matchId])
+
+          axios.patch(`http://localhost:3001/api/games/${table.games[data.matchId].common.gameId}`,{},{
+                headers: {
+                    "x-access-token": socket.handshake.auth.token,
+                }});
           if(data.matchNumber === 2) {
             io.to(data.matchId).emit("showGameTwo", (data.matchId));
           }

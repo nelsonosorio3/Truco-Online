@@ -27,6 +27,15 @@ module.exports = (sequelize) => {
         gamesLost: {
             type: DataTypes.INTEGER,
         },
+        tournamentsPlayed: {
+            type: DataTypes.INTEGER,
+        },
+        tournamentsWon: {
+            type: DataTypes.INTEGER,
+        },
+        tournamentsLost: {
+            type: DataTypes.INTEGER,
+        },
         isAdmin: {
             type: DataTypes.BOOLEAN,
             defaultValue: false
