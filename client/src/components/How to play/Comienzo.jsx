@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/alt-text */
 import React from 'react';
 import styles from './styles/Comienzo.module.css'
 import game from '../../img/game.webp'

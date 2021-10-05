@@ -1,4 +1,4 @@
-import React , { useEffect  } from 'react';
+import React  from 'react';
 import styles from './styles/Tutorial.module.css';
 import NavBar from '../NavBar'; 
 import { useState } from 'react';

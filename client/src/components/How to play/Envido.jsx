@@ -74,6 +74,7 @@ function Envido() {
             } </div>
              <div >
             {
+                 // eslint-disable-next-line jsx-a11y/alt-text
                  state.img &&  <img className={styles.envido} src={imgEnvido}  />   
             } </div>
 

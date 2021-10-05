@@ -7,13 +7,7 @@ exports = module.exports = function(io){
         socket.on('connected', function (name) {
             // socket.broadcast.emit('messages', { name: name, msg: name + " has joined." });
         });
-
-        socket.on('joinToGlobalChat', function () {
-            console.log('Conectado al chat global')
-            socket.join(1);
-            const clients = io.sockets?.adapter.rooms.get(1)
-            console.log(clients)
-        })
+        
         // socket.on("log", ()=> io.to(socket.id).emit("log"))
         socket.on('message', function (data, isAuth) {
             if(isAuth) {
@@ -38,7 +32,7 @@ exports = module.exports = function(io){
         //evento por si alguien crea una sala o entra a una
         socket.on('joinRoom', async function (roomId, name, token) {
             socket.leave(1);
-            console.log(socket.handshake.auth.user);
+            console.log('user:', socket.handshake.auth.user);
             const clients = io.sockets?.adapter.rooms.get(roomId) //set de clientes en room
             if(clients?.size < 2 || clients === undefined){ //revisar si la sala esta llena, para evitar que se unan mas, modificar el 2 con variable par ampliar luego a mas jugadores
             socket.join(parseInt(roomId));
@@ -121,7 +115,7 @@ exports = module.exports = function(io){
                 let iterator = clients.values();
                 const player1 = iterator.next().value;
                 const player2 = iterator.next().value;
-                console.log(clients.values())
+                console.log('clients', clients.values())
                 table.games[roomId].playerOne.id = player1;
                 table.games[roomId].playerTwo.id = player2;
                 table.games[roomId].playerOne.nameRival = table.games[roomId].playerTwo.name;

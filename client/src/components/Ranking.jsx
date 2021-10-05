@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React , { useEffect  } from 'react';
 import styles from './styles/Ranking.module.css';
 import getRanking from '../Redux/actions-types/getRanking';
@@ -5,9 +6,6 @@ import NavBar from './NavBar';
 import { useDispatch , useSelector } from 'react-redux';
 import Cup from './cup';
 import GameRequest from './GameRequest';
-
-
-
 
 export default function Ranking() {
     const state = useSelector(state => state.rankingReducer)

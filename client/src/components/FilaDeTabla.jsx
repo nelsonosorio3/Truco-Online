@@ -1,6 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import styles from "./styles/FilaDeTabla.module.css"
+
+// import styles from "./styles/FilaDeTabla.module.css"
 import profileIcon from '../img/profileIcon.png';
 
 export default function FilaDeTabla({ username, id, email, gamesPlayed, gamesWon, gamesLost, createdAt, reportedUser }) {

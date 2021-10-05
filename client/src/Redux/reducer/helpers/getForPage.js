@@ -9,6 +9,7 @@ export default function getForPage(arr = [], pageToShow, resultsPerPage) {
   if (arr.length > (pageToShow * resultsPerPage)) {
     var displayedInPage = arr.slice((pageToShow * resultsPerPage - (resultsPerPage)), (pageToShow * resultsPerPage));
   } else {
+    // eslint-disable-next-line no-redeclare
     var displayedInPage = arr.slice(pageToShow * resultsPerPage - (resultsPerPage));
   }
 

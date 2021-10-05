@@ -49,6 +49,7 @@ export default function FriendInfo({ isOpen, close, name, date, email, id }) {
 
     useEffect(() => {
         gamesInfo(id, localStorage.token);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [isOpen]);
 
     return (
