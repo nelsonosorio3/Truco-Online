@@ -30,7 +30,7 @@ function Cartas() {
             txt: 'Todos los Dos'},
         {   id: 3,
             img : '/cards/37.webp',
-            txt: 'El 1 de Oro y de Copa'},
+            txt: 'Uno Oro y Copa'},
     ];
 
     const cards3 = [
@@ -48,7 +48,7 @@ function Cartas() {
     const cards4 = [
         {   id: 1,
             img : '/cards/7.webp',
-            txt: 'Siete de Copa y de Basto'},
+            txt: 'Siete Copa y Basto'},
         {   id: 2,
             img : '/cards/6.webp',
             txt: 'Todos los Seis'},
@@ -84,7 +84,7 @@ function Cartas() {
            <div className={styles.cartas}>
             {
                 state ? state.map(c => 
-                    <div className={styles.cardCont}>
+                    <div className={styles.cardCont} key={c.txt}>
                         <img className={styles.card} src={process.env.PUBLIC_URL + c.img} alt={c.txt} ></img>
                         <p className={styles.epigrafe}>{c.txt}</p>
                     </div>
