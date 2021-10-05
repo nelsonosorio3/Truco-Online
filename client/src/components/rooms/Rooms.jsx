@@ -28,7 +28,7 @@ export default function Rooms() {
     <div className={styles.mainDiv}>
       
       {
-        isinRoom
+        (localStorage.isInRoom === "true")
         ?
         // <div className={styles.subMainDiv_inGame}>
         //   <div className={styles.game}>

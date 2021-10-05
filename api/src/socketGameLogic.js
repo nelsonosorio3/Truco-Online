@@ -534,13 +534,32 @@ function noQuieroFaltaEnvido(playerOne, playerTwo, isPlayerOne, common, noQuiero
 
 exports = module.exports = function(io){
     io.sockets.on('connection', function (socket) {
-
+    // reconnection
+    console.log(socket.id)
+    if(socket.handshake.auth.isInRoom){
+        let roomId = socket.handshake.auth.roomId;
+        console.log(roomId)
+        if(table.games[roomId]?.playerOne.token === socket.handshake.auth.token){
+            table.games[roomId].playerOne.id = socket.id;
+            socket.join(roomId)
+            io.to(table.games[roomId]?.playerOne?.id).emit("refresh", table.games[roomId]?.playerOne);
+            io.to(table.games[roomId]?.playerTwo?.id).emit("refresh", table.games[roomId]?.playerTwo);
+        }
+        else if(table.games[roomId]?.playerTwo.token === socket.handshake.auth.token){
+            table.games[roomId].playerTwo.id = socket.id;
+            socket.join(roomId)
+            io.to(table.games[roomId]?.playerOne?.id).emit("refresh", table.games[roomId]?.playerOne);
+            io.to(table.games[roomId]?.playerTwo?.id).emit("refresh", table.games[roomId]?.playerTwo);
+        }
+        console.log(table.games[roomId])
+    }
     //GAME EVENTS
 
     socket.on("bet", (betPick, roomId, playerId) => {
-        const playerOne = table.games[roomId].playerOne;
-        const playerTwo = table.games[roomId].playerTwo;
-        const common = table.games[roomId].common;
+        console.log(roomId)
+        const playerOne = table.games[roomId]?.playerOne;
+        const playerTwo = table.games[roomId]?.playerTwo;
+        const common = table.games[roomId]?.common;
         const isPlayerOne = playerOne.id === playerId;
         playerOne.bet = true;
         playerTwo.bet = true;
@@ -1059,7 +1078,7 @@ exports = module.exports = function(io){
         }
     }); 
     socket.on("surrender", (roomId, playerId, token)=>{
-        if(table.games[roomId].playerTwo && table.games[roomId].common){
+        if(table.games[roomId]?.playerTwo && table.games[roomId].common){
             axios.put(`http://localhost:3001/api/games/losser/${table.games[roomId].common.gameId}/${table.games[roomId].playerOne.score}/${table.games[roomId].playerTwo.score}`,{},{
                 headers: {
                     "x-access-token": token || 1,

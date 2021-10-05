@@ -2,12 +2,14 @@ const axios = require("axios");
 var activeRooms = []
 const {table, buildDeck, shuffleDeck, getHands} = require("./socketGameLogicConst")
 
+let games = {};
 exports = module.exports = function(io){
     io.sockets.on('connection', function (socket) {
         socket.on('connected', function (name) {
             // socket.broadcast.emit('messages', { name: name, msg: name + " has joined." });
         });
-        
+        let algo = socket.handshake.auth.isInRoom
+        console.log(algo)
         // socket.on("log", ()=> io.to(socket.id).emit("log"))
         socket.on('message', function (data, isAuth) {
             if(isAuth) {
