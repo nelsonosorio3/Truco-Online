@@ -1,3 +1,5 @@
+/* eslint-disable jsx-a11y/img-redundant-alt */
+/* eslint-disable react-hooks/exhaustive-deps */
 import React from 'react';
 import { useEffect, useState } from 'react';
 import { useDispatch , useSelector } from 'react-redux';

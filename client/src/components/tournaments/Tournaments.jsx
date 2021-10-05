@@ -1,8 +1,7 @@
-import React, {useEffect, useState} from 'react';
+import React from 'react';
 import {useSelector} from 'react-redux'
 
 import styles from './styles/Tournaments.module.css'
-import socket from '../socket';
 import NavBar from '../NavBar';
 import TournamentsForm from './TournamentsForm';
 import TournamentsList from './TournamentsList';

@@ -1,3 +1,4 @@
+/* eslint-disable import/no-anonymous-default-export */
 import axios from 'axios';
 import { LOG_IN, LOG_OUT , LOG_IN_FACEBOOK} from '../actions/index';
 

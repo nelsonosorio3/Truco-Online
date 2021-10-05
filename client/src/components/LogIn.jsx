@@ -80,6 +80,7 @@ export default function LogIn() {
         history.push('/rooms');
       }, 3000);
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isAuth]);
 
   return (

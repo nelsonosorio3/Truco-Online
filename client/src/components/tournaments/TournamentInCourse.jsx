@@ -1,10 +1,10 @@
 import React, {useEffect, useState} from 'react';
 import {useSelector} from 'react-redux'
 
-import styles from './styles/Tournaments.module.css'
+// import styles from './styles/Tournaments.module.css'
 import socket from '../socket';
 import TournamentGames from './TournamentGames';
-import Game from '../game';
+
 
 
 export default function TournamentInCourse(){

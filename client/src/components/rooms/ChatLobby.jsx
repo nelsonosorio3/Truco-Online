@@ -1,24 +1,24 @@
+/* eslint-disable no-unused-vars */
 import React, {useState, useEffect, useRef} from 'react';
 import socket from '../socket';
 import styles from './styles/Chat.module.css'
 
-
-export default function Chat ({name, roomId, typeofChat}) {
+export default function ChatLobby ({name, roomId, typeofChat}) {
     const [msg, setMsg] = useState('');
     const [msgs, setMsgs] = useState([]);
 
     useEffect(() => {
-        socket.emit('connected', name);
-    }, [name]);
+        if(roomId === 'lobby') socket.emit('joinToGlobalChat', roomId);
+    }, [roomId])
 
     useEffect(() => {
-        socket.on('messages', (message) => {
+        socket.on('lobbyMessages', () => {
             console.log('ENTRAMOS A MENSAJES')
-            console.log(message);
-            setMsgs([...msgs, message]);
+            // console.log(message);
+            // setMsgs([...msgs, message]);
         })
 
-        return () => { socket.off("messages"); }
+        return () => {socket.off("lobyMessages")}
     }, [msgs])
 
     const divRef = useRef(null);
@@ -29,9 +29,7 @@ export default function Chat ({name, roomId, typeofChat}) {
 
     const submit = (event) => {
         event.preventDefault();
-        if(roomId === 'lobby') socket.emit('lobyMessage', ({name, msg, roomId}), localStorage.isAuth);
-        else socket.emit('message', ({name, msg, roomId}), localStorage.isAuth);
-
+        socket.emit('message', ({name, msg, roomId}), localStorage.isAuth);
         setMsg("");
     }
 
