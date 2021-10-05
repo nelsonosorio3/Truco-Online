@@ -33,14 +33,14 @@ export default function TournamentsList(){
 
     return(
         <div>
-            <div className={styles.TournamentsList}>
+            <div className={styles.tournamentsList}>
                 {
                     allTournaments[0]
                 ?
                 allTournaments[0].map(tournament => 
                     <div key={tournament}>
                         <form onSubmit={joinTournament}>
-                            <button type='submit' value={tournament} className={styles.roomBtn} >{tournament}</button>
+                            <button type='submit' value={tournament} className={styles.tournamentBtn} >{tournament}</button>
                         </form>
                     </div>)
                 :
