@@ -40,6 +40,9 @@ export default function GameRequest({tournamentMatchId}) {
     socket.on("invite to game", (roomId, idReceiver, nameSender)=>{
       if(idReceiver == localStorage.id) setData({nameFriend: nameSender, show: true, roomId})//doble igual para string a numero comparacion no lo cambien
     })
+    return ()=>{
+      socket.off("invite to game");
+    }
   });
 
 
