@@ -8,18 +8,16 @@ export default function ChatLobby ({name, roomId, typeofChat}) {
     const [msgs, setMsgs] = useState([]);
 
     useEffect(() => {
-        if(roomId === 'lobby') socket.emit('joinToGlobalChat', roomId);
-    }, [roomId])
+        socket.emit('joinToGlobalChat', "lobby");
+    }, [])
 
     useEffect(() => {
-        socket.on('lobbyMessages', () => {
-            console.log('ENTRAMOS A MENSAJES')
-            // console.log(message);
-            // setMsgs([...msgs, message]);
+        socket.on('lobbyMessages', (data) => {
+            setMsgs([...msgs, `${data.name}: ${data.msg}`]);
         })
 
-        return () => {socket.off("lobyMessages")}
-    }, [msgs])
+        return () => {socket.off("lobbyMessages")}
+    })
 
     const divRef = useRef(null);
 
@@ -29,14 +27,14 @@ export default function ChatLobby ({name, roomId, typeofChat}) {
 
     const submit = (event) => {
         event.preventDefault();
-        socket.emit('message', ({name, msg, roomId}), localStorage.isAuth);
+        socket.emit('lobbyMessage', ({name, msg, roomId}), localStorage.isAuth);
         setMsg("");
     }
 
     return(
         <div>
             <div className={typeofChat==='chatLobby' ? styles.chatLobby : styles.chatGame}>
-                {msgs.map((element, i) => ( <div key={i}><div>{element.name}</div><div>{element.msg}</div></div> ))}
+                {msgs.map((element, i) => ( <div key={i}><div>{element}</div><div>{element.msg}</div></div> ))}
                 <div ref={divRef}></div>
             </div>
             <form onSubmit={submit} className={styles.writeMessage}>
@@ -44,8 +42,8 @@ export default function ChatLobby ({name, roomId, typeofChat}) {
                     typeofChat==='chatLobby'
                     ? 
                     <>
-                        <textarea placeholder={'Message...'} name="" id="" cols="95" rows="1" value={msg} onChange={event => setMsg(event.target.value)}></textarea>
-                        <button className={styles.btn}>Send</button>
+                        <textarea placeholder={'Escribe tu mensaje...'} name="" id="" cols="95" rows="1" value={msg} onChange={event => setMsg(event.target.value)}></textarea>
+                        <button className={styles.btn}>Enviar</button>
                         {/* <input placeholder='Message...' type="text" id="" cols="95" rows="1" value={msg} onChange={event => setMsg(event.target.value)}></input> */}
                     </>
                     : 
