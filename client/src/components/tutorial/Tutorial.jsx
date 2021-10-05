@@ -78,10 +78,6 @@ export default function Tutorial() {
                     {state.inicio ? <h3 className={styles.inicio}>Por favor, elija una opción</h3> : null}
                 </div>
             </div>
-            <br></br>
-            <br></br>
-            <br></br>
-            <br></br>
         </div>
     </>
   );

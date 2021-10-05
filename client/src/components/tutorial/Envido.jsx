@@ -75,7 +75,7 @@ export default function Envido() {
         });
     };
 
-    const ejemplo = 'En este ejemplo tenemos nuestras 3 cartas.¿ Cuantos puntos tenemos de Envido ??';
+    const ejemplo = 'En este ejemplo tenemos nuestras 3 cartas.¿Cuantos puntos tenemos de Envido?';
     
     return (
         <div className={styles.board}>
