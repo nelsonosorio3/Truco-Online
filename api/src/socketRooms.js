@@ -75,6 +75,8 @@ exports = module.exports = function(io){
                     roundResults: [],
                     turn: 1,
                     gameId: matchNumber.data,
+                    playerOneHand: [],
+                    playerTwoHand: [],
                 }
                 io.to(roomId).emit('messages', { msg: `Esperando que se una otro jugador...` });
             }
@@ -131,6 +133,10 @@ exports = module.exports = function(io){
                 //manos iniciales al iniciar partida
                 table.games[roomId].playerOne.hand = playerAhand;
                 table.games[roomId].playerTwo.hand = playerBhand;
+
+                //manos copias al iniciar partida
+                table.games[roomId].common.playerOneHand = [...playerAhand];
+                table.games[roomId].common.playerTwoHand = [...playerBhand];
     
                 //dejar las apuestas al comienzo
                 table.games[roomId].playerOne.betOptions = table.betsList.firstTurn;

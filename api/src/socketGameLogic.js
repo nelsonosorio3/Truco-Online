@@ -50,6 +50,10 @@ function setNewRound(playerOne, playerTwo, common, isPlayerOne, roomId, points, 
     table.games[roomId].playerOne.hand = playerAhand;
     table.games[roomId].playerTwo.hand = playerBhand;
 
+    //manos copias al iniciar partida
+    table.games[roomId].common.playerOneHand = [...playerAhand];
+    table.games[roomId].common.playerTwoHand = [...playerBhand];
+
     //cambiar de jugador que inicia y apuesta iniciales
     if(table.games[roomId].playerOne.starts){
         table.games[roomId].playerTwo.isTurn = true;
@@ -675,8 +679,8 @@ exports = module.exports = function(io){
             io.in(roomId).emit("messages", { msg: `${isPlayerOne? playerOne.name : playerTwo.name}: ENVIDO!`})  
         }
         else if(betPick === "quiero envido1"){
-            const playerOneEnvido = envidoCount(playerOne.hand);
-            const playerTwoEnvido = envidoCount(playerTwo.hand);
+            const playerOneEnvido = envidoCount(common.playerOneHand);
+            const playerTwoEnvido = envidoCount(common.playerTwoHand);
             io.in(roomId).emit("messages", { msg: `${isPlayerOne? playerOne.name : playerTwo.name}: QUIERO ENVIDO!`});  
             quieroEnvido(playerOne, playerOneEnvido, isPlayerOne, playerTwo, playerTwoEnvido, common, roomId, 2, true, io);            
         }
@@ -705,8 +709,8 @@ exports = module.exports = function(io){
             io.in(roomId).emit("messages", { msg: `${isPlayerOne? playerOne.name : playerTwo.name}: ENVIDO!`}) 
         }
         else if(betPick === "quiero envido2"){
-            const playerOneEnvido = envidoCount(playerOne.hand);
-            const playerTwoEnvido = envidoCount(playerTwo.hand);
+            const playerOneEnvido = envidoCount(common.playerOneHand);
+            const playerTwoEnvido = envidoCount(common.playerTwoHand);
             io.in(roomId).emit("messages", { msg: `${isPlayerOne? playerOne.name : playerTwo.name}: QUIERO ENVIDO!`});
             quieroEnvido(playerOne, playerOneEnvido, isPlayerOne, playerTwo, playerTwoEnvido, common, roomId, 4, false, io);     
         }
@@ -735,8 +739,8 @@ exports = module.exports = function(io){
             io.in(roomId).emit("messages", { msg: `${isPlayerOne? playerOne.name : playerTwo.name}: REAL ENVIDO!`}) 
         }
         else if(betPick === "quiero realEnvido"){
-            const playerOneEnvido = envidoCount(playerOne.hand);
-            const playerTwoEnvido = envidoCount(playerTwo.hand);
+            const playerOneEnvido = envidoCount(common.playerOneHand);
+            const playerTwoEnvido = envidoCount(common.playerTwoHand);
             let bool = false;
             io.in(roomId).emit("messages", { msg: `${isPlayerOne? playerOne.name : playerTwo.name}: QUIERO REAL ENVIDO!`})  
 
@@ -779,8 +783,8 @@ exports = module.exports = function(io){
         }
         else if(betPick === "quiero faltaEnvido"){
             const isMalas = (playerOne.score < common.scoreToWin/2 && playerTwo.score < common.scoreToWin/2);
-            const playerOneEnvido = envidoCount(playerOne.hand);
-            const playerTwoEnvido = envidoCount(playerTwo.hand);
+            const playerOneEnvido = envidoCount(common.playerOneHand);
+            const playerTwoEnvido = envidoCount(common.playerTwoHand);
             const playerOneWins = playerOneEnvido > playerTwoEnvido;
             io.in(roomId).emit("messages", { msg: `${isPlayerOne? playerOne.name : playerTwo.name}: QUIERO FALTA ENVIDO!`});
             if(playerOneEnvido>playerTwoEnvido){
@@ -1042,6 +1046,10 @@ exports = module.exports = function(io){
                 //manos iniciales al iniciar partida
                 table.games[roomId].playerOne.hand = playerAhand;
                 table.games[roomId].playerTwo.hand = playerBhand;
+
+                //manos copias al iniciar partida
+                table.games[roomId].common.playerOneHand = [...playerAhand];
+                table.games[roomId].common.playerTwoHand = [...playerBhand];
         
                 //dejar las apuestas al comienzo
                 table.games[roomId].playerOne.betOptions = table.betsList.firstTurn;
@@ -1057,7 +1065,7 @@ exports = module.exports = function(io){
                     table.games[roomId].playerOne.isTurn = true;
                     table.games[roomId].playerTwo.isTurn = false;
                     table.games[roomId].playerOne.starts = true;
-                    table.games[roomId].platerTwo.starts = false;
+                    table.games[roomId].playerTwo.starts = false;
                 };
                 //emitir como deberia cambiar el jugador de cada cliente
                 io.to(table.games[roomId].playerOne.id).emit("newRoundStarts", table.games[roomId].playerOne);
