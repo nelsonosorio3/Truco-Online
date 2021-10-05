@@ -40,13 +40,15 @@
 }
 
 .cartas {
+    width: 100%;
+
     display: flex;
     justify-content: space-around;
     align-content: flex-start;
+
     color: white;
     font-size: 20px;
     font-family: 'Crayon';
-   
 }
 
 .next {
@@ -68,10 +70,22 @@
     .boton {
         font-size: 1.1rem;
     }
+
+    .cartas {
+        margin-top: 3em;
+    }
+
+    .card {
+        width: 9em;
+        height: 12em;
+    }
 }
 
 @media screen and (max-width: 1024px) {
-   
+    .card {
+        width: 7em;
+        height: 10em;
+    }
 }
 
 @media screen and (max-width: 768px) {
@@ -82,4 +96,10 @@
     .boton {
         font-size: 1rem;
     }
+
+    .card {
+        width: 5em;
+        height: 8em;
+    }
+
 }
