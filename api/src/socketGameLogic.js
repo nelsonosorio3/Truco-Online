@@ -1098,7 +1098,7 @@ exports = module.exports = function(io){
                 headers: {
                     "x-access-token": token || 1,
                 }});
-            socket.leave(roomId);
+            // socket.leave(roomId);
             if(table.games[roomId]?.playerOne.id === playerId){
                 io.to(table.games[roomId]?.playerTwo?.id).emit("surrender");
             }
@@ -1114,12 +1114,21 @@ exports = module.exports = function(io){
             }
     });
     socket.on("surrender2", (roomId, token)=>{
+        console.log("entre")
         axios.put(`http://localhost:3001/api/games/winner/${table.games[roomId].common.gameId}/${table.games[roomId].playerOne.score}/${table.games[roomId].playerTwo.score}`,{},{
                 headers: {
                     "x-access-token": token || 1,
                 }});
+
+        const clients = io.sockets.adapter.rooms.get(roomId);
+        console.log(clients)
+        for(const clientId of clients) {
+            const clientSocket = io.sockets.sockets.get(clientId);
+            clientSocket.leave(roomId)
+        };
         delete table.games[roomId];
-        socket.leave(roomId);
+        delete table.games[roomId];
+        // socket.leave(roomId);
     });
     });
 }
