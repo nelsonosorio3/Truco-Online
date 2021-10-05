@@ -229,8 +229,8 @@
 
 .lastResults {
     width: 100%;
-    min-height: 10em;
-    max-height: 10em;
+    min-height: 18em;
+    max-height: 18em;
 
     display: flex;
     flex-direction: column;
@@ -242,6 +242,12 @@
 }
 
 .history {
+    width: 80%;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
     margin: auto;
 }
 
@@ -353,6 +359,43 @@
         min-height: 50vh;
         max-height: 50vh;
     }
+
+    .history {
+        justify-content: space-between;
+
+        overflow-x: scroll;
+        overflow-y: hidden;
+    }
+
+    .history::-webkit-scrollbar {
+        width: 9px;
+        height: 9px; 
+    }
+
+    .history::-webkit-scrollbar-thumb {
+     background: rgb(50, 50, 50);
+        border-radius: 4px;
+    }
+
+    .history::-webkit-scrollbar-thumb:hover {
+        background: rgb(125, 60, 30);
+    }
+
+    .history::-webkit-scrollbar-thumb:active {
+        background: rgb(141, 73, 37);
+    }
+
+    .history::-webkit-scrollbar-track {
+        background: transparent;
+    }
+
+    .history::-webkit-scrollbar-track:hover {
+        background: transparent;
+    }
+
+    .history::-webkit-scrollbar-track:active {
+        background: transparent;
+    }
 }
 
 @media screen and (max-width: 768px) {
@@ -402,6 +445,7 @@
         max-height: 50vh;
         min-height: 50vh;
     }
+
 }
 
 @media screen and (max-width: 600px) {

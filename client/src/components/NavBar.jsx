@@ -33,8 +33,6 @@ export default function NavBar() {
         if(logged) {
             setIsAuth(logged);
             dispatch(getProfile({token: localStorage.token}));
-            console.log('img:', userProfile.image);
-            console.log('user:', userProfile.username);
         };
     }, []);
     
