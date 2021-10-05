@@ -158,16 +158,38 @@ export default function Profile(props) {
                             <button className={styles.editBtn} onClick={editProfile}>Editar</button>
                             <h2>{userProfile?.username}</h2>
                             <h3>{userProfile?.email}</h3>
-                            <h3> Partidas Jugadas: </h3>
-                            <p> {userProfile?.gamesPlayed} </p>
-                            <div className={styles.playerInfo_Games}>
-                                <div className={styles.infoGames}>
-                                    <h3> Ganadas: </h3>
-                                    <p> {userProfile?.gamesWon} </p>
+                            <div className={styles.gamesAndTournamentsStats}>
+                                <div className={styles.games}>
+                                    <div className={styles.infoGames}>
+                                        <h3>Partidas Jugadas:</h3>
+                                        <p> {userProfile?.gamesPlayed} </p>
+                                    </div>
+                                    <div className={styles.playerInfo_Games}>
+                                        <div className={styles.infoGames}>
+                                            <h3>Ganadas:</h3>
+                                            <p> {userProfile?.gamesWon} </p>
+                                        </div>
+                                        <div className={styles.infoGames}>
+                                            <h3>Perdidas:</h3>
+                                            <p> {userProfile?.gamesLost} </p>
+                                        </div>
+                                    </div>
                                 </div>
-                                <div className={styles.infoGames}>
-                                    <h3> Perdidas: </h3>
-                                    <p> {userProfile?.gamesLost} </p>
+                                <div className={styles.games}>
+                                    <div className={styles.infoGames}>
+                                        <h3>Torneos jugados:</h3>
+                                        <p></p>
+                                    </div>
+                                    <div className={styles.playerInfo_Games}>
+                                        <div>
+                                            <h3>Ganados:</h3>
+                                            <p></p>
+                                        </div>
+                                        <div>
+                                            <h3>Perdidos:</h3>
+                                            <p></p>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
