@@ -67,6 +67,8 @@ export default function Game({
     const [newRound, setNewRound] = useState(false);
     const [pointBox, setPointsBox] = useState(false);
     const [isYourTurn, setIsYourTurn] = useState(false);
+    const [reported, setReported] = useState(false);
+    const [friend, setFriend] = useState(false);
     const history = useHistory();
     const scoreBox = useRef();
     const {getProfile} = profileActions;
@@ -74,25 +76,33 @@ export default function Game({
     const dispatch = useDispatch();
 
     const addFriend = ()=>{
-      player?.id && socket.emit("addFriend", localStorage.id, roomId, player.id, player.name);
-    }
+      if(!friend){
+        player?.id && socket.emit("addFriend", localStorage.id, roomId, player.id, player.name);
+        setFriend(true);
+      }
+      else  socket.emit('already friend', player.id);
+    };
     const surrender = ()=>{
       socket.emit("surrender", roomId, player.id, localStorage.token);
       dispatch(setIsInRoom({isInRoom: false, roomId: null}));
-    }
+    };
     const tutorial = ()=>{
       /// mostrar valor cartas y explicacion corta de apuestas
-    }
+    };
     const report = ()=> {
-      /// falta crear la ruta a donde enviarlo en el back
-    }
+      if(!reported){
+        localStorage.id && socket.emit("report", localStorage.id, roomId, player.id);
+      setReported(true);
+      }
+      else  socket.emit('already reported', player.id);
+    };
     const showScore = ()=>{
-      setPointsBox(!pointBox)
-    }
+      setPointsBox(!pointBox);
+    };
     const bet = e => { //emite la apuesta
       if(player.isTurn){
         socket.emit("bet", e.target.name, roomId, player.id);
-        if(e.target.name !== "ir al mazo") setPlayer({...player, bet:true, isTurn:false, betOptions: []})
+        if(e.target.name !== "ir al mazo") setPlayer({...player, bet:true, isTurn:false, betOptions: []});
       };
     };
 
@@ -183,10 +193,11 @@ export default function Game({
         dispatch(setIsInRoom({isInRoom: false, roomId: null}));
       });
       socket.on("addFriend", (idSender)=>{
-        // dispatch(sendFriendRequest({idSender, email: userProfile.email}));
-        console.log("casi");
-        userProfile.email && idSender && axios.post(`http://localhost:3001/api/friends/${idSender}/${userProfile.email}`)
-      })
+        userProfile.email && idSender && axios.post(`http://localhost:3001/api/friends/${idSender}/${userProfile.email}`);
+      });
+      socket.on("report", idReporter=>{
+        userProfile.id && idReporter && axios.post(`http://localhost:3001/api/reports/${idReporter}/${userProfile.id}`);
+      });
       let handler = event =>{
         if(!scoreBox.current.contains(event.target)){
           setPointsBox(false);

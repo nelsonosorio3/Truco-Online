@@ -159,6 +159,24 @@ exports = module.exports = function(io){
                 io.to(table.games[roomId]?.playerOne.id).emit("addFriend", idSender);
                 io.to(table.games[roomId]?.playerOne.id).emit("messages", { msg: `${name}, te ha enviado una solicitud de amistad!` });
             }
+        });
+
+        socket.on("report", (idReporter, roomId, playerId)=>{
+            if(table.games[roomId]?.playerOne.id === playerId){
+                io.to(table.games[roomId]?.playerTwo.id).emit("report", idReporter);
+                io.to(table.games[roomId]?.playerOne.id).emit("messages", { msg: `Jugador reportado` });
+            }
+            else{
+                io.to(table.games[roomId]?.playerOne.id).emit("report", idReporter);
+                io.to(table.games[roomId]?.playerTwo.id).emit("messages", { msg: `Jugador reportado` });
+            } 
+        });
+
+        socket.on("already friend", (id)=>{
+            io.to(id).emit("messages", { msg: `Ya le enviaste una solicitud de amistad` });
+        });
+        socket.on("already reported",(id)=>{
+            io.to(id).emit("messages", { msg: `Ya lo reportaste` });
         })
       
     });
