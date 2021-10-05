@@ -9,13 +9,10 @@ export default function ChatLobby ({name, roomId, typeofChat}) {
 
     useEffect(() => {
         socket.emit('joinToGlobalChat', "lobby");
-        console.log('test')
     }, [])
 
     useEffect(() => {
         socket.on('lobbyMessages', (data) => {
-            console.log(data)
-            // console.log(message);
             setMsgs([...msgs, `${data.name}: ${data.msg}`]);
         })
 
@@ -27,7 +24,6 @@ export default function ChatLobby ({name, roomId, typeofChat}) {
     useEffect(() => {
         divRef.current.scrollIntoView({behavior: 'smooth'});
     })
-    console.log(msgs)
 
     const submit = (event) => {
         event.preventDefault();
