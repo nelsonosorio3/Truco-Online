@@ -9,7 +9,6 @@ export default function ChatLobby ({name, roomId, typeofChat}) {
 
     useEffect(() => {
         socket.emit('joinToGlobalChat', "lobby");
-        socket.emit('lobbyMessage', ({name, msg: "se ha unido al chat", roomId}), localStorage.isAuth);
         console.log('test')
     }, [])
 
@@ -47,8 +46,8 @@ export default function ChatLobby ({name, roomId, typeofChat}) {
                     typeofChat==='chatLobby'
                     ? 
                     <>
-                        <textarea placeholder={'Message...'} name="" id="" cols="95" rows="1" value={msg} onChange={event => setMsg(event.target.value)}></textarea>
-                        <button className={styles.btn}>Send</button>
+                        <textarea placeholder={'Escribe tu mensaje...'} name="" id="" cols="95" rows="1" value={msg} onChange={event => setMsg(event.target.value)}></textarea>
+                        <button className={styles.btn}>Enviar</button>
                         {/* <input placeholder='Message...' type="text" id="" cols="95" rows="1" value={msg} onChange={event => setMsg(event.target.value)}></input> */}
                     </>
                     : 
