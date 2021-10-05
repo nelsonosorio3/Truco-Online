@@ -8,35 +8,38 @@ export default function ChatLobby ({name, roomId, typeofChat}) {
     const [msgs, setMsgs] = useState([]);
 
     useEffect(() => {
-        if(roomId === 'lobby') socket.emit('joinToGlobalChat', roomId);
-    }, [roomId])
+        socket.emit('joinToGlobalChat', "lobby");
+        socket.emit('lobbyMessage', ({name, msg: "se ha unido al chat", roomId}), localStorage.isAuth);
+        console.log('test')
+    }, [])
 
     useEffect(() => {
-        socket.on('lobbyMessages', () => {
-            console.log('ENTRAMOS A MENSAJES')
+        socket.on('lobbyMessages', (data) => {
+            console.log(data)
             // console.log(message);
-            // setMsgs([...msgs, message]);
+            setMsgs([...msgs, `${data.name}: ${data.msg}`]);
         })
 
-        return () => {socket.off("lobyMessages")}
-    }, [msgs])
+        return () => {socket.off("lobbyMessages")}
+    })
 
     const divRef = useRef(null);
 
     useEffect(() => {
         divRef.current.scrollIntoView({behavior: 'smooth'});
     })
+    console.log(msgs)
 
     const submit = (event) => {
         event.preventDefault();
-        socket.emit('message', ({name, msg, roomId}), localStorage.isAuth);
+        socket.emit('lobbyMessage', ({name, msg, roomId}), localStorage.isAuth);
         setMsg("");
     }
 
     return(
         <div>
             <div className={typeofChat==='chatLobby' ? styles.chatLobby : styles.chatGame}>
-                {msgs.map((element, i) => ( <div key={i}><div>{element.name}</div><div>{element.msg}</div></div> ))}
+                {msgs.map((element, i) => ( <div key={i}><div>{element}</div><div>{element.msg}</div></div> ))}
                 <div ref={divRef}></div>
             </div>
             <form onSubmit={submit} className={styles.writeMessage}>

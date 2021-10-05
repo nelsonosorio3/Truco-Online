@@ -3,14 +3,14 @@ exports = module.exports = function(io){
 
         socket.on('joinToGlobalChat', function (roomId) {
             console.log('Conectado al chat global con el ID: ', roomId)
-            socket.join(roomId);
+            socket.join("lobby");
             const clients = io.sockets?.adapter.rooms.get(roomId);
             console.log('Clients', clients, roomId)
         })
 
         socket.on('lobbyMessage', function (data, isAuth) {
             if(isAuth) {
-                io.to(data.roomId).emit('lobbyMessages');
+                io.to("lobby").emit('lobbyMessages', data);
                 console.log('DATA:', data)
                 // io.to(data.roomId).emit('lobbyMessages', { msg: `${data.name}: ${data.msg}` });
             }
