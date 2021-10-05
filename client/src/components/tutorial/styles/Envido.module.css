@@ -1,7 +1,8 @@
-.board{
+.board {
     
     height: 100%;
 }
+
 .title {
     color: white;
     font-family: 'Crayon';
@@ -46,10 +47,39 @@
     font-size: 20px;
     font-family: 'Crayon';
    
-  }
+}
 
-  .envido {
-      width: 100%;
-      height: auto;
-      padding-top: 5%;
-  }
+.next {
+    position: absolute;
+    bottom: 6%;
+}
+
+.envido {
+    width: 100%;
+    height: auto;
+    padding-top: 5%;
+}
+
+@media screen and (max-width: 1240px) {
+    .title {
+        font-size: 1.1rem;
+    }
+
+    .boton {
+        font-size: 1.1rem;
+    }
+}
+
+@media screen and (max-width: 1024px) {
+   
+}
+
+@media screen and (max-width: 768px) {
+    .title {
+        font-size: 1rem;
+    }
+
+    .boton {
+        font-size: 1rem;
+    }
+}

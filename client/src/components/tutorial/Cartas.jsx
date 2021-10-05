@@ -1,7 +1,7 @@
 import React from 'react';
-import styles from './styles/Cartas.module.css';
 import { useState } from 'react';
 
+import styles from './styles/Cartas.module.css';
 
 function Cartas() {
       const cards = [
@@ -17,13 +17,10 @@ function Cartas() {
         {   id: 4,
             img : '/cards/43.webp',
             txt: 'el Siete de Oro'},
-    ]
+    ];
     
-    
-    const [state, setState] = useState(cards)
+    const [state, setState] = useState(cards);
    
-   
-  
     const cards2 = [
         {   id: 1,
             img : '/cards/39.webp',
@@ -34,7 +31,7 @@ function Cartas() {
         {   id: 3,
             img : '/cards/37.webp',
             txt: 'El 1 de Oro y de Copa'},
-    ]
+    ];
 
     const cards3 = [
         {   id: 1,
@@ -46,7 +43,7 @@ function Cartas() {
         {   id: 3,
             img : '/cards/46.webp',
             txt: 'Todos los 10'},
-    ]
+    ];
 
     const cards4 = [
         {   id: 1,
@@ -61,40 +58,40 @@ function Cartas() {
         {   id: 4,
             img : '/cards/4.webp',
             txt: 'Todos los Cuatros'},
-    ]
+    ];
 
- 
     const mejores = () => {
         setState(cards)
-    }  
+    };  
+
     const salvan = () => {
         setState(cards2)
-    } 
+    }; 
+
     const defensa = () => {
         setState(cards3)
-    } 
+    }; 
+
     const malas = () => {
         setState(cards4)
-    } 
-    
-    
-    
+    }; 
     
     return (
         <div className={styles.board}>
           <div className={styles.title}>
-           <h3>En el truco se utiliza la baraja española y su valores son diferentes. En cada mano del truco, se repartiran 3 cartas por jugador en cada mano del partido. A continuacion podras ver como es su orden de importancia.</h3>
+           <p>En el truco se utiliza la baraja española y su valores son diferentes. En cada mano del truco, se repartiran 3 cartas por jugador en cada mano del partido. A continuacion podras ver como es su orden de importancia.</p>
            </div>
            <div className={styles.cartas}>
             {
-                state ? state.map(c => <img className={styles.card} src={process.env.PUBLIC_URL + c.img} alt={c.txt} >
-                    </img>
-                   ) : null
-            } </div>
-            <div className={styles.epigrafes}>
-            {
-                state ? state.map(c => <p className={styles.epigrafe}>{c.txt}</p>) : null
-            }
+                state ? state.map(c => 
+                    <div className={styles.cardCont}>
+                        <img className={styles.card} src={process.env.PUBLIC_URL + c.img} alt={c.txt} ></img>
+                        <p className={styles.epigrafe}>{c.txt}</p>
+                    </div>
+                    ) 
+                   : 
+                   null
+            } 
            </div>
            <div className={styles.botones}>
              <button className={styles.boton} onClick={mejores} >Las mejores</button>
@@ -103,7 +100,7 @@ function Cartas() {
              <button className={styles.boton} onClick={malas} >las malas</button>
            </div>
         </div>
-    )
-}
+    );
+};
 
-export default Cartas
+export default Cartas;
