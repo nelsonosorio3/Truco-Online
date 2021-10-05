@@ -115,6 +115,7 @@ export default function Game({
     
     useEffect(()=>{
       localStorage?.isAuth && dispatch(getProfile({token: localStorage?.token}));
+      socket.emit("refresh", roomId);
     },[]);
     useEffect(()=>{
       socket.on("gameStarts", player=>{ //escucha gameStarts para iniciar cuando la sala se llena y dejar el estado jugador listo
@@ -198,6 +199,7 @@ export default function Game({
       socket.on("report", idReporter=>{
         userProfile.id && idReporter && axios.post(`http://localhost:3001/api/reports/${idReporter}/${userProfile.id}`);
       });
+      socket.on("refresh", player=>setPlayer(player))
       let handler = event =>{
         if(!scoreBox.current.contains(event.target)){
           setPointsBox(false);
@@ -220,6 +222,7 @@ export default function Game({
         socket.off("updateRivalScore");
         socket.off("surrender");
         socket.off("addFriend");
+        socket.off("refresh");
         document.removeEventListener("mousedown", handler)
       };
     },[player]);

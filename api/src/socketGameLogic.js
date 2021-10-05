@@ -74,6 +74,8 @@ function checkWinnerCards(number, playerOne, playerTwo, common, roomId, io){
     if(playerOne.tableRival[number] && playerTwo.tableRival[number] && common.turn === number+1){
         if(playerOne.tablePlayer[number].truco < playerTwo.tablePlayer[number].truco){
             common.roundResults.push("playerOne");
+            playerOne.isTurn = true;
+            playerTwo.isTurn = false;
             if(common.trucoBet > 1){
                 io.to(playerOne.id).emit("bet", table.betsList.noTruco, false, true);
                 io.to(playerTwo.id).emit("bet", table.betsList.noTruco, false, false);
@@ -86,6 +88,8 @@ function checkWinnerCards(number, playerOne, playerTwo, common, roomId, io){
         }
         else if(playerOne.tablePlayer[number].truco > playerTwo.tablePlayer[number].truco){
             common.roundResults.push("playerTwo");
+            playerOne.isTurn = false;
+            playerTwo.isTurn = true;
             if(common.trucoBet > 1){
                 io.to(playerOne.id).emit("bet", table.betsList.noTruco, false, false);
                 io.to(playerTwo.id).emit("bet", table.betsList.noTruco, false, true);
@@ -99,6 +103,8 @@ function checkWinnerCards(number, playerOne, playerTwo, common, roomId, io){
         else{
             common.roundResults.push("tie");
             if(playerOne.starts){
+                playerOne.isTurn = true;
+                playerTwo.isTurn = false;
                 if(common.trucoBet > 1){
                     io.to(playerOne.id).emit("bet", table.betsList.noTruco, false, true);
                     io.to(playerTwo.id).emit("bet", table.betsList.noTruco, false, false);
@@ -109,6 +115,8 @@ function checkWinnerCards(number, playerOne, playerTwo, common, roomId, io){
                 }
             }
             else{
+                playerOne.isTurn = false;
+                playerTwo.isTurn = true;
                 if(common.trucoBet > 1){
                     io.to(playerOne.id).emit("bet", table.betsList.noTruco, false, false);
                     io.to(playerTwo.id).emit("bet", table.betsList.noTruco, false, true);
@@ -793,7 +801,10 @@ exports = module.exports = function(io){
         const isPlayerOne = playerOne.id === playerId;
         if(isPlayerOne){
             playerTwo.tableRival.push(card);
+            playerTwo.isTurn = true;
             playerOne.tablePlayer.push(card);
+            playerOne.hand = playerOne.hand.filter(cardH=> card.id !== cardH.id);
+            playerOne.isTurn = false;
             if(playerOne.tablePlayer[0] && playerTwo.tablePlayer[0] &&
                 !playerOne.tablePlayer[1] && !playerTwo.tablePlayer[1] &&
                 !playerOne.tablePlayer[2] && !playerTwo.tablePlayer[2]){
@@ -807,7 +818,10 @@ exports = module.exports = function(io){
         }
         else{
             playerOne.tableRival.push(card);
+            playerOne.isTurn = true;
             playerTwo.tablePlayer.push(card);
+            playerTwo.hand = playerTwo.hand.filter(cardH=> card.id !== cardH.id);
+            playerTwo.isTurn = false;
             if(playerOne.tablePlayer[0] && playerTwo.tablePlayer[0] &&
                 !playerOne.tablePlayer[1] && !playerTwo.tablePlayer[1] &&
                 !playerOne.tablePlayer[2] && !playerTwo.tablePlayer[2]){
@@ -969,5 +983,14 @@ exports = module.exports = function(io){
         };
         delete table.games[roomId];
     });
+    socket.on("refresh", (roomId)=>{
+        console.log("refresh")
+        // const clients = io.sockets.adapter.rooms.get(roomId);
+        // for(const clientId of clients) {
+        //     const clientSocket = io.sockets.sockets.get(clientId);
+            io.to(table.games[roomId]?.playerOne?.id).emit("refresh", table.games[roomId]?.playerOne);
+            io.to(table.games[roomId]?.playerTwo?.id).emit("refresh", table.games[roomId]?.playerTwo);
+        // };
+    })
     });
 }
