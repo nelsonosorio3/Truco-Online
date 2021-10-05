@@ -162,11 +162,11 @@ export default function Profile(props) {
                             <div className={styles.playerInfo_Games}>
                                 <div className={styles.infoGames}>
                                     <h3> Ganadas: </h3>
-                                    <p> {userProfile?.gamesLost} </p>
+                                    <p> {userProfile?.gamesWon} </p>
                                 </div>
                                 <div className={styles.infoGames}>
                                     <h3> Perdidas: </h3>
-                                    <p> {userProfile?.gamesWon} </p>
+                                    <p> {userProfile?.gamesLost} </p>
                                 </div>
                             </div>
                         </div>

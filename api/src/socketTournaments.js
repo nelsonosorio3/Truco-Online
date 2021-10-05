@@ -103,6 +103,8 @@ exports = module.exports = function(io){
               numberPlayers: 2,
               roundResults: [],
               turn: 1,
+              playerOneHand: [],
+              playerTwoHand: [],
               // gameId: matchNumber.data
             }
             
@@ -170,6 +172,9 @@ exports = module.exports = function(io){
           //manos iniciales al iniciar partida
           table.games[data.matchId].playerOne.hand = playerAhand;
           table.games[data.matchId].playerTwo.hand = playerBhand;
+
+          table.games[data.matchId].common.playerOneHand = [...playerAhand];
+          table.games[data.matchId].common.playerTwoHand = [...playerBhand];
       
           //dejar las apuestas al comienzo
           table.games[data.matchId].playerOne.betOptions = table.betsList.firstTurn;

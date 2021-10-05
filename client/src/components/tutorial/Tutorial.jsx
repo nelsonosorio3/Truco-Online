@@ -6,6 +6,7 @@ import Cartas from './Cartas';
 import Comienzo from './Comienzo';
 import Envido from './Envido';
 import Truco from './Truco';
+import GameRequest from '../GameRequest';
 
 import styles from './styles/Tutorial.module.css';
 
@@ -61,6 +62,7 @@ export default function Tutorial() {
   return (
     <>
         <NavBar />
+        <GameRequest />
         <div className={styles.container}>
             <div className={styles.pizarron}>
                 <h3 className={styles.title}>Cómo Jugar:</h3>

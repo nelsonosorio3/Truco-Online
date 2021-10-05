@@ -2,12 +2,14 @@ const axios = require("axios");
 var activeRooms = []
 const {table, buildDeck, shuffleDeck, getHands} = require("./socketGameLogicConst")
 
+let games = {};
 exports = module.exports = function(io){
     io.sockets.on('connection', function (socket) {
         socket.on('connected', function (name) {
             // socket.broadcast.emit('messages', { name: name, msg: name + " has joined." });
         });
-        
+        let algo = socket.handshake.auth.isInRoom
+        console.log(algo)
         // socket.on("log", ()=> io.to(socket.id).emit("log"))
         socket.on('message', function (data, isAuth) {
             if(isAuth) {
@@ -73,6 +75,8 @@ exports = module.exports = function(io){
                     roundResults: [],
                     turn: 1,
                     gameId: matchNumber.data,
+                    playerOneHand: [],
+                    playerTwoHand: [],
                 }
                 io.to(roomId).emit('messages', { msg: `Esperando que se una otro jugador...` });
             }
@@ -129,6 +133,10 @@ exports = module.exports = function(io){
                 //manos iniciales al iniciar partida
                 table.games[roomId].playerOne.hand = playerAhand;
                 table.games[roomId].playerTwo.hand = playerBhand;
+
+                //manos copias al iniciar partida
+                table.games[roomId].common.playerOneHand = [...playerAhand];
+                table.games[roomId].common.playerTwoHand = [...playerBhand];
     
                 //dejar las apuestas al comienzo
                 table.games[roomId].playerOne.betOptions = table.betsList.firstTurn;
@@ -159,6 +167,24 @@ exports = module.exports = function(io){
                 io.to(table.games[roomId]?.playerOne.id).emit("addFriend", idSender);
                 io.to(table.games[roomId]?.playerOne.id).emit("messages", { msg: `${name}, te ha enviado una solicitud de amistad!` });
             }
+        });
+
+        socket.on("report", (idReporter, roomId, playerId)=>{
+            if(table.games[roomId]?.playerOne.id === playerId){
+                io.to(table.games[roomId]?.playerTwo.id).emit("report", idReporter);
+                io.to(table.games[roomId]?.playerOne.id).emit("messages", { msg: `Jugador reportado` });
+            }
+            else{
+                io.to(table.games[roomId]?.playerOne.id).emit("report", idReporter);
+                io.to(table.games[roomId]?.playerTwo.id).emit("messages", { msg: `Jugador reportado` });
+            } 
+        });
+
+        socket.on("already friend", (id)=>{
+            io.to(id).emit("messages", { msg: `Ya le enviaste una solicitud de amistad` });
+        });
+        socket.on("already reported",(id)=>{
+            io.to(id).emit("messages", { msg: `Ya lo reportaste` });
         })
       
     });

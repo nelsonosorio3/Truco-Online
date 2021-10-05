@@ -38,9 +38,13 @@ export default function GameRequest({tournamentMatchId}) {
 
   useEffect(()=>{
     socket.on("invite to game", (roomId, idReceiver, nameSender)=>{
-      if(idReceiver === localStorage.id) setData({nameFriend: nameSender, show: true, roomId})
+      if(idReceiver == localStorage.id) setData({nameFriend: nameSender, show: true, roomId})//doble igual para string a numero comparacion no lo cambien
     })
+    return ()=>{
+      socket.off("invite to game");
+    }
   });
+
 
   return (
     <div style={{display: data.show? "flex" : "none"}} id={styles.gameRequest}>

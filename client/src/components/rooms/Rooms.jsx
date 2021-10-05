@@ -28,7 +28,7 @@ export default function Rooms() {
     <div className={styles.mainDiv}>
       
       {
-        isinRoom
+        (localStorage.isInRoom === "true")
         ?
         // <div className={styles.subMainDiv_inGame}>
         //   <div className={styles.game}>
@@ -40,8 +40,9 @@ export default function Rooms() {
         :
         <>
         <NavBar />
+        <div style={{zIndex:"999"}}>
         <GameRequest/>
-        
+        </div>
         <div className={styles.subMainDiv_noGame}>
           <div className={styles.lobby}>
             <h2 className={styles.title}>Bienvenidos a Truco Henry</h2>
