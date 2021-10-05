@@ -791,7 +791,6 @@ exports = module.exports = function(io){
         const playerTwo = table.games[roomId].playerTwo;
         const common = table.games[roomId].common;
         const isPlayerOne = playerOne.id === playerId;
-
         if(isPlayerOne){
             playerTwo.tableRival.push(card);
             playerOne.tablePlayer.push(card);
@@ -805,8 +804,6 @@ exports = module.exports = function(io){
                 io.to(playerTwo.id).emit("playCard", card, false);
             }
             else io.to(playerTwo.id).emit("playCard", card, true);
-            
-            // io.in(roomId).emit("messages", {msg: `${playerOne.name}: juega ${card.number} de ${card.suit}`})
         }
         else{
             playerOne.tableRival.push(card);
@@ -821,8 +818,6 @@ exports = module.exports = function(io){
                 io.to(playerOne.id).emit("playCard", card, false);
             }
             else io.to(playerOne.id).emit("playCard", card, true);
-            
-            // io.in(roomId).emit("messages", {msg: `${playerTwo.name}: juega ${card.number} de ${card.suit}`})
         }
 
         checkWinnerCards(0, playerOne, playerTwo, common, roomId, io);
@@ -839,8 +834,6 @@ exports = module.exports = function(io){
                 winner = true;
                 playerOne.score += common.trucoBet;
                 playerTwo.scoreRival += common.trucoBet;
-                // io.to(playerOne.id).emit("updateScore", common.trucoBet, true);
-                // io.to(playerTwo.id).emit("updateRivalScore", common.trucoBet, true);
                 io.in(roomId).emit("messages", {msg: `GANADOR MANO ${playerOne.name}!`});
             }
             else if((common.roundResults.filter(round => round === "playerTwo").length > 1) || 
@@ -849,8 +842,6 @@ exports = module.exports = function(io){
                 winner = true;
                 playerTwo.score += common.trucoBet;
                 playerOne.scoreRival += common.trucoBet;
-                // io.to(playerTwo.id).emit("updateScore", common.trucoBet, true);
-                // io.to(playerOne.id).emit("updateRivalScore", common.trucoBet, true);
                 io.in(roomId).emit("messages", {msg: `GANADOR MANO ${playerTwo.name}!`});
             }
             else if(common.roundResults.length === 2 && common.roundResults[0] === "tie" && common.roundResults[1] !== "tie"){
@@ -858,15 +849,11 @@ exports = module.exports = function(io){
                 if(common.roundResults[1] === "playerOne"){
                     playerTwo.score += common.trucoBet;
                     playerOne.scoreRival += common.trucoBet;
-                    // io.to(playerOne.id).emit("updateScore", common.trucoBet, true);
-                    // io.to(playerTwo.id).emit("updateRivalScore", common.trucoBet, true);
                     io.in(roomId).emit("messages", {msg: `GANADOR MANO ${playerOne.name}!`});
                 }
                 else if(common.roundResults[1] === "playerTwo"){
                     playerOne.score += common.trucoBet;
                     playerTwo.scoreRival += common.trucoBet;
-                    // io.to(playerTwo.id).emit("updateScore", common.trucoBet, true);
-                    // io.to(playerOne.id).emit("updateRivalScore", common.trucoBet, true);
                     io.in(roomId).emit("messages", {msg: `GANADOR MANO ${playerTwo.name}!`});
                 }
             }
@@ -875,15 +862,11 @@ exports = module.exports = function(io){
                 if(common.roundResults[0] === "playerOne"){
                     playerTwo.score += common.trucoBet;
                     playerOne.scoreRival += common.trucoBet;
-                    // io.to(playerOne.id).emit("updateScore", common.trucoBet, true);
-                    // io.to(playerTwo.id).emit("updateRivalScore", common.trucoBet, true);
                     io.in(roomId).emit("messages", {msg: `GANADOR MANO ${playerOne.name}!`});
                 }
                 else if(common.roundResults[0] === "playerTwo"){
                     playerOne.score += common.trucoBet;
                     playerTwo.scoreRival += common.trucoBet;
-                    // io.to(playerTwo.id).emit("updateScore", common.trucoBet, true);
-                    // io.to(playerOne.id).emit("updateRivalScore", common.trucoBet, true);
                     io.in(roomId).emit("messages", {msg: `GANADOR MANO ${playerTwo.name}!`});
                 }
             }
@@ -926,10 +909,12 @@ exports = module.exports = function(io){
                     table.games[roomId].playerTwo.isTurn = true;
                     table.games[roomId].playerOne.isTurn = false;
                     table.games[roomId].playerOne.starts = false;
+                    table.games[roomId].playerTwo.starts = true;
                 }else{
                     table.games[roomId].playerOne.isTurn = true;
                     table.games[roomId].playerTwo.isTurn = false;
                     table.games[roomId].playerOne.starts = true;
+                    table.games[roomId].platerTwo.starts = false;
                 };
                 //emitir como deberia cambiar el jugador de cada cliente
                 io.to(table.games[roomId].playerOne.id).emit("newRoundStarts", table.games[roomId].playerOne);
@@ -955,7 +940,6 @@ exports = module.exports = function(io){
                 headers: {
                     "x-access-token": token || 1,
                 }});
-            // socket.leave(roomId);
             if(table.games[roomId]?.playerOne.id === playerId){
                 io.to(table.games[roomId]?.playerTwo?.id).emit("surrender");
             }
