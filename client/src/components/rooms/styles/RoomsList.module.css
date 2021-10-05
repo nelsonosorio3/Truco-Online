@@ -1,14 +1,15 @@
 .roomsList{
     background-color: rgba(255, 255, 255, 0.6);
     text-align: center;
-    display: block;
-    width: auto;
-    height: 200px;
-    justify-content: left;
-    justify-self: left;
-    justify-items: left;
-
-   
+    display: flex;
+    /* width: auto; */
+    height: 23pc;
+    width: 23pc;
+    /* justify-content: left; */
+    /* justify-self: left; */
+    /* justify-items: left; */
+    /* align-items: center; */
+    justify-content: center;
 }
 
 .roomBtn{

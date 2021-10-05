@@ -19,7 +19,7 @@ export default function Tournaments(){
                     ?
                         <TournamentInCourse />
                     :
-                        <div>
+                        <div className={styles.formAndList}>
                             <TournamentsForm />
                             <TournamentsList />
                         </div>
