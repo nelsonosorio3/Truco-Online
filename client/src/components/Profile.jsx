@@ -1,34 +1,41 @@
+/* eslint-disable jsx-a11y/img-redundant-alt */
+/* eslint-disable react-hooks/exhaustive-deps */
 import React from 'react';
 import { useEffect, useState } from 'react';
 import { useDispatch , useSelector } from 'react-redux';
 import { useHistory } from 'react-router';
-import log from '../Redux/actions-types/logActions';
-import Modal from './Modal';
-import profileIcon from '../img/profileIcon.png';
-import profileActions from '../Redux/actions-types/profileActions';
-import styles from './styles/Profile.module.css';
 
 import { useModal } from '../hooks/useModal';
 
+import Modal from './Modal';
 /* Los dos siguientes imports agregados por guille */
 import Friend from './Friend';
 import AddFriend from './addFriend';
 import Match from './Match';
-
 // nav
 import NavBar from './NavBar';
+// request de partida amigos
+import GameRequest from './GameRequest';
+
+import log from '../Redux/actions-types/logActions';
+import profileActions from '../Redux/actions-types/profileActions';
+
+import styles from './styles/Profile.module.css';
+import profileIcon from '../img/profileIcon.png';
 
 export default function Profile(props) {
 
     const history = useHistory();
     const { logOut } = log;
+    const [isOpenModal, openModal, closeModal] = useModal();
 
     //Estados del profileReducer
     const [friends, setFriends] = useState({
         sender: [],
         requested: []
     });
-
+    const [removeSuccess, setRemoveSuccess] = useState(false)
+    const [isDelete, setIsDelete] = useState("delete")
     const [deleteFriend, setDeleteFriend] = useState("");
 
     //userProfile: es el estado del usuario logeado
@@ -48,31 +55,39 @@ export default function Profile(props) {
         dispatch(getGames(localStorage.token));
     }, []);
 
-
     // Esto es para que se actualice el estado una vez que se elimina
     useEffect(() => {
         setFriends({
             sender: userFriends.sender,
             requested: userFriends.requested
         })
+        if(removeSuccess){
+            setIsDelete("success")
+            openModal()
+            setRemoveSuccess(false)
+        }
     }, [userFriends]);
 
-    const [isOpenModal, openModal, closeModal] = useModal();
-
-
+    //funcionque luego de la confirmacion del modal hace el dispatch y elimina al amigo de la base de datos
     const removeFriend = (flag) => {
         if(flag){
             dispatch(deleteFriends(userProfile.id, deleteFriend));
+            setRemoveSuccess(true)
         };
+        // setDeleteFriend({
+        //     flag:false,
+        //     email: ""
+        // });
+    };
+
+    // Funcion para eliminar un amigo que se pasa a cada componente de amigos
+    const deleteFriendFunction = (email) => {
         setDeleteFriend({
             flag:false,
             email: ""
         });
-    };
-
-    // Funcion para eliminar un amigo
-    const deleteFriendFunction = (email) => {
         setDeleteFriend(email);
+        setIsDelete("delete")
         openModal();
     };
 
@@ -93,35 +108,76 @@ export default function Profile(props) {
         history.push("/edit");
     };
 
+    //Confirmacion para el modal
+    const confirmation = (flag) => {
+        removeFriend(flag);
+        closeModal();
+    };
+
     return (
         <>
             <NavBar />
-            <Modal isOpen={isOpenModal} closeModal={closeModal} removeFriend={removeFriend} deleteButtons={true}></Modal>
-            <button className={styles.logoutBtn} onClick={logout}>Log out</button>
+            <Modal isOpen={isOpenModal} closeModal={closeModal} removeFriend={removeFriend} deleteButtons={isDelete} friend={deleteFriend}>
+                {
+                    // Esto confirma la eliminacion de un amigo
+                    isDelete === "delete" ?
+                    <div className={styles.modalTextCont}>
+                        <p>¿Estas seguro de que deseas eliminar esta amistad?</p> 
+                        <div className={styles.btnDiv}>
+                            <button className={styles.leftBtn} onClick={() => confirmation(true)}>
+                                Si
+                            </button>
+                            <button className={styles.rightBtn} onClick={() => confirmation(false)}>
+                                No
+                            </button>
+                        </div>
+                    </div> 
+                    : 
+                    //Comunica que efectivamente se elimino el usuario
+                    isDelete === "success" ?
+                        <div className={styles.successDiv}>
+                            <p>Se ha eliminado con exito a {deleteFriend}</p>
+                        </div>
+                    : 
+                    null
+                }
+            </Modal>
+            <GameRequest/>
+            <button className={styles.logoutBtn} onClick={logout}></button>
             <div className={styles.mainDiv}>
                 <div className={styles.subMainDiv}>
                     <div className={styles.player}>
                         <div className={styles.playerName}>
-                            <img src={profileIcon} alt="" className={styles.profileIcon} />
-                            <button className={styles.editBtn} onClick={editProfile}>✍</button>
+                            <img 
+                                src={userProfile.image === 'false' ? profileIcon : userProfile.image} 
+                                alt="Image User" 
+                                className={styles.profileIcon} />
                         </div>
                         <div className={styles.playerInfo}>
+                            <button className={styles.editBtn} onClick={editProfile}>Editar</button>
                             <h2>{userProfile?.username}</h2>
                             <h3>{userProfile?.email}</h3>
-                            <h3>Games played: {userProfile?.gamesPlayed}</h3>
+                            <h3> Partidas Jugadas: </h3>
+                            <p> {userProfile?.gamesPlayed} </p>
                             <div className={styles.playerInfo_Games}>
-                                <h3>Wins: {userProfile?.gamesLost}</h3>
-                                <h3>Loses: {userProfile?.gamesWon}</h3>
+                                <div className={styles.infoGames}>
+                                    <h3> Ganadas: </h3>
+                                    <p> {userProfile?.gamesLost} </p>
+                                </div>
+                                <div className={styles.infoGames}>
+                                    <h3> Perdidas: </h3>
+                                    <p> {userProfile?.gamesWon} </p>
+                                </div>
                             </div>
                         </div>
                     </div>
                     <br />
                     <div className={styles.friends}>
                         <div className={styles.friendsDiv}>
-                            <h3 classname={styles.title}>Amigos</h3>
+                            <h3 className={styles.title}>Amigos</h3>
                             <div className={styles.friendsList}>
                                 {
-                                    !friends.sender.length ? <p>No tienes amigos</p> : friends.sender.map(f => <Friend
+                                    !friends.sender.length ? <p className={styles.text}>No tienes amigos</p> : friends.sender.map(f => <Friend
                                         key={f?.id}
                                         email={f?.email}
                                         deleteId={deleteFriendFunction}
@@ -135,13 +191,18 @@ export default function Profile(props) {
                             </div>
                         </div>
                         <div className={styles.friendsDiv}>
-                            <h3>Solicitudes pendientes</h3>
+                            <h3 className={styles.title}>Solicitudes pendientes</h3>
                             <div className={styles.friendsList}>
                                 {
-                                    !friends.requested.length ? <p>No solicitudes pendientes</p> : friends.requested.map(f => <AddFriend
-                                        username={f.username}
-                                        respond={respondFriendFunction}
-                                        email={f.email}
+                                    !friends.requested.length 
+                                        ? 
+                                        <p className={styles.text}>Sin solicitudes pendientes</p> 
+                                        : 
+                                        friends.requested.map(f => <AddFriend
+                                            key={f.username}
+                                            username={f.username}
+                                            respond={respondFriendFunction}
+                                            email={f.email}
                                     />)
                                 }
                             </div>
@@ -151,7 +212,7 @@ export default function Profile(props) {
                         <h3 classname={styles.title}>Últimos resultados</h3>
                         <div className={styles.history}>
                             {
-                                !userHistory.length ? null : userHistory.map(m => <Match
+                                !userHistory?.length ? null : userHistory.map(m => <Match
                                     key={m?.id}
                                     id={m?.id}
                                     result={m?.winner === userProfile.username ? "Ganaste" : "Perdiste"}

@@ -13,11 +13,12 @@ export default function Chat ({name, roomId, typeofChat}) {
 
     useEffect(() => {
         socket.on('messages', (message) => {
+            console.log('ENTRAMOS A MENSAJES')
             console.log(message);
             setMsgs([...msgs, message]);
         })
 
-        return () => {socket.off("messages")}
+        return () => { socket.off("messages"); }
     }, [msgs])
 
     const divRef = useRef(null);
@@ -28,7 +29,9 @@ export default function Chat ({name, roomId, typeofChat}) {
 
     const submit = (event) => {
         event.preventDefault();
-        socket.emit('message', ({name, msg, roomId}));
+        if(roomId === 'lobby') socket.emit('lobyMessage', ({name, msg, roomId}), localStorage.isAuth);
+        else socket.emit('message', ({name, msg, roomId}), localStorage.isAuth);
+
         setMsg("");
     }
 
@@ -45,6 +48,7 @@ export default function Chat ({name, roomId, typeofChat}) {
                     <>
                         <textarea placeholder={'Message...'} name="" id="" cols="95" rows="1" value={msg} onChange={event => setMsg(event.target.value)}></textarea>
                         <button className={styles.btn}>Send</button>
+                        {/* <input placeholder='Message...' type="text" id="" cols="95" rows="1" value={msg} onChange={event => setMsg(event.target.value)}></input> */}
                     </>
                     : 
                     <input type="text" id="" cols="31" rows="1" value={msg} onChange={event => setMsg(event.target.value)} className={styles.writeMessageGame}></input>

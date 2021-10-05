@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from 'react-router';
@@ -9,6 +10,7 @@ import Modal from "./Modal";
 import signUpActions from '../Redux/actions-types/signUpActions';
 
 import styles from './styles/SignUp.module.css';
+import profileIcon from '../img/profileIcon.png';
 
 const ALPHA = /^[a-zA-Z\s]+$/;
 const EMAIL = /^[^@]+@[^@]+\.[^@]+$/;
@@ -16,21 +18,21 @@ const EMAIL = /^[^@]+@[^@]+\.[^@]+$/;
 function validate(state) {
   let errors = {};
   if(!state.username) {
-    errors.username = 'You have to enter a user name...';
+    errors.username = 'Ingresa tu nombre de usuario...';
   } else if (state.username.length < 4) {
-      errors.username = 'The user is invalid. Must be more than 4 characters...';
+      errors.username = 'Nombre inválido. Debe contener más de 3 caracteres...';
   } else if(!ALPHA.test(state.username)) {
-      errors.username = 'Only letters are allowed...'
+      errors.username = 'Solo se aceptan letras...'
   };
   if(!state.email) {
-    errors.email = 'You have to enter an email...';
+    errors.email = 'Ingresa tu email...';
   } else if(!EMAIL.test(state.email)) {
-      errors.email = 'The email is invalid';
+      errors.email = 'El email es inválido...';
   };
   if(!state.password) {
-    errors.password = 'You have to enter a password...';
+    errors.password = 'Ingresa un contraseña...';
   } else if (state.password.length < 4) {
-      errors.password = 'The password is invalid';
+      errors.password = 'Contraseña inválida. Debe contener más de 3 caracteres...';
   };
   return errors;
 };
@@ -39,6 +41,7 @@ const initialState = {
     username: '',
     email: '',
     password: '',
+    image: profileIcon,
 };
 
 export default function SignUp() {
@@ -74,7 +77,6 @@ export default function SignUp() {
         openModal();
         setState(initialState);
         setErrors(initialState);
-
     };
 
     useEffect(() => {
@@ -96,13 +98,13 @@ export default function SignUp() {
             <HomeButton />
             <section className={styles.container}>
                 <form className={styles.form} onSubmit={handleSubmit}>
-                <label className={styles.label} htmlFor="username" > User: </label>
+                <label className={styles.label} htmlFor="username" > Usuario: </label>
                 <input
                     type="text"
                     id="username"
                     name = "username"
                     value={state.username}
-                    placeholder="Put here the username"
+                    placeholder="Nombre de usuario"
                     autoComplete="off"
                     className={styles.input}
                     onChange={handleChange}
@@ -114,31 +116,31 @@ export default function SignUp() {
                     id='email'
                     name="email"
                     value={state.email}
-                    placeholder="Put here your email"
+                    placeholder="Email a registrar"
                     autoComplete="off"
                     className={styles.input}
                     onChange={handleChange}
                 />
                 {errors.email && (<p className={styles.danger}> {errors.email} </p>)}
-                <label className={styles.label} htmlFor="health"> Password: </label>
+                <label className={styles.label} htmlFor="password"> Contraseña: </label>
                 <input 
                     type='password'
                     id='password'
                     name="password"
                     value={state.password}
-                    placeholder="Put here the password"
+                    placeholder="Contraseña de la cuenta"
                     autoComplete="off"
                     className={styles.input}
                     onChange={handleChange}
-                    />
+                />
                 {errors.password && (<p className={styles.danger}> {errors.password} </p>)}
                 {((!errors.username && !errors.email && !errors.password) 
                     && 
                     (errors.username !== '' && errors.email !== '' && errors.password !== '')) 
                     ? 
-                    (<button type="submit" className={styles.button}> Create User </button>) 
+                    (<button type="submit" className={styles.button}> Crear Usuario </button>) 
                     : 
-                    <button type="submit" className={styles.disabled} disabled> Create User </button>}
+                    <button type="submit" className={styles.disabled} disabled> Crear Usuario </button>}
                 </form> 
             </section>
             <Modal isOpen={isOpenModal} closeModal={closeModal}>
@@ -146,7 +148,7 @@ export default function SignUp() {
               <p>{message}</p>
               {
                 registered ? 
-                <p>Redirecting...</p>
+                <p>Redireccionando...</p>
                 :
                 null
               }

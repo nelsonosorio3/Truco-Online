@@ -2,7 +2,7 @@ const { Router } = require("express");
 const Sequelize = require('sequelize');
 //const User = require("../models/User");
 
-const { User, Friends, Games } = require("../db.js");
+const { User, Friends, Games, Reports } = require("../db.js");
 
 const Op = Sequelize.Op;
 
@@ -59,7 +59,19 @@ const f13 = { status: "accepted", userSenderId: 8, userRequestedId: 7 }
 const f14 = { status: "accepted", userSenderId: 1, userRequestedId: 8 }
 const f15 = { status: "accepted", userSenderId: 2, userRequestedId: 3 }
 
-var friendships = [f1, f2, f3, f4, f5, f6, f7, f8, f9, f10, f11, f12, f13, f14]
+const r1 = { content: "Jugador que insulta", senderUserId: 1, reportedUserId: 3 }
+const r2 = { content: "Jugador que insulta", senderUserId: 1, reportedUserId: 5 }
+const r3 = { content: "Jugador que insulta", senderUserId: 1, reportedUserId: 9 }
+const r4 = { content: "Jugador que insulta", senderUserId: 2, reportedUserId: 1 }
+const r5 = { content: "Jugador que insulta", senderUserId: 6, reportedUserId: 1 }
+const r6 = { content: "Jugador que insulta", senderUserId: 8, reportedUserId: 1 }
+const r7 = { content: "Jugador que insulta", senderUserId: 2, reportedUserId: 3 }
+const r8 = { content: "Jugador que insulta", senderUserId: 12, reportedUserId: 3 }
+const r9 = { content: "Jugador que insulta", senderUserId: 10, reportedUserId: 6 }
+
+var friendships = [f1, f2, f3, f4, f5, f6, f7, f8, f9, f10, f11, f12, f13, f14];
+
+var reports = [r1, r2, r3, r4, r5, r6, r7, r8, r9];
 
 // Games
 
@@ -105,6 +117,22 @@ router.post("/", async (req, res) => {
     var d7 = await User.create(u7)
     var d8 = await User.create(u8)
 
+    d1.isAdmin = true;
+    d2.isAdmin = true;
+    d3.isAdmin = true;
+    d4.isAdmin = true;
+    d5.isAdmin = true;
+    d6.isAdmin = true;
+    d7.isAdmin = true;
+
+    await d1.save();
+    await d2.save();
+    await d3.save();
+    await d4.save();
+    await d5.save();
+    await d6.save();
+    await d7.save();
+
     for await (u of users) {
       User.create(u)
     }
@@ -115,6 +143,11 @@ router.post("/", async (req, res) => {
     for await (f of friendships) {
       Friends.create(f)
     }
+
+    for await (r of reports) {
+      Reports.create(r)
+    }
+
     res.status(200).json({ message: "Tabla de prueba llenada con éxito." });
   }
 
@@ -125,5 +158,7 @@ router.post("/", async (req, res) => {
 
 
 })
+
+
 
 module.exports = router;

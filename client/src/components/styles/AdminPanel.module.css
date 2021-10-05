@@ -1,6 +1,7 @@
 .mainContainer {
   background-color: #DCDCDC;
   padding-top: 120px;
+  height: 100%;
 }
 
 .tableContainer {
@@ -27,7 +28,6 @@ table th {
   color: white;
   font-size: 14px;
   height: 50px;
-  
 }
 
 table th , table td{
@@ -39,7 +39,6 @@ table tr{
   font-size: 14px;
   height: 40px;
 }
-
 
 table tr:nth-child(even){
   background-color: #BEF2F5

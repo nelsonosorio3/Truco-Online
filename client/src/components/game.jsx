@@ -1,18 +1,56 @@
-import React, { useState, useEffect } from 'react';
+/* eslint-disable jsx-a11y/alt-text */
+/* eslint-disable react-hooks/exhaustive-deps */
+import React, { useState, useEffect, useRef } from 'react';
 import stylesGame from './styles/game.module.css';
 import socket from './socket';
 import {useDispatch, useSelector} from 'react-redux'
 import Chat from './rooms/Chat';
 import { useHistory } from "react-router-dom";
 import { setIsInRoom } from '../Redux/actions-types/roomsActions';
+import axios from 'axios';
+import profileActions from '../Redux/actions-types/profileActions';
 
+const correctBetName = (betPick)=>{
+  let properBet = "";
+  if(betPick.includes("no quiero")) properBet = "No Quiero";
+  else if(betPick.includes("quiero")) properBet = "Quiero";
+  else if(betPick.at(-1) === "1" || betPick.at(-1) === "2") properBet = "Envido";
+  else if(betPick === "realEnvido") properBet = "Real Envido";
+  else if(betPick === "faltaEnvido") properBet = "Falta Envido";
+  else if(betPick === "truco") properBet = "Truco";
+  else if(betPick === "retruco") properBet = "Retruco";
+  else if(betPick === "valeCuatro") properBet = "Vale Cuatro";
+  else if(betPick === "ir al mazo") properBet = "Ir al Mazo";
 
-export default function Game() {
-    const roomId = useSelector(store => store.roomsReducer.roomId); //traer el id de la sala en la que esta el jugador
+  return properBet || betPick;
+}
+export default function Game({
+  tournamentMatchId,
+
+  setShowFirstMatch, 
+  setFinishedFirstMatch,
+
+  setShowSecondMatch,
+  setFinishedSecondMatch,
+
+  setShowThirdMatch,
+  setFinishedThirdMatch,
+
+  finishedFirstMatch,
+  finishedSecondMatch,
+  finishedThirdMatch,
+
+  wins,
+  setWins
+
+  }) {
+    var roomId = useSelector(store => store.roomsReducer.roomId); //traer el id de la sala en la que esta el jugador
+    // let isinRoom = useSelector(store => store.roomsReducer.isInRoom); // traer si esta en sala
+    if(tournamentMatchId) roomId = tournamentMatchId;
     const [player, setPlayer] = useState({ //objeto del jugador en el cliente deberia tener solo propiedades que se usan para renderizar o limitar interacciones en el cliente
         id: 1, // socket id del jugador
-        name: "player", // la idea seria que sea el nombre del profile
-        nameRival: "otherPlayer",
+        name: localStorage.user || "jugador 1", // la idea seria que sea el nombre del profile
+        nameRival: "jugador 2",
         score: 0,  // puntaje que lleva
         scoreRival: 0,
         hand: [], // las 3 cartas de la ronda
@@ -24,9 +62,33 @@ export default function Game() {
         bet: false, // llevar registro de si aposto
         roundResults: [], //deberia contener el resultado de la mano por ejemplo ["tie", "win", "loss"]
         starts: false, // referencia para cambiar turnos al finalizar ronda
+        token: localStorage.token,
       });
+    const [newRound, setNewRound] = useState(false);
+    const [pointBox, setPointsBox] = useState(false);
+    const [isYourTurn, setIsYourTurn] = useState(false);
     const history = useHistory();
+    const scoreBox = useRef();
+    const {getProfile} = profileActions;
+    const { userProfile} = useSelector(state => state.profileReducer);
     const dispatch = useDispatch();
+
+    const addFriend = ()=>{
+      player?.id && socket.emit("addFriend", localStorage.id, roomId, player.id, player.name);
+    }
+    const surrender = ()=>{
+      socket.emit("surrender", roomId, player.id, localStorage.token);
+      dispatch(setIsInRoom({isInRoom: false, roomId: null}));
+    }
+    const tutorial = ()=>{
+      /// mostrar valor cartas y explicacion corta de apuestas
+    }
+    const report = ()=> {
+      /// falta crear la ruta a donde enviarlo en el back
+    }
+    const showScore = ()=>{
+      setPointsBox(!pointBox)
+    }
     const bet = e => { //emite la apuesta
       if(player.isTurn){
         socket.emit("bet", e.target.name, roomId, player.id);
@@ -42,20 +104,27 @@ export default function Game() {
     };
     
     useEffect(()=>{
+      localStorage?.isAuth && dispatch(getProfile({token: localStorage?.token}));
+    },[]);
+    useEffect(()=>{
       socket.on("gameStarts", player=>{ //escucha gameStarts para iniciar cuando la sala se llena y dejar el estado jugador listo
         setPlayer(player);
       });
-      socket.on("newRoundStarts", player=>{  //escucha para empezar nueva partida
-        setPlayer(player);
+      socket.on("newRoundStarts", player1=>{  //escucha para empezar nueva mano
+        setPlayer({...player, isTurn: false})
+        setNewRound(true);
+        setTimeout(()=>setPlayer(player1),3000);
       });
-      socket.on("bet", async (betOptions, bool)=>{  //trae la apuesta segun turno
-        setPlayer({...player, betOptions, bet: bool});
+      socket.on("bet", (betOptions, bool, turn)=>{  //trae la apuesta segun turno
+        console.log(turn)
+        if(turn === undefined) setPlayer({...player, betOptions, bet: bool});
+        else setPlayer({...player, betOptions, bet: bool, isTurn: turn});
       });
       socket.on("betting", bool=>{  //cambia el estado de si se esta apostando para bloquear jugar cartas hasta resolverlo
         setPlayer({...player, bet: false, betOptions: [], isTurn: !player.isTurn});
       });
-      socket.on("playCard", card=>{  //escucha carta jugada por rival
-        setPlayer({...player, tableRival:  [...player.tableRival, card], isTurn: true}); 
+      socket.on("playCard", (card, bool)=>{  //escucha carta jugada por rival
+        setPlayer({...player, tableRival:  [...player.tableRival, card], isTurn: bool}); 
       });
       socket.on("updateScore", (score, bool) =>{  //trae cambios en el puntaje
         setPlayer({...player, score: player.score + score, bet: false, isTurn: bool})
@@ -75,13 +144,55 @@ export default function Game() {
       socket.on("updateRivalScore", (score, bool)=>{
         setPlayer({...player, scoreRival: player.scoreRival + score, bet: false, isTurn: bool})
       });
-      socket.on("gameEnds", data=>{
-        console.log("termino");
-        history.push("/profile");
-        alert("el juego termino");
-        dispatch(setIsInRoom({isInRoom: false, roomId: null}))
-        //aqui deberia estar el dispatch con data que contiene playerOne, playerTwo, commonhacer el post a la api y agregar info de la partida.
+      socket.on("gameEnds", (data) =>{
+        let dataCopy = Object.assign({}, data)
+        console.log('ESTA ES LA DATA DE GAME ENDS:', dataCopy)
+        if(tournamentMatchId){
+          if(finishedFirstMatch===false && finishedSecondMatch===false && finishedThirdMatch===false){
+            alert("Partida terminada. Ganador:", dataCopy.winner);
+            dispatch(setIsInRoom({isInRoom: false, roomId: null}));
+            if(dataCopy.winner === localStorage.user) setWins([...wins, dataCopy.winner])
+            setShowFirstMatch(false)
+            setFinishedFirstMatch(true)
+          }
+          if(finishedFirstMatch===true && finishedSecondMatch===false && finishedThirdMatch===false){
+            alert("Partida terminada. Ganador:", dataCopy.winner);
+            dispatch(setIsInRoom({isInRoom: false, roomId: null}));
+            if(dataCopy.winner === localStorage.user) setWins([...wins, dataCopy.winner])
+            setShowSecondMatch(false)
+            setFinishedSecondMatch(true)
+          }
+          if(finishedFirstMatch===true && finishedSecondMatch===true && finishedThirdMatch===false){
+            alert("Partida terminada. Ganador:", dataCopy.winner);
+            dispatch(setIsInRoom({isInRoom: false, roomId: null}));
+            if(dataCopy.winner === localStorage.user) setWins([...wins, dataCopy.winner])
+            setShowThirdMatch(false)
+            setFinishedThirdMatch(true)
+          }
+
+        } else{
+          console.log("termino");
+          history.push("/profile");
+          alert("el juego termino");
+          dispatch(setIsInRoom({isInRoom: false, roomId: null}));
+        }
+      },);
+      socket.on("surrender",()=>{
+        alert("El otro jugador se rindio, TU GANAS!");
+        socket.emit("surrender2", roomId, localStorage.token);
+        dispatch(setIsInRoom({isInRoom: false, roomId: null}));
       });
+      socket.on("addFriend", (idSender)=>{
+        // dispatch(sendFriendRequest({idSender, email: userProfile.email}));
+        console.log("casi");
+        userProfile.email && idSender && axios.post(`http://localhost:3001/api/friends/${idSender}/${userProfile.email}`)
+      })
+      let handler = event =>{
+        if(!scoreBox.current.contains(event.target)){
+          setPointsBox(false);
+        }
+      }
+      document.addEventListener("mousedown", handler)
       return () =>{ //limpieza de eventos
         socket.off("gameStarts");
         socket.off('newRoundStarts');
@@ -94,12 +205,30 @@ export default function Game() {
         socket.off("quieroTruco");
         socket.off("quieroEnvido1");
         socket.off("envido1");
+        socket.off("updateScore");
+        socket.off("updateRivalScore");
+        socket.off("surrender");
+        socket.off("addFriend");
+        document.removeEventListener("mousedown", handler)
       };
     },[player]);
-    
+    useEffect(()=>{
+      setTimeout(()=>setNewRound(false), 3000);
+    },[newRound])
+    useEffect(()=>{
+      setPointsBox(true)
+      setTimeout(()=>setPointsBox(false), 2000);
+    },[player.score, player.scoreRival])
+    useEffect(()=>{
+      if(player.isTurn && !isYourTurn && !player.tablePlayer[2]){
+        setIsYourTurn(true)
+        console.log("is your turn")
+        setTimeout(()=>setIsYourTurn(false), 1000);
+      } 
+    },[player.isTurn])
     console.log(player) //para testing
     return(<div id={stylesGame.gameBackground}>
-            <div>
+            <div id={stylesGame.cardZone}>
               <ol >{[...Array(3-player.tableRival.length).keys()].map(card=><div key={card} id={stylesGame.rivalHand}><img src={`/cards/0.webp`} className={stylesGame.cardsImg}/></div>)}</ol>
               <div id={stylesGame.cardsContainer}>
               
@@ -110,23 +239,32 @@ export default function Game() {
             <ol>{player.hand?.map(card => <div key={card.id} onClick={()=>playCard(card)} id={player.isTurn && !player.bet? stylesGame.playerHandActive : stylesGame.playerHand}><img src={`/cards/${card.id}.webp`}  className={stylesGame.cardsImg}/></div>)}</ol><br/>
             </div>
 
-            <div id={stylesGame.points}>
-              <div>
+            <div id={stylesGame.points} ref={scoreBox} style={{ display: pointBox? "flex" : "none", position: "absolute",zIndex:"999"}}>
+              <div style={{ height: "20%"}}>
                 <h2>{player.name}</h2>
                 {player.score? <img src={player.score<=30? `/points/${player.score}.png.webp` : "/points/30.png.webp"}/> : <div></div>}
               </div>
-              <div>
+              <div style={{ height: "20%"}}>
                 <h2>{player.nameRival}</h2>
                 {player.scoreRival? <img src={player.scoreRival<=30? `/points/${player.scoreRival}.png.webp` : "/points/30.png.webp"}/> : <div></div>}
               </div>
             </div>
 
             <div id={stylesGame.containerChat}>
-            <Chat name={player.name} roomId={roomId}/>
-              <div className={"betContainer"}>
-                {player.betOptions?.map(betPick=><button onClick={bet} name={betPick} key={betPick} className={player.isTurn? stylesGame.btnBet : stylesGame.btnBetNoTurn}>{betPick}</button>)}<br/>
+              <div id={stylesGame.optionsButtons}>
+                <button className={stylesGame.btnOptions} onClick={showScore}>Puntaje</button>
+                <button className={stylesGame.btnOptions} onClick={report}>Reportar</button>
+                <button className={stylesGame.btnOptions} onClick={addFriend}>Agregar amigo</button>
+                <button className={stylesGame.btnOptions} onClick={surrender}>Salir</button>
+                <button className={stylesGame.btnOptions} onClick={tutorial}>❔</button>
               </div>
+              <Chat name={player.name} roomId={roomId}/>
+                <div id={"betContainer"}>
+                  {player.betOptions?.map(betPick=><button onClick={bet} name={betPick} key={betPick} className={player.isTurn? stylesGame.btnBet : stylesGame.btnBetNoTurn}>{correctBetName(betPick)}</button>)}
+                </div>
             </div>
+            <div><img src={`/cards/shuffle.gif`} style={{display: newRound? "flex" : "none"}} id={player.starts? stylesGame.shuffle1 : stylesGame.shuffle2}/></div>
+            <div id={stylesGame.isYourTurn} style={{display: isYourTurn? "flex" : "none"}}><h1>ES TU TURNO</h1></div>
           </div> 
     );
 };

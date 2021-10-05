@@ -1,9 +1,9 @@
-import React, {useState, useEffect, useRef} from 'react';
-import {useDispatch, useSelector} from 'react-redux'
+import React from 'react';
+import {useDispatch} from 'react-redux'
 import { setIsInTournament } from '../../Redux/actions-types/tournamentsActions';
 
 import socket from '../socket';
-import styles from './styles/Tournaments.module.css'
+import styles from './styles/TournamentsForm.module.css'
 
 export default function TournamentsForm(){
     const dispatch = useDispatch()
@@ -11,7 +11,7 @@ export default function TournamentsForm(){
     const createTournament = async (event) => {
         event.preventDefault();
         let idGenerator = Math.floor(Math.random()*1000000)
-        socket.emit('createTournament', (idGenerator))
+        socket.emit('createTournament', ({tournamentId: idGenerator, user: localStorage.user}))
         dispatch(setIsInTournament({isInTournament: true, tournamentId: idGenerator}))
     }
     

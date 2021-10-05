@@ -1,6 +1,14 @@
 .roomsList{
     background-color: rgba(255, 255, 255, 0.6);
     text-align: center;
+    display: block;
+    width: auto;
+    height: 200px;
+    justify-content: left;
+    justify-self: left;
+    justify-items: left;
+
+   
 }
 
 .roomBtn{
@@ -27,4 +35,8 @@
     line-height: 1.5;
     border-radius: .25rem;
     transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+}
+.btn:hover {
+    transition: all 1s cubic-bezier(0.19, 1, 0.22, 1);
+    background-color:black;
 }

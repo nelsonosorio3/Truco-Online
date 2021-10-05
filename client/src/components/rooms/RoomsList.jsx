@@ -1,5 +1,5 @@
-import React, {useState, useEffect, useRef } from 'react';
-import {useDispatch, useSelector} from 'react-redux'
+import React, {useState, useEffect} from 'react';
+import {useDispatch} from 'react-redux'
 
 import { setIsInRoom } from '../../Redux/actions-types/roomsActions';
 import socket from '../socket';
@@ -7,9 +7,9 @@ import styles from './styles/RoomsList.module.css'
 
 export default function RoomsList(){
     const [allRooms, setAllRooms] = useState([])
-    const [roomId, setRoomId] = useState('')
+    // const [roomId, setRoomId] = useState('')
     const dispatch = useDispatch()
-    const listRooms = useRef(null);
+
     useEffect(() => {
         socket.on('showActiveRooms', (rooms) => {
             setAllRooms([rooms]);
@@ -21,42 +21,34 @@ export default function RoomsList(){
 
     useEffect(()=>{
         socket.emit('bringActiveRooms')  // traer todas las rooms disponibles al entrar
-        console.log("test")
     }, [])
 
     useEffect(()=>{
-        socket.on("newRoomCreated",()=> {console.log("test");socket.emit('bringActiveRooms')}) //actualizar en tiempo real rooms disponibles
+        socket.on("newRoomCreated", () => {socket.emit('bringActiveRooms')}) //actualizar en tiempo real rooms disponibles
         return ()=>{
             socket.off("newRoomCreated")
         }
     })
 
-    const updateRooms = (event) => {
-        event.preventDefault();
-        socket.emit('bringActiveRooms'); 
-    }
-
     const joinRoom = async (event) => {
         event.preventDefault();
-        socket.emit('joinRoom', (parseInt(event.target[0].innerText)))
-        dispatch(setIsInRoom({isInRoom: true, roomId: parseInt(event.target[0].innerText)}))
+        socket.emit('joinRoom', (parseInt(event.target[0].value)), localStorage.user, localStorage.token)
+        dispatch(setIsInRoom({isInRoom: true, roomId: parseInt(event.target[0].value)}))
       }
 
     return(
         <div>
-            <form onSubmit={updateRooms} ref={listRooms}>
-                <button type='submit' className={styles.btn} >Update Rooms</button>
-            </form>
             <div className={styles.roomsList}>
                 {
                 allRooms.length > 0
-                ?
+                ?   
                     allRooms[0].activeRooms.map(room => 
-                    <div key={room}>
+                    <div key={room.id}>
                         <form onSubmit={joinRoom}>
-                            <button type='submit' value={room} className={styles.roomBtn} >{room}</button>
+                            <button type='submit' value={room.id} className={styles.roomBtn}>Room Id: {room.id} | Host: {room.host}</button>
                         </form>
-                    </div>)
+                    </div>
+                    )
                 :
                     <></>
                 }

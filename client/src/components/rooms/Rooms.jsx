@@ -1,24 +1,28 @@
-import React, {useEffect, useState} from 'react';
-import {useDispatch, useSelector} from 'react-redux'
-import { useHistory } from "react-router-dom";
+import React from 'react';
+import {useSelector} from 'react-redux'
+// import { useHistory } from "react-router-dom";
 import Game from '../game';
+import GameRequest from '../GameRequest';
+
 
 import styles from './styles/Rooms.module.css'
 
-import Chat from './Chat';
 import NavBar from '../NavBar';
 
 import JoinRoomForm from './JoinRoomForm';
 import RoomsList from './RoomsList';
-import socket from '../socket';
+import ChatLobby from './ChatLobby';
+
+// import socket from '../socket';
 
 export default function Rooms() {
   console.log("localStorage in Rooms", localStorage)
-  const history = useHistory()
+  // const history = useHistory()
 
   let isinRoom = useSelector(store => store.roomsReducer.isInRoom);
-  const roomId = useSelector(store => store.roomsReducer.roomId)
+  // const roomId = useSelector(store => store.roomsReducer.roomId)
 
+  
   // socket.on("roomFull", ()=>isinRoom= false)
   return (
     <div className={styles.mainDiv}>
@@ -36,10 +40,14 @@ export default function Rooms() {
         :
         <>
         <NavBar />
+        <GameRequest/>
+        
         <div className={styles.subMainDiv_noGame}>
           <div className={styles.lobby}>
-            <div className={styles.div_Chat_Rooms}>
-              <Chat typeofChat={'chatLobby'}/>
+            <h2 className={styles.title}>Bienvenidos a Truco Henry</h2>
+            <div className={styles.div_Chat_Rooms}>  
+              {/* <Chat typeofChat={'chatLobby'} roomId={'lobby'} name={localStorage.user}/> */}
+              <ChatLobby typeofChat={'chatLobby'} roomId={'lobby'} name={localStorage.user} />
               <div className={styles.div_CreateRoom_RoomsList}>
                 <JoinRoomForm />
                 <RoomsList />
