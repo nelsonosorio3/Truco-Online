@@ -45,6 +45,8 @@ export default function Profile(props) {
 
     const dispatch = useDispatch();
 
+    const games = userHistory.length > 5 ? userHistory.slice(0, 5) : userHistory;
+
     //Trae primeramente los datos del usuario y sus amigos
     useEffect(() => {
         //informacion del usuario logeado
@@ -93,7 +95,6 @@ export default function Profile(props) {
 
     //Funcion para responder a una solicitud
     const respondFriendFunction = (email, response) => {
-        console.log(userProfile.id, email, response);
         dispatch(putFriendRequest(userProfile.id, email, response));
         window.location.reload();
     };
@@ -212,7 +213,7 @@ export default function Profile(props) {
                         <h3 classname={styles.title}>Últimos resultados</h3>
                         <div className={styles.history}>
                             {
-                                !userHistory?.length ? null : userHistory.map(m => <Match
+                                !games?.length ? null : games.map(m => <Match
                                     key={m?.id}
                                     id={m?.id}
                                     result={m?.winner === userProfile.username ? "Ganaste" : "Perdiste"}

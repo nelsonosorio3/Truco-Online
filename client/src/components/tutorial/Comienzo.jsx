@@ -12,7 +12,7 @@ export default function Comienzo() {
             <div className={styles.title}>
                 <p>{intro}</p>
             </div>  
-            <img src={game} className={styles.game}/>
+            <img src={game} className={styles.game} alt=''/>
         </div>
     );
 };
