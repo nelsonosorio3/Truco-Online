@@ -3,11 +3,13 @@
 // /* eslint-disable no-unused-vars */
 
 import React, {useEffect, useState} from 'react';
+import { useDispatch} from 'react-redux'
+import { setLeftTournament } from '../../Redux/actions-types/tournamentsActions';
 
 import styles from './styles/TournamentGames.module.css'
-import Game from '../game';
 
 import socket from '../socket';
+import Game from '../game';
 
 export default function TournamentGames ({matchesList, savedData}){
     const [showGame, setShowGame] = useState(false)
@@ -31,6 +33,7 @@ export default function TournamentGames ({matchesList, savedData}){
     //////////////////////////////////////////////////////////////////
     const [next, setNext] = useState(0)
 
+    const dispatch = useDispatch()
 
     useEffect(() => {
         if(matchesList) socket.emit('addMatchesList', ({matchesList, savedData}));
@@ -129,6 +132,10 @@ export default function TournamentGames ({matchesList, savedData}){
         }
     }, [finishedFirstMatch, finishedSecondMatch, finishedThirdMatch])
 
+    const leave = () => {
+        dispatch(setLeftTournament())
+    }
+
     return(
         <div>
             {matches.length > 0 ? console.log(matches) : null}
@@ -223,22 +230,25 @@ export default function TournamentGames ({matchesList, savedData}){
                     <div className={styles.generalStats}>
                         {
                             allPlayersWins.length > 0
-                            ? allPlayersWins.map(w => {
-                                if(w.length > 0){
-                                    return(
-                                        <div className={styles.stats} key={w[0]}>
-                                            <h4>{`${w[0]}:`}</h4>
-                                            <h4>{`${w.length} puntos.`}</h4>
-                                        </div>
-                                    )
-                                }
-                            })
+                            ?
+                            <div>
+                            {   allPlayersWins.map(w => {
+                                    if(w.length > 0){
+                                        return(
+                                            <div className={styles.stats} key={w[0]}>
+                                                <h4>{`${w[0]}:`}</h4>
+                                                <h4>{`${w.length} puntos.`}</h4>
+                                            </div>
+                                        )
+                                    }
+                                })}
+                                <button onClick={leave}>Salir</button>
+                            </div> 
                             : null
                         }
                     </div> 
                 </div>
             : null}
-            {console.log(showGame, actualIdGame)}
         </div>
     )
 }

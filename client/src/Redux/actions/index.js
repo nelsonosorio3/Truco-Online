@@ -40,5 +40,6 @@ export const SET_DISPLAYED_ON_PAGE = "SET_DISPLAYED_ON_PAGE";
 export const IS_IN_ROOM = 'ADD_ROOM'
 //Tournament
 export const IS_IN_TOURNAMENT = 'IS_IN_TOURNAMENT';
+export const LEFT_TOURNAMENT = 'LEFT_TOURNAMENT';
 //Ranking
 export const GET_RANKING = 'GET_RANKING';
