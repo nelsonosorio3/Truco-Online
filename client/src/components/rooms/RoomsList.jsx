@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 
-import { setIsInRoom } from '../../Redux/actions-types/roomsActions';
 import socket from '../socket';
+
+import { setIsInRoom } from '../../Redux/actions-types/roomsActions';
+
 import GameRequest from '../GameRequest';
 
 import styles from './styles/RoomsList.module.css';
@@ -58,8 +60,8 @@ export default function RoomsList(){
         } 
     }
 
-    return(
-        <div>
+    return (
+        <>
             <GameRequest/>
             <div className={styles.roomsList}>
                 {
@@ -81,7 +83,7 @@ export default function RoomsList(){
                     </div>
                     )
                 :
-                    null
+                    <p>No hay rooms...</p>
                 }
             </div>
             <div>
