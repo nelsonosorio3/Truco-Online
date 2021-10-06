@@ -7,6 +7,9 @@ import styles from './styles/RoomsList.module.css'
 import GameRequest from '../GameRequest';
 export default function RoomsList(){
     const [allRooms, setAllRooms] = useState([])
+    const [roomWithPassword, setRoomWithPassword] = useState(false)
+    const [roomData, setRoomData] = useState({})
+    const [userRoomTest, setUserRoomTest] = useState("")
     // const [roomId, setRoomId] = useState('')
     const dispatch = useDispatch()
 
@@ -32,9 +35,29 @@ export default function RoomsList(){
 
     const joinRoom = async (event) => {
         event.preventDefault();
-        socket.emit('joinRoom', (parseInt(event.target[0].value)), localStorage.user, localStorage.token)
-        dispatch(setIsInRoom({isInRoom: true, roomId: parseInt(event.target[0].value)}))
-      }
+        console.log('ESTE ES EL PASSWORD', event.target[0].attributes[3].nodeValue)
+        
+        //  En caso de existir contraseña
+        if(event.target[0].attributes[3]){
+            setRoomData({idRoom: event.target[0].value, password: event.target[0].attributes[3].nodeValue})
+            setRoomWithPassword(true)
+        }
+        else{
+            socket.emit('joinRoom', (parseInt(event.target[0].value)), localStorage.user, localStorage.token)
+            dispatch(setIsInRoom({isInRoom: true, roomId: parseInt(event.target[0].value)}))
+        }
+    }
+
+    const joinRoomPassword = async (event) => {
+        event.preventDefault();
+        console.log(event.target[0].value)
+        if(event.target[0].value === roomData.password){
+            socket.emit('joinRoom', (parseInt(roomData.idRoom)), localStorage.user, localStorage.token)
+            dispatch(setIsInRoom({isInRoom: true, roomId: parseInt(event.target[0].value)}))
+        } 
+    }
+
+
 
     return(
         <div>
@@ -46,12 +69,33 @@ export default function RoomsList(){
                     allRooms[0].activeRooms.map(room => 
                     <div key={room.id}>
                         <form onSubmit={joinRoom}>
-                            <button type='submit' value={room.id} className={styles.roomBtn}>Room Id: {room.id} | Host: {room.host}</button>
+                            <button type='submit' value={room.id} className={styles.roomBtn} password={room.password ? room.password : null}>
+                                <p>Room Id: {room.id} | </p>
+                                <p>Host: {room.host} | </p>
+                                {
+                                    room.password
+                                    ? <p>Status: Private</p>
+                                    : <p>Status: Public</p>
+                                }
+                            </button>
                         </form>
                     </div>
                     )
                 :
                     <></>
+                }
+            </div>
+            <div>
+                {
+                    roomWithPassword
+                    ? 
+                    <div>
+                        <h6>Ingresa la contraseña</h6>
+                        <form onSubmit={joinRoomPassword}>
+                            <input type="text" placeholder={'Contraseña...'} />
+                        </form>
+                    </div>
+                    : null
                 }
             </div>
         </div>
