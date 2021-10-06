@@ -1,4 +1,12 @@
 .roomsList {
+
+    background-color: rgba(255, 255, 255, 0.6);
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    /* width: auto; */
+    height: 23pc;
+
     width: 90%;
     min-height: 3em;
     height: auto;
@@ -9,8 +17,13 @@
     
     margin-left: auto;
     margin-right: auto;
+
+    /* justify-content: left; */
+    /* justify-self: left; */
+    /* justify-items: left; */
+    align-items: center;
+    /* justify-content: center; */
     
-    background-color: rgba(255, 255, 255, 0.6);
     padding: .5em;
     text-align: center;
 }
@@ -22,6 +35,8 @@
 .roomBtn {
     background: none;
     border: none;
+    display: flex;
+    flex-direction: row;
 }
 
 .roomBtn:hover {
