@@ -99,6 +99,6 @@ export default function RoomsList(){
                     : null
                 }
             </div>
-        </div>
+        </>
     );
 };
