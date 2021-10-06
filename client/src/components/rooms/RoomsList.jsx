@@ -56,7 +56,7 @@ export default function RoomsList(){
         console.log(event.target[0].value)
         if(event.target[0].value === roomData.password){
             socket.emit('joinRoom', (parseInt(roomData.idRoom)), localStorage.user, localStorage.token)
-            dispatch(setIsInRoom({isInRoom: true, roomId: parseInt(event.target[0].value)}))
+            dispatch(setIsInRoom({isInRoom: true, roomId: parseInt(roomData.idRoom)}))
         } 
     }
 
