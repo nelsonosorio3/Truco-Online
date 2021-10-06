@@ -8,6 +8,7 @@ const games = require("./games");
 const signup = require("./signup");
 const ranking = require("./ranking");
 const reports = require("./reports");
+const tournaments = require("./tournaments")
 
 const filltable = require("./filltable"); // Borrar línea en proyecto final
 const { isRegularExpressionLiteral } = require('typescript');
@@ -23,6 +24,7 @@ router.use("/signup", signup);
 router.use("/games", games);
 router.use("/ranking", ranking);
 router.use("/reports", reports);
+router.use("/tournaments", tournaments);
 router.use("/filltable", filltable); // Borrar línea en proyecto final
 
 module.exports = router;

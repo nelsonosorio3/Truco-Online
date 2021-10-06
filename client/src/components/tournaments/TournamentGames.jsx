@@ -125,7 +125,7 @@ export default function TournamentGames ({matchesList, savedData}){
 
     useEffect(() => {
         if(finishedFirstMatch===true && finishedSecondMatch===true && finishedThirdMatch===true){
-            socket.emit('setWinner', ({tournamentId: savedData[0].tournamentId, playerWins: wins}))
+            socket.emit('setWinner', ({tournamentId: savedData[0].tournamentId, playerWins: wins, savedData}))
         }
     }, [finishedFirstMatch, finishedSecondMatch, finishedThirdMatch])
 
@@ -142,8 +142,8 @@ export default function TournamentGames ({matchesList, savedData}){
                                 matches.map(m => {
                                     return (
                                     <div key={m.matchId} className={styles.match}>
-                                        <h6 key={m.matchId}>{m.participants[0]} vs {m.participants[1]}.</h6>
-                                        <h6 key={m.matchId}>Match ID: {m.matchId}</h6>
+                                        <h6>{m.participants[0]} vs {m.participants[1]}.</h6>
+                                        <h6>Match ID: {m.matchId}</h6>
                                     </div>)
                             } )
                             : null
@@ -226,7 +226,7 @@ export default function TournamentGames ({matchesList, savedData}){
                             ? allPlayersWins.map(w => {
                                 if(w.length > 0){
                                     return(
-                                        <div className={styles.stats}>
+                                        <div className={styles.stats} key={w[0]}>
                                             <h4>{`${w[0]}:`}</h4>
                                             <h4>{`${w.length} puntos.`}</h4>
                                         </div>
