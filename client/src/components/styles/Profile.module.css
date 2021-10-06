@@ -87,6 +87,17 @@
     font-size: 1.5rem;
 }
 
+.gamesAndTournamentsStats{
+    display: flex;
+    /* gap: 16pc; */
+}
+
+.games{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
 .editBtn {
     width: auto;
 
@@ -187,7 +198,7 @@
     align-items: center;
     align-self: center;
 
-    background-color: rgb(222, 222, 222);
+    background-color: rgba(255, 255, 255, 0.6);
     -webkit-box-shadow: 5px 5px 20px 5px rgba(222,222,222,0.1); 
     box-shadow: 5px 5px 20px 5px rgba(222,222,222,0.1);
     padding: 1em;
@@ -195,6 +206,8 @@
 
     overflow-x: scroll;
     overflow-y: hidden;
+
+    margin-top: 5%;
 }
 
 .friendsList::-webkit-scrollbar {
@@ -229,8 +242,8 @@
 
 .lastResults {
     width: 100%;
-    min-height: 10em;
-    max-height: 10em;
+    min-height: 18em;
+    max-height: 18em;
 
     display: flex;
     flex-direction: column;
@@ -242,6 +255,12 @@
 }
 
 .history {
+    width: 80%;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
     margin: auto;
 }
 
@@ -337,6 +356,10 @@
         font-size: .8em;
     }
 
+    .playerInfo_Games {
+        width: 15em;
+    }
+
     .friends {
         width: 100%;
         min-height: 28em;
@@ -352,6 +375,43 @@
     .friendsList {
         min-height: 50vh;
         max-height: 50vh;
+    }
+
+    .history {
+        justify-content: space-between;
+
+        overflow-x: scroll;
+        overflow-y: hidden;
+    }
+
+    .history::-webkit-scrollbar {
+        width: 9px;
+        height: 9px; 
+    }
+
+    .history::-webkit-scrollbar-thumb {
+     background: rgb(50, 50, 50);
+        border-radius: 4px;
+    }
+
+    .history::-webkit-scrollbar-thumb:hover {
+        background: rgb(125, 60, 30);
+    }
+
+    .history::-webkit-scrollbar-thumb:active {
+        background: rgb(141, 73, 37);
+    }
+
+    .history::-webkit-scrollbar-track {
+        background: transparent;
+    }
+
+    .history::-webkit-scrollbar-track:hover {
+        background: transparent;
+    }
+
+    .history::-webkit-scrollbar-track:active {
+        background: transparent;
     }
 }
 
@@ -402,6 +462,7 @@
         max-height: 50vh;
         min-height: 50vh;
     }
+
 }
 
 @media screen and (max-width: 600px) {
@@ -440,6 +501,11 @@
         max-height: 22em;
     }
 
+    .playerInfo_Games {
+        width: 9em;
+    }
+
+
     .friendsList {
         max-height: 40vh;
         min-height: 40vh;
@@ -454,10 +520,22 @@
     }
 
     .playerInfo h3 {
-        font-size: 1.1rem;
+        font-size: 0.9rem;
     }
     
     .playerInfo p {
         font-size: 1rem;
     }
+}
+
+@media screen and (max-width: 335px) {
+    .playerInfo h3 {
+        background-color: red;
+    }
+
+    .playerInfo {
+        width: 300px;
+    }
+
+
 }

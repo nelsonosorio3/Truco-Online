@@ -37,8 +37,9 @@ export default function Tournaments() {
                     isinTournament
                         ?
                         <TournamentInCourse />
-                        :
-                        <div>
+                    :
+                        <div className={styles.formAndList}>
+
                             <TournamentsForm />
                             <TournamentsList />
                         </div>

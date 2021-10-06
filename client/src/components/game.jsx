@@ -10,6 +10,7 @@ import { setIsInRoom } from '../Redux/actions-types/roomsActions';
 import axios from 'axios';
 import profileActions from '../Redux/actions-types/profileActions';
 
+let turnTime;
 const correctBetName = (betPick)=>{
   let properBet = "";
   if(betPick.includes("no quiero")) properBet = "No Quiero";
@@ -67,6 +68,9 @@ export default function Game({
     const [newRound, setNewRound] = useState(false);
     const [pointBox, setPointsBox] = useState(false);
     const [isYourTurn, setIsYourTurn] = useState(false);
+    const [reported, setReported] = useState(false);
+    const [friend, setFriend] = useState(false);
+    let [timesWithoutPlay, setTimesWithoutPlay] = useState(0);
     const history = useHistory();
     const scoreBox = useRef();
     const {getProfile} = profileActions;
@@ -74,37 +78,48 @@ export default function Game({
     const dispatch = useDispatch();
 
     const addFriend = ()=>{
-      player?.id && socket.emit("addFriend", localStorage.id, roomId, player.id, player.name);
-    }
+      if(!friend){
+        player?.id && socket.emit("addFriend", localStorage.id, roomId || localStorage.roomId, player.id, player.name);
+        setFriend(true);
+      }
+      else  socket.emit('already friend', player.id);
+    };
     const surrender = ()=>{
-      socket.emit("surrender", roomId, player.id, localStorage.token);
+      socket.emit("surrender", roomId || localStorage.roomId, player.id, localStorage.token);
       dispatch(setIsInRoom({isInRoom: false, roomId: null}));
-    }
+      setTimeout(()=>history.push("/profile"),300);
+      clearTimeout(turnTime);
+    };
     const tutorial = ()=>{
       /// mostrar valor cartas y explicacion corta de apuestas
-    }
+    };
     const report = ()=> {
-      /// falta crear la ruta a donde enviarlo en el back
-    }
+      if(!reported){
+        localStorage.id && socket.emit("report", localStorage.id, roomId || localStorage.roomId, player.id);
+      setReported(true);
+      }
+      else  socket.emit('already reported', player.id);
+    };
     const showScore = ()=>{
-      setPointsBox(!pointBox)
-    }
+      setPointsBox(!pointBox);
+    };
     const bet = e => { //emite la apuesta
       if(player.isTurn){
-        socket.emit("bet", e.target.name, roomId, player.id);
-        if(e.target.name !== "ir al mazo") setPlayer({...player, bet:true, isTurn:false, betOptions: []})
+        socket.emit("bet", e.target.name, roomId || localStorage.roomId, player.id);
+        if(e.target.name !== "ir al mazo") setPlayer({...player, bet:true, isTurn:false, betOptions: []});
       };
     };
 
     const playCard = (card) =>{ //emite carta jugada
       if(player.isTurn && !player.bet){
       setPlayer({...player, hand: player.hand.filter(cardH=> card.id !== cardH.id), tablePlayer: [...player.tablePlayer, card], isTurn: false});
-      socket.emit("playCard", card, roomId, player.id);
+      socket.emit("playCard", card, roomId || localStorage.roomId, player.id);
       };
     };
     
     useEffect(()=>{
       localStorage?.isAuth && dispatch(getProfile({token: localStorage?.token}));
+      socket.emit("refresh", roomId || localStorage.roomId);
     },[]);
     useEffect(()=>{
       socket.on("gameStarts", player=>{ //escucha gameStarts para iniciar cuando la sala se llena y dejar el estado jugador listo
@@ -176,17 +191,22 @@ export default function Game({
           alert("el juego termino");
           dispatch(setIsInRoom({isInRoom: false, roomId: null}));
         }
+        clearTimeout(turnTime);
       },);
       socket.on("surrender",()=>{
         alert("El otro jugador se rindio, TU GANAS!");
-        socket.emit("surrender2", roomId, localStorage.token);
+        history.push("/profile");
+        socket.emit("surrender2", roomId || localStorage.roomId, localStorage.token);
         dispatch(setIsInRoom({isInRoom: false, roomId: null}));
+        clearTimeout(turnTime);
       });
       socket.on("addFriend", (idSender)=>{
-        // dispatch(sendFriendRequest({idSender, email: userProfile.email}));
-        console.log("casi");
-        userProfile.email && idSender && axios.post(`http://localhost:3001/api/friends/${idSender}/${userProfile.email}`)
-      })
+        userProfile.email && idSender && axios.post(`http://localhost:3001/api/friends/${idSender}/${userProfile.email}`);
+      });
+      socket.on("report", idReporter=>{
+        userProfile.id && idReporter && axios.post(`http://localhost:3001/api/reports/${idReporter}/${userProfile.id}`);
+      });
+      socket.on("refresh", player=>setPlayer(player))
       let handler = event =>{
         if(!scoreBox.current.contains(event.target)){
           setPointsBox(false);
@@ -209,6 +229,7 @@ export default function Game({
         socket.off("updateRivalScore");
         socket.off("surrender");
         socket.off("addFriend");
+        socket.off("refresh");
         document.removeEventListener("mousedown", handler)
       };
     },[player]);
@@ -224,7 +245,17 @@ export default function Game({
         setIsYourTurn(true)
         console.log("is your turn")
         setTimeout(()=>setIsYourTurn(false), 1000);
-      } 
+      }
+      if(player.isTurn) {
+        // turnTime = setTimeout(()=>socket.emit("surrender", roomId || localStorage.roomId, player.id, localStorage.token), 10*1000);
+        if(timesWithoutPlay < 3){
+          turnTime = setTimeout(()=>{socket.emit("bet", "ir al mazo", roomId || localStorage.roomId, player.id);setTimesWithoutPlay(++timesWithoutPlay)}, 30*1000)
+        }
+        else{
+          turnTime = setTimeout(()=>surrender(), 10*1000);
+        }
+      }
+      if(!player.isTurn) clearTimeout(turnTime);
     },[player.isTurn])
     console.log(player) //para testing
     return(<div id={stylesGame.gameBackground}>
@@ -258,7 +289,7 @@ export default function Game({
                 <button className={stylesGame.btnOptions} onClick={surrender}>Salir</button>
                 <button className={stylesGame.btnOptions} onClick={tutorial}>❔</button>
               </div>
-              <Chat name={player.name} roomId={roomId}/>
+              <Chat name={player.name} roomId={roomId || localStorage.roomId}/>
                 <div id={"betContainer"}>
                   {player.betOptions?.map(betPick=><button onClick={bet} name={betPick} key={betPick} className={player.isTurn? stylesGame.btnBet : stylesGame.btnBetNoTurn}>{correctBetName(betPick)}</button>)}
                 </div>

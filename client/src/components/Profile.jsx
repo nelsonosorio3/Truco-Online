@@ -45,6 +45,8 @@ export default function Profile(props) {
 
     const dispatch = useDispatch();
 
+    const games = userHistory.length > 5 ? userHistory.slice(0, 5) : userHistory;
+
     //Trae primeramente los datos del usuario y sus amigos
     useEffect(() => {
         //informacion del usuario logeado
@@ -93,7 +95,6 @@ export default function Profile(props) {
 
     //Funcion para responder a una solicitud
     const respondFriendFunction = (email, response) => {
-        console.log(userProfile.id, email, response);
         dispatch(putFriendRequest(userProfile.id, email, response));
         window.location.reload();
     };
@@ -157,16 +158,38 @@ export default function Profile(props) {
                             <button className={styles.editBtn} onClick={editProfile}>Editar</button>
                             <h2>{userProfile?.username}</h2>
                             <h3>{userProfile?.email}</h3>
-                            <h3> Partidas Jugadas: </h3>
-                            <p> {userProfile?.gamesPlayed} </p>
-                            <div className={styles.playerInfo_Games}>
-                                <div className={styles.infoGames}>
-                                    <h3> Ganadas: </h3>
-                                    <p> {userProfile?.gamesLost} </p>
+                            <div className={styles.gamesAndTournamentsStats}>
+                                <div className={styles.games}>
+                                    <div className={styles.infoGames}>
+                                        <h3>Partidas Jugadas:</h3>
+                                        <p>{userProfile?.gamesPlayed}</p>
+                                    </div>
+                                    <div className={styles.playerInfo_Games}>
+                                        <div className={styles.infoGames}>
+                                            <h3>Ganadas:</h3>
+                                            <p>{userProfile?.gamesWon}</p>
+                                        </div>
+                                        <div className={styles.infoGames}>
+                                            <h3>Perdidas:</h3>
+                                            <p>{userProfile?.gamesLost}</p>
+                                        </div>
+                                    </div>
                                 </div>
-                                <div className={styles.infoGames}>
-                                    <h3> Perdidas: </h3>
-                                    <p> {userProfile?.gamesWon} </p>
+                                <div className={styles.games}>
+                                    <div className={styles.infoGames}>
+                                        <h3>Torneos jugados:</h3>
+                                        <p>{userProfile?.tournamentsPlayed}</p>
+                                    </div>
+                                    <div className={styles.playerInfo_Games}>
+                                        <div className={styles.infoGames}>
+                                            <h3>Ganados:</h3>
+                                            <p>{userProfile?.tournamentsWon}</p>
+                                        </div>
+                                        <div className={styles.infoGames}>
+                                            <h3>Perdidos:</h3>
+                                            <p>{userProfile?.tournamentsLost}</p>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -212,7 +235,7 @@ export default function Profile(props) {
                         <h3 classname={styles.title}>Últimos resultados</h3>
                         <div className={styles.history}>
                             {
-                                !userHistory?.length ? null : userHistory.map(m => <Match
+                                !games?.length ? null : games.map(m => <Match
                                     key={m?.id}
                                     id={m?.id}
                                     result={m?.winner === userProfile.username ? "Ganaste" : "Perdiste"}

@@ -62,7 +62,7 @@ export default function Truco() {
             <div className={styles.imgBot} >
                 {
                     state.img ? 
-                    <img className={styles.truco + ' ' + styles.touch} src={state.img} onClick={handleTouch}/> 
+                    <img className={styles.truco + ' ' + styles.touch} src={state.img} onClick={handleTouch} alt=''/> 
                     : 
                     null
                 } 

@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import {useSelector} from 'react-redux'
 
-// import styles from './styles/Tournaments.module.css'
+import styles from './styles/TournamentInCourse.module.css'
 import socket from '../socket';
 import TournamentGames from './TournamentGames';
 
@@ -17,6 +17,7 @@ export default function TournamentInCourse(){
     
     useEffect(() => {
         socket.on('sendTournamentData', (data) => {
+            // console.log('SENDTOURNAMENTDATA: ', data)
             setTournamentData([data]);
         })
         return () => {socket.off()}
@@ -46,22 +47,26 @@ export default function TournamentInCourse(){
     })
 
     return(
-        <div>
-            <h3>TournamentId: {tournamentId}</h3>
+        <div className={styles.mainDiv}>
+            <h1 className={styles.h1_TournamentId}>Tournament Id: {tournamentId}</h1>
             {
                 isFull ?
                     <div>
                         <TournamentGames matchesList={matchesList} savedData={savedData}/>
                     </div>
                 :
-                <div>
-                    Actual players: 
-                    {
-                    tournamentData.length > 0 ?
-                        !tournamentData[0] ? null
-                            : tournamentData[0].players.map(p => <h4 key={p}>{p}</h4> )
-                    : null
-                    }
+                <div className={styles.players}>
+                    <h3>Actual players: </h3>
+                    <div className={styles.playersList}>
+                        {
+                        tournamentData.length > 0 ?
+                            !tournamentData[0] ? null
+                                // : console.log('LISTA DE JUGADORES:', tournamentData[0].players)
+                                // : tournamentData[0].players.map(p => console.log(p) )
+                                : tournamentData[0].players.map(p => <h4 key={p.userId} className={styles.playerName}>{p.user}</h4> )
+                        : null
+                        }
+                    </div>
                 </div>
             }
         </div>

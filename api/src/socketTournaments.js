@@ -14,7 +14,7 @@ exports = module.exports = function(io){
         if(activeTournaments.indexOf(tournamentData.tournamentId) === -1){
             activeTournaments = [...activeTournaments, {tournamentId: tournamentData.tournamentId, players: []}]
             socket.join(tournamentData.tournamentId);
-            activeTournaments.forEach(t => {if(t.tournamentId===tournamentData.tournamentId) t.players.push(tournamentData.user)})
+            activeTournaments.forEach(t => {if(t.tournamentId===tournamentData.tournamentId) t.players.push({user: tournamentData.user, userId: tournamentData.userId})})
             socketsInfo.push({socketId: socket.id, tournamentId: tournamentData.tournamentId})
         }
         else console.log(tournamentID, 'ya existe');
@@ -26,12 +26,16 @@ exports = module.exports = function(io){
       socket.on('joinTournament', function (tournamentData) {
         socket.join(tournamentData.tournamentId);
         const clients = io.sockets?.adapter.rooms.get(tournamentData.tournamentId)
-        activeTournaments.forEach(t => {if(t.tournamentId===tournamentData.tournamentId) t.players.push(tournamentData.user)})
+        activeTournaments.forEach(t => {if(t.tournamentId===tournamentData.tournamentId) t.players.push({user: tournamentData.user, userId: tournamentData.userId})})
         if(clients?.size === 4){
           let dataObject;
           activeTournaments.forEach(t => {if(t.tournamentId===tournamentData.tournamentId) dataObject = Object.assign({}, t)})
           activeTournaments = activeTournaments.filter(t => t.tournamentId !== tournamentData.tournamentId)
           tournamentsInCourse.push(dataObject)
+
+          console.log('ESTA ES LA DATA', dataObject)
+          console.log('ESTO ES TORNEOS EN PROGRESO', tournamentsInCourse)
+          
           io.emit('tournamentFull', (dataObject))
         }
         io.emit("newPlayerInside");
@@ -44,8 +48,8 @@ exports = module.exports = function(io){
         for(let i=0; i<dataObject.players.length; i++){
             for(let j=i; j<dataObject.players.length; j++){
                 if(i!==j) newArray.push({
-                  participants: [dataObject.players[i], dataObject.players[j]], 
-                  matchId: `${dataObject.tournamentId}${dataObject.players[i]}${dataObject.players[j]}`
+                  participants: [dataObject.players[i].user, dataObject.players[j].user], 
+                  matchId: `${dataObject.tournamentId}${dataObject.players[i].user}${dataObject.players[j].user}`
                 })
             }
         }
@@ -53,13 +57,84 @@ exports = module.exports = function(io){
       })
 
       socket.on('setWinner', function(data) {
-        console.log('DATA DE WINS:', data)
         tournamentsInCourse.map(t => {
           if(t.tournamentId === data.tournamentId) { 
             if(!t.results) t.results = [];
             t.results = [...t.results, data.playerWins]
           }
-          if(t.results.length===4) io.to(data.tournamentId).emit('showWinner', (t.results));
+          if(t.results.length===4) {
+            console.log('RESULTS Y DATA:', t.results, data)
+
+            let playerOne = { player: data.savedData[0].players[0].user, playerId: data.savedData[0].players[0].userId }
+            let playerTwo = { player: data.savedData[0].players[1].user, playerId: data.savedData[0].players[1].userId }
+            let playerThree = { player: data.savedData[0].players[2].user, playerId: data.savedData[0].players[2].userId }
+            let playerFour = { player: data.savedData[0].players[3].user, playerId: data.savedData[0].players[3].userId }
+
+            let winnerOne = [];
+            let winnerTwo = [];
+            let winnerThree = [];
+
+            for(let i=0; i < t.results.length; i++){
+              if(winnerOne.length === 0 && t.results[i].length > 0){
+                if(playerOne.player        === t.results[i][0])     winnerOne = [playerOne.player, playerOne.playerId, t.results[i].length];
+                else if(playerTwo.player   === t.results[i][0])     winnerOne = [playerTwo.player, playerTwo.playerId, t.results[i].length];
+                else if(playerThree.player === t.results[i][0])     winnerOne = [playerThree.player, playerThree.playerId, t.results[i].length];
+                else if(playerFour.player  === t.results[i][0])     winnerOne = [playerFour.player, playerFour.playerId, t.results[i].length];
+              } 
+              else if(t.results[i].length > winnerOne[2]){
+                if(playerOne.player === t.results[i][0])            winnerOne = [playerOne.player, playerOne.playerId, t.results[i].length];
+                else if(playerTwo.player    === t.results[i][0])    winnerOne = [playerTwo.player, playerTwo.playerId, t.results[i].length];
+                else if(playerThree.player  === t.results[i][0])    winnerOne = [playerThree.player, playerThree.playerId, t.results[i].length];
+                else if(playerFour.player   === t.results[i][0])    winnerOne = [playerFour.player, playerFour.playerId, t.results[i].length];
+              } 
+              else if(t.results[i].length === winnerOne[2] && winnerTwo.length === 0){
+                if(playerOne.player === t.results[i][0])            winnerTwo = [playerOne.player, playerOne.playerId, t.results[i].length];
+                else if(playerTwo.player    === t.results[i][0])    winnerTwo = [playerTwo.player, playerTwo.playerId, t.results[i].length];
+                else if(playerThree.player  === t.results[i][0])    winnerTwo = [playerThree.player, playerThree.playerId, t.results[i].length];
+                else if(playerFour.player   === t.results[i][0])    winnerTwo = [playerFour.player, playerFour.playerId, t.results[i].length];
+              } 
+              else if(t.results[i].length === winnerOne[2] && t.results[i].length === winnerTwo[2] && winnerThree.length === 0){
+                if(playerOne.player === t.results[i][0])            winnerThree = [playerOne.player, playerOne.playerId, t.results[i].length];
+                else if(playerTwo.player    === t.results[i][0])    winnerThree = [playerTwo.player, playerTwo.playerId, t.results[i].length];
+                else if(playerThree.player  === t.results[i][0])    winnerThree = [playerThree.player, playerThree.playerId, t.results[i].length];
+                else if(playerFour.player   === t.results[i][0])    winnerThree = [playerFour.player, playerFour.playerId, t.results[i].length];
+              } 
+            }
+            
+            for(let i=0; i<data.savedData[0].players.length; i++){
+              if(data.savedData[0].players[i].userId === winnerOne[1] || data.savedData[0].players[i].userId === winnerTwo[1] || data.savedData[0].players[i].userId === winnerThree[1]){
+              } else {
+                  axios({
+                    method: 'put',
+                    url: `http://localhost:3001/api/tournaments/tournamentLoser/${data.savedData[0].players[i].userId}`,
+                    headers: {
+                      "x-access-token": socket.handshake.auth.token || 1,
+                    },
+                  });
+              }
+            }
+
+            axios({
+              method: 'post',
+              url: 'http://localhost:3001/api/tournaments',
+              headers: {
+                "x-access-token": socket.handshake.auth.token || 1,
+              },
+              data: {
+                playerOneId: playerOne.playerId, 
+                playerTwoId: playerTwo.playerId, 
+                playerThreeId: playerThree.playerId,
+                playerFourId: playerFour.playerId,
+                winnerOne,
+                winnerTwo,
+                winnerThree,
+              }
+            });
+
+            // console.log('P1', playerOneId, 'P2', playerTwoId, 'P3', playerThreeId, 'P4', playerFourId)
+
+            io.to(data.tournamentId).emit('showWinner', (t.results));
+          } 
         })
       })
 
@@ -103,6 +178,8 @@ exports = module.exports = function(io){
               numberPlayers: 2,
               roundResults: [],
               turn: 1,
+              playerOneHand: [],
+              playerTwoHand: [],
               // gameId: matchNumber.data
             }
             
@@ -170,6 +247,9 @@ exports = module.exports = function(io){
           //manos iniciales al iniciar partida
           table.games[data.matchId].playerOne.hand = playerAhand;
           table.games[data.matchId].playerTwo.hand = playerBhand;
+
+          table.games[data.matchId].common.playerOneHand = [...playerAhand];
+          table.games[data.matchId].common.playerTwoHand = [...playerBhand];
       
           //dejar las apuestas al comienzo
           table.games[data.matchId].playerOne.betOptions = table.betsList.firstTurn;
@@ -205,6 +285,7 @@ exports = module.exports = function(io){
       socket.on('bringTournamentData', function (tournamentId) {
         let tournamentData;
         activeTournaments.forEach(t => t.tournamentId === tournamentId ? tournamentData = t : null)
+        console.log('ESTAMOS EN BRING TOURNAMENT DATA:', tournamentData)
         // console.log(tournamentData)
         socket.emit('sendTournamentData', (tournamentData))
       })

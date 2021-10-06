@@ -2,12 +2,14 @@ const axios = require("axios");
 var activeRooms = []
 const {table, buildDeck, shuffleDeck, getHands} = require("./socketGameLogicConst")
 
+let games = {};
 exports = module.exports = function(io){
     io.sockets.on('connection', function (socket) {
         socket.on('connected', function (name) {
             // socket.broadcast.emit('messages', { name: name, msg: name + " has joined." });
         });
-        
+        let algo = socket.handshake.auth.isInRoom
+        console.log(algo)
         // socket.on("log", ()=> io.to(socket.id).emit("log"))
         socket.on('message', function (data, isAuth) {
             if(isAuth) {
@@ -24,13 +26,14 @@ exports = module.exports = function(io){
         });
 
         socket.on("invite to game", (roomId, idReceiver, nameSender)=>{
+            activeRooms = activeRooms.filter((room)=> room!= roomId)
             console.log(socket.id, "invitacion")
             socket.broadcast.emit("invite to game",roomId, idReceiver, nameSender);
         });
       
     
         //evento por si alguien crea una sala o entra a una
-        socket.on('joinRoom', async function (roomId, name, token) {
+        socket.on('joinRoom', async function (roomId, name, token, password, isInv) {
             socket.leave(1);
             console.log('user:', socket.handshake.auth.user);
             const clients = io.sockets?.adapter.rooms.get(roomId) //set de clientes en room
@@ -73,6 +76,8 @@ exports = module.exports = function(io){
                     roundResults: [],
                     turn: 1,
                     gameId: matchNumber.data,
+                    playerOneHand: [],
+                    playerTwoHand: [],
                 }
                 io.to(roomId).emit('messages', { msg: `Esperando que se una otro jugador...` });
             }
@@ -104,7 +109,12 @@ exports = module.exports = function(io){
                 return room.id === roomId;
             });
 
-            if(findedRoom === -1) activeRooms = [...activeRooms, {id: roomId, host: name}]
+            if(findedRoom === -1 && password) {
+                activeRooms = [...activeRooms, {id: roomId, host: name, password}]
+            }
+            else if(findedRoom === -1 && !password && !isInv) {
+                activeRooms = [...activeRooms, {id: roomId, host: name}]
+            } 
             // if(activeRooms.indexOf(roomId) === -1) activeRooms = [...activeRooms, roomId] 
             else console.log(roomId, 'ya existe');
             console.log("active rooms: ", activeRooms)
@@ -129,6 +139,10 @@ exports = module.exports = function(io){
                 //manos iniciales al iniciar partida
                 table.games[roomId].playerOne.hand = playerAhand;
                 table.games[roomId].playerTwo.hand = playerBhand;
+
+                //manos copias al iniciar partida
+                table.games[roomId].common.playerOneHand = [...playerAhand];
+                table.games[roomId].common.playerTwoHand = [...playerBhand];
     
                 //dejar las apuestas al comienzo
                 table.games[roomId].playerOne.betOptions = table.betsList.firstTurn;
@@ -159,7 +173,61 @@ exports = module.exports = function(io){
                 io.to(table.games[roomId]?.playerOne.id).emit("addFriend", idSender);
                 io.to(table.games[roomId]?.playerOne.id).emit("messages", { msg: `${name}, te ha enviado una solicitud de amistad!` });
             }
+        });
+
+        socket.on("report", (idReporter, roomId, playerId)=>{
+            if(table.games[roomId]?.playerOne.id === playerId){
+                io.to(table.games[roomId]?.playerTwo.id).emit("report", idReporter);
+                io.to(table.games[roomId]?.playerOne.id).emit("messages", { msg: `Jugador reportado` });
+            }
+            else{
+                io.to(table.games[roomId]?.playerOne.id).emit("report", idReporter);
+                io.to(table.games[roomId]?.playerTwo.id).emit("messages", { msg: `Jugador reportado` });
+            } 
+        });
+
+        socket.on("already friend", (id)=>{
+            io.to(id).emit("messages", { msg: `Ya le enviaste una solicitud de amistad` });
+        });
+        socket.on("already reported",(id)=>{
+            io.to(id).emit("messages", { msg: `Ya lo reportaste` });
         })
-      
+        
+        socket.on("surrender", (roomId, playerId, token)=>{
+            if(table.games[roomId]?.playerTwo && table.games[roomId].common){
+                axios.put(`http://localhost:3001/api/games/losser/${table.games[roomId].common.gameId}/${table.games[roomId].playerOne.score}/${table.games[roomId].playerTwo.score}`,{},{
+                    headers: {
+                        "x-access-token": token || 1,
+                    }});
+                if(table.games[roomId]?.playerOne.id === playerId){
+                    io.to(table.games[roomId]?.playerTwo?.id).emit("surrender");
+                }
+                else{
+                    io.to(table.games[roomId]?.playerOne.id).emit("surrender");
+                }
+            }
+            else{
+                table.games[roomId]?.common && axios.put(`http://localhost:3001/api/games/winner/${table.games[roomId].common.gameId}/99/99`,{},{
+                        headers: {
+                            "x-access-token": token || 1,
+                        }});
+                }
+            activeRooms = activeRooms.filter((roomId)=> roomId!= roomId);
+        });
+        socket.on("surrender2", (roomId, token)=>{
+            console.log("entre")
+            axios.put(`http://localhost:3001/api/games/winner/${table.games[roomId].common.gameId}/${table.games[roomId].playerOne.score}/${table.games[roomId].playerTwo.score}`,{},{
+                    headers: {
+                        "x-access-token": token || 1,
+                    }});
+    
+            const clients = io.sockets.adapter.rooms.get(roomId);
+            console.log(clients)
+            for(const clientId of clients) {
+                const clientSocket = io.sockets.sockets.get(clientId);
+                clientSocket.leave(roomId)
+            };
+            delete table.games[roomId];
+        });
     });
 }
