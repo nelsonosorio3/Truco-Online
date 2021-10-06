@@ -1,3 +1,5 @@
+/* eslint-disable no-unused-vars */
+/* eslint-disable no-redeclare */
 import { GET_USERS, FILTER_BY_EMAIL, FILTER_BY_NAME, FILTER_BY_ID } from '../actions/index';
 import { ORDER_BY_GAMES_ASC, ORDER_BY_GAMES_DESC, ORDER_BY_WINS_ASC, ORDER_BY_WINS_DESC } from '../actions/index';
 import {

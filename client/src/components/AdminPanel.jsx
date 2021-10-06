@@ -1,3 +1,5 @@
+/* eslint-disable react-hooks/exhaustive-deps */
+/* eslint-disable no-unused-vars */
 import React from 'react';
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -222,11 +224,12 @@ export default function AdminPanel() {
                 <th>Id de Usuario </th>
                 <th>Nombre de Usuario </th>
                 <th>Correo </th>
-                <th>Partidos Jugados <button onClick={handleSortAscPlayed}>A</button> <button onClick={handleSortDescPlayed}>D</button>    </th> {/* onClick={sortTablebyCountry} */}
+                <th>Partidos Jugados <span><button onClick={handleSortAscPlayed}>A</button> <button onClick={handleSortDescPlayed}>D</button></span>    </th> {/* onClick={sortTablebyCountry} */}
                 <th>Partidos Ganados <button onClick={handleSortAscWon}>A</button> <button onClick={handleSortDescWon}>D</button>    </th> {/* onClick={sortTablebyCountry} */}
                 <th>Partidos Perdidos <button onClick={handleSortAscLost}>A</button> <button onClick={handleSortDescLost}>D</button>    </th> {/* onClick={sortTablebyCountry} */}
                 <th>Usuario desde <button onClick={handleSortAscUserSince}>A</button> <button onClick={handleSortDescUserSince}>D</button> </th>
                 <th>Medidas </th>
+                <th>Reportes</th>
               </tr>
               {
                 tableStatus.displayedInPage.map(u => <FilaDeTabla //nuestros usuarios traídos desde nuestro redux store!
@@ -239,6 +242,7 @@ export default function AdminPanel() {
                   gamesWon={u.gamesWon}
                   gamesLost={u.gamesLost}
                   createdAt={u.createdAt}
+                  reportedUser={u.reportedUser}
                 />)
               }
 

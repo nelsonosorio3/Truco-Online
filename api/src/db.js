@@ -41,8 +41,12 @@ User.belongsToMany(Games, { through: 'UserGames' });
 Games.belongsToMany(User, { through: 'UserGames' });
 
 // Associative entity for friends (the table friends is already created in models)
-User.belongsToMany(User, { as: "userSender", foreignKey: 'userSenderId', through: 'Friends'});
+User.belongsToMany(User, { as: "userSender", foreignKey: 'userSenderId', through: 'Friends' });
 User.belongsToMany(User, { as: "userRequested", foreignKey: 'userRequestedId', through: 'Friends' });
+
+//Associative entity for reports
+User.belongsToMany(User, { as: "senderUser", foreignKey: 'senderUserId', through: 'Reports' });
+User.belongsToMany(User, { as: "reportedUser", foreignKey: 'reportedUserId', through: 'Reports' });
 
 
 module.exports = {

@@ -1,18 +1,16 @@
 import React, { useState, useEffect } from 'react';
-import {useDispatch, useSelector} from 'react-redux'
+import {useDispatch} from 'react-redux'
+// import {useSelector} from 'react-redux'
 import { useHistory } from "react-router-dom";
 
-import axios from 'axios';
 import socket from './socket';
-
-import Chat from './rooms/Chat';
 
 import { setIsInRoom } from '../Redux/actions-types/roomsActions';
 
 import styles from './styles/GameRequest.module.css';
 
 export default function GameRequest({tournamentMatchId}) {
-  const {id} = useSelector(state => state.logReducer)
+  // const {id} = useSelector(state => state.logReducer)
 
   const history = useHistory();
 
@@ -40,9 +38,13 @@ export default function GameRequest({tournamentMatchId}) {
 
   useEffect(()=>{
     socket.on("invite to game", (roomId, idReceiver, nameSender)=>{
-      if(idReceiver == localStorage.id) setData({nameFriend: nameSender, show: true, roomId, roomId})
+      if(idReceiver == localStorage.id) setData({nameFriend: nameSender, show: true, roomId})//doble igual para string a numero comparacion no lo cambien
     })
+    return ()=>{
+      socket.off("invite to game");
+    }
   });
+
 
   return (
     <div style={{display: data.show? "flex" : "none"}} id={styles.gameRequest}>

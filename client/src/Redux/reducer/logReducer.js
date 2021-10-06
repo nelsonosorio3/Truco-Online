@@ -65,6 +65,8 @@ const logReducer = (state = INITIAL_STATE, { type, payload }) => {
       window.localStorage.removeItem("user");
       window.localStorage.removeItem("id");
       window.localStorage.removeItem("isAdmin");
+      window.localStorage.removeItem("isInRoom");
+      window.localStorage.removeItem("roomId");
       return {
         ...state,
         isAuth: false,

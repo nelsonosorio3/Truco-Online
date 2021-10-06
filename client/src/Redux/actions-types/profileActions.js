@@ -4,10 +4,10 @@ import { GET_PROFILE, GET_FRIENDS, GET_HISTORY, DELETE_FRIEND, PUT_FRIEND_REQUES
 const getProfile = ({token}) => {
 
   return function(dispatch) {
-    return axios.get(`https://trucohenry.com/api/user/profile`,{
+    return axios.get(`https://trucohenry.com/api/user/profile`, {
       headers: {
         "x-access-token": token,
-      }
+      },
     })
     .then(data => {
       dispatch({ type: GET_PROFILE, payload: data.data[0] });
@@ -21,10 +21,10 @@ const getFriends = (token) => {
     return axios(`https://trucohenry.com/api/user/friends`, {
       headers: {
         "x-access-token": token,
-      }
+      },
     })
     .then(data => {
-      dispatch({ type: GET_FRIENDS, payload: data.data});
+      dispatch({ type: GET_FRIENDS, payload: data.data });
     })
     .catch((error) => console.error(error));
   };
@@ -34,7 +34,7 @@ const deleteFriends = (id, email) => {
   return function(dispatch) {
     return axios.delete(`https://trucohenry.com/api/friends/${id}/${email}`)
       .then(data => {
-        dispatch({ type: DELETE_FRIEND, payload: data.data.id});
+        dispatch({ type: DELETE_FRIEND, payload: data.data.id });
       })
       .catch((error) => console.error(error));
   };
@@ -44,7 +44,7 @@ const putFriendRequest = (id, email, response) => {
   return function(dispatch) {
     return axios.put(`https://trucohenry.com/api/friends/${id}/${email}?response=${response}`)
       .then(data => {
-        dispatch({ type: PUT_FRIEND_REQUEST, payload: data.data.id});
+        dispatch({ type: PUT_FRIEND_REQUEST, payload: data.data.id });
       })
       .catch((error) => console.error(error));
   };
@@ -63,8 +63,6 @@ const getGames = (token) => {
     .catch((error) => console.error(error));
   };
 };
-
-
 
 export default {
     getProfile,

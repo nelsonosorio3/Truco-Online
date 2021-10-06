@@ -1,3 +1,5 @@
+/* eslint-disable import/no-anonymous-default-export */
+/* eslint-disable no-unused-vars */
 import axios from 'axios';
 import {
   GET_USERS, FILTER_BY_EMAIL, FILTER_BY_NAME, FILTER_BY_ID, SET_TOTAL_PAGES,

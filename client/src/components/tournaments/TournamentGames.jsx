@@ -1,5 +1,10 @@
+// /* eslint-disable array-callback-return */
+// /* eslint-disable react-hooks/exhaustive-deps */
+// /* eslint-disable no-unused-vars */
+
 import React, {useEffect, useState} from 'react';
-import {useSelector} from 'react-redux'
+
+import styles from './styles/TournamentGames.module.css'
 import Game from '../game';
 
 import socket from '../socket';
@@ -52,11 +57,7 @@ export default function TournamentGames ({matchesList, savedData}){
                 }
             }
         }
-        // return () => {socket.off()}
-    }, [firstMatch])
-    
-    useEffect(() => {
-        if(finishedFirstMatch===true && finishedSecondMatch===false && finishedThirdMatch===false ){
+        else if(finishedFirstMatch===true && finishedSecondMatch===false && finishedThirdMatch===false ){
             // console.log(secondMatch, 'ENTRAMOSSSSSSS USEEFFECT SECONDMATCH')
             if(matches.length>0){
                 if(matches[1].participants[0] === localStorage.user || (matches[1].participants[1] === localStorage.user)){
@@ -69,10 +70,7 @@ export default function TournamentGames ({matchesList, savedData}){
                 }
             }
         }
-    }, [secondMatch])
-
-    useEffect(() => {
-        if(finishedFirstMatch===true && finishedSecondMatch===true && finishedThirdMatch===false){
+        else  if(finishedFirstMatch===true && finishedSecondMatch===true && finishedThirdMatch===false){
             // console.log(secondMatch, 'ENTRAMOSSSSSSS USEEFFECT SECONDMATCH')
             if(matches.length>0){
                 if(matches[2].participants[0] === localStorage.user || (matches[2].participants[1] === localStorage.user)){
@@ -86,26 +84,9 @@ export default function TournamentGames ({matchesList, savedData}){
                 }
             }
         }
-    }, [thirdMatch])
-
-    // useEffect(() => {
-    //     if(matchesList.length>0){
-    //         if(matchesList[0].participants[0] === localStorage.user || (matchesList[0].participants[1] === localStorage.user)){
-    //             socket.emit('tournamentGame', matchesList[0].matchId);
-    //             matchesList.shift();
-    //         }
-    //         else if(matchesList[matchesList.length-1].participants[0] === localStorage.user || (matchesList[matchesList.length-1].participants[1] === localStorage.user)){
-    //             socket.emit('tournamentGame', matchesList[matchesList.length-1].matchId);
-    //             matchesList.pop();
-    //         }
-    //     }
-    //     // return () => {socket.off()}
-    // }, [matchesList, next])
-
-    // useEffect(() => {
-    //     console.log('TERMINADOS:',finishedGames)
-    //     setNext(next + 10)
-    // }, [finishedGames])
+        // return () => {socket.off()}
+    }, [firstMatch, secondMatch, thirdMatch])
+    
 
     useEffect(() => {
         socket.on('showGame', (matchId) => {
@@ -151,85 +132,110 @@ export default function TournamentGames ({matchesList, savedData}){
     return(
         <div>
             {matches.length > 0 ? console.log(matches) : null}
-            <h5>Matches:</h5>
-            {
-                matches.length > 0 ?
-                    matches.map(m => <h6 key={m.matchId}>{m.participants[0]} vs {m.participants[1]}. Match ID: {m.matchId}</h6> )
-                : null
-            }
-            {/*///////////// PRIMERA PARTIDA /////////////*/}
-            {
-                showFirstMatch ?
-                <Game 
-                    tournamentMatchId={actualIdGame} 
-                    setShowFirstMatch={setShowFirstMatch}
-                    setFinishedFirstMatch={setFinishedFirstMatch}
 
-                    wins={wins}
-                    setWins={setWins}
-                    
-                    finishedFirstMatch={finishedFirstMatch}
-                    finishedSecondMatch={finishedSecondMatch}
-                    finishedThirdMatch={finishedThirdMatch}
-                /> 
-                : null
-            }
-            
-            {/*///////////// SEGUNDA PARTIDA /////////////*/}
-            {
-                showSecondMatch ?
-                <div>
-                    <h1>SEGUNDA PARTIDA: {actualIdGame}</h1> 
+            <div style={{display: showFirstMatch || showSecondMatch || showThirdMatch ? "none" : null}}>
+                <div className={styles.matchesListDiv}>
+                    <h5>Matches:</h5>
+                    <div className={styles.matchesList}>
+                        {
+                            matches.length > 0 ?
+                                matches.map(m => {
+                                    return (
+                                    <div key={m.matchId} className={styles.match}>
+                                        <h6 key={m.matchId}>{m.participants[0]} vs {m.participants[1]}.</h6>
+                                        <h6 key={m.matchId}>Match ID: {m.matchId}</h6>
+                                    </div>)
+                            } )
+                            : null
+                        }
+                    </div>
+                </div>
+            </div>
+            {/*///////////// PRIMERA PARTIDA /////////////*/}
+            <div className={showFirstMatch || showSecondMatch || showThirdMatch ? styles.game : null}>
+                {
+                    showFirstMatch ?
                     <Game 
-                        tournamentMatchId={actualIdGame}
-                        setShowSecondMatch={setShowSecondMatch} 
-                        setFinishedSecondMatch={setFinishedSecondMatch}
+                        tournamentMatchId={actualIdGame} 
+                        setShowFirstMatch={setShowFirstMatch}
+                        setFinishedFirstMatch={setFinishedFirstMatch}
 
                         wins={wins}
                         setWins={setWins}
-
+                        
                         finishedFirstMatch={finishedFirstMatch}
                         finishedSecondMatch={finishedSecondMatch}
                         finishedThirdMatch={finishedThirdMatch}
                     /> 
-                </div>
-                : null
-            }
+                    : null
+                }
+            </div>
+            
+            {/*///////////// SEGUNDA PARTIDA /////////////*/}
+            <div className={showFirstMatch || showSecondMatch || showThirdMatch ? styles.game : null}>
+                {
+                    showSecondMatch ?
+                    <div>
+                        <Game 
+                            tournamentMatchId={actualIdGame}
+                            setShowSecondMatch={setShowSecondMatch} 
+                            setFinishedSecondMatch={setFinishedSecondMatch}
+
+                            wins={wins}
+                            setWins={setWins}
+
+                            finishedFirstMatch={finishedFirstMatch}
+                            finishedSecondMatch={finishedSecondMatch}
+                            finishedThirdMatch={finishedThirdMatch}
+                        /> 
+                    </div>
+                    : null
+                }
+            </div>
 
              {/*///////////// TERCERA PARTIDA /////////////*/}
-             {
-                showThirdMatch ? 
-                <div>
-                    <h1>TERCERA PARTIDA</h1> 
-                    <Game 
-                        tournamentMatchId={actualIdGame} 
-                        setShowThirdMatch={setShowThirdMatch}
-                        setFinishedThirdMatch={setFinishedThirdMatch}
+             <div className={showFirstMatch || showSecondMatch || showThirdMatch ? styles.game : null}>
+                {
+                    showThirdMatch ? 
+                    <div>
+                        <Game 
+                            tournamentMatchId={actualIdGame} 
+                            setShowThirdMatch={setShowThirdMatch}
+                            setFinishedThirdMatch={setFinishedThirdMatch}
 
-                        wins={wins}
-                        setWins={setWins}
+                            wins={wins}
+                            setWins={setWins}
 
-                        finishedFirstMatch={finishedFirstMatch}
-                        finishedSecondMatch={finishedSecondMatch}
-                        finishedThirdMatch={finishedThirdMatch} 
-                    /> 
-                </div>
-                : null
-            }
+                            finishedFirstMatch={finishedFirstMatch}
+                            finishedSecondMatch={finishedSecondMatch}
+                            finishedThirdMatch={finishedThirdMatch} 
+                        /> 
+                    </div>
+                    : null
+                }
+             </div>
             {
             finishedFirstMatch && finishedSecondMatch && finishedThirdMatch 
             ? 
-                <div>
-                    <h1>EL TORNEO HA TERMINADO</h1> 
-                    {
-                        allPlayersWins.length > 0
-                        ? allPlayersWins.map(w => {
-                            if(w.length > 0){
-                                return(<h6>{`${w[0]}: ${w.length} puntos.`}</h6>)
-                            }
-                        })
-                        : null
-                    }
+                <div className={styles.endStatsDiv}>
+                    <h1>EL TORNEO HA TERMINADO</h1>
+                    <h3 className={styles.h3_results}>Resultados:</h3>
+                    <div className={styles.generalStats}>
+                        {
+                            allPlayersWins.length > 0
+                            ? allPlayersWins.map(w => {
+                                if(w.length > 0){
+                                    return(
+                                        <div className={styles.stats}>
+                                            <h4>{`${w[0]}:`}</h4>
+                                            <h4>{`${w.length} puntos.`}</h4>
+                                        </div>
+                                    )
+                                }
+                            })
+                            : null
+                        }
+                    </div> 
                 </div>
             : null}
             {console.log(showGame, actualIdGame)}

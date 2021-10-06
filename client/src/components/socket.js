@@ -6,7 +6,9 @@ let socket = io('https://trucohenry.com',{
     auth: {
       token: localStorage.token,
       user: localStorage.user,
-      id: localStorage.id
+      id: localStorage.id,
+      isInRoom: localStorage.isInRoom,
+      roomId: localStorage.roomId,
     }
 });
 

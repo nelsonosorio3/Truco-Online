@@ -2,18 +2,14 @@ const axios = require("axios");
 var activeRooms = []
 const {table, buildDeck, shuffleDeck, getHands} = require("./socketGameLogicConst")
 
+let games = {};
 exports = module.exports = function(io){
     io.sockets.on('connection', function (socket) {
         socket.on('connected', function (name) {
             // socket.broadcast.emit('messages', { name: name, msg: name + " has joined." });
         });
-
-        socket.on('joinToGlobalChat', function () {
-            console.log('Conectado al chat global')
-            socket.join(1);
-            const clients = io.sockets?.adapter.rooms.get(1)
-            console.log(clients)
-        })
+        let algo = socket.handshake.auth.isInRoom
+        console.log(algo)
         // socket.on("log", ()=> io.to(socket.id).emit("log"))
         socket.on('message', function (data, isAuth) {
             if(isAuth) {
@@ -38,7 +34,7 @@ exports = module.exports = function(io){
         //evento por si alguien crea una sala o entra a una
         socket.on('joinRoom', async function (roomId, name, token) {
             socket.leave(1);
-            console.log(socket.handshake.auth.user);
+            console.log('user:', socket.handshake.auth.user);
             const clients = io.sockets?.adapter.rooms.get(roomId) //set de clientes en room
             if(clients?.size < 2 || clients === undefined){ //revisar si la sala esta llena, para evitar que se unan mas, modificar el 2 con variable par ampliar luego a mas jugadores
             socket.join(parseInt(roomId));
@@ -79,6 +75,8 @@ exports = module.exports = function(io){
                     roundResults: [],
                     turn: 1,
                     gameId: matchNumber.data,
+                    playerOneHand: [],
+                    playerTwoHand: [],
                 }
                 io.to(roomId).emit('messages', { msg: `Esperando que se una otro jugador...` });
             }
@@ -121,7 +119,7 @@ exports = module.exports = function(io){
                 let iterator = clients.values();
                 const player1 = iterator.next().value;
                 const player2 = iterator.next().value;
-                console.log(clients.values())
+                console.log('clients', clients.values())
                 table.games[roomId].playerOne.id = player1;
                 table.games[roomId].playerTwo.id = player2;
                 table.games[roomId].playerOne.nameRival = table.games[roomId].playerTwo.name;
@@ -135,6 +133,10 @@ exports = module.exports = function(io){
                 //manos iniciales al iniciar partida
                 table.games[roomId].playerOne.hand = playerAhand;
                 table.games[roomId].playerTwo.hand = playerBhand;
+
+                //manos copias al iniciar partida
+                table.games[roomId].common.playerOneHand = [...playerAhand];
+                table.games[roomId].common.playerTwoHand = [...playerBhand];
     
                 //dejar las apuestas al comienzo
                 table.games[roomId].playerOne.betOptions = table.betsList.firstTurn;
@@ -165,6 +167,24 @@ exports = module.exports = function(io){
                 io.to(table.games[roomId]?.playerOne.id).emit("addFriend", idSender);
                 io.to(table.games[roomId]?.playerOne.id).emit("messages", { msg: `${name}, te ha enviado una solicitud de amistad!` });
             }
+        });
+
+        socket.on("report", (idReporter, roomId, playerId)=>{
+            if(table.games[roomId]?.playerOne.id === playerId){
+                io.to(table.games[roomId]?.playerTwo.id).emit("report", idReporter);
+                io.to(table.games[roomId]?.playerOne.id).emit("messages", { msg: `Jugador reportado` });
+            }
+            else{
+                io.to(table.games[roomId]?.playerOne.id).emit("report", idReporter);
+                io.to(table.games[roomId]?.playerTwo.id).emit("messages", { msg: `Jugador reportado` });
+            } 
+        });
+
+        socket.on("already friend", (id)=>{
+            io.to(id).emit("messages", { msg: `Ya le enviaste una solicitud de amistad` });
+        });
+        socket.on("already reported",(id)=>{
+            io.to(id).emit("messages", { msg: `Ya lo reportaste` });
         })
       
     });

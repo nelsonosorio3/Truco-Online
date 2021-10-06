@@ -1,15 +1,15 @@
-import React, {useState, useEffect, useRef } from 'react';
+import React, {useState, useEffect} from 'react';
 import {useDispatch} from 'react-redux'
 
 import { setIsInRoom } from '../../Redux/actions-types/roomsActions';
 import socket from '../socket';
 import styles from './styles/RoomsList.module.css'
-
+import GameRequest from '../GameRequest';
 export default function RoomsList(){
     const [allRooms, setAllRooms] = useState([])
     // const [roomId, setRoomId] = useState('')
     const dispatch = useDispatch()
-    const listRooms = useRef(null);
+
     useEffect(() => {
         socket.on('showActiveRooms', (rooms) => {
             setAllRooms([rooms]);
@@ -38,6 +38,7 @@ export default function RoomsList(){
 
     return(
         <div>
+            <GameRequest/>
             <div className={styles.roomsList}>
                 {
                 allRooms.length > 0
