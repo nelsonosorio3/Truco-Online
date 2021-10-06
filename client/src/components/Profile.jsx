@@ -162,32 +162,32 @@ export default function Profile(props) {
                                 <div className={styles.games}>
                                     <div className={styles.infoGames}>
                                         <h3>Partidas Jugadas:</h3>
-                                        <p> {userProfile?.gamesPlayed} </p>
+                                        <p>{userProfile?.gamesPlayed}</p>
                                     </div>
                                     <div className={styles.playerInfo_Games}>
                                         <div className={styles.infoGames}>
                                             <h3>Ganadas:</h3>
-                                            <p> {userProfile?.gamesWon} </p>
+                                            <p>{userProfile?.gamesWon}</p>
                                         </div>
                                         <div className={styles.infoGames}>
                                             <h3>Perdidas:</h3>
-                                            <p> {userProfile?.gamesLost} </p>
+                                            <p>{userProfile?.gamesLost}</p>
                                         </div>
                                     </div>
                                 </div>
                                 <div className={styles.games}>
                                     <div className={styles.infoGames}>
                                         <h3>Torneos jugados:</h3>
-                                        <p></p>
+                                        <p>{userProfile?.tournamentsPlayed}</p>
                                     </div>
                                     <div className={styles.playerInfo_Games}>
-                                        <div>
+                                        <div className={styles.infoGames}>
                                             <h3>Ganados:</h3>
-                                            <p></p>
+                                            <p>{userProfile?.tournamentsWon}</p>
                                         </div>
-                                        <div>
+                                        <div className={styles.infoGames}>
                                             <h3>Perdidos:</h3>
-                                            <p></p>
+                                            <p>{userProfile?.tournamentsLost}</p>
                                         </div>
                                     </div>
                                 </div>

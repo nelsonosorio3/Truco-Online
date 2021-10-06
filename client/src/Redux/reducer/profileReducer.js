@@ -22,6 +22,9 @@ const profileReducer = (state = INITIAL_STATE, { type, payload }) => {
           gamesPlayed: payload.gamesPlayed,
           gamesWon: payload.gamesWon,
           gamesLost: payload.gamesLost,
+          tournamentsPlayed: payload.tournamentsPlayed,
+          tournamentsWon: payload.tournamentsWon,
+          tournamentsLost: payload.tournamentsLost,
         },
       };
     case GET_FRIENDS:
