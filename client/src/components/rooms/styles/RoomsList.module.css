@@ -1,10 +1,12 @@
-.roomsList{
+.roomsList {
     background-color: rgba(255, 255, 255, 0.6);
     text-align: center;
     display: flex;
     /* width: auto; */
     height: 23pc;
-    width: 23pc;
+    width: 90%;
+    margin-left: auto;
+    margin-right: auto;
     /* justify-content: left; */
     /* justify-self: left; */
     /* justify-items: left; */
@@ -12,12 +14,12 @@
     justify-content: center;
 }
 
-.roomBtn{
+.roomBtn {
     background: none;
     border: none;
 }
 
-.btn{
+.btn {
     color: #fff;
     background-color: #343a40;
     border-color: #343a40;
@@ -37,6 +39,7 @@
     border-radius: .25rem;
     transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out;
 }
+
 .btn:hover {
     transition: all 1s cubic-bezier(0.19, 1, 0.22, 1);
     background-color:black;
