@@ -89,7 +89,7 @@
 
 .gamesAndTournamentsStats{
     display: flex;
-    gap: 16pc;
+    /* gap: 16pc; */
 }
 
 .games{
@@ -356,6 +356,10 @@
         font-size: .8em;
     }
 
+    .playerInfo_Games {
+        width: 15em;
+    }
+
     .friends {
         width: 100%;
         min-height: 28em;
@@ -497,6 +501,11 @@
         max-height: 22em;
     }
 
+    .playerInfo_Games {
+        width: 9em;
+    }
+
+
     .friendsList {
         max-height: 40vh;
         min-height: 40vh;
@@ -511,10 +520,22 @@
     }
 
     .playerInfo h3 {
-        font-size: 1.1rem;
+        font-size: 0.9rem;
     }
     
     .playerInfo p {
         font-size: 1rem;
     }
+}
+
+@media screen and (max-width: 335px) {
+    .playerInfo h3 {
+        background-color: red;
+    }
+
+    .playerInfo {
+        width: 300px;
+    }
+
+
 }

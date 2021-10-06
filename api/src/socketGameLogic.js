@@ -1087,41 +1087,6 @@ exports = module.exports = function(io){
             io.to(table.games[roomId].playerOne.id).emit("changeTurn", false);
         }
     }); 
-    socket.on("surrender", (roomId, playerId, token)=>{
-        if(table.games[roomId]?.playerTwo && table.games[roomId].common){
-            axios.put(`https://trucohenry.com/api/games/losser/${table.games[roomId].common.gameId}/${table.games[roomId].playerOne.score}/${table.games[roomId].playerTwo.score}`,{},{
-                headers: {
-                    "x-access-token": token || 1,
-                }});
-            if(table.games[roomId]?.playerOne.id === playerId){
-                io.to(table.games[roomId]?.playerTwo?.id).emit("surrender");
-            }
-            else{
-                io.to(table.games[roomId]?.playerOne.id).emit("surrender");
-            }
-        }
-        else{
-            table.games[roomId]?.common && axios.put(`https://trucohenry.com/api/games/winner/${table.games[roomId].common.gameId}/99/99`,{},{
-                    headers: {
-                        "x-access-token": token || 1,
-                    }});
-            }
-    });
-    socket.on("surrender2", (roomId, token)=>{
-        console.log("entre")
-        axios.put(`https://trucohenry.com/api/games/winner/${table.games[roomId].common.gameId}/${table.games[roomId].playerOne.score}/${table.games[roomId].playerTwo.score}`,{},{
-                headers: {
-                    "x-access-token": token || 1,
-                }});
-
-        const clients = io.sockets.adapter.rooms.get(roomId);
-        console.log(clients)
-        for(const clientId of clients) {
-            const clientSocket = io.sockets.sockets.get(clientId);
-            clientSocket.leave(roomId)
-        };
-        delete table.games[roomId];
-    });
     socket.on("refresh", (roomId)=>{
         console.log("refresh")
         // const clients = io.sockets.adapter.rooms.get(roomId);
