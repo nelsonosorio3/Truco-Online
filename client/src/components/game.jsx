@@ -88,6 +88,7 @@ export default function Game({
       socket.emit("surrender", roomId || localStorage.roomId, player.id, localStorage.token);
       dispatch(setIsInRoom({isInRoom: false, roomId: null}));
       setTimeout(()=>history.push("/profile"),300);
+      clearTimeout(turnTime);
     };
     const tutorial = ()=>{
       /// mostrar valor cartas y explicacion corta de apuestas
@@ -190,12 +191,14 @@ export default function Game({
           alert("el juego termino");
           dispatch(setIsInRoom({isInRoom: false, roomId: null}));
         }
+        clearTimeout(turnTime);
       },);
       socket.on("surrender",()=>{
         alert("El otro jugador se rindio, TU GANAS!");
         history.push("/profile");
         socket.emit("surrender2", roomId || localStorage.roomId, localStorage.token);
         dispatch(setIsInRoom({isInRoom: false, roomId: null}));
+        clearTimeout(turnTime);
       });
       socket.on("addFriend", (idSender)=>{
         userProfile.email && idSender && axios.post(`http://localhost:3001/api/friends/${idSender}/${userProfile.email}`);
