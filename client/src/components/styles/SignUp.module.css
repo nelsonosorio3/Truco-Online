@@ -1,11 +1,9 @@
 .container {
     width: 100%;
     height: 100vh;
-
     background-image: url('../../img/woodBackground.webp');
     background-size: 100% 100%;
     background-repeat: no-repeat;
-
     padding-top: 57%;
 }
 
@@ -158,6 +156,54 @@
     color: rgb(247, 8, 8);
     font-weight: bold;
 }
+
+/* Estilo para el boton de subir imagen */
+input[type="file"]{
+    display:none;
+}
+
+.uploadImgMsg{
+    cursor: pointer;
+    position: absolute;
+    bottom: 30%;
+    margin-bottom: 20px;
+    padding: .1em;
+    color: white;
+    font-style: italic;
+}
+
+.deleteImg{
+    border-bottom: solid;
+    cursor: pointer;
+    position: absolute;
+    bottom: 30%;
+    margin-bottom: 20px;
+    color: red;
+    padding: .1em;
+}
+
+.uploadFileBtn{
+    cursor: pointer;
+    color: white;
+    width: 60%;
+    background-color: #f5af09;
+    position: absolute;
+    bottom: 25%;
+    left: 19%;
+    font-size: 15px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0.5em;
+    border-radius: 30px;
+}
+
+.uploadFileBtn:hover{
+    border: solid 1px white;
+}
+
+
+
 
 @media screen and (max-width: 1024px) {
     .form {

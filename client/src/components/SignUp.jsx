@@ -60,11 +60,6 @@ export default function SignUp() {
 
     const [isOpenModal, openModal, closeModal] = useModal();
 
-    //estados para el archivo imagen
-    const [fileInputState, setFileInputState] = useState("")
-    // const [selectedFile, setSelectedFile] = useState("")
-    const [previewSource, setPreviewSource] = useState("")
-
     const handleFileChange = (e) => {
         //Funcion para subir una imagen
         const file = e.target.files[0]
@@ -80,8 +75,15 @@ export default function SignUp() {
                 ...state,
                 profile_image: reader.result
             })
-            console.log(state.profile_image)
+            // console.log(state.profile_image)
         }
+    }
+
+    const removeImage = () => {
+        setState({
+            ...state,
+            profile_image: '',
+        })
     }
 
 
@@ -163,12 +165,14 @@ export default function SignUp() {
                 {errors.password && (<p className={styles.danger}> {errors.password} </p>)}
 
                 {/* Input para subir una imagen */}
+                <label for="file" className={styles.uploadFileBtn}>Imagen de perfil</label>
                 <input 
-                type="file"     
-                name="image"
-                onChange={handleFileChange} 
-                value={fileInputState}
+                    id="file"
+                    type="file"     
+                    name="image"
+                    onChange={handleFileChange} 
                 />
+                {state.profile_image ? <p className={styles.deleteImg} onClick={removeImage}>Eliminar Imagen</p> : <p className={styles.uploadImgMsg}>Carga Una foto de perfil!</p>}
 
 
                 {((!errors.username && !errors.email && !errors.password) 
@@ -178,9 +182,6 @@ export default function SignUp() {
                     (<button type="submit" className={styles.button}> Crear Usuario </button>) 
                     : 
                     <button type="submit" className={styles.disabled} disabled> Crear Usuario </button>}
-
-               
-
                 </form> 
             </section>
             <Modal isOpen={isOpenModal} closeModal={closeModal}>
