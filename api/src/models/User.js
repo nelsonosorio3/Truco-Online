@@ -44,5 +44,10 @@ module.exports = (sequelize) => {
             type: DataTypes.STRING,
             defaultValue: false
         },
+        status: { // Para indicar si está "activ", "baneado" o "suspendido"
+            type: DataTypes.STRING,
+            defaultValue: "activo"
+        }
+
     });
 };
