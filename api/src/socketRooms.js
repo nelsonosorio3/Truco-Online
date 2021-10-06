@@ -33,7 +33,7 @@ exports = module.exports = function(io){
       
     
         //evento por si alguien crea una sala o entra a una
-        socket.on('joinRoom', async function (roomId, name, token, isInv) {
+        socket.on('joinRoom', async function (roomId, name, token, password, isInv) {
             socket.leave(1);
             console.log('user:', socket.handshake.auth.user);
             const clients = io.sockets?.adapter.rooms.get(roomId) //set de clientes en room
@@ -109,7 +109,12 @@ exports = module.exports = function(io){
                 return room.id === roomId;
             });
 
-            if(findedRoom === -1 && !isInv) activeRooms = [...activeRooms, {id: roomId, host: name}]
+            if(findedRoom === -1 && password) {
+                activeRooms = [...activeRooms, {id: roomId, host: name, password}]
+            }
+            else if(findedRoom === -1 && !password && !isInv) {
+                activeRooms = [...activeRooms, {id: roomId, host: name}]
+            } 
             // if(activeRooms.indexOf(roomId) === -1) activeRooms = [...activeRooms, roomId] 
             else console.log(roomId, 'ya existe');
             console.log("active rooms: ", activeRooms)
