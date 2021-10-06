@@ -1,13 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 
-import { setIsInRoom } from '../../Redux/actions-types/roomsActions';
 import socket from '../socket';
+
+import { setIsInRoom } from '../../Redux/actions-types/roomsActions';
+
 import GameRequest from '../GameRequest';
 
 import styles from './styles/RoomsList.module.css';
 
-export default function RoomsList(){
+export default function RoomsList() {
     const [allRooms, setAllRooms] = useState([]);
     // const [roomId, setRoomId] = useState('')
     const dispatch = useDispatch();
@@ -38,28 +40,27 @@ export default function RoomsList(){
         dispatch(setIsInRoom({isInRoom: true, roomId: parseInt(event.target[0].value)}));
     };
 
-    return(
-        <div>
+    return (
+        <>
             <GameRequest/>
             <div className={styles.roomsList}>
                 {
-                allRooms.length > 0
-                ?   
-                    allRooms[0].activeRooms.map(room => 
-                    <div key={room.id}>
-                        <form onSubmit={joinRoom}>
-                            <button 
-                                type='submit' 
-                                value={room.id} 
-                                className={styles.roomBtn}>Room Id: {room.id} | Host: {room.host}
-                            </button>
-                        </form>
-                    </div>
-                    )
-                :
-                    null
+                    allRooms.length > 0
+                    ?   
+                        allRooms[0].activeRooms.map(room => 
+                            <div key={room.id}>
+                                <form onSubmit={joinRoom}>
+                                    <button 
+                                        type='submit' 
+                                        value={room.id} 
+                                        className={styles.roomBtn}>Room Id: {room.id} | Host: {room.host}
+                                    </button>
+                                </form>
+                            </div>)
+                    :
+                    <p>No hay rooms...</p>
                 }
             </div>
-        </div>
+        </>
     );
 };
