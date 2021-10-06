@@ -28,6 +28,7 @@ exports = module.exports = function(io){
         socket.on("invite to game", (roomId, idReceiver, nameSender)=>{
             console.log(socket.id, "invitacion")
             socket.broadcast.emit("invite to game",roomId, idReceiver, nameSender);
+            setTimeout(()=>activeRooms = activeRooms.filter((room)=> room!= roomId),200);
         });
       
     
@@ -186,6 +187,42 @@ exports = module.exports = function(io){
         socket.on("already reported",(id)=>{
             io.to(id).emit("messages", { msg: `Ya lo reportaste` });
         })
-      
+        
+        socket.on("surrender", (roomId, playerId, token)=>{
+            if(table.games[roomId]?.playerTwo && table.games[roomId].common){
+                axios.put(`http://localhost:3001/api/games/losser/${table.games[roomId].common.gameId}/${table.games[roomId].playerOne.score}/${table.games[roomId].playerTwo.score}`,{},{
+                    headers: {
+                        "x-access-token": token || 1,
+                    }});
+                if(table.games[roomId]?.playerOne.id === playerId){
+                    io.to(table.games[roomId]?.playerTwo?.id).emit("surrender");
+                }
+                else{
+                    io.to(table.games[roomId]?.playerOne.id).emit("surrender");
+                }
+            }
+            else{
+                table.games[roomId]?.common && axios.put(`http://localhost:3001/api/games/winner/${table.games[roomId].common.gameId}/99/99`,{},{
+                        headers: {
+                            "x-access-token": token || 1,
+                        }});
+                }
+            activeRooms = activeRooms.filter((roomId)=> roomId!= roomId);
+        });
+        socket.on("surrender2", (roomId, token)=>{
+            console.log("entre")
+            axios.put(`http://localhost:3001/api/games/winner/${table.games[roomId].common.gameId}/${table.games[roomId].playerOne.score}/${table.games[roomId].playerTwo.score}`,{},{
+                    headers: {
+                        "x-access-token": token || 1,
+                    }});
+    
+            const clients = io.sockets.adapter.rooms.get(roomId);
+            console.log(clients)
+            for(const clientId of clients) {
+                const clientSocket = io.sockets.sockets.get(clientId);
+                clientSocket.leave(roomId)
+            };
+            delete table.games[roomId];
+        });
     });
 }
