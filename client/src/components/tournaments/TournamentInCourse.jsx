@@ -17,6 +17,7 @@ export default function TournamentInCourse(){
     
     useEffect(() => {
         socket.on('sendTournamentData', (data) => {
+            // console.log('SENDTOURNAMENTDATA: ', data)
             setTournamentData([data]);
         })
         return () => {socket.off()}
@@ -60,7 +61,9 @@ export default function TournamentInCourse(){
                         {
                         tournamentData.length > 0 ?
                             !tournamentData[0] ? null
-                                : tournamentData[0].players.map(p => <h4 key={p} className={styles.playerName}>{p}</h4> )
+                                // : console.log('LISTA DE JUGADORES:', tournamentData[0].players)
+                                // : tournamentData[0].players.map(p => console.log(p) )
+                                : tournamentData[0].players.map(p => <h4 key={p.userId} className={styles.playerName}>{p.user}</h4> )
                         : null
                         }
                     </div>

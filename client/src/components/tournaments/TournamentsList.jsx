@@ -27,7 +27,7 @@ export default function TournamentsList(){
 
     const joinTournament = async (event) => {
         event.preventDefault();
-        socket.emit('joinTournament', ({tournamentId: parseInt(event.target[0].innerText), user: localStorage.user}))
+        socket.emit('joinTournament', ({tournamentId: parseInt(event.target[0].innerText), user: localStorage.user, userId: parseInt(localStorage.id)}))
         dispatch(setIsInTournament({isInTournament: true, tournamentId: parseInt(event.target[0].innerText)}))
     }
 

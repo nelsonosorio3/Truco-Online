@@ -28,7 +28,10 @@ module.exports = {
         email: emailInput,
         gamesPlayed: 0,
         gamesWon: 0,
-        gamesLost: 0
+        gamesLost: 0,
+        tournamentsPlayed: 0,
+        tournamentsWon: 0,
+        tournamentsLost: 0,
       }
     })
       .then(response => {
@@ -182,7 +185,10 @@ module.exports = {
         image,
         gamesPlayed: 0,
         gamesWon: 0,
-        gamesLost: 0
+        gamesLost: 0,
+        tournamentsPlayed: 0,
+        tournamentsWon: 0,
+        tournamentsLost: 0,
       })
       return res.status(200).json({
         message: "Usuario creado con éxito",
