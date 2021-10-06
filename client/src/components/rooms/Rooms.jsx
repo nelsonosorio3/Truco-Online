@@ -1,11 +1,8 @@
 import React from 'react';
-import {useSelector} from 'react-redux'
+import { useSelector } from 'react-redux';
 // import { useHistory } from "react-router-dom";
 import Game from '../game';
 import GameRequest from '../GameRequest';
-
-
-import styles from './styles/Rooms.module.css'
 
 import NavBar from '../NavBar';
 
@@ -13,20 +10,20 @@ import JoinRoomForm from './JoinRoomForm';
 import RoomsList from './RoomsList';
 import ChatLobby from './ChatLobby';
 
+import styles from './styles/Rooms.module.css';
+
 // import socket from '../socket';
 
 export default function Rooms() {
-  console.log("localStorage in Rooms", localStorage)
+  console.log("localStorage in Rooms", localStorage);
   // const history = useHistory()
 
   let isinRoom = useSelector(store => store.roomsReducer.isInRoom);
   // const roomId = useSelector(store => store.roomsReducer.roomId)
-
   
   // socket.on("roomFull", ()=>isinRoom= false)
   return (
     <div className={styles.mainDiv}>
-      
       {
         (localStorage.isInRoom === "true")
         ?
@@ -45,7 +42,7 @@ export default function Rooms() {
         </div>
         <div className={styles.subMainDiv_noGame}>
           <div className={styles.lobby}>
-            <h2 className={styles.title}>Bienvenidos a Truco Henry</h2>
+            <h2 className={styles.title}>Bienvenidos a Truco Henry!</h2>
             <div className={styles.div_Chat_Rooms}>  
               {/* <Chat typeofChat={'chatLobby'} roomId={'lobby'} name={localStorage.user}/> */}
               <ChatLobby typeofChat={'chatLobby'} roomId={'lobby'} name={localStorage.user} />
@@ -60,6 +57,4 @@ export default function Rooms() {
       }
     </div>
   );
-}
-
-
+};

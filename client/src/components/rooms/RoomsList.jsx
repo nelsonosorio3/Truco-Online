@@ -1,42 +1,43 @@
-import React, {useState, useEffect} from 'react';
-import {useDispatch} from 'react-redux'
+import React, { useState, useEffect } from 'react';
+import { useDispatch } from 'react-redux';
 
 import { setIsInRoom } from '../../Redux/actions-types/roomsActions';
 import socket from '../socket';
-import styles from './styles/RoomsList.module.css'
 import GameRequest from '../GameRequest';
+
+import styles from './styles/RoomsList.module.css';
+
 export default function RoomsList(){
     const [allRooms, setAllRooms] = useState([])
     const [roomWithPassword, setRoomWithPassword] = useState(false)
     const [roomData, setRoomData] = useState({})
     const [userRoomTest, setUserRoomTest] = useState("")
+
     // const [roomId, setRoomId] = useState('')
-    const dispatch = useDispatch()
+    const dispatch = useDispatch();
 
     useEffect(() => {
         socket.on('showActiveRooms', (rooms) => {
             setAllRooms([rooms]);
-        })
+        });
         // socket.emit('bringActiveRooms') //automaticamente hacer update de rooms cuando hay cambios en allRooms?
 
         return () => {socket.off()}
-    }, [allRooms])
+    }, [allRooms]);
 
     useEffect(()=>{
         socket.emit('bringActiveRooms')  // traer todas las rooms disponibles al entrar
-    }, [])
+    }, []);
 
     useEffect(()=>{
         socket.on("newRoomCreated", () => {socket.emit('bringActiveRooms')}) //actualizar en tiempo real rooms disponibles
         return ()=>{
-            socket.off("newRoomCreated")
-        }
-    })
+            socket.off("newRoomCreated");
+        };
+    });
 
     const joinRoom = async (event) => {
         event.preventDefault();
-        console.log('ESTE ES EL PASSWORD', event.target[0].attributes[3].nodeValue)
-        
         //  En caso de existir contraseña
         if(event.target[0].attributes[3]){
             setRoomData({idRoom: event.target[0].value, password: event.target[0].attributes[3].nodeValue})
@@ -56,8 +57,6 @@ export default function RoomsList(){
             dispatch(setIsInRoom({isInRoom: true, roomId: parseInt(event.target[0].value)}))
         } 
     }
-
-
 
     return(
         <div>
@@ -82,7 +81,7 @@ export default function RoomsList(){
                     </div>
                     )
                 :
-                    <></>
+                    null
                 }
             </div>
             <div>
@@ -99,5 +98,5 @@ export default function RoomsList(){
                 }
             </div>
         </div>
-    )
-}
+    );
+};
