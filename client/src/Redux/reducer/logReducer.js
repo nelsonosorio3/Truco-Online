@@ -2,6 +2,7 @@ import { LOG_OUT, LOG_IN, LOG_IN_FACEBOOK } from '../actions/index';
 
 const INITIAL_STATE = {
   isAuth: false,
+  status: "",
   user: null,
   id: null,
   message: ''
@@ -16,18 +17,22 @@ const logReducer = (state = INITIAL_STATE, { type, payload }) => {
         // login: true
         // username: "pedro"
         // token: "String"
+        console.log("lr");
+        console.log(payload);
         window.localStorage.setItem("token", payload.token);
         window.localStorage.setItem("isAuth", payload.login);
         window.localStorage.setItem("user", payload.username);
         window.localStorage.setItem("id", payload.id);
         window.localStorage.setItem("isAdmin", payload.isAdmin);
+        window.localStorage.setItem("status", payload.status);
         return {
           ...state,
           isAuth: payload.login,
           user: payload.username,
           id: payload.id,
           message: payload.message,
-          token: payload.token
+          token: payload.token,
+          status: payload.status
         };
       } else {
         const newState = {
@@ -65,13 +70,17 @@ const logReducer = (state = INITIAL_STATE, { type, payload }) => {
       window.localStorage.removeItem("user");
       window.localStorage.removeItem("id");
       window.localStorage.removeItem("isAdmin");
+      window.localStorage.removeItem("status");
       window.localStorage.removeItem("isInRoom");
       window.localStorage.removeItem("roomId");
+
       return {
         ...state,
         isAuth: false,
         user: null,
         id: null,
+        isAdmin: false,
+        status: ""
       };
     default:
       return state;

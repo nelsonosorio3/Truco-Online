@@ -31,7 +31,7 @@ export default function AdminPanel() {
   }, [])
 
 
-  const logged = window.localStorage.getItem("isAuth");
+  // const logged = window.localStorage.getItem("isAuth");
   const isAdmin = window.localStorage.getItem("isAdmin");
 
   /*
@@ -194,6 +194,7 @@ export default function AdminPanel() {
             <input type="submit" value="Go to page" />
           </form>
 
+          {/*}
           <p>Usuarios por página:
             <form>
               <input
@@ -207,6 +208,7 @@ export default function AdminPanel() {
 
             </form>
           </p>
+          {*/}
 
 
 
@@ -243,6 +245,7 @@ export default function AdminPanel() {
                   gamesLost={u.gamesLost}
                   createdAt={u.createdAt}
                   reportedUser={u.reportedUser}
+                  status={u.status}
                 />)
               }
 

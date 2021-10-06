@@ -1,10 +1,57 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import adminPanelActions from '../Redux/actions-types/adminPanelActions';
+import { createSemanticDiagnosticsBuilderProgram } from "typescript";
 
 // import styles from "./styles/FilaDeTabla.module.css"
 import profileIcon from '../img/profileIcon.png';
 
-export default function FilaDeTabla({ username, id, email, gamesPlayed, gamesWon, gamesLost, createdAt, reportedUser }) {
+export default function FilaDeTabla({ username, id, email, gamesPlayed, gamesWon, gamesLost,
+    createdAt, reportedUser, status }) {
+
+    /*
+function banUser() {
+    fetch(
+        `http://localhost:3001/api/user/banuser?userId=${id}`,
+        {
+            method: "PUT",
+            headers: {
+                "x-access-token": localStorage.token,
+                'Content-Type': 'application/json'
+            }
+        })
+        .then(
+            r => {
+                console.log(r)
+                //dispatch(getUsers({ token: localStorage.token }))
+            }
+        )
+}*/
+
+    const { banUser } = adminPanelActions;
+
+    function suspendUser(id) {
+        fetch(`http://localhost:3001/api/user/banuser?userId=${id}`)
+            .then(
+                r => {
+                    console.log(r)
+                    //dispatch(getUsers({ token: localStorage.token }))
+                }
+            )
+
+    }
+
+    function activateUser(id) {
+        fetch(`http://localhost:3001/api/user/banuser?userId=${id}`)
+            .then(
+                r => {
+                    console.log(r)
+                    //dispatch(getUsers({ token: localStorage.token }))
+                }
+            )
+    }
+
+
     return (
         <tr>
             <td><img src={profileIcon} alt="Imagen de bandera" height="20"></img></td>
@@ -19,9 +66,13 @@ export default function FilaDeTabla({ username, id, email, gamesPlayed, gamesWon
             <td>{createdAt.split("T")[0]}</td>
             <td width="170">
                 <div className="buttonContainer">
-                    <button>Suspender</button> <button>Banear</button>
-
+                    {
+                        status === "activo" ?
+                            (<div><button onClick={() => suspendUser(id)}>Suspender</button> <button onClick={() => banUser(id, localStorage.token)}>Banear</button></div>) :
+                            <button onClick={() => activateUser(id)}>Re-activar</button>
+                    }
                 </div>
+
             </td>
             <td>
                 {
