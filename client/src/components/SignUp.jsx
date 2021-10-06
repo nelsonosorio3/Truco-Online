@@ -41,6 +41,7 @@ const initialState = {
     username: '',
     email: '',
     password: '',
+    profile_image: '',
     image: profileIcon,
 };
 
@@ -58,6 +59,31 @@ export default function SignUp() {
     const [errors, setErrors] = useState(initialState);
 
     const [isOpenModal, openModal, closeModal] = useModal();
+
+    //estados para el archivo imagen
+    const [fileInputState, setFileInputState] = useState("")
+    // const [selectedFile, setSelectedFile] = useState("")
+    const [previewSource, setPreviewSource] = useState("")
+
+    const handleFileChange = (e) => {
+        //Funcion para subir una imagen
+        const file = e.target.files[0]
+        previewFile(file)
+    }
+
+    const previewFile = (file) => {
+        const reader = new FileReader()
+        //Convierte la imagen en url
+        reader.readAsDataURL(file)
+        reader.onloadend = () => {
+            setState({
+                ...state,
+                profile_image: reader.result
+            })
+            console.log(state.profile_image)
+        }
+    }
+
 
     function handleChange(event) {
         const { name, value } = event.target;
@@ -92,6 +118,7 @@ export default function SignUp() {
             }, 3000);
         };
     }, [registered]);
+
 
     return (
         <>
@@ -134,6 +161,16 @@ export default function SignUp() {
                     onChange={handleChange}
                 />
                 {errors.password && (<p className={styles.danger}> {errors.password} </p>)}
+
+                {/* Input para subir una imagen */}
+                <input 
+                type="file"     
+                name="image"
+                onChange={handleFileChange} 
+                value={fileInputState}
+                />
+
+
                 {((!errors.username && !errors.email && !errors.password) 
                     && 
                     (errors.username !== '' && errors.email !== '' && errors.password !== '')) 
@@ -141,6 +178,9 @@ export default function SignUp() {
                     (<button type="submit" className={styles.button}> Crear Usuario </button>) 
                     : 
                     <button type="submit" className={styles.disabled} disabled> Crear Usuario </button>}
+
+               
+
                 </form> 
             </section>
             <Modal isOpen={isOpenModal} closeModal={closeModal}>

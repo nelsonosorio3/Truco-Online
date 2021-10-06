@@ -85,7 +85,18 @@
 
 .playerInfo p {
     font-size: 1.5rem;
+    margin: 0px;
 }
+
+.playerInfo p:first-child{
+    /* border-top: solid 3px  #cc9966; */
+    box-shadow: 4px 4px 5px #cc99668a;
+    /* border-radius: 6px; */
+    padding: 0.2em;
+    /* margin-top: 0.1em; */
+
+}
+
 
 .gamesAndTournamentsStats{
     display: flex;
@@ -139,11 +150,14 @@
 .infoGames {
     width: auto;
     height: auto;
-
     display: flex;
-    flex-direction: column;
-    align-items: center;
+    flex-direction: column-reverse;
+    align-items: flex-start;
 }
+/* 
+.infoGames p{
+} */
+
 
 .friends {
     width: 100%;
@@ -529,13 +543,9 @@
 }
 
 @media screen and (max-width: 335px) {
-    .playerInfo h3 {
-        background-color: red;
-    }
+  
 
     .playerInfo {
         width: 300px;
     }
-
-
 }
