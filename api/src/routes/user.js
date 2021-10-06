@@ -12,7 +12,7 @@ const { validarUsuario } = require('../controller/index')
 const { validarAdmin } = require('../controller/validarAdmin')
 const userControllers = require('../controller/users')
 
-//Trae todos los usuarios
+//Trae todos los usuarios. Se deja para el desarrollo, debería borrarse si este producto llega a abrirse al público.
 router.get('/', userControllers.allUsers);
 
 //Ruta para hacer login con usuario
@@ -38,6 +38,16 @@ router.put('/edit', validarUsuario, userControllers.updateUser)
 
 //Ruta para acceder a TODOS los usuarios, pasando por dos middleware de autenticación (login === true y usuario.isAdmin === true)
 router.get("/users", [validarUsuario, validarAdmin], userControllers.allUsers)
+
+//Ruta para BANEAR USUARIO, pasando por dos middleware de autenticación (login === true y usuario.isAdmin === true)
+router.put("/banuser", userControllers.banUser)
+
+//Ruta para SUSPENDER USUARIO, pasando por dos middleware de autenticación (login === true y usuario.isAdmin === true)
+router.put("/suspenduser", userControllers.suspendUser)
+
+//Ruta para RE-ACTIVAR USUARIO, pasando por dos middleware de autenticación (login === true y usuario.isAdmin === true)
+router.put("/activateuser", userControllers.activateUser)
+
 
 
 

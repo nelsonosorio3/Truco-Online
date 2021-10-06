@@ -20,6 +20,72 @@ module.exports = {
     }
   },
 
+  // Función para banear/suspender usuario (por ahora se tratará como sinónimos);
+
+  banUser: async (req, res) => {
+    var { userId } = req.query;
+    console.log(req.query);
+    console.log(userId);
+    try {
+      const user = await User.findOne({
+        where: { id: userId }
+      });
+      user.status = "baneado";
+      await user.save();
+      return res.status(200).json(
+        { message: `Usuario id ${userId} baneado.` }
+      )
+    } catch {
+      e => {
+        console.log(e);
+        return res.stastus(400).json({ message: "no se pudo concretar operación" })
+      }
+    }
+  },
+
+  suspendUser: async (req, res) => {
+    var { userId } = req.query;
+    console.log(req.query);
+    console.log(userId);
+    try {
+      const user = await User.findOne({
+        where: { id: userId }
+      });
+      user.status = "suspendido";
+      await user.save();
+      return res.status(200).json(
+        { message: `Usuario id ${userId} suspendido.` }
+      )
+    } catch {
+      e => {
+        console.log(e);
+        return res.stastus(400).json({ message: "no se pudo concretar operación" })
+      }
+    }
+  },
+
+  activateUser: async (req, res) => {
+    var { userId } = req.query;
+    console.log(req.query);
+    console.log(userId);
+    try {
+      const user = await User.findOne({
+        where: { id: userId }
+      });
+      user.status = "activo";
+      await user.save();
+      return res.status(200).json(
+        { message: `Usuario id ${userId} ha sido re-activado.` }
+      )
+    } catch {
+      e => {
+        console.log(e);
+        return res.stastus(400).json({ message: "no se pudo concretar operación" })
+      }
+    }
+  },
+
+
   facebookLogin: (req, res) => {
     const { emailInput, usernameInput } = req.query
     User.findOrCreate({
@@ -84,15 +150,18 @@ module.exports = {
         if (user.length > 1) return res.status(200).json({ message: "Error! Hay más de un usuario con ese mail y contraseña", login: false })
 
         //token autentication - Se crea el token y se envia al cliente
-        const token = jwt.sign({ id: user[0].id, isAdmin: user[0].isAdmin }, req.app.get('secretKey'), { expiresIn: '7d' });
+        const token = jwt.sign({ id: user[0].id, isAdmin: user[0].isAdmin, isActive: user[0].isActive }, req.app.get('secretKey'), { expiresIn: '7d' });
         var resp = {
           username: user[0].username,
           id: user[0].id,
           login: true,
           token: token,
           isAdmin: user[0].isAdmin,
+          status: user[0].status,
           message: "Autenticacion exitosa!"
         }
+        console.log("resp sent")
+        console.log(resp)
         return res.status(200).json(resp)
       }
       console.log(error);
@@ -161,8 +230,10 @@ module.exports = {
   },
 
 
+
   createNewUser: async (req, res) => {
     var { username, email, password, image, profile_image } = req.body;
+
 
     const userData = await User.findAll({
       where: {
