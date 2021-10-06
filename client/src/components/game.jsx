@@ -10,6 +10,7 @@ import { setIsInRoom } from '../Redux/actions-types/roomsActions';
 import axios from 'axios';
 import profileActions from '../Redux/actions-types/profileActions';
 
+let turnTime;
 const correctBetName = (betPick)=>{
   let properBet = "";
   if(betPick.includes("no quiero")) properBet = "No Quiero";
@@ -69,6 +70,7 @@ export default function Game({
     const [isYourTurn, setIsYourTurn] = useState(false);
     const [reported, setReported] = useState(false);
     const [friend, setFriend] = useState(false);
+    let [timesWithoutPlay, setTimesWithoutPlay] = useState(0);
     const history = useHistory();
     const scoreBox = useRef();
     const {getProfile} = profileActions;
@@ -240,7 +242,17 @@ export default function Game({
         setIsYourTurn(true)
         console.log("is your turn")
         setTimeout(()=>setIsYourTurn(false), 1000);
-      } 
+      }
+      if(player.isTurn) {
+        // turnTime = setTimeout(()=>socket.emit("surrender", roomId || localStorage.roomId, player.id, localStorage.token), 10*1000);
+        if(timesWithoutPlay < 3){
+          turnTime = setTimeout(()=>{socket.emit("bet", "ir al mazo", roomId || localStorage.roomId, player.id);setTimesWithoutPlay(++timesWithoutPlay)}, 30*1000)
+        }
+        else{
+          turnTime = setTimeout(()=>surrender(), 10*1000);
+        }
+      }
+      if(!player.isTurn) clearTimeout(turnTime);
     },[player.isTurn])
     console.log(player) //para testing
     return(<div id={stylesGame.gameBackground}>
