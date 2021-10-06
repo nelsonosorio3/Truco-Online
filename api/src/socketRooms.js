@@ -26,14 +26,14 @@ exports = module.exports = function(io){
         });
 
         socket.on("invite to game", (roomId, idReceiver, nameSender)=>{
+            activeRooms = activeRooms.filter((room)=> room!= roomId)
             console.log(socket.id, "invitacion")
             socket.broadcast.emit("invite to game",roomId, idReceiver, nameSender);
-            setTimeout(()=>activeRooms = activeRooms.filter((room)=> room!= roomId),200);
         });
       
     
         //evento por si alguien crea una sala o entra a una
-        socket.on('joinRoom', async function (roomId, name, token) {
+        socket.on('joinRoom', async function (roomId, name, token, isInv) {
             socket.leave(1);
             console.log('user:', socket.handshake.auth.user);
             const clients = io.sockets?.adapter.rooms.get(roomId) //set de clientes en room
@@ -109,7 +109,7 @@ exports = module.exports = function(io){
                 return room.id === roomId;
             });
 
-            if(findedRoom === -1) activeRooms = [...activeRooms, {id: roomId, host: name}]
+            if(findedRoom === -1 && !isInv) activeRooms = [...activeRooms, {id: roomId, host: name}]
             // if(activeRooms.indexOf(roomId) === -1) activeRooms = [...activeRooms, roomId] 
             else console.log(roomId, 'ya existe');
             console.log("active rooms: ", activeRooms)
