@@ -9,17 +9,18 @@
 
 .form {
     width: 35%;
-    min-height: 30em;
+    min-height: 35em;
 
     display: flex;
     align-items: center;
     flex-direction: column;
+
     position: relative;
 
     background-color: var(--transBlackColor);
     border-radius: 1em;
 
-    margin-top: -50%;
+    margin-top: -52%;
     margin-right: auto;
     margin-left: auto;
 }
@@ -165,30 +166,30 @@ input[type="file"]{
 .uploadImgMsg{
     cursor: pointer;
     position: absolute;
-    bottom: 30%;
+    bottom: 22%;
     margin-bottom: 20px;
     padding: .1em;
     color: white;
     font-style: italic;
 }
 
-.deleteImg{
+.deleteImg {
     border-bottom: solid;
     cursor: pointer;
     position: absolute;
-    bottom: 30%;
+    bottom: 22%;
     margin-bottom: 20px;
     color: red;
     padding: .1em;
 }
 
-.uploadFileBtn{
+.uploadFileBtn { 
     cursor: pointer;
     color: white;
     width: 60%;
     background-color: #f5af09;
     position: absolute;
-    bottom: 25%;
+    bottom: 18%;
     left: 19%;
     font-size: 15px;
     display: flex;
@@ -201,9 +202,6 @@ input[type="file"]{
 .uploadFileBtn:hover{
     border: solid 1px white;
 }
-
-
-
 
 @media screen and (max-width: 1024px) {
     .form {
