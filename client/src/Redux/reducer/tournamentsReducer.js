@@ -1,4 +1,4 @@
-import { IS_IN_TOURNAMENT } from '../actions/index';
+import { IS_IN_TOURNAMENT, LEFT_TOURNAMENT } from '../actions/index';
 
 const INITIAL_STATE = {
   isInTournament: false,
@@ -11,6 +11,11 @@ const tournamentsReducer = (state = INITIAL_STATE, {type, payload}) => {
       return {
         isInTournament: payload.isInTournament,
         tournamentId: payload.tournamentId,
+      };
+    case LEFT_TOURNAMENT:
+      return {
+        isInTournament: false,
+        roomId: null,
       };
     default:
       return state;    
