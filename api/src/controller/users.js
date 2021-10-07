@@ -1,6 +1,6 @@
 const { User, Friends, Games } = require("../db.js");
 const jwt = require('jsonwebtoken');
-const {cloudinary} = require('./cloudinary.js')
+const { cloudinary } = require('./cloudinary.js')
 
 module.exports = {
   //Funciones controller para la ruta /user
@@ -8,10 +8,12 @@ module.exports = {
   allUsers: async (req, res) => {
     try {
       const users = await User.findAll({
+        attributes: { exclude: ['password'] },
         include: {
           model: User,
           as: "reportedUser",
-        }
+        },
+        order: [["id", "ASC"]],
       });
       return res.json(users)
     } catch (error) {
@@ -251,10 +253,10 @@ module.exports = {
 
       let imagen_url = ""
 
-      if(!profile_image.length){
+      if (!profile_image.length) {
         imagen_url = image
       }
-      else{
+      else {
         const uploadedResponse = await cloudinary.uploader.upload(profile_image, {
           upload_preset: "proyectofinal"
         })

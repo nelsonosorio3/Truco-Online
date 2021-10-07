@@ -119,7 +119,7 @@ export default function AdminPanel() {
   };
 
   var handleSortDescLost = function () {
-    dispatch(sortByWonDesc());
+    dispatch(sortByLostDesc());
     dispatch(filterByName(tableStatus.filterValue))
     dispatch(goToPage(1));
   };
@@ -136,9 +136,16 @@ export default function AdminPanel() {
     dispatch(goToPage(1));
   };
 
-  var pagesButtonsCreator = function () {
-
+  var reload = function () {
+    dispatch(getUsers({ token: localStorage.token }));
+    dispatch(filterByName(""));
+    dispatch(filterByEmail(""));
+    dispatch(setSelectedPage(1));
+    dispatch(goToPage(1));;
+    document.getElementById('pageSelector').value = "1";
   }
+
+  var pagesButtonsCreator = function () { }
 
   var someFunction = function () { };
 
@@ -252,7 +259,7 @@ export default function AdminPanel() {
             </tbody>
           </table>
           <div className={styles.cargarNuevamente}>
-            <p>Para cargar o reiniciar los filtros y ordenamiento presione: <button onClick={someFunction}>Cargar datos nuevamente.</button></p>
+            <p>Para cargar nuevamente los datos o reiniciar los filtros y ordenamiento presione: <button onClick={reload}>Cargar datos nuevamente.</button></p>
           </div>
 
         </div> :
