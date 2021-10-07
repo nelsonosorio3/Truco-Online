@@ -62,13 +62,26 @@
 
 .profileIcon {
     position: relative;
-    border-radius: 64px;
+    border-radius: 80px;
     top: 40px;
     z-index: 500;
     border: solid 1px;
-    width: 8.5em;
+    /* width: 8.5em; */
     margin-top: .8em;
     background-color: #ffffffd6;
+    height: 170px;
+    width: 180px;
+    border: solid 2px white;
+    box-shadow: 0px 0px 15px 5px black;
+    animation: image 3s 1;
+}
+
+@keyframes image {
+    0%{
+        top: -100px;
+    }
+
+    
 }
 
 .playerInfo {
@@ -433,8 +446,9 @@
     }
 
     .profileIcon {
-        width: 7.5em;
-
+        /* width: 7.5em; */
+        height: 140px;
+        width: 145px;
         margin-top: .8em;
 
         background-color: red;
@@ -533,9 +547,10 @@
     }
 
     .profileIcon {
-        width: 6em;
 
-        background-color: blue;
+        /* width: 6em; */
+        height: 140px;
+        width: 145px;
 
         margin-top: 1.8em;
     }
