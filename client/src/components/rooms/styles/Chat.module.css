@@ -6,6 +6,7 @@
     width: 100%;
     min-height: 60vh;
     max-height: 60vh;
+    margin-bottom: .5em;
 
     overflow: scroll;
     border: 2px solid black;
@@ -47,7 +48,7 @@
 
 .btn {
     color: #fff;
-    background-color: #7f7056;
+    background-color: #776036;
     border-color: #343a40;
     display: inline-block;
     font-weight: 400;

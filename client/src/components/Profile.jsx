@@ -2,7 +2,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React from 'react';
 import { useEffect, useState } from 'react';
-import { useDispatch , useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router';
 
 import { useModal } from '../hooks/useModal';
@@ -40,8 +40,8 @@ export default function Profile(props) {
 
     //userProfile: es el estado del usuario logeado
 
-    const { userProfile, userFriends, userHistory  } = useSelector(state => state.profileReducer);
-    const {getProfile, getFriends, deleteFriends, putFriendRequest, getGames} = profileActions;
+    const { userProfile, userFriends, userHistory } = useSelector(state => state.profileReducer);
+    const { getProfile, getFriends, deleteFriends, putFriendRequest, getGames } = profileActions;
 
     const dispatch = useDispatch();
 
@@ -50,7 +50,7 @@ export default function Profile(props) {
     //Trae primeramente los datos del usuario y sus amigos
     useEffect(() => {
         //informacion del usuario logeado
-        dispatch(getProfile({token: localStorage.token}));
+        dispatch(getProfile({ token: localStorage.token }));
         //todos los amigos (pendientes y aceptados) del usuario
         dispatch(getFriends(localStorage.token));
         //todas las partidas del usuario
@@ -63,7 +63,7 @@ export default function Profile(props) {
             sender: userFriends.sender,
             requested: userFriends.requested
         })
-        if(removeSuccess){
+        if (removeSuccess) {
             setIsDelete("success")
             openModal()
             setRemoveSuccess(false)
@@ -72,7 +72,7 @@ export default function Profile(props) {
 
     //funcionque luego de la confirmacion del modal hace el dispatch y elimina al amigo de la base de datos
     const removeFriend = (flag) => {
-        if(flag){
+        if (flag) {
             dispatch(deleteFriends(userProfile.id, deleteFriend));
             setRemoveSuccess(true)
         };
@@ -85,7 +85,7 @@ export default function Profile(props) {
     // Funcion para eliminar un amigo que se pasa a cada componente de amigos
     const deleteFriendFunction = (email) => {
         setDeleteFriend({
-            flag:false,
+            flag: false,
             email: ""
         });
         setDeleteFriend(email);
@@ -101,7 +101,7 @@ export default function Profile(props) {
 
     //Funcion para hacer log out
     const logout = () => {
-        dispatch(logOut()); 
+        dispatch(logOut());
         history.push("/");
     };
 
@@ -122,36 +122,36 @@ export default function Profile(props) {
                 {
                     // Esto confirma la eliminacion de un amigo
                     isDelete === "delete" ?
-                    <div className={styles.modalTextCont}>
-                        <p>¿Estas seguro de que deseas eliminar esta amistad?</p> 
-                        <div className={styles.btnDiv}>
-                            <button className={styles.leftBtn} onClick={() => confirmation(true)}>
-                                Si
-                            </button>
-                            <button className={styles.rightBtn} onClick={() => confirmation(false)}>
-                                No
-                            </button>
+                        <div className={styles.modalTextCont}>
+                            <p>¿Estas seguro de que deseas eliminar esta amistad?</p>
+                            <div className={styles.btnDiv}>
+                                <button className={styles.leftBtn} onClick={() => confirmation(true)}>
+                                    Si
+                                </button>
+                                <button className={styles.rightBtn} onClick={() => confirmation(false)}>
+                                    No
+                                </button>
+                            </div>
                         </div>
-                    </div> 
-                    : 
-                    //Comunica que efectivamente se elimino el usuario
-                    isDelete === "success" ?
-                        <div className={styles.successDiv}>
-                            <p>Se ha eliminado con exito a {deleteFriend}</p>
-                        </div>
-                    : 
-                    null
+                        :
+                        //Comunica que efectivamente se elimino el usuario
+                        isDelete === "success" ?
+                            <div className={styles.successDiv}>
+                                <p>Se ha eliminado con exito a {deleteFriend}</p>
+                            </div>
+                            :
+                            null
                 }
             </Modal>
-            <GameRequest/>
+            <GameRequest />
             <button className={styles.logoutBtn} onClick={logout}></button>
             <div className={styles.mainDiv}>
                 <div className={styles.subMainDiv}>
                     <div className={styles.player}>
                         <div className={styles.playerName}>
-                            <img 
-                                src={userProfile.image === 'false' ? profileIcon : userProfile.image} 
-                                alt="Image User" 
+                            <img
+                                src={userProfile.image === 'false' ? profileIcon : userProfile.image}
+                                alt="Image User"
                                 className={styles.profileIcon} />
                         </div>
                         <div className={styles.playerInfo}>
@@ -165,14 +165,14 @@ export default function Profile(props) {
                                     </div>
                                     <div className={styles.playerInfo_Games}>
                                         <div className={styles.infoGames}>
-                                            <p style={{color:"#228B22"}}>{userProfile?.gamesWon}</p>
+                                            <p style={{ color: "#228B22" }}>{userProfile?.gamesWon}</p>
                                             <p>Ganadas</p>
                                         </div>
                                         <div className={styles.infoGames}>
-                                            <p style={{color:"#ff0000"}}>{userProfile?.gamesLost}</p>
+                                            <p style={{ color: "#ff0000" }}>{userProfile?.gamesLost}</p>
                                             <p>Perdidas</p>
                                         </div>
-                                        
+
                                     </div>
                                 </div>
                                 <div className={styles.games}>
@@ -182,11 +182,11 @@ export default function Profile(props) {
                                     </div>
                                     <div className={styles.playerInfo_Games}>
                                         <div className={styles.infoGames}>
-                                            <p style={{color:"#228B22"}}>{userProfile?.tournamentsWon}</p>
+                                            <p style={{ color: "#228B22" }}>{userProfile?.tournamentsWon}</p>
                                             <p>Ganados</p>
                                         </div>
                                         <div className={styles.infoGames}>
-                                            <p style={{color:"#ff0000"}}>{userProfile?.tournamentsLost}</p>
+                                            <p style={{ color: "#ff0000" }}>{userProfile?.tournamentsLost}</p>
                                             <p>Perdidos</p>
                                         </div>
                                     </div>
@@ -209,7 +209,7 @@ export default function Profile(props) {
                                         id={f?.id}
                                         name={f?.username}
                                         date={f.Friends?.createdAt}
-                                        status = {f.Friends.status}
+                                        status={f.Friends.status}
                                     />)
                                 }
                             </div>
@@ -218,16 +218,16 @@ export default function Profile(props) {
                             <h3 className={styles.title}>Solicitudes pendientes</h3>
                             <div className={styles.friendsList}>
                                 {
-                                    !friends.requested.length 
-                                        ? 
-                                        <p className={styles.text}>Sin solicitudes pendientes</p> 
-                                        : 
+                                    !friends.requested.length
+                                        ?
+                                        <p className={styles.text}>Sin solicitudes pendientes</p>
+                                        :
                                         friends.requested.map(f => <AddFriend
                                             key={f.username}
                                             username={f.username}
                                             respond={respondFriendFunction}
                                             email={f.email}
-                                    />)
+                                        />)
                                 }
                             </div>
                         </div>

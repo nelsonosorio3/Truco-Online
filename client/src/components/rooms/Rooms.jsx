@@ -1,6 +1,7 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
 import { useHistory } from "react-router-dom";
+import { useDispatch } from 'react-redux'
 import Game from '../game';
 import GameRequest from '../GameRequest';
 
@@ -11,6 +12,7 @@ import RoomsList from './RoomsList';
 import ChatLobby from './ChatLobby';
 
 import styles from './styles/Rooms.module.css';
+import log from '../../Redux/actions-types/logActions';
 
 // import socket from '../socket';
 
@@ -19,8 +21,19 @@ import styles from './styles/Rooms.module.css';
 export default function Rooms() {
 
   //Agregado por guille, para verificar si no está baneado.
-  const isActive = window.localStorage.getItem("isActive");
+  const isActive = window.localStorage.getItem("status");
   const history = useHistory();
+
+  //Para logout
+
+  const dispatch = useDispatch()
+  const { logOut } = log;
+
+  const logout = () => {
+    dispatch(logOut());
+    history.push("/");
+  };
+  //logout termina aquí
 
   if (isActive === "baneado" || isActive === "suspendido") {
     history.push('/bannedplayer');
@@ -42,6 +55,8 @@ export default function Rooms() {
   let isinRoom = useSelector(store => store.roomsReducer.isInRoom);
   // const roomId = useSelector(store => store.roomsReducer.roomId)
 
+
+
   // socket.on("roomFull", ()=>isinRoom= false)
   return (
     <div className={styles.mainDiv}>
@@ -62,6 +77,12 @@ export default function Rooms() {
               <GameRequest />
             </div>
             <div className={styles.subMainDiv_noGame}>
+              {
+                isActive
+                  ?
+                  <button className={styles.logoutBtn} onClick={logout}>Cerrar Sesión</button> :
+                  <div></div>
+              }
               <div className={styles.lobby}>
                 <h2 className={styles.title}>Bienvenidos a Truco Henry!</h2>
                 <div className={styles.div_Chat_Rooms}>
