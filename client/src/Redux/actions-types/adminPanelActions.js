@@ -29,6 +29,7 @@ function getUsers({ token }) {
 };
 
 function banUser(id, token) {
+  alert(`Jugador id ${id}  baneado`);
   return function (dispatch) {
     return axios.put(`http://localhost:3001/api/user/banuser?userId=${id}`,
       {},
@@ -47,6 +48,7 @@ function banUser(id, token) {
 }
 
 function suspendUser(id, token) {
+  alert(`Jugador id ${id} suspendido`);
   return function (dispatch) {
     return axios.put(`http://localhost:3001/api/user/suspenduser?userId=${id}`,
       {},
@@ -65,6 +67,7 @@ function suspendUser(id, token) {
 }
 
 function activateUser(id, token) {
+  alert(`Jugador id ${id} reactivado.`)
   return function (dispatch) {
     return axios.put(`http://localhost:3001/api/user/activateuser?userId=${id}`,
       {},

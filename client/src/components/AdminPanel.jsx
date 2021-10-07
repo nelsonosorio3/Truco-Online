@@ -233,10 +233,11 @@ export default function AdminPanel() {
                 <th>Id de Usuario </th>
                 <th>Nombre de Usuario </th>
                 <th>Correo </th>
-                <th>Partidos Jugados <span><button onClick={handleSortAscPlayed}>A</button> <button onClick={handleSortDescPlayed}>D</button></span>    </th> {/* onClick={sortTablebyCountry} */}
-                <th>Partidos Ganados <button onClick={handleSortAscWon}>A</button> <button onClick={handleSortDescWon}>D</button>    </th> {/* onClick={sortTablebyCountry} */}
-                <th>Partidos Perdidos <button onClick={handleSortAscLost}>A</button> <button onClick={handleSortDescLost}>D</button>    </th> {/* onClick={sortTablebyCountry} */}
-                <th>Usuario desde <button onClick={handleSortAscUserSince}>A</button> <button onClick={handleSortDescUserSince}>D</button> </th>
+                <th>Partidos Jugados <br /><span><button onClick={handleSortAscPlayed}>A</button> <button onClick={handleSortDescPlayed}>D</button></span>  </th>
+                <th>Partidos Ganados <br /><button onClick={handleSortAscWon}>A</button> <button onClick={handleSortDescWon}>D</button>    </th>
+                <th>Partidos Perdidos <br /><button onClick={handleSortAscLost}>A</button> <button onClick={handleSortDescLost}>D</button>    </th>
+                <th>Usuario desde <br /><button onClick={handleSortAscUserSince}>A</button> <button onClick={handleSortDescUserSince}>D</button> </th>
+                <th>Estado</th>
                 <th>Medidas </th>
                 <th>Reportes</th>
               </tr>

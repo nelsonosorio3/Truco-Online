@@ -40,13 +40,14 @@ function banUser() {
             <td><img src={profileIcon} alt="Imagen de bandera" height="20"></img></td>
             <td>{id}</td>
             <td>
-                {username ? (<Link to={`/welcome`} >{username}</Link>) : <p>{username}</p>}
+                {username ? <p>{username}</p> : <p>{username}</p>}
             </td>
             <td>{email}</td>
             <td>{gamesPlayed}</td>
             <td>{gamesWon}</td>
             <td>{gamesLost}</td>
             <td>{createdAt.split("T")[0]}</td>
+            <td>{status}</td>
             <td width="170">
                 <div className="buttonContainer">
                     {
