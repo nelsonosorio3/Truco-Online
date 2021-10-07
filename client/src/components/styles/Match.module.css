@@ -9,7 +9,7 @@
 
   position: relative;
 
-  background-color: var(--transBlackColor);
+  background-color: var(--blackBoardColor);
 
   border-radius: 50%;
 }
@@ -34,7 +34,7 @@
 
 .div p {
   margin-top: -1.3em;
-  font-size: 1.5em;
+  font-size: 1.2em;
 }
 
 .div2 {
@@ -76,5 +76,12 @@
     bottom: 0;
     right: auto;
     left: auto;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .div p {
+    margin-top: -1.2em;
+    font-size: .9em;
   }
 }
