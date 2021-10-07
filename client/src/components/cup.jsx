@@ -6,12 +6,13 @@ const Cup = ({username , pos , won }) => {
     return (
         <div className={styles.cupCard}>
             <div className={styles.name}>
-                {username} <br />
-                Ganados: {won} 
+                <p className={styles.username}>{username} </p>
+                <p className={styles.title}>Ganados:</p>
+                <p className={styles.won}>{won}</p>
             </div>
             <h3 className={styles.pos}>{pos}</h3>
         </div>
-    )
-}
+    );
+};
 
-export default Cup
+export default Cup;

@@ -17,21 +17,15 @@ const EMAIL = /^[^@]+@[^@]+\.[^@]+$/;
 
 function validate(newData) {
   let errors = {};
-  if(!newData.username) {
-    errors.username = 'Ingresa tu nombre de usuario...';
-  } else if (newData.username.length < 4) {
+  if(newData.username.length > 0 && newData.username.length < 4) {
       errors.username = 'Nombre inválido. Debe contener más de 3 caracteres...';
-  } else if(!ALPHA.test(newData.username)) {
+  } else if(newData.username.length > 0 && !ALPHA.test(newData.username)) {
       errors.username = 'Solo se aceptan letras...';
   };
-  if(!newData.email) {
-    errors.email = 'Ingresa tu email...';
-  } else if(!EMAIL.test(newData.email)) {
+  if(newData.email.length > 0 && !EMAIL.test(newData.email)) {
       errors.email = 'El email es inválido...';
   };
-  if(!newData.password) {
-    errors.password = 'Ingresa un contraseña...';
-  } else if(newData.password.length < 4) {
+  if(newData.password.length > 0 && newData.password.length < 4) {
       errors.password = 'Contraseña inválida. Debe contener más de 3 caracteres...';
     } ;
   return errors;
