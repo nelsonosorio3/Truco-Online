@@ -13,7 +13,7 @@ import Tutorial from './tutorial/Tutorial';
 
 let turnTime;
 let interval;
-let otherTime;
+// let otherTime;
 const correctBetName = (betPick)=>{
   let properBet = "";
   if(betPick.includes("no quiero")) properBet = "No Quiero";
@@ -95,13 +95,13 @@ export default function Game({
       dispatch(setIsInRoom({isInRoom: false, roomId: null}));
       setTimeout(()=>history.push("/profile"),300);
       clearTimeout(turnTime);
-      clearTimeout(otherTime);
+      // clearTimeout(otherTime);
     };
     const surrender2 = ()=>{
       socket.emit("surrender2", roomId || localStorage.roomId, player.id, localStorage.token);
       dispatch(setIsInRoom({isInRoom: false, roomId: null}));
       setTimeout(()=>history.push("/profile"),300);
-      clearTimeout(otherTime);
+      // clearTimeout(otherTime);
       clearTimeout(turnTime);
       alert("El otro jugador se desconecto")
     }
@@ -208,7 +208,7 @@ export default function Game({
           dispatch(setIsInRoom({isInRoom: false, roomId: null}));
         }
         clearTimeout(turnTime);
-        clearTimeout(otherTime);
+        // clearTimeout(otherTime);
       },);
       socket.on("surrender",()=>{
         alert("El otro jugador se rindio, TU GANAS!");
@@ -272,7 +272,7 @@ export default function Game({
       }
       if(player.isTurn) {
         interval = setInterval(() => setSeconds(seconds => seconds - 1), 1000);
-        clearTimeout(otherTime);
+        // clearTimeout(otherTime);
         if(timesWithoutPlay < 3){
           turnTime = setTimeout(()=>{socket.emit("bet", "ir al mazo", roomId || localStorage.roomId, player.id);setTimesWithoutPlay(++timesWithoutPlay)}, 30*1000);
         }
@@ -282,10 +282,10 @@ export default function Game({
       }
       if(!player.isTurn){
         clearTimeout(turnTime);
-        clearTimeout(otherTime);
+        // clearTimeout(otherTime);
         clearInterval(interval);
         setSeconds(30);
-        if(player.hand?.length) otherTime = setTimeout(()=>surrender2(), 120*1000);
+        // if(player.hand?.length) otherTime = setTimeout(()=>surrender2(), 120*1000);
       } 
     },[player.isTurn])
     console.log(player) //para testing
