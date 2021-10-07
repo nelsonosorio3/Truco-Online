@@ -64,6 +64,7 @@ export default function RoomsList(){
         <>
             <GameRequest/>
             <div className={styles.roomsList}>
+                <h3>Partidas disponibles:</h3>
                 {
                 allRooms.length > 0
                 ?   

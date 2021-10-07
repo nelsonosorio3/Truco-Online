@@ -34,7 +34,7 @@ export default function TournamentsList(){
     return(
         <div>
             <div className={styles.tournamentsList}>
-                <h3>Torneos activos:</h3>
+                <h3>Torneos disponibles:</h3>
                 {
                     allTournaments.length > 0
                 ?
