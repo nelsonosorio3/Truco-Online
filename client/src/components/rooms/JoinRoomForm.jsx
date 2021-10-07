@@ -19,7 +19,7 @@ export default function JoinRoomForm (){
       socket.on("fullRoom", (bool)=>setIsInRoom(bool))
       dispatch(setIsInRoom({isInRoom: true, roomId: idGenerator}))
       }
-      else alert("Tienes que estar registrado para crear salas, pero puedes unirte a la de otros usuarios");
+      else alert("Tienes que estar registrado para crear salas, pero puedes unirte a las de otros usuarios");
     }
  
     return(
