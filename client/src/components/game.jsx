@@ -98,6 +98,7 @@ export default function Game({
       dispatch(setIsInRoom({isInRoom: false, roomId: null}));
       setTimeout(()=>history.push("/profile"),300);
       clearTimeout(turnTime);
+      alert("El otro jugador se desconecto")
     }
     const tutorial = ()=>{
       /// mostrar valor cartas y explicacion corta de apuestas
