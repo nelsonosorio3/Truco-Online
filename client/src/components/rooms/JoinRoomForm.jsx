@@ -23,11 +23,11 @@ export default function JoinRoomForm (){
     }
  
     return(
-      <div>
+      <div className={styles.mainDiv}>
         <form onSubmit={joinRoom}>
           <button type='submit' className={styles.btn}>Crear nueva sala</button>
         </form>
-        <input type="text" placeholder={'Contraseña (opcional)...'} onChange={(event) => setRoomPassword(event.target.value)} />
+        <input type="text" placeholder={'Contraseña (opcional)...'} onChange={(event) => setRoomPassword(event.target.value)} className={styles.passwordInput} />
       </div>
     )
 

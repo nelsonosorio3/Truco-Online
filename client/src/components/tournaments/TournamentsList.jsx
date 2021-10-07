@@ -34,25 +34,30 @@ export default function TournamentsList(){
     return(
         <div>
             <div className={styles.tournamentsList}>
+                <h3>Torneos activos:</h3>
                 {
                     allTournaments.length > 0
-                ? 
-                allTournaments.map(t => 
-                    <div key={t.tournamentId}>
-                        <form onSubmit={joinTournament}>
-                            <button type='submit' value={t.tournamentId} className={styles.tournamentBtn} >
-                                <p>Id de torneo: {t.tournamentId}</p>
-                                <p>Jugadores actuales:</p>
-                                <div className={styles.playersWaiting}>
-                                    {
-                                        t.players.map(p => <p key={p.userId}>{p.user}</p> )
-                                    }
-                                </div>
-                            </button>
-                        </form>
-                    </div>)
+                ?
+                <div className={styles.allTournaments}>
+                    {
+                    allTournaments.map(t => 
+                        <div key={t.tournamentId}>
+                            <form onSubmit={joinTournament}>
+                                <button type='submit' value={t.tournamentId} className={styles.tournamentBtn} >
+                                    <p>Id de torneo: {t.tournamentId}</p>
+                                    <p>Jugadores actuales:</p>
+                                    <div className={styles.playersWaiting}>
+                                        {
+                                            t.players.map(p => <p key={p.userId}>{p.user}</p> )
+                                        }
+                                    </div>
+                                </button>
+                            </form>
+                        </div>)
+                    }
+                </div> 
                 :
-                    <></>
+                    <p>No hay torneos</p>
                 }
             </div>
         </div>
