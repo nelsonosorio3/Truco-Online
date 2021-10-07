@@ -29,9 +29,7 @@ function getUsers({ token }) {
 };
 
 function banUser(id, token) {
-  console.log("entro");
-  console.log(id);
-  console.log(token);
+  alert(`Jugador id ${id}  baneado`);
   return function (dispatch) {
     return axios.put(`http://localhost:3001/api/user/banuser?userId=${id}`,
       {},
@@ -49,25 +47,42 @@ function banUser(id, token) {
   }
 }
 
-function suspendUser(id) {
-  fetch(`http://localhost:3001/api/user/banuser?userId=${id}`)
-    .then(
-      r => {
-        console.log(r)
-        //dispatch(getUsers({ token: localStorage.token }))
+function suspendUser(id, token) {
+  alert(`Jugador id ${id} suspendido`);
+  return function (dispatch) {
+    return axios.put(`http://localhost:3001/api/user/suspenduser?userId=${id}`,
+      {},
+      {
+        headers: {
+          "x-access-token": token,
+        }
       }
     )
-
+      .then(r => {
+        console.log(r);
+        dispatch({ type: SUSPEND_USER, payload: id });
+      })
+      .catch((error) => console.error(error));
+  }
 }
 
-function activateUser(id) {
-  fetch(`http://localhost:3001/api/user/banuser?userId=${id}`)
-    .then(
-      r => {
-        console.log(r)
-        //dispatch(getUsers({ token: localStorage.token }))
+function activateUser(id, token) {
+  alert(`Jugador id ${id} reactivado.`)
+  return function (dispatch) {
+    return axios.put(`http://localhost:3001/api/user/activateuser?userId=${id}`,
+      {},
+      {
+        headers: {
+          "x-access-token": token,
+        }
       }
     )
+      .then(r => {
+        console.log(r);
+        dispatch({ type: ACTIVATE_USER, payload: id });
+      })
+      .catch((error) => console.error(error));
+  }
 }
 
 
@@ -168,5 +183,5 @@ export default {
   sortByLostAsc, sortByLostDesc, sortByUserSinceAsc, sortByUserSinceDesc,
   setDisplayedOnPage, goToPage, setSelectedPage, setResultsPerPage,
   setUsersPerPage,
-  banUser
+  banUser, suspendUser, activateUser
 };
