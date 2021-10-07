@@ -53,6 +53,13 @@ const initialState = {
     image: null,
 };
 
+// const initialState2= {
+//     username: '',
+//     email: '',
+//     password: '',
+//     image: null,
+// };
+
 export default function EditProfile() {
 
     const history = useHistory();
@@ -64,10 +71,12 @@ export default function EditProfile() {
     const dispatch = useDispatch();
 
     const [newData, setNewData] = useState(initialState);
+
     const [oldData, setOldData] = useState(initialState);
 
     //Aca se debe almacenar la nueva imagen ingresada por el usuario
     const [img, setImg] = useState(null);
+
 
     const [errors, setErrors] = useState(initialState);
 
@@ -86,7 +95,6 @@ export default function EditProfile() {
         reader.readAsDataURL(file)
         reader.onloadend = () => {
             setImg(reader.result)
-            console.log(img)
         }
     }
 
@@ -103,6 +111,8 @@ export default function EditProfile() {
             password: editProfileReducer.password,
             image: editProfileReducer.img,
         });
+
+        
         if(editProfileReducer.status) {
             openModal();
             dispatch(clearData());
@@ -110,18 +120,21 @@ export default function EditProfile() {
             setErrors(initialState);
             setTimeout(() => {
                 history.push("/profile");
-            }, 5000);
+            }, 2000);
         } else if(editProfileReducer.status === false) {
             openModal();
         }
     }, [editProfileReducer]);
 
     function handleChange(event) {
+
         const { name, value } = event.target;
+
         setErrors(validate({
           ...newData,
           [name]: value,
         }));
+
         setNewData({
           ...newData,
           [name]: value,
@@ -148,7 +161,7 @@ export default function EditProfile() {
                                 id="username"
                                 name = "username"
                                 value={newData.username}
-                                placeholder="Nuevo nombre de usurario"
+                                placeholder="Nuevo nombre de usuario"
                                 autoComplete="off"
                                 className={styles.input}
                                 onChange={handleChange}
