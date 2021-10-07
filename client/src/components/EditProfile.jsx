@@ -66,11 +66,29 @@ export default function EditProfile() {
     const [newData, setNewData] = useState(initialState);
     const [oldData, setOldData] = useState(initialState);
 
+    //Aca se debe almacenar la nueva imagen ingresada por el usuario
     const [img, setImg] = useState(null);
 
     const [errors, setErrors] = useState(initialState);
 
     const [isOpenModal, openModal, closeModal] = useModal();
+
+    //Funcion para manejar el cambio de imagen
+    const handleFileChange = (e) => {
+        //Funcion para subir una imagen
+        const file = e.target.files[0]
+        previewFile(file)
+    }
+    //La funcion handleFileChange llama a esta apra convertir la imagen a url
+    const previewFile = (file) => {
+        const reader = new FileReader()
+        //Convierte la imagen en url
+        reader.readAsDataURL(file)
+        reader.onloadend = () => {
+            setImg(reader.result)
+            console.log(img)
+        }
+    }
 
     //Trae primeramente los datos del usuario
     useEffect(() => {
@@ -92,7 +110,7 @@ export default function EditProfile() {
             setErrors(initialState);
             setTimeout(() => {
                 history.push("/profile");
-            }, 3000);
+            }, 5000);
         } else if(editProfileReducer.status === false) {
             openModal();
         }
@@ -161,17 +179,17 @@ export default function EditProfile() {
                                 onChange={handleChange}
                             />
                             {errors.password && (<p className={styles.danger}> {errors.password} </p>)}
-                            <Avatars set={setImg}/>
-                            {/* <label className={styles.labelFile} htmlFor="image"> Subir Imagen: </label>
+                            {/* <Avatars set={setImg}/> */}
+                            <label className={styles.labelFile} htmlFor="image"> Subir Imagen: </label>
                             <input 
                                 type='file'
                                 id='image'
                                 name="image"
                                 accept="image/png, image/jpeg"
-                                value={newData.image}
+                                value={""}
                                 className={styles.inputFile}
-                                onChange={handleChange}
-                            /> */}
+                                onChange={handleFileChange}
+                            />
                             <div className={styles.buttons}>
                                 {
                                     ((!errors.username && !errors.email && !errors.password) 

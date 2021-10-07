@@ -291,7 +291,6 @@ module.exports = {
   },
 
   getEditProfile: async (req, res) => {
-    console.log("Authenticated for /edit userId: ", req.body.userId);
     try {
       let user = await User.findAll({
         where: {
@@ -305,24 +304,37 @@ module.exports = {
     };
   },
 
-  updateUser: (req, res) => {
+  updateUser: async (req, res) => {
     const { userId } = req.body
     const { username, email, password, image } = req.body
 
     User.findByPk(userId)
       .then(updateUser => {
 
-        updateUser.username = username
-        updateUser.email = email
-        updateUser.password = password
-        updateUser.image = image
-
-        return updateUser.save()
+        if(updateUser.image !== image){
+          cloudinary.uploader.upload(image, {
+            upload_preset: "proyectofinal"
+          }).then(response => {
+            console.log("Las imagenes son distintas")
+            updateUser.image = response.url
+            updateUser.username = username
+            updateUser.email = email
+            updateUser.password = password
+            return updateUser.save()
+          })
+        }
+        else{
+          updateUser.username = username
+          updateUser.email = email
+          updateUser.password = password
+          return updateUser.save()
+        }
       })
       .then(response => {
         res.json({ message: "El usuario se actualizo con exito", status: true, data: response })
       })
       .catch(err => {
+        console.log(err.message)
         res.json({ message: "No se ha podido actualizar el usuario", status: false })
       })
   }

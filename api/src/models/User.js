@@ -42,7 +42,7 @@ module.exports = (sequelize) => {
         },
         image: {
             type: DataTypes.STRING,
-            defaultValue: false
+            defaultValue: "/static/media/profileIcon.ab9b9b6d.png"
         },
         status: { // Para indicar si está "activ", "baneado" o "suspendido"
             type: DataTypes.STRING,
