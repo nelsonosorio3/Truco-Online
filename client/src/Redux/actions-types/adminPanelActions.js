@@ -31,7 +31,7 @@ function getUsers({ token }) {
 function banUser(id, token) {
   alert(`Jugador id ${id}  baneado`);
   return function (dispatch) {
-    return axios.put(`http://localhost:3001/api/user/banuser?userId=${id}`,
+    return axios.put(`https://trucohenry.com/api/user/banuser?userId=${id}`,
       {},
       {
         headers: {
@@ -50,7 +50,7 @@ function banUser(id, token) {
 function suspendUser(id, token) {
   alert(`Jugador id ${id} suspendido`);
   return function (dispatch) {
-    return axios.put(`http://localhost:3001/api/user/suspenduser?userId=${id}`,
+    return axios.put(`https://trucohenry.com/api/user/suspenduser?userId=${id}`,
       {},
       {
         headers: {
@@ -69,7 +69,7 @@ function suspendUser(id, token) {
 function activateUser(id, token) {
   alert(`Jugador id ${id} reactivado.`)
   return function (dispatch) {
-    return axios.put(`http://localhost:3001/api/user/activateuser?userId=${id}`,
+    return axios.put(`https://trucohenry.com/api/user/activateuser?userId=${id}`,
       {},
       {
         headers: {
