@@ -12,11 +12,14 @@ export default function JoinRoomForm (){
     console.log(typeof localStorage.token)
 
     const joinRoom = async (event) => {
+      if(localStorage.isAuth){
       event.preventDefault();
       let idGenerator = Math.floor(Math.random()*100000)
       socket.emit('joinRoom', (idGenerator), localStorage.user, localStorage.token, roomPassword)
       socket.on("fullRoom", (bool)=>setIsInRoom(bool))
       dispatch(setIsInRoom({isInRoom: true, roomId: idGenerator}))
+      }
+      else alert("Tienes que estar registrado para crear salas, pero puedes unirte a la de otros usuarios");
     }
  
     return(

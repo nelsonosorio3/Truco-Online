@@ -135,7 +135,7 @@ export default function Game({
     
     useEffect(()=>{
       localStorage?.isAuth && dispatch(getProfile({token: localStorage?.token}));
-      socket.emit("refresh", roomId || localStorage.roomId);
+      socket.emit("refresh", localStorage.roomId);
     },[]);
     useEffect(()=>{
       socket.on("gameStarts", player=>{ //escucha gameStarts para iniciar cuando la sala se llena y dejar el estado jugador listo
