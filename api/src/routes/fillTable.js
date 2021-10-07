@@ -10,6 +10,7 @@ const router = Router();
 
 // Users
 
+
 const u1 = { username: "pedro", email: "pedro@mail.com", password: "1234", gamesPlayed: 0, gamesWon: 0, gamesLost: 0, tournamentsPlayed: 0, tournamentsWon: 0, tournamentsLost: 0 }
 const u2 = { username: "nelson", email: "nelson@mail.com", password: "1234", gamesPlayed: 0, gamesWon: 0, gamesLost: 0, tournamentsPlayed: 0, tournamentsWon: 0, tournamentsLost: 0 }
 const u3 = { username: "guille", email: "guille@mail.com", password: "1234", gamesPlayed: 0, gamesWon: 0, gamesLost: 0, tournamentsPlayed: 0, tournamentsWon: 0, tournamentsLost: 0 }
@@ -19,8 +20,8 @@ const u6 = { username: "santiago", email: "santiago@mail.com", password: "1234",
 const u7 = { username: "fede", email: "fede@mail.com", password: "1234", gamesPlayed: 0, gamesWon: 0, gamesLost: 0, tournamentsPlayed: 0, tournamentsWon: 0, tournamentsLost: 0 }
 const u8 = { username: "marcelo", email: "marcelo@mail.com", password: "1234", gamesPlayed: 0, gamesWon: 0, gamesLost: 0, tournamentsPlayed: 0, tournamentsWon: 0, tournamentsLost: 0 }
 const u9 = { username: "abel", email: "abel@mail.com", password: "1234", gamesPlayed: 0, gamesWon: 0, gamesLost: 0, tournamentsPlayed: 0, tournamentsWon: 0, tournamentsLost: 0 }
-const u10 = { username: "artemio", email: "artemio@mail.com", password: "1234", gamesPlayed: 0, gamesWon: 0, gamesLost: 0, tournamentsPlayed: 0, tournamentsWon: 0, tournamentsLost: 0 }
-const u11 = { username: "matias", email: "matias@mail.com", password: "1234", gamesPlayed: 0, gamesWon: 0, gamesLost: 0, tournamentsPlayed: 0, tournamentsWon: 0, tournamentsLost: 0 }
+const u10 = { username: "artemio", email: "artemio@mail.com", password: "1234", gamesPlayed: 0, gamesWon: 0, gamesLost: 0, tournamentsPlayed: 0, tournamentsWon: 0, tournamentsLost: 0, status: "baneado" }
+const u11 = { username: "matias", email: "matias@mail.com", password: "1234", gamesPlayed: 0, gamesWon: 0, gamesLost: 0, tournamentsPlayed: 0, tournamentsWon: 0, tournamentsLost: 0, status: "suspendido" }
 const u12 = { username: "agusto", email: "agusto@mail.com", password: "1234", gamesPlayed: 0, gamesWon: 0, gamesLost: 0, tournamentsPlayed: 0, tournamentsWon: 0, tournamentsLost: 0 }
 const u13 = { username: "belmiro", email: "belmiro@mail.com", password: "1234", gamesPlayed: 0, gamesWon: 0, gamesLost: 0, tournamentsPlayed: 0, tournamentsWon: 0, tournamentsLost: 0 }
 const u14 = { username: "angélica", email: "angelica@mail.com", password: "1234", gamesPlayed: 0, gamesWon: 0, gamesLost: 0, tournamentsPlayed: 0, tournamentsWon: 0, tournamentsLost: 0 }
@@ -35,6 +36,7 @@ const u22 = { username: "wilma", email: "wilma@mail.com", password: "1234", game
 const u23 = { username: "desireé", email: "desiree@mail.com", password: "1234", gamesPlayed: 2, gamesWon: 1, gamesLost: 1, tournamentsPlayed: 0, tournamentsWon: 0, tournamentsLost: 0 }
 const u24 = { username: "diva", email: "diva@mail.com", password: "1234", gamesPlayed: 5, gamesWon: 1, gamesLost: 4, tournamentsPlayed: 0, tournamentsWon: 0, tournamentsLost: 0 }
 const u25 = { username: "marcela", email: "marcela@mail.com", password: "1234", gamesPlayed: 5, gamesWon: 4, gamesLost: 1, tournamentsPlayed: 0, tournamentsWon: 0, tournamentsLost: 0 }
+
 
 var users = [u9, u10, u11, u12, u13, u14, u15, u16, u17, u18, u19, u20,
   u21, u22, u23, u24, u25]

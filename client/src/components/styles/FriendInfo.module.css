@@ -8,14 +8,14 @@
     
     position: fixed;
     top: 0;
-    left: 0;
+    left: 0;    
     z-index: 999;
     
     background-color: var(--transBlackColor);
 }
 
 .container {
-    width: 60%;
+    width: 50%;
     height: 80vh;
 
     position: relative;
@@ -26,8 +26,9 @@
     align-items: center;
     justify-content: center;
     
-    background: rgb(161, 157, 157);
-    border-radius: var(--bRadius);
+    /* background: rgb(161, 157, 157); */
+    background-color: white;
+    /* border-radius: var(--bRadius); */
     color: black;
 }
 
@@ -86,10 +87,11 @@
     align-items: center;
     justify-content: center;
     
-    background-color: var(--transBlackColor);
+    /* background-color: var(--transBlackColor); */
+    background-color: black;
     color: #dedede;
     padding: 2em;
-    border-radius: var(--bRadius);
+    /* border-radius: var(--bRadius); */
 }
 
 .playerInfo p {

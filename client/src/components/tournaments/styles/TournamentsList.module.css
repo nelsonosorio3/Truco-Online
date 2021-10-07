@@ -15,4 +15,12 @@
 .tournamentBtn{
     background: none;
     border: none;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.playersWaiting{
+    display: flex;
+    gap: 20px;
 }

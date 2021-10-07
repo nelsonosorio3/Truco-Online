@@ -1,55 +1,77 @@
 .mainDiv {
-    min-width: 10em;
-    height: 18em;
+  min-width: 10em;
+  height: 14em;
 
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  background-color: var(--transBlackColor);
 
-    position: relative;
-
-    background-color: var(--transBlackColor);
-
-    margin:0 .7em 0 0;
-    border-radius: 1rem;
-    padding: .5em;
+  margin:0 .7em 0 0;
+  border-radius: 1rem;
+  padding: .5em;
+  background: linear-gradient(#ff5722, #ffa50094);
+  border: solid 2px;
 }
 
 .profileIconSmall {
-  width: 4.5em;
-  height: auto;
-
+  /* width: 4.5em; */
+  /* height: auto; */
   position: absolute;
   top: 1em;
-
   align-self: center;
+  border-radius: 50px;
+  width: 5em;
+  height: 5em;
+  top: 1em;
 }
 
 .btn {
-    width: 4.5em;
-    height: auto;
+  width: 4.5em;
+  height: auto;
+  position: absolute;
+  bottom: 1em;
+  align-self: center;
+  border: none;
+  border-radius: 4px;
+  text-shadow: 0px 0px 10px rgb(0 0 0 / 50%);
+  overflow: hidden;
+  padding: 8px;
+  font-size: 1rem;
+  color: white;
+  outline: none;
+  cursor: pointer;
+  background: transparent;
+  background-image: url('../../img/button1.webp');
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  text-decoration: none;
+  font-family: 'Crayon' ;
+}
 
-    position: absolute;
-    bottom: 1em;
-
-    align-self: center;
-
-    border: none;
-    border-radius: 4px;
-    text-shadow: 0px 0px 10px rgb(0 0 0 / 50%);
-    overflow: hidden;
-    padding: 8px;
-    font-size: 1rem;
-    color: white;
-    outline: none;
-    cursor: pointer;
-    background: transparent;
-    background-image: url('../../img/button1.webp');
-    background-size: 100% 100%;
-    background-repeat: no-repeat;
-    text-decoration: none;
-    font-family: 'Crayon' ;
+.pendingRequest{
+  width: 4.5em;
+  height: auto;
+  position: absolute;
+  bottom: 1em;
+  align-self: center;
+  border: none;
+  border-radius: 4px;
+  text-shadow: 0px 0px 10px rgb(0 0 0 / 50%);
+  overflow: hidden;
+  padding: 8px;
+  font-size: 1rem;
+  color: white;
+  outline: none;
+  background: transparent;
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  text-decoration: none;
+  font-family: 'Crayon' ;
+  margin-bottom: 0px;
+  background-color: black;
 }
 
 .btnAccept {
@@ -76,7 +98,23 @@
 
 .name {
   align-self: center;
-  margin-top: 1.5em;
+  /* margin-top: 1.5em; */
+  text-transform: uppercase;
+  font-size: 1.2rem;
+}
+
+.status p, h3{
+  margin: 0px;
+}
+
+.status h3:hover{
+  border-bottom: solid 2px ;
+}
+
+.status p:last-child{
+  background-color: black;
+  padding: .1em;
+  border-radius: 5px;
 }
 
 .name:hover {
@@ -96,7 +134,7 @@
   align-items: center;
   justify-content: center;
 
-  margin-top: .8em;
+  margin-top: 2em;
 }
 
 @media screen and (max-width: 1024px) {
@@ -106,8 +144,8 @@
   }
 
   .profileIconSmall {
-    width: 3.5em;
-    height: auto;
+    /* width: 3.5em; */
+    /* height: auto; */
   
     top: 1em;
   
@@ -120,7 +158,7 @@
   .status {
     height: 4em;
 
-    margin-top: .5em;
+    /* margin-top: .5em; */
   }
 }
 
@@ -132,8 +170,8 @@
   }
 
   .profileIconSmall {
-    width: 3.5em;
-    height: auto;
+    /* width: 3.5em; */
+    /* height: auto; */
   
     top: 1em;
   
@@ -146,7 +184,7 @@
   .status {
     height: 4em;
 
-    margin-top: .5em;
+    /* margin-top: .5em; */
   }
 }
 
@@ -154,17 +192,18 @@
   .mainDiv {
     min-width: 7em;
     max-width: 7em;
-    height: 12em;
+    height: 13em;
+    padding: 4em;
   }
 
   .mainDiv h3 {
     font-size: 1.2rem;
+
   }
 
   .profileIconSmall {
-    width: 3em;
-    height: auto;
-  
+    /* width: 3em; */
+    /* height: auto; */
     top: .7em;
   }
 
@@ -175,7 +214,7 @@
   .status {
     height: 3.5em;
 
-    margin-top: .5em;
+    /* margin-top: .5em; */
   }
 
   .status p {

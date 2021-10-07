@@ -5,11 +5,12 @@ import {
   GET_USERS, FILTER_BY_EMAIL, FILTER_BY_NAME, FILTER_BY_ID, SET_TOTAL_PAGES,
   ORDER_BY_GAMES_ASC, ORDER_BY_GAMES_DESC, ORDER_BY_WINS_ASC, ORDER_BY_WINS_DESC,
   ORDER_BY_LOST_ASC, ORDER_BY_LOST_DESC, GO_TO_N_PAGE, SET_SELECTED_PAGE, SET_USERS_PER_PAGE,
-  ORDER_BY_USER_SINCE_ASC, ORDER_BY_USER_SINCE_DESC, SET_DISPLAYED_ON_PAGE
+  ORDER_BY_USER_SINCE_ASC, ORDER_BY_USER_SINCE_DESC, SET_DISPLAYED_ON_PAGE,
+  BAN_USER, SUSPEND_USER, ACTIVATE_USER
 } from '../actions/index';
 
 
-function getUsers({ token }) { //por ahora, token no es necesario como parámetro, luego lo será.
+function getUsers({ token }) {
   //fetch data from server
 
   return function (dispatch) {
@@ -21,12 +22,70 @@ function getUsers({ token }) { //por ahora, token no es necesario como parámetr
       }
     )
       .then(data => {
-        console.log(data);
         dispatch({ type: GET_USERS, payload: data.data });
       })
       .catch((error) => console.error(error));
   };
 };
+
+function banUser(id, token) {
+  alert(`Jugador id ${id}  baneado`);
+  return function (dispatch) {
+    return axios.put(`http://localhost:3001/api/user/banuser?userId=${id}`,
+      {},
+      {
+        headers: {
+          "x-access-token": token,
+        }
+      }
+    )
+      .then(r => {
+        console.log(r);
+        dispatch({ type: BAN_USER, payload: id });
+      })
+      .catch((error) => console.error(error));
+  }
+}
+
+function suspendUser(id, token) {
+  alert(`Jugador id ${id} suspendido`);
+  return function (dispatch) {
+    return axios.put(`http://localhost:3001/api/user/suspenduser?userId=${id}`,
+      {},
+      {
+        headers: {
+          "x-access-token": token,
+        }
+      }
+    )
+      .then(r => {
+        console.log(r);
+        dispatch({ type: SUSPEND_USER, payload: id });
+      })
+      .catch((error) => console.error(error));
+  }
+}
+
+function activateUser(id, token) {
+  alert(`Jugador id ${id} reactivado.`)
+  return function (dispatch) {
+    return axios.put(`http://localhost:3001/api/user/activateuser?userId=${id}`,
+      {},
+      {
+        headers: {
+          "x-access-token": token,
+        }
+      }
+    )
+      .then(r => {
+        console.log(r);
+        dispatch({ type: ACTIVATE_USER, payload: id });
+      })
+      .catch((error) => console.error(error));
+  }
+}
+
+
 
 function filterByName(payload) {
   return function (dispatch) {
@@ -123,5 +182,6 @@ export default {
   sortByPlayedAsc, sortByPlayedDesc, sortByWonAsc, sortByWonDesc,
   sortByLostAsc, sortByLostDesc, sortByUserSinceAsc, sortByUserSinceDesc,
   setDisplayedOnPage, goToPage, setSelectedPage, setResultsPerPage,
-  setUsersPerPage
+  setUsersPerPage,
+  banUser, suspendUser, activateUser
 };

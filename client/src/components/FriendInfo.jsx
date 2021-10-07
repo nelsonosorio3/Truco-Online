@@ -10,7 +10,7 @@ import socket from './socket';
 import {useDispatch} from 'react-redux'
 import { setIsInRoom } from '../Redux/actions-types/roomsActions';
 
-export default function FriendInfo({ isOpen, close, name, date, email, id }) {
+export default function FriendInfo({ isOpen, close, name, date, email, id, image }) {
     const history = useHistory();
 
     const handleContainerClick = (e) => e.stopPropagation();
@@ -57,7 +57,7 @@ export default function FriendInfo({ isOpen, close, name, date, email, id }) {
             <div className={styles.container} onClick={handleContainerClick}>
                 <button className={styles.close} onClick={close}> X </button>
                 <div className={styles.player}>
-                    <img src={profileIcon} alt="" className={styles.profileIcon} />
+                    <img src={image === "false" ? profileIcon : image } alt="" className={styles.profileIcon} />
                     <p> Amigos desde: {date.split("T")[0]} </p>
                     <div className={styles.playerInfo}>
                         <h2> {name} </h2>

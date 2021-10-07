@@ -26,7 +26,17 @@ exports = module.exports = function(io){
       socket.on('joinTournament', function (tournamentData) {
         socket.join(tournamentData.tournamentId);
         const clients = io.sockets?.adapter.rooms.get(tournamentData.tournamentId)
-        activeTournaments.forEach(t => {if(t.tournamentId===tournamentData.tournamentId) t.players.push({user: tournamentData.user, userId: tournamentData.userId})})
+
+        activeTournaments.forEach(t => {
+          if(t.tournamentId===tournamentData.tournamentId) t.players.push({user: tournamentData.user, userId: tournamentData.userId});
+        })
+
+        if(clients?.size < 4){
+          let tournamentsList = [];
+          activeTournaments.forEach(t => tournamentsList.push(t))
+          io.emit('showActiveTournaments', (tournamentsList) );
+        }
+
         if(clients?.size === 4){
           let dataObject;
           activeTournaments.forEach(t => {if(t.tournamentId===tournamentData.tournamentId) dataObject = Object.assign({}, t)})
@@ -38,6 +48,7 @@ exports = module.exports = function(io){
           
           io.emit('tournamentFull', (dataObject))
         }
+        
         io.emit("newPlayerInside");
       })
 
@@ -291,9 +302,9 @@ exports = module.exports = function(io){
       })
 
       socket.on('bringActiveTournaments', function () {
-        let idTournaments = [];
-        activeTournaments.forEach(t => idTournaments.push(t.tournamentId))
-        io.emit('showActiveTournaments', (idTournaments) );
+        let tournamentsList = [];
+        activeTournaments.forEach(t => tournamentsList.push(t))
+        io.emit('showActiveTournaments', (tournamentsList) );
       })
       
       
