@@ -24,6 +24,7 @@ const getFriends = (token) => {
       },
     })
     .then(data => {
+      console.log(data)
       dispatch({ type: GET_FRIENDS, payload: data.data });
     })
     .catch((error) => console.error(error));

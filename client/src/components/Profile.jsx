@@ -156,38 +156,41 @@ export default function Profile(props) {
                         </div>
                         <div className={styles.playerInfo}>
                             <button className={styles.editBtn} onClick={editProfile}>Editar</button>
-                            <h2>{userProfile?.username}</h2>
-                            <h3>{userProfile?.email}</h3>
+                            
+                            <h2 className={styles.statsTitle}>Estadisticas</h2>
+                            {/* <h3>{userProfile?.email}</h3> */}
+
                             <div className={styles.gamesAndTournamentsStats}>
                                 <div className={styles.games}>
                                     <div className={styles.infoGames}>
-                                        <p>Partidas Jugadas:</p>
                                         <p>{userProfile?.gamesPlayed}</p>
+                                        <p>Partidas Jugadas</p>
                                     </div>
                                     <div className={styles.playerInfo_Games}>
                                         <div className={styles.infoGames}>
-                                            <p>Ganadas: </p>
-                                            <p>{userProfile?.gamesWon}</p>
+                                            <p style={{color:"#228B22"}}>{userProfile?.gamesWon}</p>
+                                            <p>Ganadas</p>
                                         </div>
                                         <div className={styles.infoGames}>
-                                            <p>Perdidas:</p>
-                                            <p>{userProfile?.gamesLost}</p>
+                                            <p style={{color:"#ff0000"}}>{userProfile?.gamesLost}</p>
+                                            <p>Perdidas</p>
                                         </div>
+                                        
                                     </div>
                                 </div>
                                 <div className={styles.games}>
                                     <div className={styles.infoGames}>
-                                        <p>Torneos jugados:</p>
                                         <p>{userProfile?.tournamentsPlayed}</p>
+                                        <p>Torneos jugados</p>
                                     </div>
                                     <div className={styles.playerInfo_Games}>
                                         <div className={styles.infoGames}>
-                                            <p>Ganados:</p>
-                                            <p>{userProfile?.tournamentsWon}</p>
+                                            <p style={{color:"#228B22"}}>{userProfile?.tournamentsWon}</p>
+                                            <p>Ganados</p>
                                         </div>
                                         <div className={styles.infoGames}>
-                                            <p>Perdidos:</p>
-                                            <p>{userProfile?.tournamentsLost}</p>
+                                            <p style={{color:"#ff0000"}}>{userProfile?.tournamentsLost}</p>
+                                            <p>Perdidos</p>
                                         </div>
                                     </div>
                                 </div>
@@ -203,6 +206,7 @@ export default function Profile(props) {
                                     !friends.sender.length ? <p className={styles.text}>No tienes amigos</p> : friends.sender.map(f => <Friend
                                         key={f?.id}
                                         email={f?.email}
+                                        image={f?.image}
                                         deleteId={deleteFriendFunction}
                                         profileId={userProfile?.id}
                                         id={f?.id}
