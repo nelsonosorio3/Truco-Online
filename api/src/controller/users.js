@@ -329,8 +329,6 @@ module.exports = {
         }
       })
       .then(response => {
-        // console.log("USUARIO GUARDADO: ========================>>>>",response.username)
-        console.log("=====> respuesta luego de actualizar", response)
         res.json({ message: "El usuario se actualizo con exito", status: true, data: response })
       })
       .catch(err => {
