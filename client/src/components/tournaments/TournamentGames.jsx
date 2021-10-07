@@ -149,8 +149,8 @@ export default function TournamentGames ({matchesList, savedData}){
                                 matches.map(m => {
                                     return (
                                     <div key={m.matchId} className={styles.match}>
-                                        <h6>{m.participants[0]} vs {m.participants[1]}.</h6>
-                                        <h6>Match ID: {m.matchId}</h6>
+                                        <h6 className={styles.vs_h6}>{m.participants[0]} vs {m.participants[1]}.</h6>
+                                        <h6 className={styles.matchId_h6}>Match ID: {m.matchId}</h6>
                                     </div>)
                             } )
                             : null
@@ -242,11 +242,11 @@ export default function TournamentGames ({matchesList, savedData}){
                                         )
                                     }
                                 })}
-                                <button onClick={leave}>Salir</button>
                             </div> 
                             : null
                         }
                     </div> 
+                    <button onClick={leave} className={styles.exitBtn}>Salir</button>
                 </div>
             : null}
         </div>

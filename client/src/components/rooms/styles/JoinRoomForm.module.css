@@ -1,9 +1,19 @@
+
+.mainDiv{
+    display: flex;
+}
+
+.passwordInput{
+    margin-bottom: 5%;
+}
+
 .mainContainer {
     display: flex;
     justify-content: center;
     flex-direction: column;
     margin-bottom: 1em;
 }
+
 
 .btn {
     color: #fff;
@@ -38,6 +48,10 @@
 @media screen and (max-width: 768px) {
     .btn {
         margin-top: 1em;
+    }
+
+    .passwordInput{
+        margin-top: 5%;
     }
 }
 

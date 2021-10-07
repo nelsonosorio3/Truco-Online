@@ -20,15 +20,13 @@ export default function JoinRoomForm() {
       dispatch(setIsInRoom({ isInRoom: true, roomId: idGenerator }))
     }
     else alert("Tienes que estar registrado para crear salas, pero puedes unirte a las de otros usuarios");
-  }
-
-  return (
-    <div>
-      <form onSubmit={joinRoom}>
-        <button type='submit' className={styles.btn}>Crear nueva sala</button>
-      </form>
-      <input type="text" placeholder={'Contraseña (opcional)...'} onChange={(event) => setRoomPassword(event.target.value)} />
-    </div>
-  )
-
+    
+    return(
+      <div className={styles.mainDiv}>
+        <form onSubmit={joinRoom}>
+          <button type='submit' className={styles.btn}>Crear nueva sala</button>
+        </form>
+        <input type="text" placeholder={'Contraseña (opcional)...'} onChange={(event) => setRoomPassword(event.target.value)} className={styles.passwordInput} />
+      </div>
+    )
 }

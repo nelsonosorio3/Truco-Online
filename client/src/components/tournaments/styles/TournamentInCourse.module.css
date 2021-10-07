@@ -17,6 +17,7 @@
 .h1_TournamentId{
     font-weight: bold;
     margin-top: 5%;
+    text-align: center;
 }
 
 .playersList{
@@ -27,4 +28,14 @@
 .playerName{
     font-weight: 300;
     font-size: xx-large;
+}
+
+@media screen and (max-width: 768px) {
+    .mainDiv{
+        background-color: rgba(255, 255, 255, 0.6);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin: -100% 25%;
+    }
 }

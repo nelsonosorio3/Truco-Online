@@ -5,7 +5,8 @@
     width: auto;
     /* height: 500px; */
     padding-top: 57%;
-    /* background-size: cover; */
+    background-size: cover;
+    background-attachment: fixed;
 }
 
 .formAndList{
@@ -36,4 +37,25 @@
     transform : scale(1.1);
 
     cursor: pointer;
+
+}
+
+@media screen and (max-width: 768px) {
+    .submainDiv{
+        background-image: url("../../../img/tournaments_bg.png");
+        background-size: contain;
+        background-repeat: no-repeat;
+        width: auto;
+        /* height: 500px; */
+        padding-top: 125%;
+        background-size: cover;
+        background-attachment: fixed;
+    }
+
+    .formAndList{
+        margin-top: -100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
 }

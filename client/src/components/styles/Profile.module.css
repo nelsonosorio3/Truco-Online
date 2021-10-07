@@ -235,8 +235,8 @@
 
 .friends {
     width: 100%;
-    min-height: 32em;
-    max-height: 32em;
+    /* min-height: 32em;
+    max-height: 32em; */
 
     display: flex;
     justify-content: space-between;
@@ -250,8 +250,8 @@
 
 .friendsDiv {
     width: 48%;
-    min-height: 30em;
-    max-height: 30em;
+    /* min-height: 30em;
+    max-height: 30em; */
 
     position: relative;
 
@@ -279,7 +279,7 @@
 
 .friendsList {
     width: 90%;
-    height: 60vh;
+    /* height: 60vh; */
 
     display: flex;
     flex-direction: row;

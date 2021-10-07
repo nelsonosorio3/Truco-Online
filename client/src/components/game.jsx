@@ -180,27 +180,26 @@ export default function Game({
         console.log('ESTA ES LA DATA DE GAME ENDS:', dataCopy)
         if(tournamentMatchId){
           if(finishedFirstMatch===false && finishedSecondMatch===false && finishedThirdMatch===false){
-            alert("Partida terminada. Ganador:", dataCopy.winner);
+            alert(`Partida terminada. Ganador: ${dataCopy.winner}`);
             dispatch(setIsInRoom({isInRoom: false, roomId: null}));
             if(dataCopy.winner === localStorage.user) setWins([...wins, dataCopy.winner])
             setShowFirstMatch(false)
             setFinishedFirstMatch(true)
           }
           if(finishedFirstMatch===true && finishedSecondMatch===false && finishedThirdMatch===false){
-            alert("Partida terminada. Ganador:", dataCopy.winner);
+            alert(`Partida terminada. Ganador: ${dataCopy.winner}`);
             dispatch(setIsInRoom({isInRoom: false, roomId: null}));
             if(dataCopy.winner === localStorage.user) setWins([...wins, dataCopy.winner])
             setShowSecondMatch(false)
             setFinishedSecondMatch(true)
           }
           if(finishedFirstMatch===true && finishedSecondMatch===true && finishedThirdMatch===false){
-            alert("Partida terminada. Ganador:", dataCopy.winner);
+            alert(`Partida terminada. Ganador: ${dataCopy.winner}`);
             dispatch(setIsInRoom({isInRoom: false, roomId: null}));
             if(dataCopy.winner === localStorage.user) setWins([...wins, dataCopy.winner])
             setShowThirdMatch(false)
             setFinishedThirdMatch(true)
           }
-
         } else{
           console.log("termino");
           history.push("/profile");
@@ -210,12 +209,37 @@ export default function Game({
         clearTimeout(turnTime);
         // clearTimeout(otherTime);
       },);
-      socket.on("surrender",()=>{
+      socket.on("surrender",(data)=>{
         alert("El otro jugador se rindio, TU GANAS!");
-        history.push("/profile");
-        socket.emit("surrender2", roomId || localStorage.roomId, localStorage.token);
-        dispatch(setIsInRoom({isInRoom: false, roomId: null}));
-        clearTimeout(turnTime);
+        let dataCopy = Object.assign({}, data)
+        if(tournamentMatchId){
+          if(finishedFirstMatch===false && finishedSecondMatch===false && finishedThirdMatch===false){
+            // alert("Partida terminada. Ganador:", dataCopy.winner);
+            dispatch(setIsInRoom({isInRoom: false, roomId: null}));
+            if(dataCopy.winner === localStorage.user) setWins([...wins, dataCopy.winner])
+            setShowFirstMatch(false)
+            setFinishedFirstMatch(true)
+          }
+          if(finishedFirstMatch===true && finishedSecondMatch===false && finishedThirdMatch===false){
+            // alert("Partida terminada. Ganador:", dataCopy.winner);
+            dispatch(setIsInRoom({isInRoom: false, roomId: null}));
+            if(dataCopy.winner === localStorage.user) setWins([...wins, dataCopy.winner])
+            setShowSecondMatch(false)
+            setFinishedSecondMatch(true)
+          }
+          if(finishedFirstMatch===true && finishedSecondMatch===true && finishedThirdMatch===false){
+            // alert("Partida terminada. Ganador:", dataCopy.winner);
+            dispatch(setIsInRoom({isInRoom: false, roomId: null}));
+            if(dataCopy.winner === localStorage.user) setWins([...wins, dataCopy.winner])
+            setShowThirdMatch(false)
+            setFinishedThirdMatch(true)
+          }
+        } else {
+          history.push("/profile");
+          socket.emit("surrender2", roomId || localStorage.roomId, localStorage.token);
+          dispatch(setIsInRoom({isInRoom: false, roomId: null}));
+          clearTimeout(turnTime);
+        }
       });
       socket.on("addFriend", (idSender)=>{
         userProfile.email && idSender && axios.post(`http://localhost:3001/api/friends/${idSender}/${userProfile.email}`);
