@@ -55,7 +55,7 @@
 .contProfile img {
     width: 2em;
     height: auto;
-
+    border-radius: 30px;
     margin-right: .8rem;
 }
 

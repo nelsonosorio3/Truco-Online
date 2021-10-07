@@ -205,7 +205,7 @@ module.exports = {
       include: {
         model: User,
         as: "userSender",
-        attributes: ["username", "id", "email"],
+        attributes: ["username", "id", "email", "image"],
         through: {
           attributes: ["status", "createdAt", "userRequestedId"]
         }
@@ -214,7 +214,7 @@ module.exports = {
       .then(userSenderResults => {
         userInfo.userSender = userSenderResults
         return userSenderResults.getUserRequested({
-          attributes: ["username", "id", "email"],
+          attributes: ["username", "id", "email", "image"],
         })
       })
       .then(userRequestedResults => {
