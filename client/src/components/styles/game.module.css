@@ -8,6 +8,13 @@
     background-size: 100% 100%;
     background-repeat: no-repeat;  
 }
+#tutorial{
+    position: absolute;
+    left:15%;
+    top: -10%;
+    z-Index:999;
+    width: 70%;  
+}
 #shuffle2{
     position: absolute;
     left:30%;
