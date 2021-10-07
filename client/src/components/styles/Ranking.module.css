@@ -34,6 +34,41 @@
         text-shadow: white 1px 0 10px;
 }
 
+.logoutBtn {
+        position: absolute;
+        font-weight: bold;
+        right: 1.5em;
+        padding: 3px;
+        font-size: .9em;
+        letter-spacing: 1px;
+        background-color: rgb(161, 157, 157);
+        padding: .3em .5em;
+        border: none;
+        top: 5px;
+        border-radius: 5px;
+}
+    
+.logoutBtn:hover {
+        color: white ;
+    
+        transition: all 1s cubic-bezier(0.19, 1, 0.22, 1);
+        transform : scale(1.1);
+    
+        cursor: pointer;
+}
+
+@media screen and (max-width: 1200px) {
+     .fondo {
+             height: 100%;
+             background-size: 100% 100%;
+             background-repeat: repeat-y;
+     }  
+     
+     .title {
+             margin-top: 4%;
+     }
+}
+
 @media screen and (max-width: 960px) {
      .title {
         font-size: 2.5rem;

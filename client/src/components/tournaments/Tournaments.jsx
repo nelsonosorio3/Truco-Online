@@ -8,11 +8,25 @@ import TournamentsForm from './TournamentsForm';
 import TournamentsList from './TournamentsList';
 import TournamentInCourse from './TournamentInCourse';
 
+import log from '../../Redux/actions-types/logActions'; // para logoutButton
+import { useDispatch } from 'react-redux'; //para logoutButton
+
 export default function Tournaments() {
     const isinTournament = useSelector(store => store.tournamentsReducer.isInTournament);
 
+    //Para logout
+
+    const dispatch = useDispatch()
+    const { logOut } = log;
+
+    const logout = () => {
+        dispatch(logOut());
+        history.push("/");
+    };
+    //logout termina aquí
+
     //Agregado por guille, para verificar si el jugador no está baneado.
-    const isActive = window.localStorage.getItem("isActive");
+    const isActive = window.localStorage.getItem("status");
     const history = useHistory();
 
     if (isActive === "baneado" || isActive === "suspendido") {
@@ -32,12 +46,19 @@ export default function Tournaments() {
     return (
         <div>
             <NavBar />
+            {
+                isActive
+                    ?
+                    <button className={styles.logoutBtn} onClick={logout}>Cerrar Sesión</button> :
+                    <div></div>
+            }
+
             <div className={styles.submainDiv}>
                 {
                     isinTournament
                         ?
                         <TournamentInCourse />
-                    :
+                        :
                         <div className={styles.formAndList}>
 
                             <TournamentsForm />

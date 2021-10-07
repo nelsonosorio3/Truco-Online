@@ -1,6 +1,13 @@
+.mainContainer {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    margin-bottom: 1em;
+}
+
 .btn {
     color: #fff;
-    background-color: #343a40;
+    background-color: #776036;
     border-color: #343a40;
     display: flex;
     font-weight: 400;
@@ -8,6 +15,8 @@
     white-space: nowrap;
 
     margin-bottom: 1em;
+    margin-left: auto;
+    margin-right: auto;
 
     -webkit-user-select: none;
     -moz-user-select: none;
