@@ -219,7 +219,6 @@
     align-items: center;
 }
 
-
 .friends {
     width: 100%;
     min-height: 32em;
@@ -436,8 +435,6 @@
         width: 7.5em;
 
         margin-top: .8em;
-
-        background-color: red;
     }
 
     .player {
@@ -535,8 +532,6 @@
     .profileIcon {
         width: 6em;
 
-        background-color: blue;
-
         margin-top: 1.8em;
     }
 
@@ -597,10 +592,6 @@
         font-size: .6rem;
     }
 
-    .profileIcon {
-        background-color: blueviolet;
-    }
-
     .player {
         width: 80%;
     }
@@ -653,8 +644,6 @@
 }
 
 @media screen and (max-width: 335px) {
-  
-
     .playerInfo {
         width: 300px;
     }
