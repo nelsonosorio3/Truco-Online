@@ -11,6 +11,8 @@ import axios from 'axios';
 import profileActions from '../Redux/actions-types/profileActions';
 
 let turnTime;
+let interval;
+let otherTime;
 const correctBetName = (betPick)=>{
   let properBet = "";
   if(betPick.includes("no quiero")) properBet = "No Quiero";
@@ -71,6 +73,7 @@ export default function Game({
     const [reported, setReported] = useState(false);
     const [friend, setFriend] = useState(false);
     let [timesWithoutPlay, setTimesWithoutPlay] = useState(0);
+    const [seconds, setSeconds] = useState(30);
     const history = useHistory();
     const scoreBox = useRef();
     const {getProfile} = profileActions;
@@ -90,6 +93,12 @@ export default function Game({
       setTimeout(()=>history.push("/profile"),300);
       clearTimeout(turnTime);
     };
+    const surrender2 = ()=>{
+      socket.emit("surrender2", roomId || localStorage.roomId, player.id, localStorage.token);
+      dispatch(setIsInRoom({isInRoom: false, roomId: null}));
+      setTimeout(()=>history.push("/profile"),300);
+      clearTimeout(turnTime);
+    }
     const tutorial = ()=>{
       /// mostrar valor cartas y explicacion corta de apuestas
     };
@@ -188,7 +197,7 @@ export default function Game({
         } else{
           console.log("termino");
           history.push("/profile");
-          alert("el juego termino");
+          alert("El juego termino");
           dispatch(setIsInRoom({isInRoom: false, roomId: null}));
         }
         clearTimeout(turnTime);
@@ -247,15 +256,21 @@ export default function Game({
         setTimeout(()=>setIsYourTurn(false), 1000);
       }
       if(player.isTurn) {
-        // turnTime = setTimeout(()=>socket.emit("surrender", roomId || localStorage.roomId, player.id, localStorage.token), 10*1000);
+        interval = setInterval(() => setSeconds(seconds => seconds - 1), 1000);
+        clearTimeout(otherTime);
         if(timesWithoutPlay < 3){
-          turnTime = setTimeout(()=>{socket.emit("bet", "ir al mazo", roomId || localStorage.roomId, player.id);setTimesWithoutPlay(++timesWithoutPlay)}, 30*1000)
+          turnTime = setTimeout(()=>{socket.emit("bet", "ir al mazo", roomId || localStorage.roomId, player.id);setTimesWithoutPlay(++timesWithoutPlay)}, 30*1000);
         }
         else{
           turnTime = setTimeout(()=>surrender(), 10*1000);
         }
       }
-      if(!player.isTurn) clearTimeout(turnTime);
+      if(!player.isTurn){
+        clearTimeout(turnTime);
+        clearInterval(interval);
+        setSeconds(30);
+        otherTime = setTimeout(()=>surrender2(), 60*1000);
+      } 
     },[player.isTurn])
     console.log(player) //para testing
     return(<div id={stylesGame.gameBackground}>
@@ -283,6 +298,7 @@ export default function Game({
 
             <div id={stylesGame.containerChat}>
               <div id={stylesGame.optionsButtons}>
+                <button className={stylesGame.btnOptions}>{seconds}</button>
                 <button className={stylesGame.btnOptions} onClick={showScore}>Puntaje</button>
                 <button className={stylesGame.btnOptions} onClick={report}>Reportar</button>
                 <button className={stylesGame.btnOptions} onClick={addFriend}>Agregar amigo</button>
