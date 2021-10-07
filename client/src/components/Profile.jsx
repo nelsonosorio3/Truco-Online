@@ -156,10 +156,7 @@ export default function Profile(props) {
                         </div>
                         <div className={styles.playerInfo}>
                             <button className={styles.editBtn} onClick={editProfile}>Editar</button>
-                            
                             <h2 className={styles.statsTitle}>Estadisticas</h2>
-                            {/* <h3>{userProfile?.email}</h3> */}
-
                             <div className={styles.gamesAndTournamentsStats}>
                                 <div className={styles.games}>
                                     <div className={styles.infoGames}>

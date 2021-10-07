@@ -67,7 +67,7 @@ exports = module.exports = function(io){
                     envidoList: [],
                     envidoBet: 0,
                     trucoBet: 1,
-                    scoreToWin: 15,
+                    scoreToWin: 30,
                     matchesToWin: 1, 
                     flor: true,
                     cumulativeScore: 1,
