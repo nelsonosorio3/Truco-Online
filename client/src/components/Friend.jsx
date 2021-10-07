@@ -6,7 +6,7 @@ import FriendInfo from './FriendInfo';
 import styles from './styles/Friend.module.css'
 import profileIcon from '../img/profileIcon.png'
 
-export default function Friend({ name, date, id, deleteId, email, status }) {
+export default function Friend({ name, date, id, deleteId, email, status , image}) {
   
   const [isOpen, open, close] = useModal();
 
@@ -16,20 +16,21 @@ export default function Friend({ name, date, id, deleteId, email, status }) {
 
   return (
     <div className={styles.mainDiv}>
-      <img src={profileIcon} alt="Avatar" className={styles.profileIconSmall} />
-      <h3 className={styles.name} onClick={open}>{name}</h3>
+      <img src={image === "false" ? profileIcon : image } alt="Avatar" className={styles.profileIconSmall} />
       <div className={styles.status}> 
-        <p>Status:</p>
-        <p>{status}</p>
+        <h3 className={styles.name} onClick={open}>{name}</h3>
+        {/* {status === "accepted" ? null : <p>Status:</p>} */}
+        {/* {status === "accepted" ? null : <p>{status}</p>} */}
+        
       </div>
       { 
         status === "pending" ? 
-        null 
+        <p className={styles.pendingRequest}>{status}</p>
         : 
         <button className={styles.btn} onClick={() => deleteFriend()}>Eliminar</button>
       }
       {/* Desplegar info detallada */}
-      <FriendInfo isOpen={isOpen} close={close} name={name} date={date} email={email} id={id} />
+      <FriendInfo isOpen={isOpen} close={close} name={name} date={date} email={email} id={id} image={image  } />
     </div>
   );
 };

@@ -1,13 +1,18 @@
-.chatLobby{
+.contChat {
+    width: 60%;
+}
+
+.chatLobby {
     width: 100%;
     min-height: 60vh;
     max-height: 60vh;
+
     overflow: scroll;
     border: 2px solid black;
     background-color: rgba(255, 255, 255, 0.6);
 }
 
-.chatGame{
+.chatGame {
     width: 93%;
     min-height: 30vh;
     max-height: 50vh;
@@ -23,24 +28,24 @@
     font-family: 'Courier New', Courier, monospace;
 }
 
-.chatContainer{
+.chatContainer {
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
 }
 
-.writeMessageGame{
+.writeMessageGame {
     margin: 10px;
     display: flex;
     width: 93%;
 }
 
-.writeMessage{
+.writeMessage {
     display: flex;
 }
 
-.btn{
+.btn {
     color: #fff;
     background-color: #7f7056;
     border-color: #343a40;
@@ -57,7 +62,8 @@
     line-height: 1.5;
     border-radius: .25rem;
     transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out;
-}
+} 
+
 @media screen and (max-width: 1440px) {
     .chatGame{
         width: 90%;
@@ -75,6 +81,7 @@
         width: 90%;
     }
 }
+
 @media screen and (max-width: 1024px) {
     .chatGame{
         width: 80%;
@@ -116,8 +123,19 @@
         height: 3vh;
     }
 }
+
+@media screen and (max-width: 768px) {
+    .contChat {
+        width: 80%;
+    }
+
+    .btn {
+        font-size: .8rem;
+    }
+}
+
 @media screen and (max-width: 320px) {
-    .chatGame{
+    .chatGame {
         width: 100%;
         min-height: 10vh;
         max-height: 10vh;
@@ -127,13 +145,14 @@
         background-color: rgba(255, 255, 255, 0.6);
         font-size: xx-small;
     }
-    .writeMessageGame{
+    .writeMessageGame {
         margin: 0px;
         display: flex;
         width: 100%;
         height: 4vh;
     }
 }
+
 @media only screen 
 and (min-device-width: 320px) 
 and (max-device-width: 900px)

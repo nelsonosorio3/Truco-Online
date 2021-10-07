@@ -45,6 +45,8 @@ export default function Profile(props) {
 
     const dispatch = useDispatch();
 
+    const games = userHistory.length > 5 ? userHistory.slice(0, 5) : userHistory;
+
     //Trae primeramente los datos del usuario y sus amigos
     useEffect(() => {
         //informacion del usuario logeado
@@ -93,7 +95,6 @@ export default function Profile(props) {
 
     //Funcion para responder a una solicitud
     const respondFriendFunction = (email, response) => {
-        console.log(userProfile.id, email, response);
         dispatch(putFriendRequest(userProfile.id, email, response));
         window.location.reload();
     };
@@ -155,18 +156,40 @@ export default function Profile(props) {
                         </div>
                         <div className={styles.playerInfo}>
                             <button className={styles.editBtn} onClick={editProfile}>Editar</button>
-                            <h2>{userProfile?.username}</h2>
-                            <h3>{userProfile?.email}</h3>
-                            <h3> Partidas Jugadas: </h3>
-                            <p> {userProfile?.gamesPlayed} </p>
-                            <div className={styles.playerInfo_Games}>
-                                <div className={styles.infoGames}>
-                                    <h3> Ganadas: </h3>
-                                    <p> {userProfile?.gamesLost} </p>
+                            <h2 className={styles.statsTitle}>Estadisticas</h2>
+                            <div className={styles.gamesAndTournamentsStats}>
+                                <div className={styles.games}>
+                                    <div className={styles.infoGames}>
+                                        <p>{userProfile?.gamesPlayed}</p>
+                                        <p>Partidas Jugadas</p>
+                                    </div>
+                                    <div className={styles.playerInfo_Games}>
+                                        <div className={styles.infoGames}>
+                                            <p style={{color:"#228B22"}}>{userProfile?.gamesWon}</p>
+                                            <p>Ganadas</p>
+                                        </div>
+                                        <div className={styles.infoGames}>
+                                            <p style={{color:"#ff0000"}}>{userProfile?.gamesLost}</p>
+                                            <p>Perdidas</p>
+                                        </div>
+                                        
+                                    </div>
                                 </div>
-                                <div className={styles.infoGames}>
-                                    <h3> Perdidas: </h3>
-                                    <p> {userProfile?.gamesWon} </p>
+                                <div className={styles.games}>
+                                    <div className={styles.infoGames}>
+                                        <p>{userProfile?.tournamentsPlayed}</p>
+                                        <p>Torneos jugados</p>
+                                    </div>
+                                    <div className={styles.playerInfo_Games}>
+                                        <div className={styles.infoGames}>
+                                            <p style={{color:"#228B22"}}>{userProfile?.tournamentsWon}</p>
+                                            <p>Ganados</p>
+                                        </div>
+                                        <div className={styles.infoGames}>
+                                            <p style={{color:"#ff0000"}}>{userProfile?.tournamentsLost}</p>
+                                            <p>Perdidos</p>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -180,6 +203,7 @@ export default function Profile(props) {
                                     !friends.sender.length ? <p className={styles.text}>No tienes amigos</p> : friends.sender.map(f => <Friend
                                         key={f?.id}
                                         email={f?.email}
+                                        image={f?.image}
                                         deleteId={deleteFriendFunction}
                                         profileId={userProfile?.id}
                                         id={f?.id}
@@ -212,7 +236,7 @@ export default function Profile(props) {
                         <h3 classname={styles.title}>Últimos resultados</h3>
                         <div className={styles.history}>
                             {
-                                !userHistory?.length ? null : userHistory.map(m => <Match
+                                !games?.length ? null : games.map(m => <Match
                                     key={m?.id}
                                     id={m?.id}
                                     result={m?.winner === userProfile.username ? "Ganaste" : "Perdiste"}

@@ -91,7 +91,7 @@ export default function Envido() {
             </div>
             <div >
                 {
-                    state.img &&  <img className={styles.envido} src={imgEnvido}  />   
+                    state.img &&  <img className={styles.envido} src={imgEnvido} alt=''/>   
                 } 
             </div>
             {

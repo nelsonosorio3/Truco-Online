@@ -1,14 +1,13 @@
-/* eslint-disable import/no-anonymous-default-export */
 import axios from 'axios';
 import { GET_PROFILE, GET_FRIENDS, GET_HISTORY, DELETE_FRIEND, PUT_FRIEND_REQUEST } from '../actions/index';
 
 const getProfile = ({token}) => {
 
   return function(dispatch) {
-    return axios.get(`http://localhost:3001/api/user/profile`,{
+    return axios.get(`http://localhost:3001/api/user/profile`, {
       headers: {
         "x-access-token": token,
-      }
+      },
     })
     .then(data => {
       dispatch({ type: GET_PROFILE, payload: data.data[0] });
@@ -22,10 +21,11 @@ const getFriends = (token) => {
     return axios(`http://localhost:3001/api/user/friends`, {
       headers: {
         "x-access-token": token,
-      }
+      },
     })
     .then(data => {
-      dispatch({ type: GET_FRIENDS, payload: data.data});
+      console.log(data)
+      dispatch({ type: GET_FRIENDS, payload: data.data });
     })
     .catch((error) => console.error(error));
   };
@@ -35,7 +35,7 @@ const deleteFriends = (id, email) => {
   return function(dispatch) {
     return axios.delete(`http://localhost:3001/api/friends/${id}/${email}`)
       .then(data => {
-        dispatch({ type: DELETE_FRIEND, payload: data.data.id});
+        dispatch({ type: DELETE_FRIEND, payload: data.data.id });
       })
       .catch((error) => console.error(error));
   };
@@ -45,7 +45,7 @@ const putFriendRequest = (id, email, response) => {
   return function(dispatch) {
     return axios.put(`http://localhost:3001/api/friends/${id}/${email}?response=${response}`)
       .then(data => {
-        dispatch({ type: PUT_FRIEND_REQUEST, payload: data.data.id});
+        dispatch({ type: PUT_FRIEND_REQUEST, payload: data.data.id });
       })
       .catch((error) => console.error(error));
   };
@@ -64,8 +64,6 @@ const getGames = (token) => {
     .catch((error) => console.error(error));
   };
 };
-
-
 
 export default {
     getProfile,

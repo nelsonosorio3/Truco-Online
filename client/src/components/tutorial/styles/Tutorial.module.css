@@ -26,9 +26,13 @@
     justify-content: center;
 
     position: relative;
-
-    background-color: var(--blackBoardColor);
-    border: .5em solid rgb(112, 98, 76);
+    background-image:  url('../../../img/pizarron.webp') ;
+    background-size: cover;
+    background-attachment: fixed;
+    background-repeat: no-repeat;
+    background-color: transparent;
+    object-fit: contain;
+    border: 5px ridge lightgray;
 }
 
 .title {

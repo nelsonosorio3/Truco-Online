@@ -55,3 +55,9 @@ table tr:hover{
 h2 {
   text-align: center;
 }
+
+.fondo {
+  min-height: 100vh;
+  padding-top: 20vh;
+  padding-bottom: 20vh;
+}

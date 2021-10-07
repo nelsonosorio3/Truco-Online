@@ -11,7 +11,7 @@ export default function TournamentsForm(){
     const createTournament = async (event) => {
         event.preventDefault();
         let idGenerator = Math.floor(Math.random()*1000000)
-        socket.emit('createTournament', ({tournamentId: idGenerator, user: localStorage.user}))
+        socket.emit('createTournament', ({tournamentId: idGenerator, user: localStorage.user, userId: parseInt(localStorage.id)}))
         dispatch(setIsInTournament({isInTournament: true, tournamentId: idGenerator}))
     }
     

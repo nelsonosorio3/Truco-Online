@@ -1,11 +1,13 @@
 import React from 'react';
 import { useState } from 'react';
+import { useHistory } from 'react-router';
 
 import NavBar from '../NavBar'; 
 import Cartas from './Cartas';
 import Comienzo from './Comienzo';
 import Envido from './Envido';
 import Truco from './Truco';
+import GameRequest from '../GameRequest';
 
 import styles from './styles/Tutorial.module.css';
 
@@ -58,10 +60,15 @@ export default function Tutorial() {
     });
   };
   
+  let history = useHistory();
+  
   return (
     <>
-        <NavBar />
-        <div className={styles.container}>
+        <div style={{display: history.location.pathname === "/rooms" && "none"}}>
+            <NavBar />
+            <GameRequest />
+        </div>
+        <div className={styles.container} style={{backgroundImage: history.location.pathname === "/rooms" && "none"}}>
             <div className={styles.pizarron}>
                 <h3 className={styles.title}>Cómo Jugar:</h3>
                 <div className={styles.botones}>

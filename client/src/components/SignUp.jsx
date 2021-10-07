@@ -41,6 +41,7 @@ const initialState = {
     username: '',
     email: '',
     password: '',
+    profile_image: '',
     image: profileIcon,
 };
 
@@ -58,6 +59,33 @@ export default function SignUp() {
     const [errors, setErrors] = useState(initialState);
 
     const [isOpenModal, openModal, closeModal] = useModal();
+
+    const handleFileChange = (e) => {
+        //Funcion para subir una imagen
+        const file = e.target.files[0]
+        previewFile(file)
+    }
+
+    const previewFile = (file) => {
+        const reader = new FileReader()
+        //Convierte la imagen en url
+        reader.readAsDataURL(file)
+        reader.onloadend = () => {
+            setState({
+                ...state,
+                profile_image: reader.result
+            })
+            // console.log(state.profile_image)
+        }
+    }
+
+    const removeImage = () => {
+        setState({
+            ...state,
+            profile_image: '',
+        })
+    }
+
 
     function handleChange(event) {
         const { name, value } = event.target;
@@ -92,6 +120,7 @@ export default function SignUp() {
             }, 3000);
         };
     }, [registered]);
+
 
     return (
         <>
@@ -134,6 +163,18 @@ export default function SignUp() {
                     onChange={handleChange}
                 />
                 {errors.password && (<p className={styles.danger}> {errors.password} </p>)}
+
+                {/* Input para subir una imagen */}
+                <label for="file" className={styles.uploadFileBtn}>Imagen de perfil</label>
+                <input 
+                    id="file"
+                    type="file"     
+                    name="image"
+                    onChange={handleFileChange} 
+                />
+                {state.profile_image ? <p className={styles.deleteImg} onClick={removeImage}>Eliminar Imagen</p> : <p className={styles.uploadImgMsg}>Carga Una foto de perfil!</p>}
+
+
                 {((!errors.username && !errors.email && !errors.password) 
                     && 
                     (errors.username !== '' && errors.email !== '' && errors.password !== '')) 

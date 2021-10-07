@@ -4,7 +4,8 @@ import { GET_USERS, FILTER_BY_EMAIL, FILTER_BY_NAME, FILTER_BY_ID } from '../act
 import { ORDER_BY_GAMES_ASC, ORDER_BY_GAMES_DESC, ORDER_BY_WINS_ASC, ORDER_BY_WINS_DESC } from '../actions/index';
 import {
   ORDER_BY_LOST_ASC, ORDER_BY_LOST_DESC, GO_TO_N_PAGE, SET_SELECTED_PAGE, SET_USERS_PER_PAGE, SET_TOTAL_PAGES, SET_DISPLAYED_ON_PAGE,
-  ORDER_BY_USER_SINCE_ASC, ORDER_BY_USER_SINCE_DESC
+  ORDER_BY_USER_SINCE_ASC, ORDER_BY_USER_SINCE_DESC,
+  BAN_USER, SUSPEND_USER, ACTIVATE_USER
 } from '../actions/index';
 import comparers from './helpers/comparers';
 import getForPage from './helpers/getForPage';
@@ -23,6 +24,9 @@ const INITIAL_STATE = {
   usersPerPage: 10,
 
 };
+
+//helper function
+
 
 const adminPanelReducer = (state = INITIAL_STATE, { type, payload }) => {
   switch (type) {
@@ -199,7 +203,61 @@ const adminPanelReducer = (state = INITIAL_STATE, { type, payload }) => {
       return {
         ...state,
         pages: pagesArr
+      };
+
+    case BAN_USER:
+      var newOrderedUsers = [...state.orderedUsers];
+      var newFilteredUsers = [...state.filteredUsers]; // mejor renombrarlo a filteredUsers --> se ordenan, se filtran y se muestran
+      var newDisplayedInPage = [...state.displayedInPage];
+      function changeBan(userId, arr) {
+        var user = arr.find(u => u.id === userId);
+        user.status = "baneado";
       }
+      changeBan(payload, newOrderedUsers);
+      changeBan(payload, newFilteredUsers);
+      changeBan(payload, newDisplayedInPage);
+      return {
+        ...state,
+        OrderedUsers: newOrderedUsers,
+        FilteredUsers: newFilteredUsers,
+        DisplayedInPage: newDisplayedInPage
+      };
+
+    case SUSPEND_USER:
+      var newOrderedUsers = [...state.orderedUsers];
+      var newFilteredUsers = [...state.filteredUsers]; // mejor renombrarlo a filteredUsers --> se ordenan, se filtran y se muestran
+      var newDisplayedInPage = [...state.displayedInPage];
+      function changeSuspend(userId, arr) {
+        var user = arr.find(u => u.id === userId);
+        user.status = "suspendido";
+      }
+      changeSuspend(payload, newOrderedUsers);
+      changeSuspend(payload, newFilteredUsers);
+      changeSuspend(payload, newDisplayedInPage);
+      return {
+        ...state,
+        OrderedUsers: newOrderedUsers,
+        FilteredUsers: newFilteredUsers,
+        DisplayedInPage: newDisplayedInPage
+      };
+
+    case ACTIVATE_USER:
+      var newOrderedUsers = [...state.orderedUsers];
+      var newFilteredUsers = [...state.filteredUsers]; // mejor renombrarlo a filteredUsers --> se ordenan, se filtran y se muestran
+      var newDisplayedInPage = [...state.displayedInPage];
+      function changeActivate(userId, arr) {
+        var user = arr.find(u => u.id === userId);
+        user.status = "activo";
+      }
+      changeActivate(payload, newOrderedUsers);
+      changeActivate(payload, newFilteredUsers);
+      changeActivate(payload, newDisplayedInPage);
+      return {
+        ...state,
+        OrderedUsers: newOrderedUsers,
+        FilteredUsers: newFilteredUsers,
+        DisplayedInPage: newDisplayedInPage
+      };
 
     default:
       return state;

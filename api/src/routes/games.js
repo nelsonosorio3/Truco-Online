@@ -56,8 +56,8 @@ router.put("/losser/:gameId/:p1Score/:p2Score", validarUsuario, async (req, res)
     const {userId} = req.body;
     const user = await User.findByPk(parseInt(userId));
     const game = await Games.update({state: "terminada", loser: `${user.dataValues.username}`, results: `${p1Score}|${p2Score}`}, {where: {id: gameId}});
-    const test = await Games.findByPk(parseInt(gameId));
-    return res.json(test);
+    const userUpdate = await User.update({gamesPlayed: ++user.dataValues.gamesPlayed, gamesLost: ++user.dataValues.gamesLost}, {where: {id: userId}});
+    return res.json("perdedor actualizado");
 });
 
 //Ruta para dar la partida por terminada,parte del ganador, si es diferente a la del perdedor por ahora la partida se elimina de la base de datos
@@ -68,6 +68,7 @@ router.put("/winner/:gameId/:p1Score/:p2Score", validarUsuario, async (req, res)
     const checkIntegrity = await Games.findByPk(parseInt(gameId));
     if(checkIntegrity.dataValues.results === `${p1Score}|${p2Score}` && checkIntegrity.dataValues.state === "terminada" && checkIntegrity.dataValues.loser !== ""){
         await Games.update({winner: `${user.username}`}, {where: {id: gameId}})
+        const userUpdate = await User.update({gamesPlayed: ++user.dataValues.gamesPlayed, gamesWon: ++user.dataValues.gamesWon}, {where: {id: userId}});
         return res.json("partida finalizada");
     }
     Games.destroy({where: {id: gameId}})

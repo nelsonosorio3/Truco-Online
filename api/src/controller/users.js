@@ -1,5 +1,6 @@
 const { User, Friends, Games } = require("../db.js");
 const jwt = require('jsonwebtoken');
+const { cloudinary } = require('./cloudinary.js')
 
 module.exports = {
   //Funciones controller para la ruta /user
@@ -7,10 +8,12 @@ module.exports = {
   allUsers: async (req, res) => {
     try {
       const users = await User.findAll({
+        attributes: { exclude: ['password'] },
         include: {
           model: User,
           as: "reportedUser",
-        }
+        },
+        order: [["id", "ASC"]],
       });
       return res.json(users)
     } catch (error) {
@@ -18,6 +21,72 @@ module.exports = {
       return res.sendStatus(404).send(error);
     }
   },
+
+  // Función para banear/suspender usuario (por ahora se tratará como sinónimos);
+
+  banUser: async (req, res) => {
+    var { userId } = req.query;
+    console.log(req.query);
+    console.log(userId);
+    try {
+      const user = await User.findOne({
+        where: { id: userId }
+      });
+      user.status = "baneado";
+      await user.save();
+      return res.status(200).json(
+        { message: `Usuario id ${userId} baneado.` }
+      )
+    } catch {
+      e => {
+        console.log(e);
+        return res.stastus(400).json({ message: "no se pudo concretar operación" })
+      }
+    }
+  },
+
+  suspendUser: async (req, res) => {
+    var { userId } = req.query;
+    console.log(req.query);
+    console.log(userId);
+    try {
+      const user = await User.findOne({
+        where: { id: userId }
+      });
+      user.status = "suspendido";
+      await user.save();
+      return res.status(200).json(
+        { message: `Usuario id ${userId} suspendido.` }
+      )
+    } catch {
+      e => {
+        console.log(e);
+        return res.stastus(400).json({ message: "no se pudo concretar operación" })
+      }
+    }
+  },
+
+  activateUser: async (req, res) => {
+    var { userId } = req.query;
+    console.log(req.query);
+    console.log(userId);
+    try {
+      const user = await User.findOne({
+        where: { id: userId }
+      });
+      user.status = "activo";
+      await user.save();
+      return res.status(200).json(
+        { message: `Usuario id ${userId} ha sido re-activado.` }
+      )
+    } catch {
+      e => {
+        console.log(e);
+        return res.stastus(400).json({ message: "no se pudo concretar operación" })
+      }
+    }
+  },
+
 
   facebookLogin: (req, res) => {
     const { emailInput, usernameInput } = req.query
@@ -28,7 +97,10 @@ module.exports = {
         email: emailInput,
         gamesPlayed: 0,
         gamesWon: 0,
-        gamesLost: 0
+        gamesLost: 0,
+        tournamentsPlayed: 0,
+        tournamentsWon: 0,
+        tournamentsLost: 0,
       }
     })
       .then(response => {
@@ -80,15 +152,18 @@ module.exports = {
         if (user.length > 1) return res.status(200).json({ message: "Error! Hay más de un usuario con ese mail y contraseña", login: false })
 
         //token autentication - Se crea el token y se envia al cliente
-        const token = jwt.sign({ id: user[0].id, isAdmin: user[0].isAdmin }, req.app.get('secretKey'), { expiresIn: '7d' });
+        const token = jwt.sign({ id: user[0].id, isAdmin: user[0].isAdmin, isActive: user[0].isActive }, req.app.get('secretKey'), { expiresIn: '7d' });
         var resp = {
           username: user[0].username,
           id: user[0].id,
           login: true,
           token: token,
           isAdmin: user[0].isAdmin,
+          status: user[0].status,
           message: "Autenticacion exitosa!"
         }
+        console.log("resp sent")
+        console.log(resp)
         return res.status(200).json(resp)
       }
       console.log(error);
@@ -132,7 +207,7 @@ module.exports = {
       include: {
         model: User,
         as: "userSender",
-        attributes: ["username", "id", "email"],
+        attributes: ["username", "id", "email", "image"],
         through: {
           attributes: ["status", "createdAt", "userRequestedId"]
         }
@@ -141,7 +216,7 @@ module.exports = {
       .then(userSenderResults => {
         userInfo.userSender = userSenderResults
         return userSenderResults.getUserRequested({
-          attributes: ["username", "id", "email"],
+          attributes: ["username", "id", "email", "image"],
         })
       })
       .then(userRequestedResults => {
@@ -156,11 +231,11 @@ module.exports = {
       })
   },
 
+
+
   createNewUser: async (req, res) => {
+    var { username, email, password, image, profile_image } = req.body;
 
-    console.log("ingreso aca 1")
-
-    var { username, email, password, image } = req.body;
 
     const userData = await User.findAll({
       where: {
@@ -175,14 +250,30 @@ module.exports = {
     });
 
     try {
+
+      let imagen_url = ""
+
+      if (!profile_image.length) {
+        imagen_url = image
+      }
+      else {
+        const uploadedResponse = await cloudinary.uploader.upload(profile_image, {
+          upload_preset: "proyectofinal"
+        })
+        imagen_url = uploadedResponse.url
+      }
+
       await User.create({
         username,
         email,
         password,
-        image,
+        image: imagen_url,
         gamesPlayed: 0,
         gamesWon: 0,
-        gamesLost: 0
+        gamesLost: 0,
+        tournamentsPlayed: 0,
+        tournamentsWon: 0,
+        tournamentsLost: 0,
       })
       return res.status(200).json({
         message: "Usuario creado con éxito",
@@ -200,7 +291,6 @@ module.exports = {
   },
 
   getEditProfile: async (req, res) => {
-    console.log("Authenticated for /edit userId: ", req.body.userId);
     try {
       let user = await User.findAll({
         where: {
@@ -214,24 +304,37 @@ module.exports = {
     };
   },
 
-  updateUser: (req, res) => {
+  updateUser: async (req, res) => {
     const { userId } = req.body
     const { username, email, password, image } = req.body
 
     User.findByPk(userId)
       .then(updateUser => {
 
-        updateUser.username = username
-        updateUser.email = email
-        updateUser.password = password
-        updateUser.image = image
-
-        return updateUser.save()
+        if(updateUser.image !== image){
+          cloudinary.uploader.upload(image, {
+            upload_preset: "proyectofinal"
+          }).then(response => {
+            console.log("Las imagenes son distintas")
+            updateUser.image = response.url
+            updateUser.username = username
+            updateUser.email = email
+            updateUser.password = password
+            return updateUser.save()
+          })
+        }
+        else{
+          updateUser.username = username
+          updateUser.email = email
+          updateUser.password = password
+          return updateUser.save()
+        }
       })
       .then(response => {
         res.json({ message: "El usuario se actualizo con exito", status: true, data: response })
       })
       .catch(err => {
+        console.log(err.message)
         res.json({ message: "No se ha podido actualizar el usuario", status: false })
       })
   }

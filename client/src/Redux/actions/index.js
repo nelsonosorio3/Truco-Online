@@ -34,11 +34,16 @@ export const SET_SELECTED_PAGE = "SET_SELECTED_PAGE";
 export const SET_USERS_PER_PAGE = "SET_USERS_PER_PAGE";
 export const SET_TOTAL_PAGES = "SET_TOTAL_PAGES";
 export const SET_DISPLAYED_ON_PAGE = "SET_DISPLAYED_ON_PAGE";
+export const BAN_USER = "BAN_USER";
+export const SUSPEND_USER = "SUSPEND_USER";
+export const ACTIVATE_USER = "ACTIVATE_USER";
+
 
 
 //Rooms
 export const IS_IN_ROOM = 'ADD_ROOM'
 //Tournament
 export const IS_IN_TOURNAMENT = 'IS_IN_TOURNAMENT';
+export const LEFT_TOURNAMENT = 'LEFT_TOURNAMENT';
 //Ranking
 export const GET_RANKING = 'GET_RANKING';

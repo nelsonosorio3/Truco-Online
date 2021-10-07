@@ -10,8 +10,8 @@ export default function TournamentsList(){
     const dispatch = useDispatch()
 
     useEffect(() => {
-        socket.on('showActiveTournaments', (tournaments) => {
-            setAllTournaments([tournaments]);
+        socket.on('showActiveTournaments', (tournamentsList) => {
+            setAllTournaments(tournamentsList);
         })
         return () => {socket.off()}
     }, [allTournaments])
@@ -27,20 +27,28 @@ export default function TournamentsList(){
 
     const joinTournament = async (event) => {
         event.preventDefault();
-        socket.emit('joinTournament', ({tournamentId: parseInt(event.target[0].innerText), user: localStorage.user}))
-        dispatch(setIsInTournament({isInTournament: true, tournamentId: parseInt(event.target[0].innerText)}))
+        socket.emit('joinTournament', ({tournamentId: parseInt(event.target[0].value), user: localStorage.user, userId: parseInt(localStorage.id)}))
+        dispatch(setIsInTournament({isInTournament: true, tournamentId: parseInt(event.target[0].value)}))
     }
 
     return(
         <div>
-            <div className={styles.TournamentsList}>
+            <div className={styles.tournamentsList}>
                 {
-                    allTournaments[0]
-                ?
-                allTournaments[0].map(tournament => 
-                    <div key={tournament}>
+                    allTournaments.length > 0
+                ? 
+                allTournaments.map(t => 
+                    <div key={t.tournamentId}>
                         <form onSubmit={joinTournament}>
-                            <button type='submit' value={tournament} className={styles.roomBtn} >{tournament}</button>
+                            <button type='submit' value={t.tournamentId} className={styles.tournamentBtn} >
+                                <p>Id de torneo: {t.tournamentId}</p>
+                                <p>Jugadores actuales:</p>
+                                <div className={styles.playersWaiting}>
+                                    {
+                                        t.players.map(p => <p key={p.userId}>{p.user}</p> )
+                                    }
+                                </div>
+                            </button>
                         </form>
                     </div>)
                 :

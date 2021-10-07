@@ -1,4 +1,4 @@
-.btn{
+.btn {
     color: #fff;
     background-color: #343a40;
     border-color: #343a40;
@@ -6,6 +6,8 @@
     font-weight: 400;
     text-align: center;
     white-space: nowrap;
+
+    margin-bottom: 1em;
 
     -webkit-user-select: none;
     -moz-user-select: none;
@@ -22,4 +24,17 @@
 .btn:hover {
     transition: all 1s cubic-bezier(0.19, 1, 0.22, 1);
     background-color:black;
+}
+
+@media screen and (max-width: 768px) {
+    .btn {
+        margin-top: 1em;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .btn {
+        font-size: .8rem;
+        padding: .175rem .35rem;
+    }
 }

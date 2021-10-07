@@ -12,6 +12,7 @@ import Game from './components/game';
 import Ranking from './components/Ranking';
 import PrivateRoute from './components/PrivateRoute';
 import AdminPanel from './components/AdminPanel';
+import BannedPlayer from './components/BannedPlayer';
 import Tournaments from './components/tournaments/Tournaments';
 import EditProfile from './components/EditProfile';
 import Tutorial from './components/tutorial/Tutorial';
@@ -20,6 +21,7 @@ function App() {
   return (
     <div className="App">
       <Switch>
+
         <Route exact path='/' component={Landing} />
         <Route exact path='/welcome' component={Welcome} />
         <Route exact path='/sign-up' component={SignUp} />
@@ -31,6 +33,7 @@ function App() {
         <PrivateRoute exact path="/tournaments" component={Tournaments} />
         <PrivateRoute exact path="/ranking" component={Ranking} />
         <PrivateRoute exact path='/adminpanel' component={AdminPanel} />
+        <Route exact path='/bannedplayer' component={BannedPlayer} />
         <Route exact path='/tutorial' component={Tutorial} />
         <Route path="*" component={ErrorPage} />
       </Switch>
