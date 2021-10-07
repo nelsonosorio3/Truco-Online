@@ -9,6 +9,7 @@ import { useHistory } from "react-router-dom";
 import { setIsInRoom } from '../Redux/actions-types/roomsActions';
 import axios from 'axios';
 import profileActions from '../Redux/actions-types/profileActions';
+import Tutorial from './tutorial/Tutorial';
 
 let turnTime;
 let interval;
@@ -72,10 +73,12 @@ export default function Game({
     const [isYourTurn, setIsYourTurn] = useState(false);
     const [reported, setReported] = useState(false);
     const [friend, setFriend] = useState(false);
-    let [timesWithoutPlay, setTimesWithoutPlay] = useState(0);
+    const [tutorialBox, setTutorialBox] = useState(false);
+    const [timesWithoutPlay, setTimesWithoutPlay] = useState(0);
     const [seconds, setSeconds] = useState(30);
     const history = useHistory();
     const scoreBox = useRef();
+    const tuto = useRef();
     const {getProfile} = profileActions;
     const { userProfile} = useSelector(state => state.profileReducer);
     const dispatch = useDispatch();
@@ -92,21 +95,24 @@ export default function Game({
       dispatch(setIsInRoom({isInRoom: false, roomId: null}));
       setTimeout(()=>history.push("/profile"),300);
       clearTimeout(turnTime);
+      clearTimeout(otherTime);
     };
     const surrender2 = ()=>{
       socket.emit("surrender2", roomId || localStorage.roomId, player.id, localStorage.token);
       dispatch(setIsInRoom({isInRoom: false, roomId: null}));
       setTimeout(()=>history.push("/profile"),300);
+      clearTimeout(otherTime);
       clearTimeout(turnTime);
       alert("El otro jugador se desconecto")
     }
     const tutorial = ()=>{
       /// mostrar valor cartas y explicacion corta de apuestas
+      setTutorialBox(!tutorialBox);
     };
     const report = ()=> {
       if(!reported){
         localStorage.id && socket.emit("report", localStorage.id, roomId || localStorage.roomId, player.id);
-      setReported(true);
+        setReported(true);
       }
       else  socket.emit('already reported', player.id);
     };
@@ -202,6 +208,7 @@ export default function Game({
           dispatch(setIsInRoom({isInRoom: false, roomId: null}));
         }
         clearTimeout(turnTime);
+        clearTimeout(otherTime);
       },);
       socket.on("surrender",()=>{
         alert("El otro jugador se rindio, TU GANAS!");
@@ -222,7 +229,13 @@ export default function Game({
           setPointsBox(false);
         }
       }
-      document.addEventListener("mousedown", handler)
+      let handlerTuto = event =>{
+        if(!tuto.current.contains(event.target)){
+          setTutorialBox(false);
+        }
+      }
+      document.addEventListener("mousedown", handler);
+      document.addEventListener("mousedown", handlerTuto);
       return () =>{ //limpieza de eventos
         socket.off("gameStarts");
         socket.off('newRoundStarts');
@@ -240,7 +253,8 @@ export default function Game({
         socket.off("surrender");
         socket.off("addFriend");
         socket.off("refresh");
-        document.removeEventListener("mousedown", handler)
+        document.removeEventListener("mousedown", handler);
+        document.removeEventListener("mousedown", handlerTuto)
       };
     },[player]);
     useEffect(()=>{
@@ -268,9 +282,10 @@ export default function Game({
       }
       if(!player.isTurn){
         clearTimeout(turnTime);
+        clearTimeout(otherTime);
         clearInterval(interval);
         setSeconds(30);
-        otherTime = setTimeout(()=>surrender2(), 60*1000);
+        if(player.hand?.length) otherTime = setTimeout(()=>surrender2(), 120*1000);
       } 
     },[player.isTurn])
     console.log(player) //para testing
@@ -313,6 +328,9 @@ export default function Game({
             </div>
             <div><img src={`/cards/shuffle.gif`} style={{display: newRound? "flex" : "none"}} id={player.starts? stylesGame.shuffle1 : stylesGame.shuffle2}/></div>
             <div id={stylesGame.isYourTurn} style={{display: isYourTurn? "flex" : "none"}}><h1>ES TU TURNO</h1></div>
+            <div id={stylesGame.tutorial} style={{display: tutorialBox || "none"}} ref={tuto}>
+              <Tutorial/>
+            </div>
           </div> 
     );
 };
