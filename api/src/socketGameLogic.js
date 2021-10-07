@@ -749,7 +749,7 @@ exports = module.exports = function(io){
                 common.envidoList[i] === "envido"? common.envidoBet += 2 : common.envidoBet +=3;
                 bool = !bool;
             }
-            quieroEnvido(playerOne, playerOneEnvido, isPlayerOne, playerTwo, playerTwoEnvido, common, roomId, common.envidoBet, bool, io);  
+            quieroEnvido(playerOne, playerOneEnvido, isPlayerOne, playerTwo, playerTwoEnvido, common, roomId, common.envidoBet, bool, io, isPlayerTwo);  
         }
         else if(betPick === "no quiero realEnvido"){
             let bool = false;

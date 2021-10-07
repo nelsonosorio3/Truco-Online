@@ -10,10 +10,11 @@
 }
 #tutorial{
     position: absolute;
-    left:15%;
+    left:7%;
     top: -10%;
     z-Index:999;
-    width: 70%;  
+    width: 86%; 
+    transform: scale(0.5); 
 }
 #shuffle2{
     position: absolute;
