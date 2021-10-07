@@ -1,5 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import { useDispatch } from "react-redux";
 import adminPanelActions from '../Redux/actions-types/adminPanelActions';
 import { createSemanticDiagnosticsBuilderProgram } from "typescript";
 
@@ -29,6 +30,7 @@ function banUser() {
 }*/
 
     const { banUser } = adminPanelActions;
+    const dispatch = useDispatch();
 
     function suspendUser(id) {
         fetch(`http://localhost:3001/api/user/banuser?userId=${id}`)
@@ -68,7 +70,7 @@ function banUser() {
                 <div className="buttonContainer">
                     {
                         status === "activo" ?
-                            (<div><button onClick={() => suspendUser(id)}>Suspender</button> <button onClick={() => banUser(id, localStorage.token)}>Banear</button></div>) :
+                            (<div><button onClick={() => suspendUser(id)}>Suspender</button> <button onClick={() => dispatch(banUser(id, localStorage.token))}>Banear</button></div>) :
                             <button onClick={() => activateUser(id)}>Re-activar</button>
                     }
                 </div>
