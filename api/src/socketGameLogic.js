@@ -683,7 +683,7 @@ exports = module.exports = function(io){
             const playerOneEnvido = envidoCount(common.playerOneHand);
             const playerTwoEnvido = envidoCount(common.playerTwoHand);
             io.in(roomId).emit("messages", { msg: `${isPlayerOne? playerOne.name : playerTwo.name}: QUIERO ENVIDO!`});  
-            quieroEnvido(playerOne, playerOneEnvido, isPlayerOne, playerTwo, playerTwoEnvido, common, roomId, 2, true, io);            
+            quieroEnvido(playerOne, playerOneEnvido, isPlayerOne, playerTwo, playerTwoEnvido, common, roomId, 2, true, io, isPlayerTwo);            
         }
         else if(betPick === "no quiero envido1"){
             noQuieroEnvido(playerOne, playerTwo, isPlayerOne, 1, io, isPlayerTwo); 
@@ -713,7 +713,7 @@ exports = module.exports = function(io){
             const playerOneEnvido = envidoCount(common.playerOneHand);
             const playerTwoEnvido = envidoCount(common.playerTwoHand);
             io.in(roomId).emit("messages", { msg: `${isPlayerOne? playerOne.name : playerTwo.name}: QUIERO ENVIDO!`});
-            quieroEnvido(playerOne, playerOneEnvido, isPlayerOne, playerTwo, playerTwoEnvido, common, roomId, 4, false, io);     
+            quieroEnvido(playerOne, playerOneEnvido, isPlayerOne, playerTwo, playerTwoEnvido, common, roomId, 4, false, io, isPlayerTwo);     
         }
         else if(betPick === "no quiero envido2"){
             noQuieroEnvido(playerOne, playerTwo, isPlayerOne, 2, io, isPlayerTwo); 
