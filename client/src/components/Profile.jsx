@@ -117,6 +117,8 @@ export default function Profile(props) {
 
     return (
         <>
+            <button className={styles.logoutBtn} onClick={logout}>Cerrar Sesions</button>
+
             <NavBar />
             <Modal isOpen={isOpenModal} closeModal={closeModal} removeFriend={removeFriend} deleteButtons={isDelete} friend={deleteFriend}>
                 {
@@ -144,7 +146,6 @@ export default function Profile(props) {
                 }
             </Modal>
             <GameRequest />
-            <button className={styles.logoutBtn} onClick={logout}></button>
             <div className={styles.mainDiv}>
                 <div className={styles.subMainDiv}>
                     <div className={styles.player}>
