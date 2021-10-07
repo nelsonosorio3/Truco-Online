@@ -119,7 +119,7 @@ export default function AdminPanel() {
   };
 
   var handleSortDescLost = function () {
-    dispatch(sortByWonDesc());
+    dispatch(sortByLostDesc());
     dispatch(filterByName(tableStatus.filterValue))
     dispatch(goToPage(1));
   };
@@ -136,9 +136,16 @@ export default function AdminPanel() {
     dispatch(goToPage(1));
   };
 
-  var pagesButtonsCreator = function () {
-
+  var reload = function () {
+    dispatch(getUsers({ token: localStorage.token }));
+    dispatch(filterByName(""));
+    dispatch(filterByEmail(""));
+    dispatch(setSelectedPage(1));
+    dispatch(goToPage(1));;
+    document.getElementById('pageSelector').value = "1";
   }
+
+  var pagesButtonsCreator = function () { }
 
   var someFunction = function () { };
 
@@ -226,10 +233,11 @@ export default function AdminPanel() {
                 <th>Id de Usuario </th>
                 <th>Nombre de Usuario </th>
                 <th>Correo </th>
-                <th>Partidos Jugados <span><button onClick={handleSortAscPlayed}>A</button> <button onClick={handleSortDescPlayed}>D</button></span>    </th> {/* onClick={sortTablebyCountry} */}
-                <th>Partidos Ganados <button onClick={handleSortAscWon}>A</button> <button onClick={handleSortDescWon}>D</button>    </th> {/* onClick={sortTablebyCountry} */}
-                <th>Partidos Perdidos <button onClick={handleSortAscLost}>A</button> <button onClick={handleSortDescLost}>D</button>    </th> {/* onClick={sortTablebyCountry} */}
-                <th>Usuario desde <button onClick={handleSortAscUserSince}>A</button> <button onClick={handleSortDescUserSince}>D</button> </th>
+                <th>Partidos Jugados <br /><span><button onClick={handleSortAscPlayed}>A</button> <button onClick={handleSortDescPlayed}>D</button></span>  </th>
+                <th>Partidos Ganados <br /><button onClick={handleSortAscWon}>A</button> <button onClick={handleSortDescWon}>D</button>    </th>
+                <th>Partidos Perdidos <br /><button onClick={handleSortAscLost}>A</button> <button onClick={handleSortDescLost}>D</button>    </th>
+                <th>Usuario desde <br /><button onClick={handleSortAscUserSince}>A</button> <button onClick={handleSortDescUserSince}>D</button> </th>
+                <th>Estado</th>
                 <th>Medidas </th>
                 <th>Reportes</th>
               </tr>
@@ -252,7 +260,7 @@ export default function AdminPanel() {
             </tbody>
           </table>
           <div className={styles.cargarNuevamente}>
-            <p>Para cargar o reiniciar los filtros y ordenamiento presione: <button onClick={someFunction}>Cargar datos nuevamente.</button></p>
+            <p>Para cargar nuevamente los datos o reiniciar los filtros y ordenamiento presione: <button onClick={reload}>Cargar datos nuevamente.</button></p>
           </div>
 
         </div> :
