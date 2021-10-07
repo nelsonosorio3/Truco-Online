@@ -12,15 +12,18 @@ export default function JoinRoomForm() {
   console.log(typeof localStorage.token)
 
   const joinRoom = async (event) => {
-    event.preventDefault();
-    let idGenerator = Math.floor(Math.random() * 100000)
-    socket.emit('joinRoom', (idGenerator), localStorage.user, localStorage.token, roomPassword)
-    socket.on("fullRoom", (bool) => setIsInRoom(bool))
-    dispatch(setIsInRoom({ isInRoom: true, roomId: idGenerator }))
+    if (localStorage.isAuth) {
+      event.preventDefault();
+      let idGenerator = Math.floor(Math.random() * 100000)
+      socket.emit('joinRoom', (idGenerator), localStorage.user, localStorage.token, roomPassword)
+      socket.on("fullRoom", (bool) => setIsInRoom(bool))
+      dispatch(setIsInRoom({ isInRoom: true, roomId: idGenerator }))
+    }
+    else alert("Tienes que estar registrado para crear salas, pero puedes unirte a las de otros usuarios");
   }
 
   return (
-    <div className={styles.mainContainer}>
+    <div>
       <form onSubmit={joinRoom}>
         <button type='submit' className={styles.btn}>Crear nueva sala</button>
       </form>

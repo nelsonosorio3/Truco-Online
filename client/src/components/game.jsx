@@ -13,7 +13,7 @@ import Tutorial from './tutorial/Tutorial';
 
 let turnTime;
 let interval;
-let otherTime;
+// let otherTime;
 const correctBetName = (betPick)=>{
   let properBet = "";
   if(betPick.includes("no quiero")) properBet = "No Quiero";
@@ -68,14 +68,14 @@ export default function Game({
         starts: false, // referencia para cambiar turnos al finalizar ronda
         token: localStorage.token,
       });
-    const [newRound, setNewRound] = useState(false);
-    const [pointBox, setPointsBox] = useState(false);
-    const [isYourTurn, setIsYourTurn] = useState(false);
-    const [reported, setReported] = useState(false);
-    const [friend, setFriend] = useState(false);
-    const [tutorialBox, setTutorialBox] = useState(false);
-    const [timesWithoutPlay, setTimesWithoutPlay] = useState(0);
-    const [seconds, setSeconds] = useState(30);
+    let [newRound, setNewRound] = useState(false);
+    let [pointBox, setPointsBox] = useState(false);
+    let [isYourTurn, setIsYourTurn] = useState(false);
+    let [reported, setReported] = useState(false);
+    let [friend, setFriend] = useState(false);
+    let [tutorialBox, setTutorialBox] = useState(false);
+    let [timesWithoutPlay, setTimesWithoutPlay] = useState(0);
+    let [seconds, setSeconds] = useState(30);
     const history = useHistory();
     const scoreBox = useRef();
     const tuto = useRef();
@@ -95,13 +95,13 @@ export default function Game({
       dispatch(setIsInRoom({isInRoom: false, roomId: null}));
       setTimeout(()=>history.push("/profile"),300);
       clearTimeout(turnTime);
-      clearTimeout(otherTime);
+      // clearTimeout(otherTime);
     };
     const surrender2 = ()=>{
       socket.emit("surrender2", roomId || localStorage.roomId, player.id, localStorage.token);
       dispatch(setIsInRoom({isInRoom: false, roomId: null}));
       setTimeout(()=>history.push("/profile"),300);
-      clearTimeout(otherTime);
+      // clearTimeout(otherTime);
       clearTimeout(turnTime);
       alert("El otro jugador se desconecto")
     }
@@ -135,7 +135,7 @@ export default function Game({
     
     useEffect(()=>{
       localStorage?.isAuth && dispatch(getProfile({token: localStorage?.token}));
-      socket.emit("refresh", roomId || localStorage.roomId);
+      socket.emit("refresh", localStorage.roomId);
     },[]);
     useEffect(()=>{
       socket.on("gameStarts", player=>{ //escucha gameStarts para iniciar cuando la sala se llena y dejar el estado jugador listo
@@ -208,7 +208,7 @@ export default function Game({
           dispatch(setIsInRoom({isInRoom: false, roomId: null}));
         }
         clearTimeout(turnTime);
-        clearTimeout(otherTime);
+        // clearTimeout(otherTime);
       },);
       socket.on("surrender",()=>{
         alert("El otro jugador se rindio, TU GANAS!");
@@ -272,7 +272,7 @@ export default function Game({
       }
       if(player.isTurn) {
         interval = setInterval(() => setSeconds(seconds => seconds - 1), 1000);
-        clearTimeout(otherTime);
+        // clearTimeout(otherTime);
         if(timesWithoutPlay < 3){
           turnTime = setTimeout(()=>{socket.emit("bet", "ir al mazo", roomId || localStorage.roomId, player.id);setTimesWithoutPlay(++timesWithoutPlay)}, 30*1000);
         }
@@ -282,10 +282,10 @@ export default function Game({
       }
       if(!player.isTurn){
         clearTimeout(turnTime);
-        clearTimeout(otherTime);
+        // clearTimeout(otherTime);
         clearInterval(interval);
         setSeconds(30);
-        if(player.hand?.length) otherTime = setTimeout(()=>surrender2(), 120*1000);
+        // if(player.hand?.length) otherTime = setTimeout(()=>surrender2(), 120*1000);
       } 
     },[player.isTurn])
     console.log(player) //para testing
