@@ -30,9 +30,11 @@ function getUsers({ token }) {
 
 function banUser(id, token) {
   console.log("entro");
+  console.log(id);
+  console.log(token);
   return function (dispatch) {
-    return axios.put(
-      `http://localhost:3001/api/user/banuser?userId=${id}`,
+    return axios.put(`http://localhost:3001/api/user/banuser?userId=${id}`,
+      {},
       {
         headers: {
           "x-access-token": token,
@@ -40,6 +42,7 @@ function banUser(id, token) {
       }
     )
       .then(r => {
+        console.log(r);
         dispatch({ type: BAN_USER, payload: id });
       })
       .catch((error) => console.error(error));

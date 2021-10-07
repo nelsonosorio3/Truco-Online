@@ -203,9 +203,9 @@ const adminPanelReducer = (state = INITIAL_STATE, { type, payload }) => {
       };
 
     case BAN_USER:
-      var newOrderedUsers = [...state.OrderedUsers];
-      var newFilteredUsers = [...state.FilteredUsers]; // mejor renombrarlo a filteredUsers --> se ordenan, se filtran y se muestran
-      var newDisplayedInPage = [...state.DisplayedInPage];
+      var newOrderedUsers = [...state.orderedUsers];
+      var newFilteredUsers = [...state.filteredUsers]; // mejor renombrarlo a filteredUsers --> se ordenan, se filtran y se muestran
+      var newDisplayedInPage = [...state.displayedInPage];
       function change(userId, arr) {
         var user = arr.find(u => u.id === userId);
         user.status = "baneado";
