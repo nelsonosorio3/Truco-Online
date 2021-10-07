@@ -68,14 +68,14 @@ export default function Game({
         starts: false, // referencia para cambiar turnos al finalizar ronda
         token: localStorage.token,
       });
-    const [newRound, setNewRound] = useState(false);
-    const [pointBox, setPointsBox] = useState(false);
-    const [isYourTurn, setIsYourTurn] = useState(false);
-    const [reported, setReported] = useState(false);
-    const [friend, setFriend] = useState(false);
-    const [tutorialBox, setTutorialBox] = useState(false);
-    const [timesWithoutPlay, setTimesWithoutPlay] = useState(0);
-    const [seconds, setSeconds] = useState(30);
+    let [newRound, setNewRound] = useState(false);
+    let [pointBox, setPointsBox] = useState(false);
+    let [isYourTurn, setIsYourTurn] = useState(false);
+    let [reported, setReported] = useState(false);
+    let [friend, setFriend] = useState(false);
+    let [tutorialBox, setTutorialBox] = useState(false);
+    let [timesWithoutPlay, setTimesWithoutPlay] = useState(0);
+    let [seconds, setSeconds] = useState(30);
     const history = useHistory();
     const scoreBox = useRef();
     const tuto = useRef();
