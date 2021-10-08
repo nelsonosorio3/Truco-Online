@@ -29,9 +29,9 @@ export default function Landing() {
                         </NavLink>
                 }
             </div>
-            <div className={styles.containerBottom}>O {isAuth ?
-                <NavLink to="/adminpanel">Entrar como administrador</NavLink> :
-                <NavLink to="/welcome" >Entrar como administrador</NavLink>
+            <div className={styles.containerBottom}> {isAuth ?
+                <p className={styles.someText}>O <NavLink to="/adminpanel">Entrar como administrador</NavLink></p> :
+                <p className={styles.someText}>O <NavLink to="/welcome" >Entrar como administrador</NavLink></p>
             }
             </div>
         </section>
