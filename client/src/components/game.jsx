@@ -91,11 +91,36 @@ export default function Game({
       else  socket.emit('already friend', player.id);
     };
     const surrender = ()=>{
-      socket.emit("surrender", roomId || localStorage.roomId, player.id, localStorage.token);
-      dispatch(setIsInRoom({isInRoom: false, roomId: null}));
-      setTimeout(()=>history.push("/profile"),300);
-      clearTimeout(turnTime);
-      // clearTimeout(otherTime);
+      if(tournamentMatchId){
+        if(finishedFirstMatch===false && finishedSecondMatch===false && finishedThirdMatch===false){
+          // alert(`Partida terminada. Ganador: ${dataCopy.winner}`);
+          dispatch(setIsInRoom({isInRoom: false, roomId: null}));
+          // if(dataCopy.winner === localStorage.user) setWins([...wins, dataCopy.winner])
+          setShowFirstMatch(false)
+          setFinishedFirstMatch(true)
+        }
+        if(finishedFirstMatch===true && finishedSecondMatch===false && finishedThirdMatch===false){
+          // alert(`Partida terminada. Ganador: ${dataCopy.winner}`);
+          dispatch(setIsInRoom({isInRoom: false, roomId: null}));
+          // if(dataCopy.winner === localStorage.user) setWins([...wins, dataCopy.winner])
+          setShowSecondMatch(false)
+          setFinishedSecondMatch(true)
+        }
+        if(finishedFirstMatch===true && finishedSecondMatch===true && finishedThirdMatch===false){
+          // alert(`Partida terminada. Ganador: ${dataCopy.winner}`);
+          dispatch(setIsInRoom({isInRoom: false, roomId: null}));
+          // if(dataCopy.winner === localStorage.user) setWins([...wins, dataCopy.winner])
+          setShowThirdMatch(false)
+          setFinishedThirdMatch(true)
+        }
+      }
+        else {
+          socket.emit("surrender", roomId || localStorage.roomId, player.id, localStorage.token);
+          dispatch(setIsInRoom({isInRoom: false, roomId: null}));
+          setTimeout(()=>history.push("/profile"),300);
+          // clearTimeout(otherTime);
+        }
+        clearTimeout(turnTime);
     };
     const surrender2 = ()=>{
       socket.emit("surrender2", roomId || localStorage.roomId, player.id, localStorage.token);

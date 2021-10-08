@@ -37,7 +37,7 @@ export default function Rooms() {
   };
   //logout termina aquí
 
-  // dispatch(setLeftTournament())
+  dispatch(setLeftTournament())
 
   if (isActive === "baneado" || isActive === "suspendido") {
     history.push('/bannedplayer');

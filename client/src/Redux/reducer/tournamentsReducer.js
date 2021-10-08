@@ -8,11 +8,13 @@ const INITIAL_STATE = {
 const tournamentsReducer = (state = INITIAL_STATE, {type, payload}) => {
   switch (type) {
     case IS_IN_TOURNAMENT:
+      window.localStorage.setItem("isInTournament", true);
       return {
         isInTournament: payload.isInTournament,
         tournamentId: payload.tournamentId,
       };
     case LEFT_TOURNAMENT:
+      window.localStorage.removeItem("isInTournament");
       return {
         isInTournament: false,
         roomId: null,

@@ -16,7 +16,7 @@ export default function Ranking() {
   const state = useSelector(state => state.rankingReducer)
   const dispatch = useDispatch();
 
-  // dispatch(setLeftTournament())
+  dispatch(setLeftTournament())
 
   useEffect(() => {
     dispatch(getRanking())
