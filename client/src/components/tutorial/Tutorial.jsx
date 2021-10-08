@@ -23,7 +23,7 @@ export default function Tutorial() {
     const dispatch = useDispatch()
     const { logOut } = log;
 
-    dispatch(setLeftTournament())
+    // dispatch(setLeftTournament())
 
     const logout = () => {
         dispatch(logOut());
