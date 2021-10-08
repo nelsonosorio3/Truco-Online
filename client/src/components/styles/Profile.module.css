@@ -74,6 +74,7 @@
     border: solid 2px white;
     box-shadow: 0px 0px 15px 5px black;
     animation: image 3s 1;
+    top: 20px;
 }
 
 @keyframes image {
@@ -86,13 +87,13 @@
 
 .playerInfo {
     width: 100%;
-    max-height: 60%;
+    max-height: 65%;
     box-shadow: 0px 0px 5px #505050;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-
+    bottom: 5%;
     position: relative;
     /* # */
     background-color: var(--transBlackColor);
@@ -431,6 +432,7 @@
 @media screen and (max-width: 1280px) {
     .profileIcon {
         width: 8em;
+        height: 8em;
     }
 
     .player {
@@ -446,8 +448,8 @@
 
     .profileIcon {
         /* width: 7.5em; */
-        height: 140px;
-        width: 145px;
+        height: 155px;
+        width: 170px;
         margin-top: .8em;
     }
 
@@ -524,6 +526,7 @@
     }
 
     .statsTitle {
+        margin-top: 16px;
         font-size: 1.3rem;
     }
 
@@ -548,7 +551,7 @@
         /* width: 6em; */
         height: 140px;
         width: 145px;
-
+        top: 8px;
         margin-top: 1.8em;
     }
 
