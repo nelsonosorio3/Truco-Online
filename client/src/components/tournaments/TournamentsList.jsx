@@ -7,6 +7,8 @@ import styles from './styles/TournamentsList.module.css'
 
 export default function TournamentsList(){
     const [allTournaments, setAllTournaments] = useState([])
+    const [registered, setRegistered] = useState(false)
+
     const dispatch = useDispatch()
 
     useEffect(() => {

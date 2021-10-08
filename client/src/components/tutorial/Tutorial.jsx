@@ -3,6 +3,8 @@ import { useState } from 'react';
 import { useHistory } from 'react-router';
 import { useDispatch } from 'react-redux'
 
+import { setLeftTournament } from '../../Redux/actions-types/tournamentsActions';
+
 import NavBar from '../NavBar';
 import Cartas from './Cartas';
 import Comienzo from './Comienzo';
@@ -20,6 +22,8 @@ export default function Tutorial() {
     const isActive = window.localStorage.getItem("status");
     const dispatch = useDispatch()
     const { logOut } = log;
+
+    dispatch(setLeftTournament())
 
     const logout = () => {
         dispatch(logOut());

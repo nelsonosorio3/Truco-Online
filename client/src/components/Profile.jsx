@@ -6,6 +6,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router';
 
 import { useModal } from '../hooks/useModal';
+import { setLeftTournament } from '../Redux/actions-types/tournamentsActions';
 
 import Modal from './Modal';
 /* Los dos siguientes imports agregados por guille */
@@ -44,6 +45,8 @@ export default function Profile(props) {
     const { getProfile, getFriends, deleteFriends, putFriendRequest, getGames } = profileActions;
 
     const dispatch = useDispatch();
+
+    dispatch(setLeftTournament())
 
     const games = userHistory.length > 5 ? userHistory.slice(0, 5) : userHistory;
 

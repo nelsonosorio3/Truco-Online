@@ -7,7 +7,7 @@ import { useModal } from '../hooks/useModal';
 import editProfileActions from '../Redux/actions-types/editProfileActions';
 
 import Modal from "./Modal";
-import Avatars from './Avatars';
+// import Avatars from './Avatars';
 import Loading from './Loading';
 
 import styles from './styles/EditProfile.module.css';
@@ -89,6 +89,7 @@ export default function EditProfile() {
         reader.readAsDataURL(file)
         reader.onloadend = () => {
             setImg(reader.result)
+            // console.log(img)
         }
     }
 

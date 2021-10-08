@@ -147,7 +147,7 @@ export default function Game({
         setTimeout(()=>setPlayer(player1),3000);
       });
       socket.on("bet", (betOptions, bool, turn)=>{  //trae la apuesta segun turno
-        console.log(turn)
+        // console.log(turn)
         if(turn === undefined) setPlayer({...player, betOptions, bet: bool});
         else setPlayer({...player, betOptions, bet: bool, isTurn: turn});
       });
@@ -177,7 +177,7 @@ export default function Game({
       });
       socket.on("gameEnds", (data) =>{
         let dataCopy = Object.assign({}, data)
-        console.log('ESTA ES LA DATA DE GAME ENDS:', dataCopy)
+        // console.log('ESTA ES LA DATA DE GAME ENDS:', dataCopy)
         if(tournamentMatchId){
           if(finishedFirstMatch===false && finishedSecondMatch===false && finishedThirdMatch===false){
             alert(`Partida terminada. Ganador: ${dataCopy.winner}`);
@@ -201,9 +201,9 @@ export default function Game({
             setFinishedThirdMatch(true)
           }
         } else{
-          console.log("termino");
+          // console.log("termino");
           history.push("/profile");
-          alert("El juego termino");
+          alert("Partida terminada.");
           dispatch(setIsInRoom({isInRoom: false, roomId: null}));
         }
         clearTimeout(turnTime);
@@ -291,7 +291,7 @@ export default function Game({
     useEffect(()=>{
       if(player.isTurn && !isYourTurn && !player.tablePlayer[2]){
         setIsYourTurn(true)
-        console.log("is your turn")
+        // console.log("is your turn")
         setTimeout(()=>setIsYourTurn(false), 1000);
       }
       if(player.isTurn) {
@@ -312,7 +312,7 @@ export default function Game({
         // if(player.hand?.length) otherTime = setTimeout(()=>surrender2(), 120*1000);
       } 
     },[player.isTurn])
-    console.log(player) //para testing
+    // console.log(player) //para testing
     return(<div id={stylesGame.gameBackground}>
             <div id={stylesGame.cardZone}>
               <ol >{[...Array(3-player.tableRival.length).keys()].map(card=><div key={card} id={stylesGame.rivalHand}><img src={`/cards/0.webp`} className={stylesGame.cardsImg}/></div>)}</ol>

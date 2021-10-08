@@ -8,8 +8,8 @@ import styles from './styles/JoinRoomForm.module.css'
 export default function JoinRoomForm() {
   const [roomPassword, setRoomPassword] = useState("")
 
-  const dispatch = useDispatch()
-  console.log(typeof localStorage.token)
+    const dispatch = useDispatch()
+    // console.log(typeof localStorage.token)
 
   const joinRoom = async (event) => {
     if (localStorage.isAuth) {

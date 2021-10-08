@@ -15,7 +15,7 @@ export default function Welcome() {
     // const history = useHistory()
 
     const responseFacebook = (response) => {
-        console.log(response)
+        // console.log(response)
         dispatch(logInFacebook(response));
 
         // console.log(response.email)
