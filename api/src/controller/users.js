@@ -308,20 +308,18 @@ module.exports = {
     const { userId } = req.body
     const { username, email, password, image } = req.body
 
-    User.findByPk(userId)
-      .then(updateUser => {
 
+    User.findByPk(userId)
+      .then(async (updateUser) => {
         if(updateUser.image !== image){
-          cloudinary.uploader.upload(image, {
+          const uploadedResponse = await cloudinary.uploader.upload(image, {
             upload_preset: "proyectofinal"
-          }).then(response => {
-            console.log("Las imagenes son distintas")
-            updateUser.image = response.url
-            updateUser.username = username
-            updateUser.email = email
-            updateUser.password = password
-            return updateUser.save()
           })
+          updateUser.image = uploadedResponse.url
+          updateUser.username = username
+          updateUser.email = email
+          updateUser.password = password
+          return updateUser.save()
         }
         else{
           updateUser.username = username

@@ -1,7 +1,9 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useState } from 'react';
 import { useHistory } from 'react-router';
 import { useDispatch, useSelector } from "react-redux";
 import { useModal } from '../hooks/useModal';
+import { Link } from 'react-router-dom';
 
 import HomeButton from './HomeButton';
 import Modal from "./Modal";
@@ -79,14 +81,14 @@ export default function LogIn() {
 
   useEffect(() => {
     if (isAuth) {
-      console.log(isActive)
+      // console.log(isActive)
       if (isActive !== "baneado" && isActive !== "suspendido") {
-        console.log("Entro acá1");
+        // console.log("Entro acá1");
         setTimeout(() => {
           history.push('/rooms');
         }, 3000);
       } else {
-        console.log("Entro acá2");
+        // console.log("Entro acá2");
         setTimeout(() => {
           history.push('/bannedPlayer');
         }, 3000);
@@ -131,7 +133,11 @@ export default function LogIn() {
             (<button type="submit" className={styles.button}>Entrar</button>)
             :
             <button type="submit" className={styles.disabled} disabled>Entrar</button>}
+          <p className={styles.someText}>¿No tienes cuenta? <Link to='/sign-up'>¡Regístrate!</Link> O, <Link to='/rooms'>entra como invitado.</Link></p>
+
         </form>
+
+
       </section>
       <Modal isOpen={isOpenModal} closeModal={closeModal}>
         <h3>Status:</h3>

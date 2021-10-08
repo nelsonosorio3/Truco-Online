@@ -13,7 +13,7 @@ export default function RoomsList(){
     const [allRooms, setAllRooms] = useState([])
     const [roomWithPassword, setRoomWithPassword] = useState(false)
     const [roomData, setRoomData] = useState({})
-    const [userRoomTest, setUserRoomTest] = useState("")
+    // const [userRoomTest, setUserRoomTest] = useState("")
 
     // const [roomId, setRoomId] = useState('')
     const dispatch = useDispatch();
@@ -53,7 +53,7 @@ export default function RoomsList(){
 
     const joinRoomPassword = async (event) => {
         event.preventDefault();
-        console.log(event.target[0].value)
+        // console.log(event.target[0].value)
         if(event.target[0].value === roomData.password){
             socket.emit('joinRoom', (parseInt(roomData.idRoom)), localStorage.user, localStorage.token)
             dispatch(setIsInRoom({isInRoom: true, roomId: parseInt(roomData.idRoom)}))
@@ -64,6 +64,7 @@ export default function RoomsList(){
         <>
             <GameRequest/>
             <div className={styles.roomsList}>
+                <h3>Partidas disponibles:</h3>
                 {
                 allRooms.length > 0
                 ?   

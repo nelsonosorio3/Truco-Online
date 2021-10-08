@@ -91,11 +91,36 @@ export default function Game({
       else  socket.emit('already friend', player.id);
     };
     const surrender = ()=>{
-      socket.emit("surrender", roomId || localStorage.roomId, player.id, localStorage.token);
-      dispatch(setIsInRoom({isInRoom: false, roomId: null}));
-      setTimeout(()=>history.push("/profile"),300);
-      clearTimeout(turnTime);
-      // clearTimeout(otherTime);
+      if(tournamentMatchId){
+        if(finishedFirstMatch===false && finishedSecondMatch===false && finishedThirdMatch===false){
+          // alert(`Partida terminada. Ganador: ${dataCopy.winner}`);
+          dispatch(setIsInRoom({isInRoom: false, roomId: null}));
+          // if(dataCopy.winner === localStorage.user) setWins([...wins, dataCopy.winner])
+          setShowFirstMatch(false)
+          setFinishedFirstMatch(true)
+        }
+        if(finishedFirstMatch===true && finishedSecondMatch===false && finishedThirdMatch===false){
+          // alert(`Partida terminada. Ganador: ${dataCopy.winner}`);
+          dispatch(setIsInRoom({isInRoom: false, roomId: null}));
+          // if(dataCopy.winner === localStorage.user) setWins([...wins, dataCopy.winner])
+          setShowSecondMatch(false)
+          setFinishedSecondMatch(true)
+        }
+        if(finishedFirstMatch===true && finishedSecondMatch===true && finishedThirdMatch===false){
+          // alert(`Partida terminada. Ganador: ${dataCopy.winner}`);
+          dispatch(setIsInRoom({isInRoom: false, roomId: null}));
+          // if(dataCopy.winner === localStorage.user) setWins([...wins, dataCopy.winner])
+          setShowThirdMatch(false)
+          setFinishedThirdMatch(true)
+        }
+      }
+        else {
+          socket.emit("surrender", roomId || localStorage.roomId, player.id, localStorage.token);
+          dispatch(setIsInRoom({isInRoom: false, roomId: null}));
+          setTimeout(()=>history.push("/profile"),300);
+          // clearTimeout(otherTime);
+        }
+        clearTimeout(turnTime);
     };
     const surrender2 = ()=>{
       socket.emit("surrender2", roomId || localStorage.roomId, player.id, localStorage.token);
@@ -147,7 +172,7 @@ export default function Game({
         setTimeout(()=>setPlayer(player1),3000);
       });
       socket.on("bet", (betOptions, bool, turn)=>{  //trae la apuesta segun turno
-        console.log(turn)
+        // console.log(turn)
         if(turn === undefined) setPlayer({...player, betOptions, bet: bool});
         else setPlayer({...player, betOptions, bet: bool, isTurn: turn});
       });
@@ -177,45 +202,69 @@ export default function Game({
       });
       socket.on("gameEnds", (data) =>{
         let dataCopy = Object.assign({}, data)
-        console.log('ESTA ES LA DATA DE GAME ENDS:', dataCopy)
+        // console.log('ESTA ES LA DATA DE GAME ENDS:', dataCopy)
         if(tournamentMatchId){
           if(finishedFirstMatch===false && finishedSecondMatch===false && finishedThirdMatch===false){
-            alert("Partida terminada. Ganador:", dataCopy.winner);
+            alert(`Partida terminada. Ganador: ${dataCopy.winner}`);
             dispatch(setIsInRoom({isInRoom: false, roomId: null}));
             if(dataCopy.winner === localStorage.user) setWins([...wins, dataCopy.winner])
             setShowFirstMatch(false)
             setFinishedFirstMatch(true)
           }
           if(finishedFirstMatch===true && finishedSecondMatch===false && finishedThirdMatch===false){
-            alert("Partida terminada. Ganador:", dataCopy.winner);
+            alert(`Partida terminada. Ganador: ${dataCopy.winner}`);
             dispatch(setIsInRoom({isInRoom: false, roomId: null}));
             if(dataCopy.winner === localStorage.user) setWins([...wins, dataCopy.winner])
             setShowSecondMatch(false)
             setFinishedSecondMatch(true)
           }
           if(finishedFirstMatch===true && finishedSecondMatch===true && finishedThirdMatch===false){
-            alert("Partida terminada. Ganador:", dataCopy.winner);
+            alert(`Partida terminada. Ganador: ${dataCopy.winner}`);
             dispatch(setIsInRoom({isInRoom: false, roomId: null}));
             if(dataCopy.winner === localStorage.user) setWins([...wins, dataCopy.winner])
             setShowThirdMatch(false)
             setFinishedThirdMatch(true)
           }
-
         } else{
-          console.log("termino");
+          // console.log("termino");
           history.push("/profile");
-          alert("El juego termino");
+          alert("Partida terminada.");
           dispatch(setIsInRoom({isInRoom: false, roomId: null}));
         }
         clearTimeout(turnTime);
         // clearTimeout(otherTime);
       },);
-      socket.on("surrender",()=>{
+      socket.on("surrender",(data)=>{
         alert("El otro jugador se rindio, TU GANAS!");
-        history.push("/profile");
-        socket.emit("surrender2", roomId || localStorage.roomId, localStorage.token);
-        dispatch(setIsInRoom({isInRoom: false, roomId: null}));
-        clearTimeout(turnTime);
+        let dataCopy = Object.assign({}, data)
+        if(tournamentMatchId){
+          if(finishedFirstMatch===false && finishedSecondMatch===false && finishedThirdMatch===false){
+            // alert("Partida terminada. Ganador:", dataCopy.winner);
+            dispatch(setIsInRoom({isInRoom: false, roomId: null}));
+            if(dataCopy.winner === localStorage.user) setWins([...wins, dataCopy.winner])
+            setShowFirstMatch(false)
+            setFinishedFirstMatch(true)
+          }
+          if(finishedFirstMatch===true && finishedSecondMatch===false && finishedThirdMatch===false){
+            // alert("Partida terminada. Ganador:", dataCopy.winner);
+            dispatch(setIsInRoom({isInRoom: false, roomId: null}));
+            if(dataCopy.winner === localStorage.user) setWins([...wins, dataCopy.winner])
+            setShowSecondMatch(false)
+            setFinishedSecondMatch(true)
+          }
+          if(finishedFirstMatch===true && finishedSecondMatch===true && finishedThirdMatch===false){
+            // alert("Partida terminada. Ganador:", dataCopy.winner);
+            dispatch(setIsInRoom({isInRoom: false, roomId: null}));
+            if(dataCopy.winner === localStorage.user) setWins([...wins, dataCopy.winner])
+            setShowThirdMatch(false)
+            setFinishedThirdMatch(true)
+          }
+        } else {
+          history.push("/profile");
+          socket.emit("surrender2", roomId || localStorage.roomId, localStorage.token);
+          dispatch(setIsInRoom({isInRoom: false, roomId: null}));
+          clearTimeout(turnTime);
+        }
       });
       socket.on("addFriend", (idSender)=>{
         userProfile.email && idSender && axios.post(`https://trucohenry.com/api/friends/${idSender}/${userProfile.email}`);
@@ -267,7 +316,7 @@ export default function Game({
     useEffect(()=>{
       if(player.isTurn && !isYourTurn && !player.tablePlayer[2]){
         setIsYourTurn(true)
-        console.log("is your turn")
+        // console.log("is your turn")
         setTimeout(()=>setIsYourTurn(false), 1000);
       }
       if(player.isTurn) {
@@ -288,7 +337,7 @@ export default function Game({
         // if(player.hand?.length) otherTime = setTimeout(()=>surrender2(), 120*1000);
       } 
     },[player.isTurn])
-    console.log(player) //para testing
+    // console.log(player) //para testing
     return(<div id={stylesGame.gameBackground}>
             <div id={stylesGame.cardZone}>
               <ol >{[...Array(3-player.tableRival.length).keys()].map(card=><div key={card} id={stylesGame.rivalHand}><img src={`/cards/0.webp`} className={stylesGame.cardsImg}/></div>)}</ol>

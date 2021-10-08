@@ -14,7 +14,6 @@ const INITIAL_STATE = {
 const editProfileReducer = (state = INITIAL_STATE, {type, payload}) => {
   switch (type) {
     case EDIT_PROFILE:
-      // console.log("console from reducer :", payload)
         return {
           ...state,
           id: payload.id,
@@ -31,6 +30,7 @@ const editProfileReducer = (state = INITIAL_STATE, {type, payload}) => {
           msg: payload.data.message,
         };
     case CLEAR_DATA:
+      console.log("clear data")
         return {
           ...state,
           id: '',

@@ -230,7 +230,7 @@ ol{
 @media screen and (max-width: 1440px) {
     .cardsImg {
         width: 150px;
-        height: 160px;
+        height: 140px;
     }
     .btnBet, .btnBetNoTurn {
         /* width: 180px !important; */
@@ -259,7 +259,7 @@ ol{
  
   }
 
-  @media screen and (max-height: 750px) {
+  @media screen and (max-height: 710px) {
     .cardsImg {
         width: 100px;
         height: 100px;

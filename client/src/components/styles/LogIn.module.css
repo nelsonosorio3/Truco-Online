@@ -149,6 +149,41 @@
     transition: background-position .7s,box-shadow .4s;
 }
 
+.someText {
+    color:white;
+    width: auto !important;
+    height: auto;
+    white-space: nowrap;
+
+    border: none;
+    border-radius: 4px;
+    text-decoration: none;
+    text-shadow: 0px 0px 10px rgb(0 0 0 / 50%);
+    overflow: hidden;
+    margin-top: 1em;
+    padding: 20px 50px 20px 50px;
+    margin-bottom: 20px;
+    font-size: 16px;
+    position: absolute;
+    bottom: -8em;
+    left: auto;
+    right: auto;
+    color: white;
+    outline: none;
+    cursor: pointer;
+    width: 100%;
+    background: transparent;
+    /*background-image: url('../../img/button1.webp');*/
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+    text-decoration: none;
+    /*font-family: 'Crayon' ;*/
+}
+
+.sometext, a {
+    color:rgb(154, 243, 154);
+}
+
 .danger {
     color: rgb(247, 8, 8);
     font-weight: bold;

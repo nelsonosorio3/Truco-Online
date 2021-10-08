@@ -200,10 +200,10 @@ exports = module.exports = function(io){
                         "x-access-token": token || 1,
                     }});
                 if(table.games[roomId]?.playerOne.id === playerId){
-                    io.to(table.games[roomId]?.playerTwo?.id).emit("surrender");
+                    io.to(table.games[roomId]?.playerTwo?.id).emit("surrender", {winner: table.games[roomId]?.playerTwo?.name});
                 }
                 else{
-                    io.to(table.games[roomId]?.playerOne.id).emit("surrender");
+                    io.to(table.games[roomId]?.playerOne.id).emit("surrender", {winner: table.games[roomId]?.playerOne?.name});
                 }
             }
             else{

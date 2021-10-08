@@ -1,6 +1,6 @@
-// /* eslint-disable array-callback-return */
-// /* eslint-disable react-hooks/exhaustive-deps */
-// /* eslint-disable no-unused-vars */
+/* eslint-disable array-callback-return */
+/* eslint-disable react-hooks/exhaustive-deps */
+/* eslint-disable no-unused-vars */
 
 import React, {useEffect, useState} from 'react';
 import { useDispatch} from 'react-redux'
@@ -51,11 +51,11 @@ export default function TournamentGames ({matchesList, savedData}){
         if(finishedFirstMatch===false && finishedSecondMatch===false && finishedThirdMatch===false){
             if(matches.length>0){
                 if(matches[0].participants[0] === localStorage.user || (matches[0].participants[1] === localStorage.user)){
-                    console.log('EN CASO DE QUE SE REPITA ARRIBA')
+                    // console.log('EN CASO DE QUE SE REPITA ARRIBA')
                     socket.emit('tournamentGame', ({tournamentId: savedData[0].tournamentId, matchId: matches[0].matchId}));
                 }
                 else if(matches[matches.length-1].participants[0] === localStorage.user || (matches[matches.length-1].participants[1] === localStorage.user)){
-                    console.log('EN CASO DE QUE SE REPITA ABAJO')
+                    // console.log('EN CASO DE QUE SE REPITA ABAJO')
                     socket.emit('tournamentGame', ({tournamentId: savedData[0].tournamentId, matchId: matches[matches.length-1].matchId}));
                 }
             }
@@ -64,11 +64,11 @@ export default function TournamentGames ({matchesList, savedData}){
             // console.log(secondMatch, 'ENTRAMOSSSSSSS USEEFFECT SECONDMATCH')
             if(matches.length>0){
                 if(matches[1].participants[0] === localStorage.user || (matches[1].participants[1] === localStorage.user)){
-                    console.log(localStorage.user, 'HA ENTRADO A SEGUNDA PARTIDA ARRIBA')
+                    // console.log(localStorage.user, 'HA ENTRADO A SEGUNDA PARTIDA ARRIBA')
                     socket.emit('tournamentGame', ({tournamentId: savedData[0].tournamentId, matchId: matches[1].matchId, matchNumber: 2}));
                 }
                 else if(matches[matches.length-2].participants[0] === localStorage.user || (matches[matches.length-2].participants[1] === localStorage.user)){
-                    console.log(localStorage.user, 'HA ENTRADO A SEGUNDA PARTIDA ABAJO')
+                    // console.log(localStorage.user, 'HA ENTRADO A SEGUNDA PARTIDA ABAJO')
                     socket.emit('tournamentGame', ({tournamentId: savedData[0].tournamentId, matchId: matches[matches.length-2].matchId, matchNumber: 2}));
                 }
             }
@@ -77,11 +77,11 @@ export default function TournamentGames ({matchesList, savedData}){
             // console.log(secondMatch, 'ENTRAMOSSSSSSS USEEFFECT SECONDMATCH')
             if(matches.length>0){
                 if(matches[2].participants[0] === localStorage.user || (matches[2].participants[1] === localStorage.user)){
-                    console.log(localStorage.user, 'HA ENTRADO A TERCERA PARTIDA ARRIBA')
+                    // console.log(localStorage.user, 'HA ENTRADO A TERCERA PARTIDA ARRIBA')
                     socket.emit('tournamentGame', ({tournamentId: savedData[0].tournamentId, matchId: matches[2].matchId, matchNumber: 3}));
                 }
                 else if(matches[matches.length-3].participants[0] === localStorage.user || (matches[matches.length-3].participants[1] === localStorage.user)){
-                    console.log(localStorage.user, 'HA ENTRADO A TERCERA PARTIDA ABAJO')
+                    // console.log(localStorage.user, 'HA ENTRADO A TERCERA PARTIDA ABAJO')
                     socket.emit('tournamentGame', ({tournamentId: savedData[0].tournamentId, matchId: matches[matches.length-3].matchId, matchNumber: 3}));
 
                 }
@@ -97,12 +97,12 @@ export default function TournamentGames ({matchesList, savedData}){
             setActualIdGame(matchId)
         })
         socket.on('showGameTwo', (matchId) => {
-            console.log('EL ID DE LA SEGUNDA PARTIDA ES: ', matchId)
+            // console.log('EL ID DE LA SEGUNDA PARTIDA ES: ', matchId)
             setShowSecondMatch(true);
             setActualIdGame(matchId)
         })
         socket.on('showGameThree', (matchId) => {
-            console.log('EL ID DE LA SEGUNDA PARTIDA ES: ', matchId)
+            // console.log('EL ID DE LA SEGUNDA PARTIDA ES: ', matchId)
             setShowThirdMatch(true);
             setActualIdGame(matchId)
         })
@@ -114,14 +114,14 @@ export default function TournamentGames ({matchesList, savedData}){
 
     useEffect(() => {
         if(finishedFirstMatch===true){
-            console.log('PRIMERA PARTIDA TERMINADA')
+            // console.log('PRIMERA PARTIDA TERMINADA')
             setSecondMatch(true)
         }
     }, [finishedFirstMatch])
 
     useEffect(() => {
         if(finishedSecondMatch===true){
-            console.log('SEGUNDA PARTIDA TERMINADA')
+            // console.log('SEGUNDA PARTIDA TERMINADA')
             setThirdMatch(true)
         }
     }, [finishedSecondMatch])
@@ -138,8 +138,6 @@ export default function TournamentGames ({matchesList, savedData}){
 
     return(
         <div>
-            {matches.length > 0 ? console.log(matches) : null}
-
             <div style={{display: showFirstMatch || showSecondMatch || showThirdMatch ? "none" : null}}>
                 <div className={styles.matchesListDiv}>
                     <h5>Matches:</h5>
@@ -149,8 +147,8 @@ export default function TournamentGames ({matchesList, savedData}){
                                 matches.map(m => {
                                     return (
                                     <div key={m.matchId} className={styles.match}>
-                                        <h6>{m.participants[0]} vs {m.participants[1]}.</h6>
-                                        <h6>Match ID: {m.matchId}</h6>
+                                        <h6 className={styles.vs_h6}>{m.participants[0]} vs {m.participants[1]}.</h6>
+                                        <h6 className={styles.matchId_h6}>Match ID: {m.matchId}</h6>
                                     </div>)
                             } )
                             : null
@@ -242,7 +240,7 @@ export default function TournamentGames ({matchesList, savedData}){
                                         )
                                     }
                                 })}
-                                <button onClick={leave}>Salir</button>
+                                <button onClick={leave} className={styles.exitBtn}>Salir</button>
                             </div> 
                             : null
                         }

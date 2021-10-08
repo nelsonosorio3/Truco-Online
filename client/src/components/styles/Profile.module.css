@@ -1,52 +1,41 @@
 .mainDiv {
     width: 100%;
     height: 100vh;
-
     background-image: url('../../img/Profile_bg.webp');
     background-size: cover;
     background-attachment: fixed;
     background-repeat: no-repeat;
-    
     padding-top: 67%;
 }
 
 .subMainDiv {
     width: 100%;
     height: 100vh;
-
     display: flex;
     flex-direction: column;
     margin-top: -60%;
 }
 
 .logoutBtn {
+
     position: absolute;
+    font-weight: bold;
     right: 1.5em;
     padding: 3px;
     font-size: .9em;
     letter-spacing: 1px;
-    opacity: 0.5;
-    transition: opacity .45s;
-    transition: transform .45s;
-
+    background-color: rgb(161, 157, 157);
+    padding: .3em .5em;
     border: none;
     top: 5px;
     border-radius: 5px;
-    visibility: hidden;
-}
-
-.logoutBtn::before {
-    visibility: visible;
-    color: white;
-    content: 'Cerrar Sesión';
-    opacity: 0.8;
-    font-size: .9rem;
 }
 
 .logoutBtn:hover {
-    opacity: 1;
-    transition: transform .45s;
+   color: white;
+    transition: all 1s cubic-bezier(0.19, 1, 0.22, 1);
     transform: scale(1.1);
+    cursor: pointer;
 }
 
 .player {
@@ -74,6 +63,7 @@
     border: solid 2px white;
     box-shadow: 0px 0px 15px 5px black;
     animation: image 3s 1;
+    top: 20px;
 }
 
 @keyframes image {
@@ -86,13 +76,13 @@
 
 .playerInfo {
     width: 100%;
-    max-height: 60%;
+    max-height: 65%;
     box-shadow: 0px 0px 5px #505050;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-
+    bottom: 5%;
     position: relative;
     /* # */
     background-color: var(--transBlackColor);
@@ -234,8 +224,8 @@
 
 .friends {
     width: 100%;
-    min-height: 32em;
-    max-height: 32em;
+    /* min-height: 32em;
+    max-height: 32em; */
 
     display: flex;
     justify-content: space-between;
@@ -249,8 +239,8 @@
 
 .friendsDiv {
     width: 48%;
-    min-height: 30em;
-    max-height: 30em;
+    /* min-height: 30em;
+    max-height: 30em; */
 
     position: relative;
 
@@ -278,7 +268,7 @@
 
 .friendsList {
     width: 90%;
-    height: 60vh;
+    /* height: 60vh; */
 
     display: flex;
     flex-direction: row;
@@ -431,6 +421,7 @@
 @media screen and (max-width: 1280px) {
     .profileIcon {
         width: 8em;
+        height: 8em;
     }
 
     .player {
@@ -446,8 +437,8 @@
 
     .profileIcon {
         /* width: 7.5em; */
-        height: 140px;
-        width: 145px;
+        height: 155px;
+        width: 170px;
         margin-top: .8em;
     }
 
@@ -524,6 +515,7 @@
     }
 
     .statsTitle {
+        margin-top: 16px;
         font-size: 1.3rem;
     }
 
@@ -548,7 +540,7 @@
         /* width: 6em; */
         height: 140px;
         width: 145px;
-
+        top: 8px;
         margin-top: 1.8em;
     }
 

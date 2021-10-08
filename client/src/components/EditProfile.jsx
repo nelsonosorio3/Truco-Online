@@ -7,7 +7,7 @@ import { useModal } from '../hooks/useModal';
 import editProfileActions from '../Redux/actions-types/editProfileActions';
 
 import Modal from "./Modal";
-import Avatars from './Avatars';
+// import Avatars from './Avatars';
 import Loading from './Loading';
 
 import styles from './styles/EditProfile.module.css';
@@ -47,6 +47,13 @@ const initialState = {
     image: null,
 };
 
+// const initialState2= {
+//     username: '',
+//     email: '',
+//     password: '',
+//     image: null,
+// };
+
 export default function EditProfile() {
 
     const history = useHistory();
@@ -58,10 +65,14 @@ export default function EditProfile() {
     const dispatch = useDispatch();
 
     const [newData, setNewData] = useState(initialState);
+
     const [oldData, setOldData] = useState(initialState);
+
+    const [loading, setLoading] = useState(false)
 
     //Aca se debe almacenar la nueva imagen ingresada por el usuario
     const [img, setImg] = useState(null);
+
 
     const [errors, setErrors] = useState(initialState);
 
@@ -80,7 +91,7 @@ export default function EditProfile() {
         reader.readAsDataURL(file)
         reader.onloadend = () => {
             setImg(reader.result)
-            console.log(img)
+            // console.log(img)
         }
     }
 
@@ -97,25 +108,30 @@ export default function EditProfile() {
             password: editProfileReducer.password,
             image: editProfileReducer.img,
         });
+        
         if(editProfileReducer.status) {
+            setLoading(true)
             openModal();
             dispatch(clearData());
             setNewData(initialState);
             setErrors(initialState);
             setTimeout(() => {
                 history.push("/profile");
-            }, 5000);
+            }, 2000);
         } else if(editProfileReducer.status === false) {
             openModal();
         }
     }, [editProfileReducer]);
 
     function handleChange(event) {
+
         const { name, value } = event.target;
+
         setErrors(validate({
           ...newData,
           [name]: value,
         }));
+
         setNewData({
           ...newData,
           [name]: value,
@@ -124,6 +140,8 @@ export default function EditProfile() {
 
     function handleSubmit(event) {
         event.preventDefault();
+        setLoading(false)
+        openModal();
         dispatch(putEditProfile(doPackage(oldData, newData, img), localStorage.token));
     };
 
@@ -142,7 +160,7 @@ export default function EditProfile() {
                                 id="username"
                                 name = "username"
                                 value={newData.username}
-                                placeholder="Nuevo nombre de usurario"
+                                placeholder="Nuevo nombre de usuario"
                                 autoComplete="off"
                                 className={styles.input}
                                 onChange={handleChange}
@@ -203,14 +221,21 @@ export default function EditProfile() {
                 </form> 
             </section>
             <Modal isOpen={isOpenModal} closeModal={closeModal}>
-              <h3>Status:</h3>
-              <p>{editProfileReducer.msg}</p>
-              {
-                editProfileReducer.status ? 
-                <p>Redireccionando...</p>
-                :
-                null
-              }
+                {
+                    loading ?
+                    <> 
+                    <h3>Status:</h3>
+                    <p>{editProfileReducer.msg}</p>
+                    {
+                      editProfileReducer.status ? 
+                      <p>Redireccionando...</p>
+                      :
+                      null
+                    }
+                    </>
+                    :  <h3>Loading...</h3>
+                }
+             
             </Modal> 
         </>
     );

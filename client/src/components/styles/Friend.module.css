@@ -81,7 +81,7 @@
 
 .friendReq {
     position: absolute;
-    top: 2.4em;
+    top: 4.3em;
 }
 
 .btn:hover {
@@ -144,21 +144,15 @@
   }
 
   .profileIconSmall {
-    /* width: 3.5em; */
-    /* height: auto; */
-  
     top: 1em;
-  
   }
 
   .friendReq {
-    top: 1.8em;
+    top: 5em;
   }
 
   .status {
     height: 4em;
-
-    /* margin-top: .5em; */
   }
 }
 
@@ -170,21 +164,11 @@
   }
 
   .profileIconSmall {
-    /* width: 3.5em; */
-    /* height: auto; */
-  
     top: 1em;
-  
-  }
-
-  .friendReq {
-    top: 1.8em;
   }
 
   .status {
     height: 4em;
-
-    /* margin-top: .5em; */
   }
 }
 
@@ -202,19 +186,11 @@
   }
 
   .profileIconSmall {
-    /* width: 3em; */
-    /* height: auto; */
     top: .7em;
-  }
-
-  .friendReq {
-    top: 1.8em;
   }
 
   .status {
     height: 3.5em;
-
-    /* margin-top: .5em; */
   }
 
   .status p {
