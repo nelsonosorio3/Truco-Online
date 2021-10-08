@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useState } from 'react';
 import { useHistory } from 'react-router';
 import { useDispatch, useSelector } from "react-redux";
@@ -79,14 +80,14 @@ export default function LogIn() {
 
   useEffect(() => {
     if (isAuth) {
-      console.log(isActive)
+      // console.log(isActive)
       if (isActive !== "baneado" && isActive !== "suspendido") {
-        console.log("Entro acá1");
+        // console.log("Entro acá1");
         setTimeout(() => {
           history.push('/rooms');
         }, 3000);
       } else {
-        console.log("Entro acá2");
+        // console.log("Entro acá2");
         setTimeout(() => {
           history.push('/bannedPlayer');
         }, 3000);

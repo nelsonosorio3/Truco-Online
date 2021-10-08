@@ -13,8 +13,8 @@ export default function Chat ({name, roomId, typeofChat}) {
 
     useEffect(() => {
         socket.on('messages', (message) => {
-            console.log('ENTRAMOS A MENSAJES')
-            console.log(message);
+            // console.log('ENTRAMOS A MENSAJES')
+            // console.log(message);
             setMsgs([...msgs, message]);
         })
 

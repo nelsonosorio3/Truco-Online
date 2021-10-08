@@ -9,7 +9,7 @@ export default function JoinRoomForm (){
     const [roomPassword, setRoomPassword] = useState("")
 
     const dispatch = useDispatch()
-    console.log(typeof localStorage.token)
+    // console.log(typeof localStorage.token)
 
     const joinRoom = async (event) => {
       if(localStorage.isAuth){

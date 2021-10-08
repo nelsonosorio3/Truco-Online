@@ -1,5 +1,5 @@
 import React from 'react';
-import { useSelector } from 'react-redux';
+// import { useSelector } from 'react-redux';
 import { useHistory } from "react-router-dom";
 import Game from '../game';
 import GameRequest from '../GameRequest';
@@ -36,10 +36,10 @@ export default function Rooms() {
   */
   // Fin de verificación si el jugador está activo.
 
-  console.log("localStorage in Rooms", localStorage);
+  // console.log("localStorage in Rooms", localStorage);
   // const history = useHistory()
 
-  let isinRoom = useSelector(store => store.roomsReducer.isInRoom);
+  // let isinRoom = useSelector(store => store.roomsReducer.isInRoom);
   // const roomId = useSelector(store => store.roomsReducer.roomId)
 
   // socket.on("roomFull", ()=>isinRoom= false)

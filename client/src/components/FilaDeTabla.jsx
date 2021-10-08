@@ -1,9 +1,9 @@
 import React from "react";
-import { Link } from "react-router-dom";
+// import { Link } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import adminPanelActions from '../Redux/actions-types/adminPanelActions';
 import styles from './styles/FilaDeTabla.module.css'
-import { createSemanticDiagnosticsBuilderProgram } from "typescript";
+// import { createSemanticDiagnosticsBuilderProgram } from "typescript";
 
 // import styles from "./styles/FilaDeTabla.module.css"
 import profileIcon from '../img/profileIcon.png';
