@@ -83,9 +83,8 @@ export default function FriendInfo({ isOpen, close, name, date, email, id, image
                         <div className={styles.type}>Perdidas</div>
                     </div>
                 </div>
-
+                <button className={styles.inviteBtn} onClick={inviteToGame}> Invitar a partida </button>
             </div>
         </article>
     );
 };
-
