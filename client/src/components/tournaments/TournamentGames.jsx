@@ -240,11 +240,11 @@ export default function TournamentGames ({matchesList, savedData}){
                                         )
                                     }
                                 })}
+                                <button onClick={leave} className={styles.exitBtn}>Salir</button>
                             </div> 
                             : null
                         }
                     </div> 
-                    <button onClick={leave} className={styles.exitBtn}>Salir</button>
                 </div>
             : null}
         </div>

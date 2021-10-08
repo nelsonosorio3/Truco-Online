@@ -46,7 +46,7 @@ export default function Profile(props) {
 
     const dispatch = useDispatch();
 
-    dispatch(setLeftTournament())
+    // dispatch(setLeftTournament())
 
     const games = userHistory.length > 5 ? userHistory.slice(0, 5) : userHistory;
 
