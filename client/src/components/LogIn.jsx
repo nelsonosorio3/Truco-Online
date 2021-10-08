@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import { useHistory } from 'react-router';
 import { useDispatch, useSelector } from "react-redux";
 import { useModal } from '../hooks/useModal';
+import { Link } from 'react-router-dom';
 
 import HomeButton from './HomeButton';
 import Modal from "./Modal";
@@ -132,7 +133,11 @@ export default function LogIn() {
             (<button type="submit" className={styles.button}>Entrar</button>)
             :
             <button type="submit" className={styles.disabled} disabled>Entrar</button>}
+          <p className={styles.someText}>¿No tienes cuenta? <Link to='/sign-up'>¡Regístrate!</Link> O, <Link to='/rooms'>entra como invitado.</Link></p>
+
         </form>
+
+
       </section>
       <Modal isOpen={isOpenModal} closeModal={closeModal}>
         <h3>Status:</h3>

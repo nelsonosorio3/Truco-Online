@@ -55,8 +55,13 @@
 }
 
 .containerBottom {
+    color: white;
     position: absolute;
     bottom: 2.5em;
+}
+
+.someText {
+    color: white;
 }
 
 @media screen and (max-width: 1320px) {
