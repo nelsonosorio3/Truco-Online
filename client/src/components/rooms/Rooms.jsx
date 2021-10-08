@@ -1,7 +1,9 @@
 import React from 'react';
-// import { useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { useHistory } from "react-router-dom";
 import { useDispatch } from 'react-redux'
+import { setLeftTournament } from '../../Redux/actions-types/tournamentsActions';
+
 import Game from '../game';
 import GameRequest from '../GameRequest';
 
@@ -35,6 +37,8 @@ export default function Rooms() {
   };
   //logout termina aquí
 
+  dispatch(setLeftTournament())
+
   if (isActive === "baneado" || isActive === "suspendido") {
     history.push('/bannedplayer');
   }
@@ -52,8 +56,8 @@ export default function Rooms() {
   // console.log("localStorage in Rooms", localStorage);
   // const history = useHistory()
 
-  // let isinRoom = useSelector(store => store.roomsReducer.isInRoom);
-  // const roomId = useSelector(store => store.roomsReducer.roomId)
+  let isinRoom = useSelector(store => store.roomsReducer.isInRoom);
+  const roomId = useSelector(store => store.roomsReducer.roomId)
 
 
 

@@ -145,6 +145,12 @@ exports = module.exports = function(io){
             // console.log('P1', playerOneId, 'P2', playerTwoId, 'P3', playerThreeId, 'P4', playerFourId)
 
             io.to(data.tournamentId).emit('showWinner', (t.results));
+
+            const clients = io.sockets.adapter.rooms.get(data.tournamentId);
+            for(const clientId of clients) {
+              const clientSocket = io.sockets.sockets.get(clientId);
+              clientSocket.leave(data.tournamentId)
+            };
           } 
         })
       })
