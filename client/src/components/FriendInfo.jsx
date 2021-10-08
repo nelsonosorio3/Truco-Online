@@ -56,30 +56,36 @@ export default function FriendInfo({ isOpen, close, name, date, email, id, image
         <article className={styles.info + ' ' + conditionalOpen} onClick={close}>
             <div className={styles.container} onClick={handleContainerClick}>
                 <button className={styles.close} onClick={close}> X </button>
-                <div className={styles.player}>
-                    <img src={image === "false" ? profileIcon : image } alt="" className={styles.profileIcon} />
-                    <p> Amigos desde: {date.split("T")[0]} </p>
-                    <div className={styles.playerInfo}>
-                        <h2> {name} </h2>
-                        <h3> {email} </h3>
-                        <h3> Partidas Jugadas: </h3>
-                        <p>{games.length}</p>
-                        <div className={styles.playerInfo_Games}>
-                            <div className={styles.infoGames}>
-                                <h3> Ganadas: </h3>
-                                <p>{games? wins(games) : 'No data'}</p>
-                            </div>    
-                            <div className={styles.infoGames}>
-                                <h3> Perdidas: </h3>
-                                <p>{games? (games.length - wins(games)) : 'No data'}</p>
-                            </div>
-                        </div>
-                        <button className={styles.inviteBtn} onClick={inviteToGame}>
-                            Invitar a partida
-                        </button>
+
+                <div className={styles.cardImage} style={{backgroundImage: `url(${image})`}}></div>
+
+                <div className={styles.cardText}>
+                    <span className={styles.date}>
+                        {date.split("T")[0]}
+                    </span>
+                    <h2> {name} </h2>
+                    <p>{email}</p>
+                    <h3 className={styles.partidasStats}>Partidas</h3>
+                </div>
+                <div className={styles.cardStats}>
+                    <div className={styles.stat}>
+                        <div className={styles.value}>{games.length}</div>
+                        <div className={styles.type}>Jugadas</div>
+                    </div>
+
+                    <div className={styles.stat} style={{borderLeft: "2px solid #795548", borderRight: "2px solid #795548"}}>
+                        <div className={styles.value}>{games? wins(games) : 'No data'}</div>
+                        <div className={styles.type}>Ganadas</div>
+                    </div>
+
+                    <div className={styles.stat}>
+                        <div className={styles.value}>{games? (games.length - wins(games)) : 'No data'}</div>
+                        <div className={styles.type}>Perdidas</div>
                     </div>
                 </div>
+
             </div>
         </article>
     );
 };
+

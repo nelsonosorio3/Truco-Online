@@ -68,6 +68,8 @@ export default function EditProfile() {
 
     const [oldData, setOldData] = useState(initialState);
 
+    const [loading, setLoading] = useState(false)
+
     //Aca se debe almacenar la nueva imagen ingresada por el usuario
     const [img, setImg] = useState(null);
 
@@ -106,9 +108,9 @@ export default function EditProfile() {
             password: editProfileReducer.password,
             image: editProfileReducer.img,
         });
-
         
         if(editProfileReducer.status) {
+            setLoading(true)
             openModal();
             dispatch(clearData());
             setNewData(initialState);
@@ -138,6 +140,8 @@ export default function EditProfile() {
 
     function handleSubmit(event) {
         event.preventDefault();
+        setLoading(false)
+        openModal();
         dispatch(putEditProfile(doPackage(oldData, newData, img), localStorage.token));
     };
 
@@ -217,14 +221,21 @@ export default function EditProfile() {
                 </form> 
             </section>
             <Modal isOpen={isOpenModal} closeModal={closeModal}>
-              <h3>Status:</h3>
-              <p>{editProfileReducer.msg}</p>
-              {
-                editProfileReducer.status ? 
-                <p>Redireccionando...</p>
-                :
-                null
-              }
+                {
+                    loading ?
+                    <> 
+                    <h3>Status:</h3>
+                    <p>{editProfileReducer.msg}</p>
+                    {
+                      editProfileReducer.status ? 
+                      <p>Redireccionando...</p>
+                      :
+                      null
+                    }
+                    </>
+                    :  <h3>Loading...</h3>
+                }
+             
             </Modal> 
         </>
     );
